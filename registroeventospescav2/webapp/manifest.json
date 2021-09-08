@@ -31,10 +31,8 @@
     "sap.ui5": {
         "flexEnabled": false,
         "rootView": {
-            "viewName": "com.tasa.registroeventospescav2.view.Main",
-            "type": "XML",
-            "async": true,
-            "id": "Main"
+            "viewName": "com.tasa.registroeventospescav2.view.App",
+            "type": "XML"
         },
         "dependencies": {
             "minUI5Version": "1.93.0",
@@ -54,6 +52,18 @@
                 "settings": {
                     "bundleName": "com.tasa.registroeventospescav2.i18n.i18n"
                 }
+            },
+            "CurrentUser":{
+                "preload": true,
+                "type": "sap.ui.model.json.JSONModel"
+            },
+            "DetalleMarea": {
+                "preload": true,
+                "type": "sap.ui.model.json.JSONModel"
+            },
+            "Dominios": {
+                "preload": true,
+                "type": "sap.ui.model.json.JSONModel"
             }
         },
         "resources": {
@@ -67,30 +77,25 @@
             "config": {
                 "routerClass": "sap.m.routing.Router",
                 "viewType": "XML",
-                "async": true,
                 "viewPath": "com.tasa.registroeventospescav2.view",
-                "controlAggregation": "pages",
-                "controlId": "app",
-                "clearControlAggregation": false
+                "targetAggregation": "pages"
             },
             "routes": [
                 {
-                    "name": "RouteMain",
-                    "pattern": "RouteMain",
-                    "target": [
-                        "TargetMain"
-                    ]
+                    "name": "Main",
+                    "view": "Main",
+                    "pattern": "",
+                    "targetAggregation": "pages",
+                    "controlId": "app"
+                },
+                {
+                    "name": "DetalleMarea",
+                    "view": "DetalleMarea",
+                    "pattern": "DetalleMarea",
+                    "targetAggregation": "pages",
+                    "controlId": "app"
                 }
-            ],
-            "targets": {
-                "TargetMain": {
-                    "viewType": "XML",
-                    "transition": "slide",
-                    "clearControlAggregation": false,
-                    "viewId": "Main",
-                    "viewName": "Main"
-                }
-            }
+            ]
         }
     },
     "sap.cloud": {

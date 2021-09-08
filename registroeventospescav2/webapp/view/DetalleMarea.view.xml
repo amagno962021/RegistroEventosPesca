@@ -1,0 +1,444 @@
+<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:layout="sap.ui.layout" xmlns:form="sap.ui.layout.form"
+	controllerName="com.tasa.registroeventospescav2.controller.DetalleMarea" displayBlock="true"
+	height="100%">
+	<App>
+		<pages>
+			<Page title="Detalle de Marea" showNavButton="true" navButtonPress="onBackListMarea">
+				<content>
+					<layout:VerticalLayout width="100%" visible="true">
+						<layout:content>
+							<ObjectHeader intro="{path: 'DetalleMarea>/Cabecera/CDMMA'}" title="{DetalleMarea>/Cabecera/NRMAR}" icon="sap-icon://product" number="" numberUnit="" numberState="None" titleActive="false"
+								backgroundDesign="Translucent" condensed="false" visible="true">
+								<attributes>
+									<ObjectAttribute title="Embarcacion" text="{DetalleMarea>/Cabecera/CDEMB} {DetalleMarea>/Cabecera/NMEMB}" active="false" visible="true"/>
+									<ObjectAttribute title="Matricula" text="{DetalleMarea>/Cabecera/MREMB}" active="false" visible="true"/>
+									<ObjectAttribute title="Armador" text="{DetalleMarea>/Cabecera/CDEMP} {DetalleMarea>/Cabecera/NAME1}" active="false" visible="true"/>
+								</attributes>
+								<statuses>
+									<ObjectStatus text="Abierto" state="Success" icon="sap-icon://status-completed" visible="true"/>
+								</statuses>
+								<markers/>
+							</ObjectHeader>
+						</layout:content>
+					</layout:VerticalLayout>
+					<IconTabBar expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true"
+						selectedKey="Ok">
+						<items>
+							<IconTabFilter iconColor="Default" text="Datos Generales" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true"
+								visible="true" iconDensityAware="false">
+								<content>
+									<form:Form width="100%" editable="true" visible="true">
+										<form:title>
+											<core:Title text="Pertenencia" level="Auto"/>
+										</form:title>
+										<form:formContainers>
+											<form:FormContainer visible="true">
+												<form:formElements>
+													<form:FormElement visible="true">
+														<form:label>
+															<Label text="Embarcacion" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:label>
+														<form:fields>
+															<Input value="{DetalleMarea>/DatosGenerales/CDEMB}"  description="{DetalleMarea>/DatosGenerales/NMEMB}"  enabled="false"  width="60%"
+																 valueStateText="Invalid entry"/>
+															
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorComercial}">
+														<form:label>
+															<Label text="Armador Comercial" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:label>
+														<form:fields>
+															<Input value="{DetalleMarea>/DatosGenerales/CDEMP}" description="{DetalleMarea>/DatosGenerales/NAME1}" enabled="false" 
+																width="60%" valueStateText="Invalid entry"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="{DetalleMarea>/Config/visibleLinkCrearArmador}">
+														<form:label>
+															<Label text=""/>
+														</form:label>
+														<form:fields>
+															<Link text="Crear Armador" press="onCrearArmador" />
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorRuc}">
+														<form:label>
+															<Label text="RUC"/>
+														</form:label>
+														<form:fields>
+															<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/RUC}" width="60%"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorRazon}">
+														<form:label>
+															<Label text="Razón Social"/>
+														</form:label>
+														<form:fields>
+															<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/RAZON}" width="60%"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorCalle}">
+														<form:label>
+															<Label text="Calle"/>
+														</form:label>
+														<form:fields>
+															<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/CALLE}" width="60%"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorDistrito}">
+														<form:label>
+															<Label text="Distrito"/>
+														</form:label>
+														<form:fields>
+															<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/DISTRITO}" width="60%"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorProvincia}">
+														<form:label>
+															<Label text="Provincia"/>
+														</form:label>
+														<form:fields>
+															<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/PROVINCIA}" width="60%"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorDepartamento}">
+														<form:label>
+															<Label text="Departamento"/>
+														</form:label>
+														<form:fields>
+															<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/NuevoArmador/DEPARTAMENTO}" items="" width="25%">
+																<core:Item key="{key}" text="{text}" />
+															</ComboBox>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="{DetalleMarea>/Config/visibleLinkSelecArmador}">
+														<form:label>
+															<Label text=""/>
+														</form:label>
+														<form:fields>
+															<Link text="Seleccionar Armador" press="onSeleccionarArmador" />
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement>
+														<form:label>
+															<Label text="Sistema de Pesca" width="100%"/>
+														</form:label>
+														<form:fields>
+															<Text text="{DetalleMarea>/DatosGenerales/CDSPE} {DetalleMarea>/DatosGenerales/DSSPE}" width="auto" maxLines="1" wrapping="false"/>
+														</form:fields>
+													</form:FormElement>
+												</form:formElements>
+												<form:title/>
+											</form:FormContainer>
+										</form:formContainers>
+										<form:layout>
+											<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+										</form:layout>
+									</form:Form>
+									<form:Form width="100%" editable="true" >
+										<form:title>
+											<core:Title text="Travesia" level="Auto"/>
+										</form:title>
+										<form:formContainers>
+											<form:FormContainer>
+												<form:formElements>
+													<form:FormElement visible="{DetalleMarea>/Config/visibleMotMarea}">
+														<form:label>
+															<Label text="Motivo de Marea" width="100%" />
+														</form:label>
+														<form:fields>
+															<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/CDMMA}" items="" width="25%">
+																<core:Item key="{key}" text="{text}" />
+															</ComboBox>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="{DetalleMarea>/Config/visibleUbiPesca}">
+														<form:label>
+															<Label text="Ubicación de Pesca"  width="100%" />
+														</form:label>
+														<form:fields>
+															<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/INUBC}" items="" width="25%">
+																<core:Item key="{key}" text="{text}" />
+															</ComboBox>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="{DetalleMarea>/Config/visibleFecHoEta}">
+														<form:label>
+															<Label text="Fecha/Hora ETA." width="100%" />
+														</form:label>
+														<form:fields>
+															<DateTimePicker value="{DetalleMarea>/DatosGenerales/FEARR}" width="25%" displayFormat="medium"  valueStateText="Invalid entry" 
+																 valueFormat="yyyyMMddHHmmss"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="{DetalleMarea>/DatosGenerales/FEINI}">
+														<form:label>
+															<Label text="Fecha de Inicio" width="100%" />
+														</form:label>
+														<form:fields>
+															<DateTimePicker value="{DetalleMarea>/DatosGenerales/FIMAR}" width="25%" displayFormat="medium"  valueStateText="Invalid entry" 
+																 valueFormat="yyyyMMddHHmmss"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="{DetalleMarea>/DatosGenerales/FEFIN}">
+														<form:label>
+															<Label text="Fecha de Fin" width="100%" />
+														</form:label>
+														<form:fields>
+															<DateTimePicker value="{DetalleMarea>/DatosGenerales/FFMAR}" width="25%" displayFormat="medium"  valueStateText="Invalid entry" 
+																 valueFormat="yyyyMMddHHmmss"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="{DetalleMarea>/Config/visibleEstMarea}">
+														<form:label>
+															<Label text="Estado de Marea" width="100%"/>
+														</form:label>
+														<form:fields>
+															<ComboBox width="25%" selectedKey="{DetalleMarea>/DatosGenerales/ESMAR}" items="">
+																<items>
+																	<core:Item key="{key}" text="{text}" />
+																</items>
+															</ComboBox>
+														</form:fields>
+													</form:FormElement>
+												</form:formElements>
+												<form:title/>
+											</form:FormContainer>
+										</form:formContainers>
+										<form:layout>
+											<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+										</form:layout>
+									</form:Form>
+								</content>
+							</IconTabFilter>
+							<IconTabSeparator icon="" iconDensityAware="false"/>
+							<IconTabFilter iconColor="Default" text="Eventos" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true"
+								visible="true" iconDensityAware="false">
+								<content>
+									<Table id="tblEventos" width="auto" noDataText="No data" mode="SingleSelectLeft" showSeparators="All" growing="true" growingThreshold="20"
+										growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'/', templateShareable:true}">
+										<infoToolbar>
+											<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+												<content>
+													<Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</content>
+											</Toolbar>
+										</infoToolbar>
+										<headerToolbar>
+											<OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+												<content>
+													<Title text="Eventos (7)" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+													<ToolbarSpacer width=""/>
+													<OverflowToolbarButton text="Sort" type="Default" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true"
+														iconDensityAware="false" />
+													<OverflowToolbarButton text="Action" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true"
+														iconDensityAware="false"/>
+												</content>
+											</OverflowToolbar>
+										</headerToolbar>
+										<columns>
+											<Column width="5%" hAlign="Center" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+												<header>
+													<Text text="" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</header>
+												<footer/>
+											</Column>
+											<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+												<header>
+													<Text text="Tipo de Evento" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</header>
+												<footer/>
+											</Column>
+											<Column width="15%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+												<header>
+													<Text text="Fecha/Hora Ini." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</header>
+												<footer/>
+											</Column>
+											<Column width="15%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+												<header>
+													<Text text="Fecha/Hora Fin." width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</header>
+												<footer/>
+											</Column>
+											<Column width="12%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+												<header>
+													<Text text="Zona de Pesca" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</header>
+												<footer/>
+											</Column>
+											<Column width="12%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+												<header>
+													<Text text="Puerto" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</header>
+												<footer/>
+											</Column>
+											<Column width="12%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+												<header>
+													<Text text="Planta" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</header>
+												<footer/>
+											</Column>
+										</columns>
+										<items>
+											<ColumnListItem type="Navigation" >
+												<cells>
+													<Text text="{ID}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+													<Text text="{TipoEvento}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+													<Text text="{FechIni}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+													<Text text="{FechFin}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+													<Text text="{ZonaPesca}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+													<Text text="{Puerto}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+													<Text text="{Planta}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</cells>
+											</ColumnListItem>
+										</items>
+									</Table>
+								</content>
+							</IconTabFilter>
+							<IconTabSeparator icon="" iconDensityAware="false"/>
+							<IconTabFilter iconColor="Default" text="Reserva Combustible" count="" design="Vertical" showAll="false" textDirection="Inherit"
+								enabled="true" visible="true" iconDensityAware="false">
+								<content>
+									<form:Form width="100%" editable="true" visible="true">
+										<form:title/>
+										<form:formContainers>
+											<form:FormContainer visible="true">
+												<form:formElements>
+													<form:FormElement visible="true">
+														<form:label>
+															<Label text="Embarcacion" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:label>
+														<form:fields>
+															<Text text="000000065 TASA 417" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="true">
+														<form:label>
+															<Label text="Marea" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:label>
+														<form:fields>
+															<Text text="0000171452 PESCA CHI" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="true">
+														<form:label>
+															<Label text="Evento" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:label>
+														<form:fields>
+															<Text text="Salida de Zona de Pesca" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:fields>
+													</form:FormElement>
+													<form:FormElement visible="true">
+														<form:label>
+															<Label text="Fecha de Reserva" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:label>
+														<form:fields>
+															<Text text="30/07/2021" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														</form:fields>
+													</form:FormElement>
+												</form:formElements>
+												<form:title/>
+											</form:FormContainer>
+										</form:formContainers>
+										<form:layout>
+											<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+										</form:layout>
+									</form:Form>
+									<Table width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true"
+										class="sapUiResponsiveMargin">
+										<infoToolbar>
+											<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+												<content>
+													<Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</content>
+											</Toolbar>
+										</infoToolbar>
+										<headerToolbar>
+											<OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+												<content>
+													<Title text="Reservas" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+													<ToolbarSpacer width=""/>
+													<Button text="Nueva Reserva" type="Default" icon="sap-icon://add-product" iconFirst="true" width="auto" enabled="true" visible="true"
+														iconDensityAware="false" />
+												</content>
+											</OverflowToolbar>
+										</headerToolbar>
+										<columns>
+											<Column width="5%" hAlign="Center" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+												<header>
+													<Text text="Nro." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</header>
+												<footer/>
+											</Column>
+											<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+												<header>
+													<Text text="Suministro" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</header>
+												<footer/>
+											</Column>
+											<Column width="12%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+												<header>
+													<Text text="Cantidad" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</header>
+												<footer/>
+											</Column>
+											<Column width="12%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+												<header>
+													<Text text="UM" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</header>
+												<footer/>
+											</Column>
+											<Column width="15%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+												<header>
+													<Text text="Centro" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</header>
+												<footer/>
+											</Column>
+											<Column width="15%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+												<header>
+													<Text text="Almacenes" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</header>
+												<footer/>
+											</Column>
+										</columns>
+										<items>
+											<ColumnListItem type="Inactive">
+												<cells>
+													<Text text="001" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+													<Text text="PETROLEO DIESEL B5 S50 PD TASA" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit"
+														visible="true"/>
+													<Text text="3000" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+													<Text text="GALONES" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+													<Text text="TCNO" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+													<Text text="CALLAO" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</cells>
+											</ColumnListItem>
+										</items>
+									</Table>
+								</content>
+							</IconTabFilter>
+						</items>
+						<content>
+							<Text text="Tab Bar Content goes here ..." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit"
+								visible="true"/>
+						</content>
+					</IconTabBar>
+				</content>
+				<footer>
+					<OverflowToolbar width="100%" height="46px" design="Auto" enabled="true" visible="true">
+						<content>
+							<ToolbarSpacer width=""/>
+							<Button text="Guardar" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true"
+								iconDensityAware="false"/>
+							<Button text="Crear" type="Accept" icon="sap-icon://create" iconFirst="true" width="auto" enabled="true" visible="true"
+								iconDensityAware="false"/>
+							<Button text="Eliminar" type="Reject" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true"
+								iconDensityAware="false"/>
+						</content>
+					</OverflowToolbar>
+				</footer>
+			</Page>
+		</pages>
+	</App>
+</mvc:View>
