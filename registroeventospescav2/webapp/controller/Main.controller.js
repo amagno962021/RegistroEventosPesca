@@ -1,18 +1,18 @@
 sap.ui.define([
-	"sap/ui/core/mvc/Controller",
-	"sap/ui/model/json/JSONModel",
+    "sap/ui/core/mvc/Controller",
+    "sap/ui/model/json/JSONModel",
     "sap/m/MessageBox"
 ],
-	/**
-	 * @param {typeof sap.ui.core.mvc.Controller} Controller
-	 */
-	function (Controller, JSONModel, MessageBox) {
-		"use strict";
+    /**
+     * @param {typeof sap.ui.core.mvc.Controller} Controller
+     */
+    function (Controller, JSONModel, MessageBox) {
+        "use strict";
 
-		return Controller.extend("com.tasa.registroeventospescav2.controller.Main", {
-			onInit: function () {
+        return Controller.extend("com.tasa.registroeventospescav2.controller.Main", {
+            onInit: function () {
                 /*this.router = this.getView().getRouter(this);
-			    this.router.getRoute("RouteMain").attachPatternMatched(this._onPatternMatched, this);*/
+                this.router.getRoute("RouteMain").attachPatternMatched(this._onPatternMatched, this);*/
                 var currentUser = this.getCurrentUser();
                 this.consultaTipoEmbarcacion(currentUser);
                 //this.prepararDataTree();
@@ -21,11 +21,11 @@ sap.ui.define([
                 //this.filtarMareas("001","0012");//por defecto muestra la primera opcion
             },
 
-            _onPatternMatched:function(){
+            _onPatternMatched: function () {
 
             },
 
-            prepararDataTree: function(dataTipoEmba, dataPlantas){
+            prepararDataTree: function (dataTipoEmba, dataPlantas) {
                 //preparar data del tree
                 /*var modeloTipoEmbarcacion = this.getView().getModel("TipoEmbarcacion");
                 var modeloPlantas = this.getView().getModel("Plantas");
@@ -65,11 +65,11 @@ sap.ui.define([
 
             },
 
-            onSearchMarea: function(evt){
+            onSearchMarea: function (evt) {
                 //console.log(evt)
                 var selectedItem = evt.getParameter("item").getBindingContext().getObject();
                 console.log(selectedItem);
-                if(selectedItem.cdtem && selectedItem.cdpta){
+                if (selectedItem.cdtem && selectedItem.cdpta) {
                     var oGlobalBusyDialog = new sap.m.BusyDialog();
                     var cdtem = selectedItem.cdtem;
                     var cdpta = selectedItem.cdpta;
@@ -82,7 +82,7 @@ sap.ui.define([
                 }
             },
 
-            filtarMareas: function(cdtem, cdpta){
+            filtarMareas: function (cdtem, cdpta) {
                 var dataModeloPropios = this.getView().getModel("Propios").getData();
                 var dataModeloTerceros = this.getView().getModel("Terceros").getData();
                 var dataPropios = [];
@@ -93,19 +93,19 @@ sap.ui.define([
                 //filtrar propios
                 for (let index = 0; index < dataModeloPropios.length; index++) {
                     const element = dataModeloPropios[index];
-                    if(element.CDTEM == cdtem && element.CDPTA == cdpta){
+                    if (element.CDTEM == cdtem && element.CDPTA == cdpta) {
                         num++;
                         var tmpElement = Object.assign({}, element);
                         tmpElement.NRO = num;
                         var fehoarr = ""
-                        if(tmpElement.FEARR){
+                        if (tmpElement.FEARR) {
                             //var tmpDate = new Date(tmpElement.FEARR);
                             var fearr = tmpElement.FEARR;
                             fehoarr = fearr + " " + tmpElement.HEARR;
                         }
                         tmpElement.FEHOARR = fehoarr;
                         tmpElement.DESCESMAR = "";
-                        if(tmpElement.ESMAR == "A" || tmpElement.ESMAR == 'C'){
+                        if (tmpElement.ESMAR == "A" || tmpElement.ESMAR == 'C') {
                             tmpElement.DESCESMAR = tmpElement.ESMAR == "A" ? "Abierto" : "Cerrado"
                         }
                         dataPropios.push(tmpElement);
@@ -118,19 +118,19 @@ sap.ui.define([
                 //filtrar terceros
                 for (let index1 = 0; index1 < dataModeloTerceros.length; index1++) {
                     const element1 = dataModeloTerceros[index1];
-                    if(element1.CDTEM == cdtem && element1.CDPTA == cdpta){
+                    if (element1.CDTEM == cdtem && element1.CDPTA == cdpta) {
                         num1++;
                         var tmpElement1 = Object.assign({}, element1);
                         tmpElement1.NRO = num1;
                         var fehoarr = ""
-                        if(tmpElement1.FEARR){
+                        if (tmpElement1.FEARR) {
                             //var tmpDate = new Date(tmpElement1.FEARR);
                             var fearr = tmpElement1.FEARR;
                             fehoarr = fearr + " " + tmpElement1.HEARR;
                         }
                         tmpElement1.FEHOARR = fehoarr;
                         tmpElement1.DESCESMAR = "";
-                        if(tmpElement1.ESMAR == "A" || tmpElement1.ESMAR == 'C'){
+                        if (tmpElement1.ESMAR == "A" || tmpElement1.ESMAR == 'C') {
                             tmpElement1.DESCESMAR = tmpElement1.ESMAR == "A" ? "Abierto" : "Cerrado"
                         }
                         dataTerceros.push(tmpElement1);
@@ -142,11 +142,11 @@ sap.ui.define([
 
             },
 
-            onNavToDetailMaster:function(){
-                
+            onNavToDetailMaster: function () {
+
             },
 
-            onActualizaMareas: function(){
+            onActualizaMareas: function () {
                 if (this.CDTEM && this.CDPTA) {
                     var that = this;
                     var oGlobalBusyDialog = new sap.m.BusyDialog();
@@ -195,21 +195,21 @@ sap.ui.define([
                 }
             },
 
-            onNuevaMarea:function(){
+            onNuevaMarea: function () {
                 //abrir poup
                 this.getDialog().open();
 
             },
 
-            onCancelMarea:function(){
+            onCancelMarea: function () {
                 this.getDialog().close();
             },
 
-            onCrearMarea:function(){
+            onCrearMarea: function () {
                 this.getDialog().close();
             },
 
-            onEditarCrearMarea:function(evt){
+            onEditarCrearMarea: function (evt) {
                 var selectedItem = evt.getSource().getParent().getBindingContext().getObject();
                 console.log(selectedItem);
                 var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
@@ -246,9 +246,11 @@ sap.ui.define([
                         //var sData = JSON.parse(data);
                         var marea = data.s_marea[0];
                         var eventos = data.s_evento;
+                        console.log("Eventos: ", eventos);
                         var detalleMarea = {
                             Cabecera: {},
                             DatosGenerales: {},
+                            Eventos: {},
                             ResCombustible: {},
                             VentaCombustible: {},
                             Config: {}
@@ -279,7 +281,7 @@ sap.ui.define([
                             FEARR: marea.FEARR,
                             FIMAR: marea.FIMAR,
                             FFMAR: marea.FFMAR,
-                            NuevoArmador:{
+                            NuevoArmador: {
                                 RUC: "",
                                 RAZON: "",
                                 CALLE: "",
@@ -289,6 +291,16 @@ sap.ui.define([
                             }
                         };
                         detalleMarea.DatosGenerales = tmpDatosGenerales;
+
+                        var tmpEventos = {
+                            TituloEventos: "Eventos ("+ eventos.length + ")",
+                            Lista: eventos
+                        };
+                        detalleMarea.Eventos = tmpEventos;
+
+
+
+
 
                         var tmpConfig = {
                             visibleArmadorComercial: true,
@@ -306,11 +318,14 @@ sap.ui.define([
                             visibleFecHoEta: true,
                             visibleFechIni: true,
                             visibleFechFin: true,
-
-                            widthInput: "60%"
+                            datosCombo: {
+                                Departamentos: that.getDepartamentos(),
+                                MotivosMarea: that.getMotivosMarea(marea.INPRP),
+                                UbicPesca: that.getUbicPesca(),
+                                EstMar: that.getEstMar()
+                            }
                         };
                         detalleMarea.Config = tmpConfig;
-
 
 
 
@@ -318,7 +333,7 @@ sap.ui.define([
                         that.getOwnerComponent().getModel("DetalleMarea").setData(detalleMarea);
                         that.getOwnerComponent().getModel("DetalleMarea").refresh();
                         oGlobalBusyDialog.close();
-                        oRouter.navTo("DetalleMarea");  
+                        oRouter.navTo("DetalleMarea");
                     },
                     complete: function () {
                         oGlobalBusyDialog.close();
@@ -330,7 +345,7 @@ sap.ui.define([
                 });
             },
 
-            consultaTipoEmbarcacion: function(user){
+            consultaTipoEmbarcacion: function (user) {
                 var that = this;
                 var oGlobalBusyDialog = new sap.m.BusyDialog();
                 var host = "https://cf-nodejs-qas.cfapps.us10.hana.ondemand.com";
@@ -343,7 +358,7 @@ sap.ui.define([
                     cache: false,
                     async: true,
                     dataType: 'json',
-                    beforeSend: function(){
+                    beforeSend: function () {
                         oGlobalBusyDialog.open();
                     },
                     success: function (data, textStatus, jqXHR) {
@@ -354,7 +369,7 @@ sap.ui.define([
                         that.consultaPlantas(user, JSON.parse(data));
                         //oGlobalBusyDialog.close();
                     },
-                    complete: function(){
+                    complete: function () {
                         oGlobalBusyDialog.close();
                     },
                     error: function (xhr, readyState) {
@@ -362,8 +377,8 @@ sap.ui.define([
                     }
                 });
             },
-    
-            consultaPlantas: function(user, dataTipoEmba){
+
+            consultaPlantas: function (user, dataTipoEmba) {
                 var that = this;
                 var oGlobalBusyDialog = new sap.m.BusyDialog();
                 var host = "https://cf-nodejs-qas.cfapps.us10.hana.ondemand.com";
@@ -376,7 +391,7 @@ sap.ui.define([
                     cache: false,
                     async: false,
                     dataType: 'json',
-                    beforeSend: function(){
+                    beforeSend: function () {
                         oGlobalBusyDialog.open();
                     },
                     success: function (data, textStatus, jqXHR) {
@@ -388,7 +403,7 @@ sap.ui.define([
                         that.cargaMareas(user);
                         //oGlobalBusyDialog.close();
                     },
-                    complete: function(){
+                    complete: function () {
                         oGlobalBusyDialog.close();
                     },
                     error: function (xhr, readyState) {
@@ -396,8 +411,8 @@ sap.ui.define([
                     }
                 });
             },
-    
-            cargaMareas: function(usuario){
+
+            cargaMareas: function (usuario) {
                 var that = this;
                 var oGlobalBusyDialog = new sap.m.BusyDialog();
                 var host = "https://cf-nodejs-qas.cfapps.us10.hana.ondemand.com";
@@ -410,7 +425,7 @@ sap.ui.define([
                     cache: false,
                     async: false,
                     dataType: 'json',
-                    beforeSend: function(){
+                    beforeSend: function () {
                         //oGlobalBusyDialog.open();
                     },
                     success: function (data, textStatus, jqXHR) {
@@ -436,17 +451,17 @@ sap.ui.define([
                         that.getView().getModel("Terceros").refresh();
                         //oGlobalBusyDialog.close();
                     },
-                    complete: function(){
+                    complete: function () {
                         oGlobalBusyDialog.close();
                     },
                     error: function (xhr, readyState) {
                         console.log(xhr);
                     }
                 });
-    
+
             },
 
-            getCurrentUser: function(){
+            getCurrentUser: function () {
                 return "fgarcia";
             },
 
@@ -472,7 +487,7 @@ sap.ui.define([
                 return this.oDialog;
             },
 
-            getDominio: function(dominio, key){
+            getDominio: function (dominio, key) {
                 var that = this;
                 var oVal = null;
                 var oGlobalBusyDialog = new sap.m.BusyDialog();
@@ -494,7 +509,7 @@ sap.ui.define([
                     async: false,
                     data: JSON.stringify(sBody),
                     dataType: 'json',
-                    beforeSend: function(){
+                    beforeSend: function () {
                         oGlobalBusyDialog.open();
                     },
                     success: function (data, textStatus, jqXHR) {
@@ -509,7 +524,201 @@ sap.ui.define([
                         }
                         //oGlobalBusyDialog.close();
                     },
-                    complete: function(){
+                    complete: function () {
+                        oGlobalBusyDialog.close();
+                    },
+                    error: function (xhr, readyState) {
+                        console.log(xhr);
+                    }
+                });
+                return oVal;
+            },
+
+            getDepartamentos: function () {
+                var that = this;
+                var oGlobalBusyDialog = new sap.m.BusyDialog();
+                var host = "https://cf-nodejs-qas.cfapps.us10.hana.ondemand.com";
+                var path = "/api/General/Read_Table/";
+                var sUrl = host + path;
+                var departamentos = [];
+                var sBody = {
+                    "delimitador": "|",
+                    "fields": [
+                        "BLAND",
+                        "BEZEI"
+                    ],
+                    "no_data": "",
+                    "option": [
+                        {
+                            "wa": "SPRAS EQ 'ES' AND LAND1 EQ 'PE'"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "cantidad": "",
+                            "control": "",
+                            "key": "",
+                            "valueHigh": "",
+                            "valueLow": ""
+                        }
+                    ],
+                    "order": "",
+                    "p_user": this.getCurrentUser(),
+                    "rowcount": 0,
+                    "rowskips": 0,
+                    "tabla": "T005U"
+                };
+                $.ajax({
+                    url: sUrl,
+                    type: 'POST',
+                    cache: false,
+                    async: false,
+                    data: JSON.stringify(sBody),
+                    dataType: 'json',
+                    beforeSend: function () {
+                        oGlobalBusyDialog.open();
+                    },
+                    success: function (data, textStatus, jqXHR) {
+                        var sData = data.data;
+                        if (sData.length > 0) {
+                            departamentos = sData;
+                        }
+                    },
+                    complete: function () {
+                        oGlobalBusyDialog.close();
+                    },
+                    error: function (xhr, readyState) {
+                        console.log(xhr);
+                        oGlobalBusyDialog.close();
+                    }
+                });
+                return departamentos;
+            },
+
+            getMotivosMarea: function (indProp) {
+                var that = this;
+                var MotivosMarea = [];
+                var oGlobalBusyDialog = new sap.m.BusyDialog();
+                var host = "https://cf-nodejs-qas.cfapps.us10.hana.ondemand.com";
+                var path = "/api/dominios/Listar";
+                var sUrl = host + path;
+                var sBody = {
+                    "dominios": [
+                        {
+                            "domname": "ZDO_ZCDMMA",
+                            "status": "A"
+                        }
+                    ]
+                };
+                $.ajax({
+                    url: sUrl,
+                    type: 'POST',
+                    cache: false,
+                    async: false,
+                    data: JSON.stringify(sBody),
+                    dataType: 'json',
+                    beforeSend: function () {
+                        oGlobalBusyDialog.open();
+                    },
+                    success: function (data, textStatus, jqXHR) {
+                        //var sData = JSON.parse(data);
+                        if (indProp) {
+                            if (indProp == "P") {
+                                MotivosMarea = data.data[0].data;
+                            } else {
+                                var sData = data.data[0].data;
+                                for (let index = 0; index < sData.length; index++) {
+                                    const element = sData[index];
+                                    //Motivos de marea con pesca (descargas)
+                                    if (element.id == "1" || element.id == "2") {
+                                        MotivosMarea.push(element);
+                                    }
+                                }
+                            }
+                        }
+                        //oGlobalBusyDialog.close();
+                    },
+                    complete: function () {
+                        oGlobalBusyDialog.close();
+                    },
+                    error: function (xhr, readyState) {
+                        console.log(xhr);
+                    }
+                });
+                return MotivosMarea;
+            },
+
+            getUbicPesca: function () {
+                var that = this;
+                var oVal = [];
+                var oGlobalBusyDialog = new sap.m.BusyDialog();
+                var host = "https://cf-nodejs-qas.cfapps.us10.hana.ondemand.com";
+                var path = "/api/dominios/Listar";
+                var sUrl = host + path;
+                var sBody = {
+                    "dominios": [
+                        {
+                            "domname": "ZUBIC",
+                            "status": "A"
+                        }
+                    ]
+                };
+                $.ajax({
+                    url: sUrl,
+                    type: 'POST',
+                    cache: false,
+                    async: false,
+                    data: JSON.stringify(sBody),
+                    dataType: 'json',
+                    beforeSend: function () {
+                        oGlobalBusyDialog.open();
+                    },
+                    success: function (data, textStatus, jqXHR) {
+                        //var sData = JSON.parse(data);
+                        oVal = data.data[0].data;
+                        //oGlobalBusyDialog.close();
+                    },
+                    complete: function () {
+                        oGlobalBusyDialog.close();
+                    },
+                    error: function (xhr, readyState) {
+                        console.log(xhr);
+                    }
+                });
+                return oVal;
+            },
+
+            getEstMar: function(){
+                var that = this;
+                var oVal = [];
+                var oGlobalBusyDialog = new sap.m.BusyDialog();
+                var host = "https://cf-nodejs-qas.cfapps.us10.hana.ondemand.com";
+                var path = "/api/dominios/Listar";
+                var sUrl = host + path;
+                var sBody = {
+                    "dominios": [
+                        {
+                            "domname": "ZESTMAR",
+                            "status": "A"
+                        }
+                    ]
+                };
+                $.ajax({
+                    url: sUrl,
+                    type: 'POST',
+                    cache: false,
+                    async: false,
+                    data: JSON.stringify(sBody),
+                    dataType: 'json',
+                    beforeSend: function () {
+                        oGlobalBusyDialog.open();
+                    },
+                    success: function (data, textStatus, jqXHR) {
+                        //var sData = JSON.parse(data);
+                        oVal = data.data[0].data;
+                        //oGlobalBusyDialog.close();
+                    },
+                    complete: function () {
                         oGlobalBusyDialog.close();
                     },
                     error: function (xhr, readyState) {
@@ -518,5 +727,7 @@ sap.ui.define([
                 });
                 return oVal;
             }
-		});
-	});
+
+
+        });
+    });

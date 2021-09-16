@@ -106,8 +106,8 @@
 															<Label text="Departamento"/>
 														</form:label>
 														<form:fields>
-															<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/NuevoArmador/DEPARTAMENTO}" items="" width="25%">
-																<core:Item key="{key}" text="{text}" />
+															<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/NuevoArmador/DEPARTAMENTO}" items="{DetalleMarea>/Config/datosCombo/Departamentos}" width="25%">
+																<core:Item key="{DetalleMarea>BLAND}" text="{DetalleMarea>BEZEI}" />
 															</ComboBox>
 														</form:fields>
 													</form:FormElement>
@@ -147,8 +147,8 @@
 															<Label text="Motivo de Marea" width="100%" />
 														</form:label>
 														<form:fields>
-															<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/CDMMA}" items="" width="25%">
-																<core:Item key="{key}" text="{text}" />
+															<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/CDMMA}" items="{DetalleMarea>/Config/datosCombo/MotivosMarea}" width="25%">
+																<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
 															</ComboBox>
 														</form:fields>
 													</form:FormElement>
@@ -157,8 +157,8 @@
 															<Label text="Ubicación de Pesca"  width="100%" />
 														</form:label>
 														<form:fields>
-															<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/INUBC}" items="" width="25%">
-																<core:Item key="{key}" text="{text}" />
+															<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/INUBC}" items="{DetalleMarea>/Config/datosCombo/UbicPesca}" width="25%">
+																<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
 															</ComboBox>
 														</form:fields>
 													</form:FormElement>
@@ -194,9 +194,9 @@
 															<Label text="Estado de Marea" width="100%"/>
 														</form:label>
 														<form:fields>
-															<ComboBox width="25%" selectedKey="{DetalleMarea>/DatosGenerales/ESMAR}" items="">
+															<ComboBox width="25%" selectedKey="{DetalleMarea>/DatosGenerales/ESMAR}" items="{DetalleMarea>/Config/datosCombo/EstMar}">
 																<items>
-																	<core:Item key="{key}" text="{text}" />
+																	<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
 																</items>
 															</ComboBox>
 														</form:fields>
@@ -216,7 +216,7 @@
 								visible="true" iconDensityAware="false">
 								<content>
 									<Table id="tblEventos" width="auto" noDataText="No data" mode="SingleSelectLeft" showSeparators="All" growing="true" growingThreshold="20"
-										growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'/', templateShareable:true}">
+										growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'DetalleMarea>/Eventos/Lista', templateShareable:true}">
 										<infoToolbar>
 											<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
 												<content>
@@ -227,7 +227,7 @@
 										<headerToolbar>
 											<OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
 												<content>
-													<Title text="Eventos (7)" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+													<Title text="{DetalleMarea>/Eventos/TituloEventos}" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
 													<ToolbarSpacer width=""/>
 													<OverflowToolbarButton text="Sort" type="Default" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true"
 														iconDensityAware="false" />

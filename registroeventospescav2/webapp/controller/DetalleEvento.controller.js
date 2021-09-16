@@ -6,5 +6,16 @@ sap.ui.define([
 	"use strict";
 
 	return Controller.extend("com.tasa.registroeventospescav2.controller.DetalleEvento", {
+	
+		/**
+		 * @override
+		 */
+		onInit: function() {
+			
+			
+		
+		}
+	
+
 	});
 });
