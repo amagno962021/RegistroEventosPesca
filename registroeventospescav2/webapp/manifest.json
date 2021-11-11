@@ -10,7 +10,22 @@
         "title": "{{appTitle}}",
         "description": "{{appDescription}}",
         "resources": "resources.json",
-        "ach": "ach"
+        "ach": "ach",
+        "crossNavigation": {
+            "inbounds": {
+                "fe-inbound": {
+                    "signature": {
+                        "parameters": {},
+                        "additionalParameters": "allowed"
+                    },
+                    "semanticObject": "registroeventospescav2",
+                    "action": "display",
+                    "title": "Registro de Eventos de Pesca",
+                    "subTitle": "",
+                    "icon": "sap-icon://manager-insight"
+                }
+            }   
+        } 
     },
     "sap.ui": {
         "technology": "UI5",
@@ -94,8 +109,32 @@
                     "pattern": "DetalleMarea",
                     "targetAggregation": "pages",
                     "controlId": "app"
+                },
+                {
+                    "name": "DetalleMarea",
+                    "view": "DetalleMarea",
+                    "pattern": "DetalleMarea/{nrmar}",
+                    "targetAggregation": "pages",
+                    "controlId": "app",
+                    "target": [
+                        "main",
+                        "detalleMarea"
+                    ]
                 }
-            ]
+            ],
+            "targets": {
+                "main":{
+                    "viewName": "Main",
+                    "viewLevel": 1,
+                    "viewId": "main"
+                },
+                "detalleMarea":{
+                    "viewName": "DetalleMarea",
+                    "viewLevel": 2,
+                    "viewId": "detalleMarea"
+                }
+                
+            }
         }
     },
     "sap.cloud": {

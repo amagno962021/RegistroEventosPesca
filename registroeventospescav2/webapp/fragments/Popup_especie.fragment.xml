@@ -1,0 +1,38 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<TableSelectDialog
+		id="myDialog"
+        contentWidth="30rem"
+		noDataText="No Products Found"
+		title="Seleccione especies"
+		search=".handleSearch"
+		confirm=".obtenerEspecies"
+		cancel=".handleClose"
+		items="{
+			path : 'popupEspecies>/data',
+			sorter : {
+				path : 'popupEspecies>id',
+				descending : false
+			}
+		}">
+		<ColumnListItem>
+			<cells>
+				<Text text="{popupEspecies>id}" />
+				<Text text="{popupEspecies>descripcion}" />
+			</cells>
+		</ColumnListItem>
+		<columns>
+			<Column width="12em">
+				<header>
+					<Text text="Código de especie" />
+				</header>
+			</Column>
+			<Column id="descripcion" minScreenWidth="Tablet" demandPopin="true">
+				<header>
+					<Text text="Descripcion" />
+				</header>
+			</Column>
+		</columns>
+	</TableSelectDialog>
+</core:FragmentDefinition>

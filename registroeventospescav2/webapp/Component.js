@@ -1,7 +1,7 @@
 sap.ui.define([
 	"sap/ui/core/UIComponent",
 	"sap/ui/Device",
-	"com/tasa/registroeventospescav2/model/models"
+	"./model/models",
 ], function (UIComponent, Device, models) {
 	"use strict";
 
@@ -25,6 +25,10 @@ sap.ui.define([
 
 			// set the device model
 			this.setModel(models.createDeviceModel(), "device");
+
+			//set init model
+			this.setModel(models.createInitModel(), "DetalleMarea");
+
 		}
 
 	});

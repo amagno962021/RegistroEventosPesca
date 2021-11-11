@@ -1,9 +1,82 @@
 <mvc:View
 	controllerName="com.tasa.registroeventospescav2.controller.DetalleEvento"
 	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:layout="sap.ui.layout"
 	xmlns="sap.m"
 	displayBlock="true"
 	height="100%"
 	busyIndicatorDelay="0"
 >
+	<App>
+		<pages>
+			<Page title="Detalle de Evento" showNavButton="true">
+				<content>
+					<layout:VerticalLayout width="100%" visible="true">
+						<layout:content>
+							<ObjectListItem intro="Pesca CHI" title="000000171452" icon="sap-icon://order-status" number="" numberUnit="" numberState="None" type="Active" selected="false">
+								<attributes>
+									<ObjectAttribute title="Embarcacion" text="000000065 TASA 417" active="false" visible="true" />
+									<ObjectAttribute title="Matricula" text="CE-11079-PM" active="false" visible="true" />
+									<ObjectAttribute title="Tipo de Evento" text="Zarpe" active="false" visible="true" />
+								</attributes>
+								<firstStatus />
+								<secondStatus />
+							</ObjectListItem>
+						</layout:content>
+					</layout:VerticalLayout>
+					<IconTabBar select=".obtenerTab"  expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true" selectedKey="Ok">
+						<items>
+							<IconTabFilter id="idGeneral" iconColor="Default" text="General" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false">
+
+							</IconTabFilter>
+							<IconTabFilter id="idDistribucion" iconColor="Default" text="Distribucion" count="" design="Vertical" showAll="false" 
+							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
+
+							</IconTabFilter>
+							<IconTabFilter id="idBiometria" iconColor="Default" text="Biometria" count="" design="Vertical" showAll="false" 
+							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
+								
+							</IconTabFilter>
+							<IconTabFilter id="idPescaDesc" iconColor="Default" text="Pesca descargada" count="" design="Vertical" showAll="false" 
+							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
+								
+							</IconTabFilter>
+							<IconTabFilter id="idPescaDecl" iconColor="Default" text="Pesca declarada" count="" design="Vertical" showAll="false" 
+							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
+								
+							</IconTabFilter>
+							<IconTabFilter id="idHorometro" iconColor="Default" text="Horometro" count="" design="Vertical" showAll="false" 
+							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
+								
+							</IconTabFilter>
+							<IconTabFilter id="idEquipamiento" iconColor="Default" text="Equipamiento" count="" design="Vertical" showAll="false" 
+							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
+								
+							</IconTabFilter>
+							<IconTabFilter id="idSiniestro" iconColor="Default" text="Siniestro" count="" design="Vertical" showAll="false" 
+							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
+								
+							</IconTabFilter>
+							<IconTabFilter id="idAccidente" iconColor="Default" text="Accidente" count="" design="Vertical" showAll="false" 
+							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
+								
+							</IconTabFilter>
+							<IconTabSeparator icon="" iconDensityAware="false" />
+						</items>
+						<content />
+					</IconTabBar>
+				</content>
+				<footer>
+					<OverflowToolbar width="100%" height="46px" design="Auto" enabled="true" visible="true">
+						<content>
+							<ToolbarSpacer width="" />
+							<Button text="Atras" type="Emphasized" icon="sap-icon://nav-back" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress" />
+							<Button text="Guardar" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress1" />
+						</content>
+					</OverflowToolbar>
+				</footer>
+			</Page>
+		</pages>
+	</App>
+
 </mvc:View>

@@ -1,0 +1,102 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form">
+
+	<Panel id="0002" headerText="Ubicacion" expandable="true" expanded="true">
+		<content>
+			<form:Form width="100%" editable="true" visible="true">
+				<form:formContainers>
+
+					<form:FormContainer visible="true">
+						<form:formElements>
+							<form:FormElement visible="true">
+								<form:label>
+									<Label text="Puerto" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+								</form:label>
+								<form:fields>
+									<Input value="011" description="Chimbote" type="Text" showValueHelp="false" enabled="false" visible="true" width="80%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement id="fe_ZonaPesca" visible="true">
+								<form:label>
+									<Label text="Zona de pesca" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+								</form:label>
+								<form:fields>
+									<ComboBox id="cb_ZonaPesca" placeholder="Zona de pesca" items="{combZonaPesca>/data}" editable="true" enabled="true" visible="true" width="100%" valueState="None" maxWidth="100%">
+										<items>
+											<core:Item key="{combZonaPesca>id}" text="{combZonaPesca>descripcion}" />
+										</items>
+									</ComboBox>
+									<Text text="Zona1" width="25%"/>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement id="fe_Empresa" visible="true">
+								<form:label>
+									<Label text="Empresa" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+								</form:label>
+								<form:fields>
+									<Input value="XTS" type="Text" showValueHelp="false" enabled="false" visible="true" width="100%" required="false" maxLength="0"/>
+									<Text text="Xternal"/>
+								</form:fields>
+							</form:FormElement>
+						</form:formElements>
+					</form:FormContainer>
+					<form:FormContainer visible="true">
+						<form:formElements>
+							<form:FormElement visible="true">
+								<form:label>
+									<Label text="Planta" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+								</form:label>
+								<form:fields>
+									<Input type="Text" showValueHelp="false" enabled="false" visible="true" width="70%" required="false" maxLength="0"/>
+								</form:fields>
+							</form:FormElement>
+						</form:formElements>
+					</form:FormContainer>
+				</form:formContainers>
+				<form:layout>
+					<form:ResponsiveGridLayout singleContainerFullSize="false" adjustLabelSpan="false" columnsL="3" labelSpanL="3" columnsM="2" labelSpanM="2" labelSpanS="8" />
+				</form:layout>
+			</form:Form>
+			<form:Form id="f_LatitudLongitud" width="100%" editable="true" visible="true">
+				<form:formContainers>
+
+					<form:FormContainer visible="true">
+						<form:formElements>
+							<form:FormElement visible="true">
+								<form:label>
+									<Label text="Latitud" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+								</form:label>
+								<form:fields>
+									<Input id="ip_latitud1" value="74" description="º" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0" />
+									<Input id="ip_latitud2" value="75" description="'" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0"/>
+								</form:fields>
+							</form:FormElement>
+						</form:formElements>
+					</form:FormContainer>
+					<form:FormContainer visible="true">
+						<form:formElements>
+							<form:FormElement visible="true">
+								<form:label>
+									<Label text="Longitud" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+								</form:label>
+								<form:fields>
+									<Input id="ip_longitud1" value="74" description="º" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0"/>
+									<Input id="ip_longitud2" value="75" description="'" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0"/>
+								</form:fields>
+							</form:FormElement>
+						</form:formElements>
+					</form:FormContainer>
+				</form:formContainers>
+				<form:layout>
+					<form:ResponsiveGridLayout 
+					singleContainerFullSize="false" 
+					adjustLabelSpan="true" 
+					columnsL="3" 
+					labelSpanL="3" 
+					columnsM="3" />
+				</form:layout>
+			</form:Form>
+
+		</content>
+	</Panel>
+
+</core:FragmentDefinition>
