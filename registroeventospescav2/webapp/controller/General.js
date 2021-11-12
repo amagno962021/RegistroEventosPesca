@@ -33,7 +33,7 @@ sap.ui.define([
             this._oControl = sap.ui.xmlfragment(oView.getId(), "com.tasa.registroeventospescav2.fragments."+ sFragName,this);
             this._bInit = false;
             this.ctr = o_this;
-            this.previousTab = "";
+            this.previousTab = "General";
             this.nextTab = "";
             console.log(textValidaciones.eventAttTabGeneral);
 
@@ -286,8 +286,8 @@ sap.ui.define([
             return bOk;
         },
 
-        onActionSelectTab: function(){
-            var soloLectura = this.ctr._soloLectura;
+        onActionSelectTab: function(tab_seleccionado){
+            this.nextTab = tab_seleccionado;
             var visible = textValidaciones.visible;//modelo visible
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //nodo evento actual
             var motivoEnCalend = ["1", "2", "8"]; // Motivos de marea con registros en calendario

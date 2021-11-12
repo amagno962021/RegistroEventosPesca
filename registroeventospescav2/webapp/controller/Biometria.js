@@ -7,16 +7,15 @@ sap.ui.define([
 
 	return ManagedObject.extend("com.tasa.registroeventospescav2.controller.Biometria", {
 
-        constructor: function(oView,sFragName,idBiometria) {
+        constructor: function(oView,sFragName,idBiometria, oThis) {
 
             this._oView = oView;
             this._oControl = sap.ui.xmlfragment(oView.getId(), "com.tasa.registroeventospescav2.fragments."+ sFragName,this);
             this._bInit = false;
+            this.ctr = oThis;
             this._navBio = idBiometria;
+            this.cargarDataBiometria();
             console.log("TextoNav : " + idBiometria)
-
-            this.getTableDefault();
-
 
         },
 
@@ -198,6 +197,14 @@ sap.ui.define([
             }
             this._oView.getModel("eventos").setProperty("/ListaPescaDeclarada",ListaPescaDecl);
             this._oView.getModel("eventos").setProperty("/ListaBiometria",ListaBiometrias);
+        },
+
+        cargarDataBiometria:function(){
+            if (this.ctr._listasServicioCargaIni[18] ? true : false) {
+                let listaDataBio = this.ctr._listasServicioCargaIni[18].str_flbsp_matched;
+            }else{
+                this.getTableDefault();
+            }
         }
 
 

@@ -555,7 +555,7 @@ sap.ui.define([
           
             }
             console.log(this._controler._nroEvento);
-            let s = await  this.cargar_servicios_pescaDesc(options);
+            let s = await this.cargar_servicios_pescaDesc(matricula, nom_embarcacion, cod_planta, nom_planta, fecha_inicio, this._controler.getCurrentUser());
             this._oView.getModel("popup_descarga").setProperty("/ListaDescargas", JSON.parse(this._DataPopup[0]).data);
             this._oView.getModel("popup_descarga").updateBindings(true);
 
@@ -624,16 +624,16 @@ sap.ui.define([
           
             }
             console.log(this._controler._nroEvento);
-            let s = await  this.cargar_servicios_pescaDescCHD(options);
+            let s = await this.cargar_servicios_pescaDescCHD(options);
             this._oView.getModel("popup_descarga").setProperty("/ListaDescargas", JSON.parse(this._DataPopup[0]).data);
             this._oView.getModel("popup_descarga").updateBindings(true);
 
 
         },
 
-        cargar_servicios_pescaDesc :function (options){
+        cargar_servicios_pescaDesc :function (matricula, nom_embarcacion, cod_planta, nom_planta, fecha_inicio, user){
             let self = this;
-            var s1 = TasaBackendService.obtenerListaDescargaPopUp(options);
+            var s1 = TasaBackendService.obtenerListaDescargaPopUp(matricula, nom_embarcacion, cod_planta, nom_planta, fecha_inicio, user);
             return Promise.all([s1]).then(values => {
                 self._DataPopup = values;
                 console.log(self._DataPopup);
@@ -641,7 +641,6 @@ sap.ui.define([
             }).catch(reason => {
                 return false;
             })
-
         },
 
         cargar_servicios_pescaDescCHD :function (options){
@@ -817,13 +816,13 @@ sap.ui.define([
             } else {
                 if (anularEvento) {
                     //ELIMINAR DE TABLA EVENTO
-                    let elimDesc =  await TasaBackendService.eliminarPescaDescargada(this._controler._nroMarea, this._controler._nroEvento);
+                    let elimDesc =  await TasaBackendService.eliminarPescaDescargada(this._controler._nroMarea, this._controler._nroEvento, this._controler.getCurrentUser());
                     let consulta  = await Promise.all([elimDesc]).then(values => {
                         return true; }).catch(reason => { return false; })
 
                 } else {
                     //METODO ACTUALIZAR TABLA
-                    let ActualizDesc =  await TasaBackendService.actualizarPescaDescargada(this._controler._nroMarea, this._controler._nroEvento);
+                    let ActualizDesc =  await TasaBackendService.actualizarPescaDescargada(this._controler._nroMarea, this._controler._nroEvento, this._controler.getCurrentUser());
                     let consulta     =  await Promise.all([ActualizDesc]).then(values => {
                         return true; }).catch(reason => { return false; })
                     

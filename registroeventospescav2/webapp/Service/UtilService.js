@@ -105,14 +105,14 @@ sap.ui.define([
         getElimPescaDesc: function(){
             var sBody = {
                 i_table: "",
-                p_user: "FGARCIA",
+                p_user: "",
                 t_data: ""
             };
             return sBody;
         },
         getActuaPescaDesc: function(){
             var sBody = {
-                p_user: "FGARCIA",
+                p_user: "",
                 str_set: []
             };
             return sBody;
@@ -128,6 +128,29 @@ sap.ui.define([
             var sBody = {
                 ip_cdemb: "",
                 ip_nrmar: ""
+            };
+            return sBody;
+        },
+
+        getConsultaGeneral: function(){
+            var sBody = {
+                nombreConsulta: "",
+                p_user: "",
+                parametro1: "",
+                parametro2: "",
+                parametro3: "",
+                parametro4: "",
+                parametro5: ""
+            };
+            return sBody;
+        },
+
+        getConsultaMareaBio: function(){
+            var sBody = {
+                p_flag: "",
+                user: "",
+                p_marea: "",
+                p_embarcacion: ""
             };
             return sBody;
         }

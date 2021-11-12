@@ -291,6 +291,12 @@
                         </header>
                         <footer/>
                     </Column>
+					<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                        <header>
+                            <Text text="" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                        </header>
+                        <footer/>
+                    </Column>
 										</columns>
 										<items>
 											<ColumnListItem type="Navigation" >
@@ -304,6 +310,13 @@
                             <ObjectIdentifier title="{DetalleMarea>DESCR}" text="{DetalleMarea>CDPTA}" titleActive="false" visible="true"/>
                             <ObjectNumber number="{DetalleMarea>CNPDC}" unit="Tn." emphasized="true" state="None"/>
                             <ObjectNumber number="{DetalleMarea>CNPDS}" unit="Tn." emphasized="true" state="None"/>
+							<Button
+								icon="sap-icon://detail-view"
+								text=""
+								press="onNavEventos"
+							>
+								
+							</Button>
 												</cells>
 											</ColumnListItem>
 										</items>
