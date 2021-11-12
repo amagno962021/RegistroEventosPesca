@@ -336,7 +336,7 @@ sap.ui.define([
                 dataDetalleMarea.Eventos.TituloEventos = "Eventos (" + eventos.length + ")";
 
                 //setear desc eventos
-                TasaBackendService.obtenerDominio("ZCDTEV").then(function(response){
+                /*TasaBackendService.obtenerDominio("ZCDTEV").then(function(response){
                     var sData = response.data[0].data;
                     for (let index = 0; index < eventos.length; index++) {
                         const element = eventos[index];
@@ -353,7 +353,7 @@ sap.ui.define([
                     dataDetalleMarea.Eventos.Lista = eventos;
                 }).catch(function(error){
                     console.log("ERROR: DetalleMarea.cargarCombos - ", error );
-                });
+                });*/
                 dataDetalleMarea.Eventos.Lista = eventos;
 
                 //la pestania de reserva de combustible y venta de combustible se setean en el Detalle
