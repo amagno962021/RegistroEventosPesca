@@ -12,7 +12,7 @@
 									<Label text="Puerto" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<Input value="011" description="Chimbote" type="Text" showValueHelp="false" enabled="false" visible="true" width="80%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+									<Input value="{eventos>/CDPTO}" description="{eventos>/DSPTO}" type="Text" showValueHelp="false" enabled="false" visible="true" width="80%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement id="fe_ZonaPesca" visible="true">

@@ -97,6 +97,7 @@ sap.ui.define([
             this._listaEventosBkup;
             this._listaMareaAnterior = MareaAnterior_cont;
             this._eventoNuevo="5"; //VALOR DEL ID DEL EVENTO NUEVO DE LA LISTA PRINCIPAL
+            this.cargarListasEventoSelVacias();
             /************ Listas iniciales vacias **************/
             this._ConfiguracionEvento = {};
             this._cmbPuntosDescarga = [];
@@ -132,7 +133,18 @@ sap.ui.define([
             EventosModelo.setProperty("/enabledAveriado", true);
             EventosModelo.setProperty("/enabledCantEquipamiento", true);
         },
-
+        cargarListasEventoSelVacias:function(){
+            this._listaEventos[this._elementAct].ListaBodegas = [];
+            this._listaEventos[this._elementAct].ListaBiometria = [];
+            this._listaEventos[this._elementAct].ListaPescaDeclarada = [];
+            this._listaEventos[this._elementAct].ListaPescaDescargada = [];
+            this._listaEventos[this._elementAct].ListaHorometros = [];
+            this._listaEventos[this._elementAct].ListaEquipamiento = [];
+            this._listaEventos[this._elementAct].ListaAccidente = [];
+            this._listaEventos[this._elementAct].ListaSiniestros = [];
+            this._listaEventos[this._elementAct].ListaIncidental = [];
+            this._listaEventos[this._elementAct].eListaPescaDeclarada = [];
+        },
 
         obtenerTab :function(event){
             let tab_evento_sel = event.getParameter("selectedItem").getProperty("text");
@@ -233,7 +245,7 @@ sap.ui.define([
 
         },
 
-        getFragment: function () {
+        getFragment: async function () {
             var o_tabGeneral = this.getView().byId("idGeneral");
             var o_tabDistribucion = this.getView().byId("idDistribucion");
             var o_tabPescaDeclarada = this.getView().byId("idPescaDecl");
@@ -286,7 +298,7 @@ sap.ui.define([
                 this._ConfiguracionEvento = this._listasServicioCargaIni[9];
             }
             var ss = this._listasServicioCargaIni[11].data[0].data;
-            this.prepararRevisionEvento(false);
+            await this.prepararRevisionEvento(false);
             this.cargaModelos();
 
         },
