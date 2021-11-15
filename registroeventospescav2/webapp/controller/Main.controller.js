@@ -219,7 +219,7 @@ sap.ui.define([
                 }
             },
 
-            onNuevaMarea: function () {
+            onActionCrearMarea: function () {
                 //abrir poup
                 var me = this;
                 var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
@@ -419,6 +419,10 @@ sap.ui.define([
                 }
 
                 this.getView().byId("idObjectHeader").setNumber(totalPescaDeclarada);
+            },
+
+            onActionSelPlanta: function(evt){
+                
             },
 
             onTest: function(){

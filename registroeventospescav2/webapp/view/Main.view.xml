@@ -760,7 +760,7 @@
 								enabled="true"
 								visible="true"
 								iconDensityAware="false"
-								press="onNuevaMarea"
+								press="onActionCrearMarea"
 							/>
 							<Button
 								text="Actualizar"
