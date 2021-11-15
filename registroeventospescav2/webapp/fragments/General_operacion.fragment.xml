@@ -12,7 +12,7 @@
 									<Label text="Estado de operación:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<ComboBox id="cmb_estaOperacion" items="{combEstadoOperacion>/data}" placeholder="Estado de operación" editable="true" enabled="true" visible="true" width="50%" valueState="None" maxWidth="100%" change=".map_onActionVerMotiLimitacion">
+									<ComboBox selectedKey="{eventos>/ESOPE}" id="cmb_estaOperacion" items="{combEstadoOperacion>/data}" placeholder="Estado de operación" editable="true" enabled="true" visible="true" width="50%" valueState="None" maxWidth="100%" change=".map_onActionVerMotiLimitacion">
 										<items>
 											<core:Item key="{combEstadoOperacion>id}" text="{combEstadoOperacion>descripcion}" />
 										</items>
@@ -24,7 +24,7 @@
 									<Label text="Tipo de descarga" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<ComboBox id="cb_tipoDescarga" items="{combTipoDescarga>/data}" placeholder="Tipo de descarga" editable="true" enabled="true" visible="true" width="50%" valueState="None" maxWidth="100%">
+									<ComboBox selectedKey="{eventos>/CDTDS}" id="cb_tipoDescarga" items="{combTipoDescarga>/data}" placeholder="Tipo de descarga" editable="true" enabled="true" visible="true" width="50%" valueState="None" maxWidth="100%">
 										<items>
 											<core:Item key="{combTipoDescarga>id}" text="{combTipoDescarga>descripcion}" />
 										</items>
@@ -36,7 +36,7 @@
 									<Label text="Motivo de no pesca" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<ComboBox placeholder="Motivo de no pesca" items="{combMotivoNoPesca>/data}" editable="true" enabled="true" visible="true" width="50%" valueState="None" maxWidth="100%">
+									<ComboBox selectedKey="{eventos>/CDMNP}" placeholder="Motivo de no pesca" items="{combMotivoNoPesca>/data}" editable="true" enabled="true" visible="true" width="50%" valueState="None" maxWidth="100%">
 										<items>
 											<core:Item key="{combMotivoNoPesca>id}" text="{combMotivoNoPesca>descripcion}" />
 										</items>
@@ -48,7 +48,7 @@
 									<Label text="Temperatura del mar" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<Input id="i_temperaturaMar" value="30" description="ºC" type="Number" showValueHelp="false" enabled="true" visible="true" width="30%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+									<Input id="i_temperaturaMar" value="{eventos>/TEMAR}" description="ºC" type="Number" showValueHelp="false" enabled="true" visible="true" width="30%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement id="fe_stockCombustible" visible="true">
@@ -56,7 +56,7 @@
 									<Label text="Stock de combustible" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<Input id="i_stockCombustible" value="30" type="Number" showValueHelp="false" enabled="true" visible="true" width="30%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+									<Input id="i_stockCombustible" value="{eventos>/STCMB}" type="Number" showValueHelp="false" enabled="true" visible="true" width="30%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement id="fe_muestra" visible="true">
@@ -64,7 +64,7 @@
 									<Label text="Muestra" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<Input id="ip_muestra" value="30" type="Number" showValueHelp="false" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+									<Input id="ip_muestra" value="{eventos>/MUEST}" type="Number" showValueHelp="false" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement id="fe_sistema_frio" visible="true">
@@ -72,7 +72,7 @@
 									<Label text="Estado sist. frio" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<ComboBox id="ip_sistema_frio" items="{combSistemaFrio>/data}" placeholder="Estado sist. frio" editable="true" enabled="true" visible="true" width="50%" valueState="None" maxWidth="100%">
+									<ComboBox selectedKey="{eventos>/ESTSF}" id="ip_sistema_frio" items="{combSistemaFrio>/data}" placeholder="Estado sist. frio" editable="true" enabled="true" visible="true" width="50%" valueState="None" maxWidth="100%">
 										<items>
 											<core:Item key="{combSistemaFrio>id}" text="{combSistemaFrio>descripcion}" />
 										</items>
@@ -88,7 +88,7 @@
 									<Label text="Motivo de limitación:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<ComboBox id="cmb_motivoLim" items="{combMotivoLim>/data}" placeholder="Motivo de limitación" editable="true" enabled="true" visible="true" width="50%" valueState="None" maxWidth="100%">
+									<ComboBox selectedKey="{eventos>/CDMLM}" id="cmb_motivoLim" items="{combMotivoLim>/data}" placeholder="Motivo de limitación" editable="true" enabled="true" visible="true" width="50%" valueState="None" maxWidth="100%">
 										<items>
 											<core:Item key="{combMotivoLim>id}" text="{combMotivoLim>descripcion}" />
 										</items>

@@ -68,7 +68,7 @@ sap.ui.define([
             console.log("FormEvent_cont: ", FormEvent_cont);
 
             /********* Carga de variables globales **********/
-            this._elementAct = "1";//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
+            this._elementAct = "0";//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
             this._utilNroEventoBio = "001";
             this._utilNroEventoIncid = "001";
             this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA;
@@ -81,7 +81,7 @@ sap.ui.define([
             this._codPlanta = FormEvent_cont.Cabecera.CDPTA;
             this._embarcacion = FormEvent_cont.Cabecera.CDEMB;//"0000000012";
             this._indicadorPropXPlanta = FormEvent_cont.Cabecera.INPRP;
-            this._soloLectura = false;//data de session solo lectura obtenida desde el principal
+            this._soloLectura = true;//data de session solo lectura obtenida desde el principal
             this._EsperaMareaAnt = EsperaMareaAnt_cont;//[{ "id": "0" }, { "id": "1" }]; 
             this._listaEventos = ListaEventos_cont;
             this._FormMarea = FormEvent_cont.Cabecera;
@@ -849,6 +849,7 @@ sap.ui.define([
         obtenerPescaDescargada: function () {
             if (this._listasServicioCargaIni[7] ? true : false) {
                 this._listaEventos[this._elementAct].ListaPescaDescargada = JSON.parse(this._listasServicioCargaIni[7]).data;
+                this._listaEventos[this._elementAct].FechProduccion = this._listaEventos[this._elementAct].ListaPescaDescargada[0].FECCONMOV;
             }
 
         },

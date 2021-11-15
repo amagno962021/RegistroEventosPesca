@@ -33,7 +33,7 @@ sap.ui.define([
         },
 
         validarPescaDeclarada: function(verMensajes){
-            this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+            this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
             var bOk = true;
             var motivo = this.ctr._motivoMarea; //motivo de marea de modelo detalle marea
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //modelo del evento actual
@@ -100,7 +100,7 @@ sap.ui.define([
 
         validarPorcPesca: function(){
             var bOk = true;
-            this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+            this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //modelo del evento actual
             var cantPescaDec = eventoActual.ListaPescaDeclarada.length;
             var cantTotal = eventoActual.CantTotalPescDecla;
@@ -144,7 +144,7 @@ sap.ui.define([
 
         validarCantidadTotalPesca: function(){
             var bOk = true;
-            this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+            this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
             var detalleMarea = this.ctr._FormMarea;//modelo de detalle de marea
             var indProp =  this.ctr._indicadorProp;//obtener indicador de propeidad del modelo de marea
             var cantTotal = 0;

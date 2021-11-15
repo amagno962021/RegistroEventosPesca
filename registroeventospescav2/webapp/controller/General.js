@@ -47,7 +47,7 @@ sap.ui.define([
         },
 
         validateFields: function(attributeName, verMensajes){
-            this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+            this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
             var bOk = true;
             var value = null;
             var messages = [];
@@ -210,7 +210,7 @@ sap.ui.define([
 
         validarLatitudLongitud: function(){
             var bOk = true;
-            this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+            this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
             var detalleMarea = this.ctr._FormMarea;//cargar modelo detalle marea
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct];//modelo de evento
             var latitudD = eventoActual.LatitudD;
@@ -292,7 +292,7 @@ sap.ui.define([
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //nodo evento actual
             var motivoEnCalend = ["1", "2", "8"]; // Motivos de marea con registros en calendario
             var detalleMarea = this.ctr._FormMarea;//modelo detalle marea
-            if(!soloLectura){
+            if(!this.ctr._soloLectura){
                 visible.Links =false;
                 var tipoEvento = eventoActual.TipoEvento;
                 var motivoMarea = detalleMarea.MotMar;
@@ -345,6 +345,7 @@ sap.ui.define([
                             this.obtenerTemporadas(motivoMarea, eventoActual.FechIni);
                             this.obtenerTemporadas("8", eventoActual.FechIni);
                             this.consultarPermisoPesca(eventoActual.Embarcacion, motivoMarea);
+                            //obtenerEspeciesPermitidas - falta metodo
                     }
                 }
 
