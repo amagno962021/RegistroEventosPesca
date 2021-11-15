@@ -29,9 +29,11 @@ sap.ui.define([
         _onPatternMatched: function (oEvent) {
             var modeloMarea = this.getOwnerComponent().getModel("DetalleMarea");
 
+
             //validar fechas nulas en tabla de eventos
             this.validaFechaNulaEvt();
 
+            
             //cargar combos
             this.cargarCombos();
 
@@ -486,7 +488,7 @@ sap.ui.define([
 
         onNavEventos: function(){
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("detalleEvento");
+            oRouter.navTo("DetalleEvento");
         }
 
 

@@ -5,11 +5,9 @@
 	xmlns="sap.m"
 	displayBlock="true"
 	height="100%"
-	busyIndicatorDelay="0"
 >
-	<App>
-		<pages>
-			<Page title="Detalle de Evento" showNavButton="true">
+	
+			<Page title="Detalle de Evento" showNavButton="true" navButtonPress="onBackDetalleMarea">
 				<content>
 					<layout:VerticalLayout width="100%" visible="true">
 						<layout:content>
@@ -76,7 +74,5 @@
 					</OverflowToolbar>
 				</footer>
 			</Page>
-		</pages>
-	</App>
 
 </mvc:View>

@@ -147,6 +147,18 @@ sap.ui.define([
 
         getConsultaMareaBio: function(){
             var sBody = {
+                "fieldEvento": [
+    
+                ],
+                "fieldFLBSP": [
+                  
+                ],
+                "fieldMarea": [
+                  
+                ],
+                "fieldPSCINC": [
+                  
+                ],
                 p_flag: "",
                 user: "",
                 p_marea: "",

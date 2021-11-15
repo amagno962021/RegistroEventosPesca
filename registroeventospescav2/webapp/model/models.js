@@ -21,9 +21,11 @@ sap.ui.define([
                     CDEMB: "",
                     NMEMB: "",
                     MREMB: "",
+                    CDPTA: "",
                     CDEMP: "",
                     NAME1: "",
-                    INPRP: ""
+                    INPRP: "",
+                    WERKS: ""
 				},
                 DatosGenerales: {
 					CDEMB: "",
@@ -33,11 +35,13 @@ sap.ui.define([
                     CDSPE: "",
                     DSSPE: "",
                     CDMMA: "",
+                    CDPTA: "",
                     INUBC: "",
                     ESMAR: "",
                     FEARR: "",
                     FIMAR: "",
                     FFMAR: "",
+                    WERKS: "",
                     NuevoArmador: {
                         RUC: "",
                         RAZON: "",
@@ -49,7 +53,8 @@ sap.ui.define([
 				},
                 Eventos: {
 					TituloEventos: "",
-                    Lista: []
+                    Lista: [],
+                    CurrentEvento: {}
 				},
                 ResCombustible: {},
                 VentaCombustible: {},
@@ -89,6 +94,12 @@ sap.ui.define([
                         FFEVN: "",
                         HFEVN: ""
                     }
+                },
+                EsperaMareaAnt: {
+
+                },
+                Eventos: {
+
                 },
                 Config: {
 					visibleArmadorComercial: true,

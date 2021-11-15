@@ -299,7 +299,7 @@
                     </Column>
 										</columns>
 										<items>
-											<ColumnListItem type="Navigation" >
+											<ColumnListItem >
 												<cells>
 													<Text text="{DetalleMarea>NREVN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                             <ObjectIdentifier title="{path: 'DetalleMarea>DESCEVT'}" text="" titleActive="false" visible="true"/>
@@ -310,13 +310,15 @@
                             <ObjectIdentifier title="{DetalleMarea>DESCR}" text="{DetalleMarea>CDPTA}" titleActive="false" visible="true"/>
                             <ObjectNumber number="{DetalleMarea>CNPDC}" unit="Tn." emphasized="true" state="None"/>
                             <ObjectNumber number="{DetalleMarea>CNPDS}" unit="Tn." emphasized="true" state="None"/>
-							<Button
-								icon="sap-icon://detail-view"
-								text=""
-								press="onNavEventos"
-							>
-								
-							</Button>
+							<Link
+														text="Detalle"
+														press="onNavEventos"
+														width="auto"
+														wrapping="false"
+														textAlign="Begin"
+														textDirection="Inherit"
+														visible="true"
+													/>
 												</cells>
 											</ColumnListItem>
 										</items>

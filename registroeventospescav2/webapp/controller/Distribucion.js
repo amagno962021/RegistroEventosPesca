@@ -10,7 +10,7 @@ sap.ui.define([
         constructor: function(oView,sFragName) {
 
             this._oView = oView;
-            this._oControl = sap.ui.xmlfragment(oView.getId(), "com.tasa.test.fragments."+ sFragName,this);
+            this._oControl = sap.ui.xmlfragment(oView.getId(), "com.tasa.registroeventospescav2.fragments."+ sFragName,this);
             this._bInit = false;
 
 

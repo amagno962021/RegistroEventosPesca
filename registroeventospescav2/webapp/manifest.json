@@ -111,35 +111,20 @@
                     "controlId": "app"
                 },
                 {
-                    "name": "DetalleMarea",
-                    "view": "DetalleMarea",
-                    "pattern": "DetalleMarea/{nrmar}",
+                    "name": "DetalleEvento",
+                    "view": "DetalleEvento",
+                    "pattern": "DetalleEvento",
                     "targetAggregation": "pages",
-                    "controlId": "app",
-                    "target": [
-                        "main",
-                        "detalleMarea"
-                    ]
-                }
-            ],
-            "targets": {
-                "main":{
-                    "viewName": "Main",
-                    "viewLevel": 1,
-                    "viewId": "main"
+                    "controlId": "app"
                 },
-                "detalleMarea":{
-                    "viewName": "DetalleMarea",
-                    "viewLevel": 2,
-                    "viewId": "detalleMarea"
-                },
-                "detalleEvento": {
-                    "viewName": "DetalleEvento",
-                    "viewLevel": 3,
-                    "viewId": "detalleEvento"
+                {
+                    "name": "test",
+                    "view": "test",
+                    "pattern": "test",
+                    "targetAggregation": "pages",
+                    "controlId": "app"
                 }
-                
-            }
+            ]
         }
     },
     "sap.cloud": {

@@ -47,36 +47,48 @@ sap.ui.define([
 		
 
 		 onInit: function () {
+            this.router = this.getOwnerComponent().getRouter();
+            this.router.getRoute("DetalleEvento").attachPatternMatched(this._onPatternMatched, this);
 
-            this.formEnableAtrib = true;
+        },
+
+        onBackDetalleMarea: function(){
+            history.go(-1);
+        },
+
+        _onPatternMatched: function (oEvent) {
             //modelo de alejandro
-            let ListaEventos_cont = this.getView().getModel("initModel").getData().Eventos.Lista; 
-            let MareaAnterior_cont =this.getView().getModel("initModel").getData().MareaAnterior; 
-            let EsperaMareaAnt_cont = this.getView().getModel("initModel").getData().EsperaMareaAnt;  
-            let FormEvent_cont = this.getView().getModel("initModel").getData().Eventos;
+            var modeloDetalleMarea = this.getOwnerComponent().getModel("DetalleMarea");
+            var dataDetalleMarea = modeloDetalleMarea.getData();
+            let ListaEventos_cont = dataDetalleMarea.Eventos.Lista; 
+            let MareaAnterior_cont = dataDetalleMarea.MareaAnterior; 
+            let EsperaMareaAnt_cont = dataDetalleMarea.EsperaMareaAnt;  
+            let FormEvent_cont = dataDetalleMarea;
+
+            console.log("FormEvent_cont: ", FormEvent_cont);
 
             /********* Carga de variables globales **********/
+            this._elementAct = "1";//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
             this._utilNroEventoBio = "001";
             this._utilNroEventoIncid = "001";
-            this._motivoMarea = FormEvent_cont.MotMarea;
-            this._tipoEvento = ListaEventos_cont[this._elementAct].TipoEvento;
+            this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA;
+            this._tipoEvento = ListaEventos_cont[this._elementAct].CDTEV;
             this._nroEvento = "3";//ESTE ES EL NUMERO DEL EVENTO SELECCIONADO DE LA LISTA DE DETALLE
-            this._nroMarea = FormEvent_cont.Marea;//"165728";
-            this._nroDescarga = FormEvent_cont.nroDescarga;//"TCHI001444";
-            this._indicador = ListaEventos_cont[this._elementAct].Indicador;//"E";
-            this._indicadorProp = FormEvent_cont.IndPropiedad;
-            this._codPlanta = ListaEventos_cont[this._elementAct].Planta;
-            this._embarcacion = FormEvent_cont.Embarcacion;//"0000000012";
-            this._indicadorPropXPlanta = ListaEventos_cont[this._elementAct].IndPropPlanta;
+            this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "";//"165728";
+            this._nroDescarga = ListaEventos_cont[this._elementAct].NRDES;//"TCHI001444";
+            this._indicador = ListaEventos_cont[this._elementAct].INPRP;//"E";
+            this._indicadorProp = ListaEventos_cont[this._elementAct].INPRP;
+            this._codPlanta = FormEvent_cont.Cabecera.CDPTA;
+            this._embarcacion = FormEvent_cont.Cabecera.CDEMB;//"0000000012";
+            this._indicadorPropXPlanta = FormEvent_cont.Cabecera.INPRP;
             this._soloLectura = false;//data de session solo lectura obtenida desde el principal
             this._EsperaMareaAnt = EsperaMareaAnt_cont;//[{ "id": "0" }, { "id": "1" }]; 
             this._listaEventos = ListaEventos_cont;
-            this._FormMarea = FormEvent_cont;
+            this._FormMarea = FormEvent_cont.Cabecera;
             //this._listaEventos = [{ "Numero": "1", "id": "0", "TipoEvento": "7", "MotiNoPesca": "no pesca", "EstaOperacion": "L", "ObseAdicional": "Prueba", "ZPLatiIni": "", "ZPLatiFin": "", "ZPLongIni": "", "ZPLongFin": "", "CantTotalPescDecla": "","CantTotalPescDeclaM":"", "ListaBodegas": [],"ListaBiometria": [], "ListaPescaDeclarada" : [], "ListaPescaDescargada" : [],"ListaHorometros" : [], "ListaEquipamiento" :[], "ListaAccidente" :[], "ListaSiniestros": [],"ListaIncidental":[],"eListaPescaDeclarada":[] }, { "Numero": "2", "id": "1", "TipoEvento": "2", "MotiNoPesca": "7", "EstaOperacion": "L", "ObseAdicional": "Prueba", "ZPLatiIni": "", "ZPLatiFin": "", "ZPLongIni": "", "ZPLongFin": "", "CantTotalPescDecla": "","CantTotalPescDeclaM":"", "ListaBodegas": [],"ListaBiometria": [], "ListaPescaDeclarada" : [], "ListaPescaDescargada" : [],"ListaHorometros" : [], "ListaEquipamiento" :[], "ListaAccidente" :[],"ListaSiniestros": [],"ListaIncidental":[],"eListaPescaDeclarada":[]  }];
             //this._FormMarea = {"EsNuevo":true, "EstMarea": "C", "EstCierre": "A", "FecCierre": "02/24/2021", "HorCierre": "17:04:50", "ObseAdicional": "Prueba", "CenEmbarcacion": "T059" };
             this._mareaReabierta = false;
-            this._elementAct = "1";//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
-            this._zonaPesca = ListaEventos_cont[this._elementAct].ZonaPesca;
+            this._zonaPesca = ListaEventos_cont[this._elementAct].CDZPC;
             this._IsRolRadOpe = true; //ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
             this._IsRolIngComb = true;//ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
             this._tipoPreservacion = ""; //viene de la consulta al servicio
@@ -120,6 +132,8 @@ sap.ui.define([
             EventosModelo.setProperty("/enabledAveriado", true);
             EventosModelo.setProperty("/enabledCantEquipamiento", true);
         },
+
+
         obtenerTab :function(event){
             let tab_evento_sel = event.getParameter("selectedItem").getProperty("text");
             console.log(event.getParameter("selectedItem").getProperty("text"));
@@ -196,7 +210,7 @@ sap.ui.define([
             var s7 = TasaBackendService.obtenerListaPuntosDescarga(this._codPlanta, this.getCurrentUser());
             var s8 = TasaBackendService.obtenerListaPescaDescargada(this._nroDescarga, this.getCurrentUser());
             //var s9 = TasaBackendService.obtenerListaSiniestros(this._nroMarea, this._nroEvento); ---> PENDIENTE EN REVISAR
-            var s10 = TasaBackendService.obtenerListaHorometro(this._FormMarea.CenEmbarcacion, this._tipoEvento, this._nroMarea, this._nroEvento);
+            var s10 = TasaBackendService.obtenerListaHorometro(this._FormMarea.WERKS, this._tipoEvento, this._nroMarea, this._nroEvento);
             var s11 = TasaBackendService.obtenerConfiguracionEvento();
             var s12 = TasaBackendService.obtenerDominio("1ZONAPESCA");
             var s13 = TasaBackendService.obtenerDominio("ZESOPE");
@@ -1275,7 +1289,7 @@ sap.ui.define([
         },
 
         getCurrentUser: function () {
-            return "fgarcia";
+            return "FGARCIA";
         },
 
 	});
