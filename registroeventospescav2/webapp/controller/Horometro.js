@@ -39,7 +39,7 @@ sap.ui.define([
 
 
         validarLecturaHorometros: function () {
-            this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+            this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
             var bOk = true;
             var eventoActual = {}; //nodo evento actual
             var horometroActual = this.ctr._listaEventos[this.ctr._elementAct].ListaHorometros;// nodo horometros de evento actual
@@ -181,7 +181,7 @@ sap.ui.define([
         },
 
         validarHorometrosEvento: function () {
-            this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+            this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
             var bOk = true;
             var listaEventos = this.ctr._listaEventos; //modelo de lista de eventos
             var detalleMarea = this.ctr._FormMarea;//cargar modelo detalle marea

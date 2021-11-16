@@ -58,7 +58,7 @@ sap.ui.define([
         },
 
         validarBodegas: function () {
-            this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+            this.oBundle = this._controler.getOwnerComponent().getModel("i18n").getResourceBundle();
             var bOk = true;
             var bodegas = this._controler._listaEventos[this._controler._elementAct].ListaBodegas;
             var cantTotal = 0;
@@ -91,7 +91,7 @@ sap.ui.define([
 
         validarBodegaPesca: function (verMensaje) {
             var bOk = true;
-            this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+            this.oBundle = this._controler.getOwnerComponent().getModel("i18n").getResourceBundle();
             var eventoActual = this._controler._listaEventos[this._controler._elementAct];
             var cantPesca = eventoActual.ListaPescaDeclarada.length;
             var cantTotBod = eventoActual.CantTotalPescDecla;
@@ -329,7 +329,7 @@ sap.ui.define([
 
         validarPescaDescargada: function(){
             var bOk = true;
-            this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+            this.oBundle = this._controler.getOwnerComponent().getModel("i18n").getResourceBundle();
             var valorAtributo = null;
             var DetalleMarea = this._controler._FormMarea;//modelo detalle de marea
             var eventoActual = this._controler._listaEventos[this._controler._elementAct];//modelo evento actual

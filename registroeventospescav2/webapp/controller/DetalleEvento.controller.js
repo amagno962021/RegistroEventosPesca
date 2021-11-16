@@ -68,7 +68,7 @@ sap.ui.define([
             console.log("FormEvent_cont: ", FormEvent_cont);
 
             /********* Carga de variables globales **********/
-            this._elementAct = "1";//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
+            this._elementAct = "0";//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
             this._utilNroEventoBio = "001";
             this._utilNroEventoIncid = "001";
             this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA;
@@ -81,7 +81,7 @@ sap.ui.define([
             this._codPlanta = FormEvent_cont.Cabecera.CDPTA;
             this._embarcacion = FormEvent_cont.Cabecera.CDEMB;//"0000000012";
             this._indicadorPropXPlanta = FormEvent_cont.Cabecera.INPRP;
-            this._soloLectura = false;//data de session solo lectura obtenida desde el principal
+            this._soloLectura = true;//data de session solo lectura obtenida desde el principal
             this._EsperaMareaAnt = EsperaMareaAnt_cont;//[{ "id": "0" }, { "id": "1" }]; 
             this._listaEventos = ListaEventos_cont;
             this._FormMarea = FormEvent_cont.Cabecera;
@@ -97,6 +97,7 @@ sap.ui.define([
             this._listaEventosBkup;
             this._listaMareaAnterior = MareaAnterior_cont;
             this._eventoNuevo="5"; //VALOR DEL ID DEL EVENTO NUEVO DE LA LISTA PRINCIPAL
+            this.cargarListasEventoSelVacias();
             /************ Listas iniciales vacias **************/
             this._ConfiguracionEvento = {};
             this._cmbPuntosDescarga = [];
@@ -132,7 +133,18 @@ sap.ui.define([
             EventosModelo.setProperty("/enabledAveriado", true);
             EventosModelo.setProperty("/enabledCantEquipamiento", true);
         },
-
+        cargarListasEventoSelVacias:function(){
+            this._listaEventos[this._elementAct].ListaBodegas = [];
+            this._listaEventos[this._elementAct].ListaBiometria = [];
+            this._listaEventos[this._elementAct].ListaPescaDeclarada = [];
+            this._listaEventos[this._elementAct].ListaPescaDescargada = [];
+            this._listaEventos[this._elementAct].ListaHorometros = [];
+            this._listaEventos[this._elementAct].ListaEquipamiento = [];
+            this._listaEventos[this._elementAct].ListaAccidente = [];
+            this._listaEventos[this._elementAct].ListaSiniestros = [];
+            this._listaEventos[this._elementAct].ListaIncidental = [];
+            this._listaEventos[this._elementAct].eListaPescaDeclarada = [];
+        },
 
         obtenerTab :function(event){
             let tab_evento_sel = event.getParameter("selectedItem").getProperty("text");
@@ -233,7 +245,7 @@ sap.ui.define([
 
         },
 
-        getFragment: function () {
+        getFragment: async function () {
             var o_tabGeneral = this.getView().byId("idGeneral");
             var o_tabDistribucion = this.getView().byId("idDistribucion");
             var o_tabPescaDeclarada = this.getView().byId("idPescaDecl");
@@ -286,7 +298,7 @@ sap.ui.define([
                 this._ConfiguracionEvento = this._listasServicioCargaIni[9];
             }
             var ss = this._listasServicioCargaIni[11].data[0].data;
-            this.prepararRevisionEvento(false);
+            await this.prepararRevisionEvento(false);
             this.cargaModelos();
 
         },
@@ -837,6 +849,7 @@ sap.ui.define([
         obtenerPescaDescargada: function () {
             if (this._listasServicioCargaIni[7] ? true : false) {
                 this._listaEventos[this._elementAct].ListaPescaDescargada = JSON.parse(this._listasServicioCargaIni[7]).data;
+                this._listaEventos[this._elementAct].FechProduccion = this._listaEventos[this._elementAct].ListaPescaDescargada[0].FECCONMOV;
             }
 
         },

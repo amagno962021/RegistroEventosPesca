@@ -12,12 +12,12 @@
 									<Label text="Observacion" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<Input id="ip_observacion" value="" placeholder="Observacion" type="Text" enabled="true" visible="true" width="100%" valueHelpOnly="false" required="false"/>
+									<Input id="ip_observacion" value="{eventos>/KMEVN}" placeholder="Observacion" type="Text" enabled="true" visible="true" width="100%" valueHelpOnly="false" required="false"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement id="fe_observacioAdic" visible="true">
 								<form:label>
-									<Label text="Observacion adicional" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+									<Label text="{eventos>/ObseAdicional}" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
 									
