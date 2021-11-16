@@ -112,7 +112,7 @@ sap.ui.define([
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //nodo evento actual
             //var detalleMarea = {};//modelo detalle marea
             var Utils = {};//modelo Utils
-            var visible = {};//modelo visible
+            var visible = this.ctr.modeloVisible;//modelo visible
             //var eventAttTabGeneral = {};//modelo con los atributos de los tab por tipo de evento
             var motivoMarea = this.ctr._motivoMarea;
             var tipoEvento = this.ctr._tipoEvento;
@@ -131,15 +131,15 @@ sap.ui.define([
             if(!eveCampGeneVal.includes(tipoEvento)){
                 bOk = this.validateFields(textValidaciones.eventAttTabGeneral[Number(tipoEvento)],bool);
                 if(bOk && tipoEvento == "3"){
-                    textValidaciones.visible.VisibleDescarga = true;
+                    this.ctr.modeloVisible.VisibleDescarga = true;
                     bOk =  this.validarLatitudLongitud();
                 }
             } else {
                 var estOperacion = eventoActual.EstaOperacion;
                 var eventosValidar = textValidaciones.eventAttTabGeneral[Number(tipoEvento)];
                 if(tipoEvento == "1"){
-                    textValidaciones.visible.VisibleDescarga = true;
-                    if(textValidaciones.visible.MotiLimitacion){
+                    this.ctr.modeloVisible.VisibleDescarga = true;
+                    if(this.ctr.modeloVisible.MotiLimitacion){
                         eventosValidar = textValidaciones.eventAttTabGeneral[10];
                     }
                     if(indPropiedad == "T"){
@@ -147,8 +147,8 @@ sap.ui.define([
                     }
                 } else if(tipoEvento == "5"){
                     visible.VisibleDescarga = true;
-                    var motLimitacion = textValidaciones.visible.MotiLimitacion;
-                    var motNoPesca = textValidaciones.visible.MotiNoPesca;
+                    var motLimitacion = this.ctr.modeloVisible.MotiLimitacion;
+                    var motNoPesca = this.ctr.modeloVisible.MotiNoPesca;
                     if(indPropiedad == "P"){
                         if(motLimitacion && motNoPesca){
                             eventosValidar = textValidaciones.eventAttTabGeneral[13];
@@ -161,8 +161,8 @@ sap.ui.define([
                         eventosValidar = textValidaciones.eventAttTabGeneral[15];
                     }
                 } else if(tipoEvento == "6"){
-                    textValidaciones.visible.VisibleDescarga = false;
-                    textValidaciones.visible.FechFin = false;
+                    this.ctr.modeloVisible.VisibleDescarga = false;
+                    this.ctr.modeloVisible.FechFin = false;
                     if(indPropPlanta == "P"){
                         if(indPropiedad == "P"){
                             if(motivoMarea == "1"){
@@ -193,20 +193,21 @@ sap.ui.define([
 
             if(bOk && tipoEvento == "1" && indPropiedad == "P"){
                 bOk = this.ctr.validarEsperaEventoAnterior();
-                textValidaciones.visible.VisibleDescarga = true;
+                this.ctr.modeloVisible.VisibleDescarga = true;
             }
 
             if(bOk && tipoEvento == "7"){
                 bOk = this.ctr.validarDatosEspera();
-                textValidaciones.visible.VisibleDescarga = true;
+                this.ctr.modeloVisible.VisibleDescarga = true;
             }
 
             if(bOk){
                 eventoActual.FechHoraIni = eventoActual.FechIni + " " + eventoActual.HoraIni;
-                if(textValidaciones.visible.FechFin){
+                if(this.ctr.modeloVisible.FechFin){
                     eventoActual.FechHoraFin = eventoActual.FechFin + " " + eventoActual.HoraFin;
                 }
             }
+            this.ctr.modeloVisibleModel.refresh();
 
             return bOk;
         },
@@ -291,12 +292,13 @@ sap.ui.define([
 
         onActionSelectTab: function(tab_seleccionado){
             this.nextTab = tab_seleccionado;
-            var visible = textValidaciones.visible;//modelo visible
+            var visible = this.ctr.modeloVisible;//modelo visible
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //nodo evento actual
             var motivoEnCalend = ["1", "2", "8"]; // Motivos de marea con registros en calendario
             var detalleMarea = this.ctr._FormMarea;//modelo detalle marea
             if(!this.ctr._soloLectura){
-                visible.Links =false;
+                visible.LinkRemover = false;
+                visible.LinkDescartar = false;
                 var tipoEvento = eventoActual.TipoEvento;
                 var motivoMarea = detalleMarea.MotMar;
                 var fechEvento = new Date(eventoActual.FechIni);
@@ -348,7 +350,7 @@ sap.ui.define([
                             this.obtenerTemporadas(motivoMarea, eventoActual.FechIni);
                             this.obtenerTemporadas("8", eventoActual.FechIni);
                             this.consultarPermisoPesca(eventoActual.Embarcacion, motivoMarea);
-                            //obtenerEspeciesPermitidas - falta metodo
+                            this.obtenerEspeciesPermitidas();//obtenerEspeciesPermitidas - falta metodo
                     }
                 }
 
@@ -379,6 +381,7 @@ sap.ui.define([
                 }
 
             }
+            this.ctr.modeloVisibleModel.refresh();
             this._oView.getModel("eventos").updateBindings(true);
             //refrescar modelos
         },
@@ -531,6 +534,8 @@ sap.ui.define([
             return bOk;
         },
         map_onActionVerMotiLimitacion:function(event){
+            //this.ctr.prueba01 = "Hola 0222";
+            //this._oView.getModel("eventos").updateBindings(true);
             var h = Horometro;
             this.ctr.Dat_Horometro.onActionVerMotiLimitacion();
         },
@@ -538,8 +543,8 @@ sap.ui.define([
         obtenerEspeciesPermitidas: function(){
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //nodo evento actual
             var DetalleMarea =  this.ctr._FormMarea;// modelo detalle marea
-            var confEventosPesca = {};//modelo conf eventos pesca 
-            var listaBiometria = [];//modelo lista biometria
+            var confEventosPesca = this.ctr._ConfiguracionEvento;//modelo conf eventos pesca 
+            var listaBiometria = this.ctr._listaEventos[this.ctr._elementAct].ListaBiometria;//modelo lista biometria
             var latiIniZonaPesca = eventoActual.ZPLatiIni;
 	        var latiFinZonaPesca = eventoActual.ZPLatiFin;
 	        var longIniZonaPesca = eventoActual.ZPLongIni;

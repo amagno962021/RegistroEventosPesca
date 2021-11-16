@@ -155,7 +155,7 @@ sap.ui.define([
             var tieneErrores = DetalleMarea.TieneErrores;//modelo detalle marea
             var listaEventos = this._controler._listaEventos;
             var eventoActual = this._controler._listaEventos[this._controler._elementAct];//modelo evento actual
-            var visible = textValidaciones.visible;//modelo visible
+            var visible = this._controler.modeloVisible;//modelo visible
             var motivoEnCalend = ["1", "2", "8"];//motivos de marea con registros en calendario
 
             if(!soloLectura && !tieneErrores){
@@ -276,6 +276,7 @@ sap.ui.define([
                     bOk = this._controler.Dat_Siniestro.validarSiniestros();
                 }
             }
+            this._controler.modeloVisibleModel.refresh();
             return bOk;
         },
 

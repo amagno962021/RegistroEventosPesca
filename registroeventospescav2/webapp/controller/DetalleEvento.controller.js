@@ -56,7 +56,7 @@ sap.ui.define([
             history.go(-1);
         },
 
-        _onPatternMatched: function (oEvent) {
+        _onPatternMatched: async function (oEvent) {
             //modelo de alejandro
             var modeloDetalleMarea = this.getOwnerComponent().getModel("DetalleMarea");
             var dataDetalleMarea = modeloDetalleMarea.getData();
@@ -103,26 +103,20 @@ sap.ui.define([
             this._cmbPuntosDescarga = [];
             this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
 
-            /************ Carga de fragments de los eventos **************/
-            let self = this;
-            this.cargarServiciosPreEvento().then(r => {
-                if (r) {
-                    self.getFragment();
-                } else {
-                    alert("Error");
-                }
-            })
-
             // var cardManifests = new JSONModel();
             var EventosModelo = new JSONModel();
             var oProductsModel = new JSONModel();
+            var ModeloVisible = new JSONModel();
                 
+            this.getView().setModel(ModeloVisible, "visible");
             this.getView().setModel(oProductsModel, "products");
             this.getView().setModel(EventosModelo, "eventos");
 
+            ModeloVisible.setData(textValidaciones.visible);
             EventosModelo.setData(this._listaEventos[this._elementAct]);
             oProductsModel.setData(eventosModel);
             oProductsModel.setProperty("/enabledEspecie", true);
+
             EventosModelo.setProperty("/enabledBodCantpesca", true);
             EventosModelo.setProperty("/enabledCantPescDeclarada", true);
 
@@ -132,6 +126,23 @@ sap.ui.define([
             EventosModelo.setProperty("/enabledFechProdDesc", true);
             EventosModelo.setProperty("/enabledAveriado", true);
             EventosModelo.setProperty("/enabledCantEquipamiento", true);
+
+            this.modeloVisibleModel =  this.getView().getModel("visible");
+            this.modeloVisible = this.modeloVisibleModel.getData();
+
+            // this.prueba01 = "Hola"
+            // EventosModelo.setProperty("/prueba001", this.prueba01);
+
+            /************ Carga de fragments de los eventos **************/
+            let self = this;
+            await this.cargarServiciosPreEvento().then(r => {
+                if (r) {
+                    self.getFragment();
+                } else {
+                    alert("Error");
+                }
+            })
+            
         },
         cargarListasEventoSelVacias:function(){
             this._listaEventos[this._elementAct].ListaBodegas = [];
@@ -1130,7 +1141,7 @@ sap.ui.define([
             this.getView().byId("ip_longitud1").setEnabled(false);
             this.getView().byId("ip_longitud2").setEnabled(false);
 
-            this.getView().getModel("products").setProperty("enabledEspecie", false);
+            this.getView().getModel("products").setProperty("/enabledEspecie", false);
             this.getView().getModel("eventos").setProperty("/enabledBodCantpesca", false);
 
         },
@@ -1179,7 +1190,7 @@ sap.ui.define([
 
         validarDatos: function(){
             var DataSession = {};//modelo data session
-            var visible = textValidaciones.visible;//modelo visible
+            var visible = this.modeloVisible//textValidaciones.visible;//modelo visible
             var eventoActual = this._listaEventos[this._elementAct]; //nodo evento actual
             var detalleMarea = this._FormMarea;//modelo detalle marea
             var isRolIngComb = DataSession.IsRolIngComb;
@@ -1202,6 +1213,7 @@ sap.ui.define([
                     this.getDialog().open();
                 }
             }
+            this.modeloVisibleModel.refresh();
         },
 
         getDialog: function(){

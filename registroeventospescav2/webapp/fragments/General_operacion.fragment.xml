@@ -31,7 +31,7 @@
 									</ComboBox>
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement id="fe_MotiNoPesca" visible="true">
+							<form:FormElement id="fe_MotiNoPesca" visible="{visible>/MotiNoPesca}">
 								<form:label>
 									<Label text="Motivo de no pesca" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
@@ -83,7 +83,7 @@
 					</form:FormContainer>
 					<form:FormContainer visible="true">
 						<form:formElements>
-							<form:FormElement id="fe_motivoLimitacion" visible="true">
+							<form:FormElement id="fe_motivoLimitacion" visible="{visible>/MotiLimitacion}">
 								<form:label>
 									<Label text="Motivo de limitación:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>

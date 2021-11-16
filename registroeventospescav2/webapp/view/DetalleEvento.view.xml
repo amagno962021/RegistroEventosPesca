@@ -44,7 +44,7 @@
 								
 							</IconTabFilter>
 							<IconTabFilter id="idHorometro" iconColor="Default" text="Horometro" count="" design="Vertical" showAll="false" 
-							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
+							textDirection="Inherit" enabled="true" visible="{visible>/TabHorometro}" iconDensityAware="false">
 								
 							</IconTabFilter>
 							<IconTabFilter id="idEquipamiento" iconColor="Default" text="Equipamiento" count="" design="Vertical" showAll="false" 
@@ -68,6 +68,8 @@
 					<OverflowToolbar width="100%" height="46px" design="Auto" enabled="true" visible="true">
 						<content>
 							<ToolbarSpacer width="" />
+							<Button text="Remover evento" type="Emphasized" icon="" iconFirst="true" width="auto" enabled="true" visible="{visible>/LinkRemover}" iconDensityAware="false" press=".removerEvento_button" />
+							<Button text="Descartar cambios" type="Emphasized" icon="" iconFirst="true" width="auto" enabled="true" visible="{visible>/LinkDescartar}" iconDensityAware="false" press=".descartarCambios_button" />
 							<Button text="Atras" type="Emphasized" icon="sap-icon://nav-back" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress" />
 							<Button text="Guardar" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="_onButtonPress1" />
 						</content>
