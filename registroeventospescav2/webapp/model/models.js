@@ -138,7 +138,32 @@ sap.ui.define([
 			var oModel = new JSONModel(initModel);
 			//oModel.setDefaultBindingMode("OneWay");
 			return oModel;
-		}
+		},
+
+        createFiltroModel: function(){
+            var data = {
+                DescUbicacion: "",
+                IndPropiedad: "",
+                Planta: "",
+                TipoEmbarcacion: "",
+                ValFijoPlanta: ""
+            };
+            var oModel = new JSONModel(data);
+			return oModel;
+        },
+
+        createCombosModel: function(){
+            var data = {
+                Plantas: [],
+                Embarcaciones: [],
+                IndPropiedad: [],
+                TituloEmba: "",
+                NumerosPaginacion: [],
+            };
+            var oModel = new JSONModel(data);
+			return oModel;
+        }
+
 
 	};
 });

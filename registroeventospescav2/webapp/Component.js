@@ -29,6 +29,9 @@ sap.ui.define([
 			//set init model
 			this.setModel(models.createInitModel(), "DetalleMarea");
 
+			//set combos model
+			this.setModel(models.createCombosModel(), "ComboModel");
+
 		}
 
 	});

@@ -4,14 +4,16 @@ sap.ui.define([
     "sap/ui/core/routing/History",
     "../Formatter/formatter",
     "sap/m/MessageBox",
-    "../Service/TasaBackendService"
+    "../Service/TasaBackendService",
+    "sap/ui/core/BusyIndicator",
 ], function (
     Controller,
     JSONModel,
     History,
     formatter,
     MessageBox,
-    TasaBackendService
+    TasaBackendService,
+    BusyIndicator
 ) {
     "use strict";
 

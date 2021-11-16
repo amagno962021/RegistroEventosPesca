@@ -35,6 +35,9 @@ sap.ui.define([
             this.ctr = o_this;
             this.previousTab = "General";
             this.nextTab = "";
+            this.calendarioPescaCHD = [];
+            this.calendarioPescaCHI = [];
+            this.calendarioPescaVED = [];
             console.log(textValidaciones.eventAttTabGeneral);
 
         },
@@ -529,6 +532,167 @@ sap.ui.define([
         map_onActionVerMotiLimitacion:function(event){
             var h = Horometro;
             this.ctr.Dat_Horometro.onActionVerMotiLimitacion();
+        },
+
+        obtenerEspeciesPermitidas: function(){
+            var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //nodo evento actual
+            var DetalleMarea =  this.ctr._FormMarea;// modelo detalle marea
+            var confEventosPesca = {};//modelo conf eventos pesca 
+            var listaBiometria = [];//modelo lista biometria
+            var latiIniZonaPesca = eventoActual.ZPLatiIni;
+	        var latiFinZonaPesca = eventoActual.ZPLatiFin;
+	        var longIniZonaPesca = eventoActual.ZPLongIni;
+	        var longFinZonaPesca = eventoActual.ZPLongFin;
+	        var latiCalaD = eventoActual.LatitudD;
+	        var latiCalaM = eventoActual.LatitudM;
+	        var latiCala = latiCalaD * 100 + latiCalaM;
+	        var longCalaD = eventoActual.LongitudD;
+	        var longCalaM = eventoActual.LongitudM;
+	        var longCala = longCalaD*100 + longCalaM; 
+            var indPropiedad = DetalleMarea.IndPropiedad;
+	        var motivoMarea = DetalleMarea.MotMarea;
+	        var indEvento = eventoActual.Indicador;
+	        var espePermitEmb = DetalleMarea.EspPermitida;
+            var valiCoordCala = eventoActual.ValiCoordCala;
+            var millaCosta = eventoActual.MillaCosta;
+            var espePermitida = [];
+	        var espeZonaPesca = [];
+	        var espeVeda = [];
+            var listCalendario = motivoMarea == "1" ? this.calendarioPescaCHD : this.calendarioPescaCHI;
+            this.calendarioPescaVED
+            for (let index = 0; index < listCalendario.length; index++) {
+                const element = listCalendario[index];
+                var latiIni = element.IntLatIni;
+		        var latiFin = element.IntLatFin;
+		        var longIni = element.IntLonIni;
+		        var longFin = element.IntLonFin;
+                if (((latiIni < latiIniZonaPesca && latiFin > latiIniZonaPesca) || 
+				(latiIni >= latiIniZonaPesca && latiIni < latiFinZonaPesca)) && 
+				((longIni < longIniZonaPesca && longFin > longIniZonaPesca) || 
+				(longIni >= longIniZonaPesca && longIni < longFinZonaPesca)) && 
+				((latiCala >= latiIni || latiCala <= latiFin) && 
+				(longCala >= longIni || longCala <= longFin))) {
+                    var obj = {
+                        CodEspecie: element.CodEspecie,
+                        DescEspecie: element.DescEspecie
+                    };
+                    espeZonaPesca.push(obj);
+                    espePermitida.push(obj);
+		        }
+            }
+
+            if(espePermitida != null && espePermitida.length > 0){
+                if(valiCoordCala){
+                    for (let i = 0, j = 0; i < this.calendarioPescaVED.length; i++) {
+                        const calendarioVED = this.calendarioPescaVED[i];
+                        var latiIni = calendarioVED.IntLatIni;
+				        var latiFin = calendarioVED.IntLatFin;
+				        var longIni = calendarioVED.IntLonIni;
+				        var longFin = calendarioVED.IntLonFin;
+                        var millas = calendarioVED.Milla;
+				        var especieVeda = calendarioVED.CodEspecie;
+                        if ((latiCala >= latiIni && latiCala <= latiFin) && (millaCosta <= millas)) {
+                            var arrayFiltrado = espePermitida.filter(function(el) { return el.CodEspecie != especieVeda; });
+                            espePermitida = arrayFiltrado;
+                            var obj = {
+                                CodEspecie: calendarioVED.CodEspecie,
+                                DescEspecie: calendarioVED.DescEspecie
+                            };
+                            espeVeda.push(obj);
+                        }
+                    }
+                }
+
+                if(indEvento == "N"){
+                    eventoActual.PescaDeclarada = [];
+                    if(motivoMarea == "1" && espePermitEmb != null){
+                        for (let index = 0; index < espePermitEmb.length; index++) {
+                            const element = espePermitEmb[index];
+                            var especie = element.CodEspecie;
+                            var descEspecie = element.DescEspecie;
+                            for (let index1 = 0; index1 < espePermitida.length; index1++) {
+                                const element = espePermitida[index1];
+                                if(element.CodEspecie == especie){
+                                    var obj = {
+                                        Indicador: "N",
+                                        Especie: especie.toString(),
+                                        DescEspecie: descEspecie,
+                                        UnidMedida: confEventosPesca.CalaUMPescaDecl,
+                                        DescUnidMedida: confEventosPesca.CalaDescUMPescaDecl
+                                    };
+                                    eventoActual.PescaDeclarada.push(obj);
+                                    var objBiometria = {
+                                        CodEspecie: especie.toString(),
+                                        Especie: element.DescEspecie
+                                    };
+                                    listaBiometria.push(objBiometria);
+                                }
+                            }
+                            
+                        }
+                    } else if(motivoMarea == "2"){
+                        var espOk = true;
+                        this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+                        var especieDef = confEventosPesca.CalaEspecieCHI; //Una sola especie para pesca CHI
+				        var obsvEspecie = "";
+                        for (let index2 = 0; index2 < espePermitEmb.length; index2++) {
+                            const element = espePermitEmb[index2];
+                            if(element.CodEspecie != especieDef){
+                                espOk = false;
+                                obsvEspecie += this.oBundle.getText("EMBNOPERMISOESP");
+                                break;
+                            }
+                        }
+
+                        for (let index3 = 0; index3 < espeZonaPesca.length; index3++) {
+                            const element = espeZonaPesca[index3];
+                            if(element.CodEspecie != especieDef){
+                                espOk = false;
+                                obsvEspecie += this.oBundle.getText("ESPNOPERMITZONA");
+                                break;
+                            }
+                        }
+
+                        if(valiCoordCala){
+                            for (let index4 = 0; index4 < espeVeda.length; index4++) {
+                                const element = espeVeda[index4];
+                                if(element.CodEspecie != especieDef){
+                                    espOk = false;
+                                    obsvEspecie += this.oBundle.getText("ESPECIEENVEDA");
+                                    break;
+                                }
+                            }
+                        }
+
+                        if(!espOk){
+                            eventoActual.ObseAdicional = this.oBundle.getText("OBSADICCALAESPNOVALIDA");
+                        }
+
+                        var obj = {
+                            Indicador: "N",
+                            Especie: especieDef.toString(),
+                            DescEspecie: confEventosPesca.CalaDescEspecieCHI,
+                            Observacion: obsvEspecie,
+                            UnidMedida: confEventosPesca.CalaUMPescaDecl,
+                            DescUnidMedida: confEventosPesca.CalaDescUMPescaDecl
+                        };
+                        eventoActual.PescaDeclarada.push(obj);
+
+                        var objBiometria = {
+                            CodEspecie: especieDef.toString(),
+                            Especie: confEventosPesca.CalaDescEspecieCHI
+                        };
+                        listaBiometria.push(objBiometria);
+
+                    }
+                }
+            }
+
+            eventoActual.ObteEspePermitidas = false;
+            eventoActual.EspePermitida = espePermitida;
+            eventoActual.EspeZonaPesca = espeZonaPesca;
+            eventoActual.EspeVeda = espeVeda;
+            //refrescar modelo
         }
 
 	});

@@ -26,7 +26,51 @@ sap.ui.define([
                     data.map(x => [key(x), x])
                 ).values()
             ];
-        }
+        },
+
+        getDegrees :function(value){
+            if (value != "") {
+                let type = null;
+                value = value.trim();		
+                type = this.getFormatGeo(value);
+                if (type != null) {
+                    return Number(value.substring(0, 3));
+                }
+            }
+            return 0;
+        },
+
+        getMinutes :function(value){
+            if (value != "") {
+                let type = null;
+                value = value.trim();		
+                type = this.getFormatGeo(value);
+                if (type != null) {
+                    if (type == "D") {
+                        return Number(value.substring(3));
+                    } else if (type == "G") {
+                        return Number(value.substring(4, 7));
+                    }
+                } 
+            }
+            return 0;
+        },
+        
+        getFormatGeo :function(value){
+            if (value != "") {
+                let myPattern = /(\d){5}/;
+                let myGeoPattern =/(\d){3}º(\d){2}'/;
+                value = value.trim();
+                let myMatcher = myPattern.test(value);
+                let myGeoMatcher = myGeoPattern.test(value);
+                if (myMatcher) {
+                    return "D";
+                } else if (myGeoMatcher) {
+                    return "G";
+                }
+            }
+            return null;
+        },
 
 
     }

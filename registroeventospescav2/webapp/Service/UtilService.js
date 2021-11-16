@@ -165,6 +165,14 @@ sap.ui.define([
                 p_embarcacion: ""
             };
             return sBody;
+        },
+
+        getBodyAyudaBusq: function(){
+            var sBody = {
+                "nombreAyuda": "",
+                "p_user": ""
+            };
+            return sBody;
         }
 
     }

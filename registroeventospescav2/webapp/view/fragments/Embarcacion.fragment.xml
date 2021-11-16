@@ -1,0 +1,187 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+    xmlns:form="sap.ui.layout.form"
+>
+
+    <Dialog horizontalScrolling="true" showHeader="true" state="None" stretch="false" title="Buscar Embarcación" type="Standard"
+		verticalScrolling="true">
+		<content>
+			<form:Form width="100%" editable="true" visible="true">
+				<form:title/>
+				<form:formContainers>
+					<form:FormContainer visible="true">
+						<form:formElements>
+							<form:FormElement visible="true">
+								<form:label>
+									<Label text="Cod. Embarcación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<Input id="idEmba" width="auto" valueStateText="Invalid entry" maxLength="10"/>
+								</form:fields>
+							</form:FormElement>
+                            <form:FormElement visible="true">
+								<form:label>
+									<Label text="Nomb. Embarcación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<Input id="idNombEmba" width="auto" valueStateText="Invalid entry"/>
+								</form:fields>
+							</form:FormElement>
+                            <form:FormElement visible="true">
+								<form:label>
+									<Label text="R.U.C Armador" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<Input id="idRucArmador"   width="auto" valueStateText="Invalid entry"/>
+								</form:fields>
+							</form:FormElement>
+                            <form:FormElement visible="true">
+								<form:label>
+									<Label text="Matrícula" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<Input id="idMatricula"   width="auto" valueStateText="Invalid entry"/>
+								</form:fields>
+							</form:FormElement>
+                            <form:FormElement visible="true">
+                                <form:label>
+                                    <Label text="Indicador de propiedad" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </form:label>
+                                <form:fields>
+                                    <ComboBox id="indicadorPropiedad" items="{ComboModel>/IndPropiedad}" editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%">
+                                        <items>
+                                            <core:Item text="{ComboModel>descripcion}" enabled="true" key="{ComboModel>id}"/>
+                                        </items>
+                                    </ComboBox>
+                                </form:fields>
+                            </form:FormElement>
+                            <form:FormElement visible="true">
+								<form:label>
+									<Label text="Desc. Armador" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<Input id="idDescArmador"   width="auto" valueStateText="Invalid entry"/>
+								</form:fields>
+							</form:FormElement>
+                            <form:FormElement visible="true">
+                                    <form:label>
+                                        <Label text="" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                    </form:label>
+                                    <form:fields>
+                                        <Button text="Buscar" type="Emphasized" icon="sap-icon://search" iconFirst="true" width="100%" enabled="true" visible="true" iconDensityAware="false" press="onSearchEmbarcacion"/>
+                                        <Button press="clearFilterEmba" text="Limpiar" type="Emphasized" icon="sap-icon://clear-filter" iconFirst="true" width="100%" enabled="true" visible="true" iconDensityAware="false"/>
+                                    </form:fields>
+                            </form:FormElement>
+						</form:formElements>
+						<form:title/>
+					</form:FormContainer>
+				</form:formContainers>
+				<form:layout>
+					<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+				</form:layout>
+				
+			</form:Form>
+			
+ <ScrollContainer height='20rem' vertical='true'> 
+                         <Table id="idProductsTable2"
+							itemPress="onSelectEmba"
+							inset="false"
+							items="{
+								path: 'ComboModel>/Embarcaciones',
+								sorter: {
+									path: 'Name'
+								}
+							}">
+                                    
+									<headerToolbar>
+			<OverflowToolbar>
+				
+					<Title id="titleEmba" text="{ComboModel>/TituloEmba}"/>
+					<ToolbarSpacer width="" />
+			
+			</OverflowToolbar>
+		</headerToolbar>
+		
+		<columns>
+			<Column
+				width="12em">
+				<Text text="Codigo Embarcacion" />
+			</Column>
+			<Column
+				minScreenWidth="Tablet"
+				demandPopin="true">
+				<Text text="Matricula" />
+			</Column>
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true">
+				<Text text="Nombre Embarcación" />
+			</Column>
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true">
+				<Text text="RUC" />
+			</Column>
+			<Column>
+				<Text text="Descripción Armador" />
+			</Column>
+		</columns>
+		<items>
+			<ColumnListItem type="Active">
+				<cells>
+					<ObjectIdentifier
+						text="{ComboModel>CDEMB}"/>
+				</cells>
+                <cells>
+					<ObjectIdentifier
+						text="{ComboModel>MREMB}"/>
+				</cells>
+                <cells>
+					<ObjectIdentifier
+						text="{ComboModel>NMEMB}"/>
+				</cells>
+                <cells>
+					<ObjectIdentifier
+						text="{ComboModel>LIFNR}"/>
+				</cells>
+                <cells>
+					<ObjectIdentifier
+						text="{ComboModel>NAME1}"/>
+				</cells>
+			</ColumnListItem>
+		</items>
+                                </Table>
+								  </ScrollContainer>
+                                <FlexBox
+        alignItems="Center"
+        justifyContent="Center">
+      <items>
+            <Button id="goFirstPag" press="onSetCurrentPage" enabled="false" activeIcon="" icon="sap-icon://close-command-field" width="" tooltip="Inicio"/>
+            <Button id="goPreviousPag" press="onSetCurrentPage" enabled="false"  activeIcon="" icon="sap-icon://navigation-left-arrow" width="" tooltip="Anterior"/>
+            <ComboBox id="comboPaginacion" enabled="false" items="{ComboModel>/NumerosPaginacion}"  width="auto" change="onChangePag"  >
+                <items>
+                    <core:Item text="{ComboModel>numero}" key="{ComboModel>numero}"/>
+                </items>
+            </ComboBox>
+            <Button id="goNextPag" press="onSetCurrentPage" activeIcon="" enabled="false" icon="sap-icon://navigation-right-arrow" width="" tooltip="Siguiente"/>         
+            <Button id="goLastPag" press="onSetCurrentPage" activeIcon="" enabled="false" icon="sap-icon://open-command-field" width="" tooltip="Ultimo"/>                   
+      </items>
+    </FlexBox>
+                                
+		</content>
+		<beginButton/>
+		<buttons>
+			
+            <Button text="Cerrar"
+             type="Reject" icon="sap-icon://decline" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onCerrarEmba"/>
+		</buttons>
+		<customHeader/>
+		<endButton/>
+		<subHeader/>
+	</Dialog>
+
+
+
+</core:FragmentDefinition>
+

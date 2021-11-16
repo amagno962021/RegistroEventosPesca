@@ -473,6 +473,17 @@ sap.ui.define([
             });
         },
 
+        ayudaBusqueda: function(nombreAyuda, usuario){
+            var uri = UtilService.getHostService() + "/api/General/AyudasBusqueda/";
+            var sBody = UtilService.getBodyAyudaBusq();
+            sBody.nombreAyuda = nombreAyuda;
+            sBody.p_user = usuario;
+            return this.http(uri).post(null, sBody).then(function(response){
+                var data = JSON.parse(response);
+                return data;
+            });
+        },
+
         test: function(){
             var latiCalaD = "";
             var latiCalaM = "";
