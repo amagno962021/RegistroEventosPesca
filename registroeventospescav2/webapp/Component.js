@@ -32,6 +32,41 @@ sap.ui.define([
 			//set combos model
 			this.setModel(models.createCombosModel(), "ComboModel");
 
+			//set form model
+			sap.ui.getCore().setModel(models.createFormModel(), "Form");
+
+			//set data session model
+			sap.ui.getCore().setModel(models.createDataSession(), "DataSession");
+
+			//set visible model
+			sap.ui.getCore().setModel(models.createVisibleModel(), "Visible");
+
+			//set resource model i18n
+			sap.ui.getCore().setModel(models.createResourceModel(), "i18n");
+
+			//set Utils model
+			sap.ui.getCore().setModel(models.createUtilsModel(), "Utils");
+
+			//set marea anterior model
+			sap.ui.getCore().setModel(models.createMareaAnteriorModel(), "MareaAnterior");
+
+			//set utilitario model
+			sap.ui.getCore().setModel(models.createUttilitarioModel(), "Utilitario");
+
+			//set filtro model
+			sap.ui.getCore().setModel(models.createFiltroModel(), "Filtro");
+
+			//set Distrib Flota model
+			sap.ui.getCore().setModel(models.createDistribFlotaModel(), "DistribFlota");
+
+			//set constants utiliy model
+			sap.ui.getCore().setModel(models.createConstantsUtility(), "ConstantsUtility");
+
+			//set constantes model
+			sap.ui.getCore().setModel(models.createConstantesModel(), "Constantes");
+
+
+
 		}
 
 	});

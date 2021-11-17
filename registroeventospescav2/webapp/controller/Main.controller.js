@@ -1,4 +1,6 @@
 sap.ui.define([
+    "./MainComp.controller",
+    "./FormCust",
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageBox",
@@ -8,21 +10,21 @@ sap.ui.define([
     "../model/models",
     "sap/ui/core/BusyIndicator",
 ],
-    /**
-     * @param {typeof sap.ui.core.mvc.Controller} Controller
-     */
-    function (Controller, JSONModel, MessageBox, TasaBackendService, formatter, Utils, models, BusyIndicator) {
+
+    function (MainComp, FormCust, Controller, JSONModel, MessageBox, TasaBackendService, formatter, Utils, models, BusyIndicator) {
         "use strict";
 
         const mainUrlServices = 'https://cf-nodejs-qas.cfapps.us10.hana.ondemand.com/api/';
 
-        return Controller.extend("com.tasa.registroeventospescav2.controller.Main", {
+        return MainComp.extend("com.tasa.registroeventospescav2.controller.Main", {
 
             formatter: formatter,
+            //FormCust: FormCust,
 
             onInit: function () {
                 var currentUser = this.getCurrentUser();
                 this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+                //this.formCust = sap.ui.controller("com.tasa.registroeventospescav2.controller.FormCust")
                 var me = this;
                 TasaBackendService.obtenerTipoEmbarcacion(currentUser).then(function (tipoEmbarcacion) {
                     TasaBackendService.obtenerPlantas(currentUser).then(function (plantas) {
@@ -443,7 +445,7 @@ sap.ui.define([
             },
 
             onSelectTab: function (evt) {
-                var key = evt.getParameters("key").selectedKey;
+                var key = evt.getParameter("key").selectedKey;
                 var totalPescaDeclarada = 0;
                 var modelo = null;
                 if (key.includes("itfPropios")) {
@@ -485,13 +487,25 @@ sap.ui.define([
                 this.getEmbaDialog().open();
             },
 
-            onSelectEmba: function (evt) {
-                var indices = evt.mParameters.listItem.oBindingContexts.ComboModel.sPath.split("/")[2];
+            onSelectEmba:  async function (evt) {
+                var object = evt.getParameter("listItem").getBindingContext("ComboModel").getObject();
+                var formModel = this.getModel("Form");
+                formModel.setProperty("/Embarcacion", object.CDEMB);
+                formModel.setProperty("/DescEmbarcacion", object.NMEMB);
+                await FormCust.verificarCambiosCodigo("EMB", formModel.getProperty("/Embarcacion"));
+
+                /*var s = await FormCust.consultarPermisoZarpe(object.CDEMB)
+                console.log(s);*/
+                //var a  = new FormCust;
+                //MainComp.FormCust().verificarCambiosCodigo("EMB", formModel.getProperty("/Embarcacion"))
+                //FormCust.verificarCambiosCodigo("EMB", formModel.getProperty("/Embarcacion"));
+
+                /*var indices = evt.mParameters.listItem.oBindingContexts.ComboModel.sPath.split("/")[2];
                 console.log(indices);
 
                 var data = this.getView().getModel("ComboModel").oData.Embarcaciones[indices].CDEMB;
                 sap.ui.getCore().byId("txtEmba").setValue(data);
-                this.onCerrarEmba();
+                this.onCerrarEmba();*/
             },
 
             clearFilterEmba: function () {

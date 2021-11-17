@@ -173,6 +173,26 @@ sap.ui.define([
                 "p_user": ""
             };
             return sBody;
+        },
+
+        getBodyBuscarEmba: function(){
+            var sBody = {
+                option: [{
+                    wa: ""
+                }],
+                options: [
+                    {
+                      cantidad: "",
+                      control: "",
+                      key: "",
+                      valueHigh: "",
+                      valueLow: ""
+                    }
+                ],
+                p_user: "",
+                rowcount: ""
+            };
+            return sBody;
         }
 
     }

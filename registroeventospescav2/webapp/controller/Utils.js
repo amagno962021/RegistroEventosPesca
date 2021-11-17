@@ -72,6 +72,17 @@ sap.ui.define([
             return null;
         },
 
+        strDateToDate: function(strDate){
+            var date = null;
+            if(strDate){ // dd/MM/yyyy
+                var anio = parseInt(strDate.split("/")[2]);
+                var mes = parseInt(strDate.split("/")[1]) + 1;
+                var dia = parseInt(strDate.split("/")[0]);
+                date = new Date(anio, mes, dia);
+            }
+            return date;
+        }
+
 
     }
 });

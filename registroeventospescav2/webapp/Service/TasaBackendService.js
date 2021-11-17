@@ -158,8 +158,8 @@ sap.ui.define([
                         EMPLA: data.data[0].EMPLA,
                         WKSPT: data.data[0].WKSPT,
                         CDUPT: data.data[0].CDUPT,
-                        DSEMP: sData.data[0].DSEMP,
-                        INPRP: sData.data[0].INPRP,
+                        DSEMP: sData.data.length > 0 ? sData.data[0].DSEMP : null,
+                        INPRP: sData.data.length > 0 ? sData.data[0].INPRP : null,
                     }
                     return objReturn;
                 });
@@ -167,17 +167,34 @@ sap.ui.define([
         },
 
         obtenerMareaAnterior: function(marea, embarcacion, sUsuario){
-            var me = this;
             var uri = UtilService.getHostService() + "/api/General/Read_Table/";
             var sBody = UtilService.getBodyReadTable();
             sBody.delimitador = "|";
-            sBody.fields = ["NRMAR", "ESMAR", "CDMMA", "FEMAR", "HAMAR", "FXMAR", "HXMAR", "FIMAR", "HIMAR", "FFMAR", "HFMAR", "ESCMA", "MANDT"];
-            sBody.option[0].wa = marea ? "NRMAR < " + marea + " AND CDEMB LIKE '" + embarcacion + "'" : "CDEMB LIKE '" + embarcacion + "'"  ;
+            sBody.fields = ["NRMAR", "ESMAR", "CDMMA", "FEMAR", "HAMAR", "FXMAR", "HXMAR", "FIMAR", "HIMAR", "FFMAR", "HFMAR", "ESCMA", "MANDT", "CDEMB"];
+            sBody.option[0].wa = marea > 0 ? "NRMAR < " + marea + " AND CDEMB LIKE '" + embarcacion + "'" : "CDEMB = '" + embarcacion + "'"  ;
             sBody.order = "NRMAR DESCENDING";
             sBody.tabla = "ZFLMAR";
+            sBody.rowcount = 1;
             sBody.p_user = sUsuario;
             return this.http(uri).post(null, sBody).then(function(response){
-                return response;
+                var data = JSON.parse(response);
+                return data;
+            });
+        },
+
+        obtenerEventoAnterior: function(marea, sUsuario){
+            var uri = UtilService.getHostService() + "/api/General/Read_Table/";
+            var sBody = UtilService.getBodyReadTable();
+            sBody.delimitador = "|";
+            sBody.fields = ["NREVN", "CDTEV", "FIEVN", "HIEVN", "FFEVN", "HFEVN", "MANDT"];
+            sBody.option[0].wa = "NRMAR = " + marea;
+            sBody.order = "NREVN DESCENDING";
+            sBody.tabla = "ZFLEVN";
+            sBody.rowcount = 1;
+            sBody.p_user = sUsuario;
+            return this.http(uri).post(null, sBody).then(function(response){
+                var data = JSON.parse(response);
+                return data;
             });
         },
 
@@ -481,6 +498,73 @@ sap.ui.define([
             return this.http(uri).post(null, sBody).then(function(response){
                 var data = JSON.parse(response);
                 return data;
+            });
+        },
+
+        buscarEmbarcacion: async function(codigo, usuario){
+            var uri = UtilService.getHostService() + "/api/embarcacion/BusquedasEmbarcacion/";
+            var sBody = UtilService.getBodyBuscarEmba();
+            sBody.option[0].wa = "CDEMB = '" + codigo + "'";
+            sBody.p_user = usuario;
+            var data = await this.http(uri).post(null, sBody).then(function(response){
+                var data = JSON.parse(response);
+                return data.data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.buscarEmbarcacion : ",  error);
+                return null;
+            });
+            return data;
+        },
+
+        obtenerPermisoZarpe: function(codigo, usuario){
+            var uri = UtilService.getHostService() + "/api/General/Read_Table/";
+            var sBody = UtilService.getBodyReadTable();
+            sBody.delimitador = "|";
+            sBody.fields = ["CDEMB", "ESPMS"];
+            sBody.option[0].wa = "CDEMB LIKE '" + codigo + "' AND CDTPM LIKE 'Z'";
+            sBody.p_user = usuario;
+            sBody.tabla = "ZFLPPE";
+            return this.http(uri).post(null, sBody).then(function(response){
+                var data = JSON.parse(response);
+                return data;
+            });
+        },
+
+        obtenerDatosPlantaDist: function(planta, sUsuario){
+            var me = this;
+            var uri = UtilService.getHostService() + "/api/General/Read_Table/";
+            var sBody = UtilService.getBodyReadTable();
+            sBody.delimitador = "|";
+            sBody.fields = ["CDPTA", "DESCR", "CDPTO", "DSPTO", "LTGEO", "LNGEO", "CDEMP", "CDUPT", "MANDT"];;
+            sBody.option[0].wa = "CDPTA LIKE '" + planta + "'";
+            sBody.p_user = sUsuario;
+            sBody.tabla = "ZV_FLPL";
+            return this.http(uri).post(null, sBody).then(function(response){
+                var data = JSON.parse(response);
+                var empla = data.data[0].EMPLA;
+                var sUri = UtilService.getHostService() + "/api/General/Read_Table/";
+                sBody.fields = ["DSEMP", "INPRP", "MANDT"];
+                sBody.option[0].wa = "CDEMP LIKE '" + empla + "'";
+                sBody.tabla = "ZV_FLMP";
+                return me.http(sUri).post(null, sBody).then(function(sResponse){
+                    var sData = JSON.parse(sResponse);
+                    var objReturn = {
+                        CDPTA: data.data[0].CDPTA,
+                        DESCR: data.data[0].DESCR,
+                        CDPTO: data.data[0].CDPTO,
+                        DSPTO: data.data[0].DSPTO,
+                        LTGEO: data.data[0].LTGEO,
+                        LNGEO: data.data[0].LNGEO,
+                        FEARR: data.data[0].FEARR,
+                        HEARR: data.data[0].HEARR,
+                        EMPLA: data.data[0].EMPLA,
+                        WKSPT: data.data[0].WKSPT,
+                        CDUPT: data.data[0].CDUPT,
+                        DSEMP: sData.data.length > 0 ? sData.data[0].DSEMP : null,
+                        INPRP: sData.data.length > 0 ? sData.data[0].INPRP : null,
+                    }
+                    return objReturn;
+                });
             });
         },
 

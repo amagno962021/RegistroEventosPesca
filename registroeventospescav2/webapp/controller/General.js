@@ -622,6 +622,7 @@ sap.ui.define([
                                         DescUnidMedida: confEventosPesca.CalaDescUMPescaDecl
                                     };
                                     eventoActual.PescaDeclarada.push(obj);
+                                    
                                     var objBiometria = {
                                         CodEspecie: especie.toString(),
                                         Especie: element.DescEspecie
