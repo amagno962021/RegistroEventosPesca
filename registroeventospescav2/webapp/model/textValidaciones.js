@@ -342,15 +342,15 @@ sap.ui.define([], function () {
 				{id : "8"}
 			],
 			visible : {
-				VisibleDescarga :true,
-				MotiLimitacion :true,
-				MotiNoPesca :true,
-				FechFin: true,
-				Links:true,
-				LinkRemover:true,
-				LinkDescartar:true,
-				TabHorometro : true,
-				Links :true
+				VisibleDescarga :false,
+				MotiLimitacion :false,
+				MotiNoPesca :false,
+				FechFin: false,
+				Links:false,
+				LinkRemover:false,
+				LinkDescartar:false,
+				TabHorometro : false,
+				VisibleObsvComb:false
 			}
 		}
 

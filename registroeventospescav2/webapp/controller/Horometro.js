@@ -77,16 +77,16 @@ sap.ui.define([
             var eventoActual = this.ctr._elementAct; //nodo evento actual
             var indEvento = this.ctr._indicador;
 
-            var visible = {};//nodo visible
-            textValidaciones.visible.Links = true;
-            textValidaciones.visible.LinkRemover = false;
-            textValidaciones.visible.LinkDescartar = false;
+            //this.ctr.modeloVisible.Links = true;
+            this.ctr.modeloVisible.LinkRemover = false;
+            this.ctr.modeloVisible.LinkDescartar = false;
 
             if (indEvento == "N" && eventoActual == ListaEventos[ListaEventos - 1]) {
-                textValidaciones.visible.LinkRemover = true;
+                this.ctr.modeloVisible.LinkRemover = true;
             } else {
-                textValidaciones.visible.LinkDescartar = true;
+                this.ctr.modeloVisible.LinkDescartar = true;
             }
+            this.ctr.modeloVisibleModel.refresh();
             this._oView.getModel("eventos").updateBindings(true);
             //refresh model
         },
@@ -119,7 +119,7 @@ sap.ui.define([
             console.log("onActionVerMotiLimitacion");
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct];
             var estOper = eventoActual.EstaOperacion;
-            var visible = textValidaciones.visible;//nodo visible
+            var visible = this.ctr.modeloVisible;//nodo visible
             eventoActual.MotiLimitacion = null;
             if (estOper.equalsIgnoreCase("L")) {
                 eventoActual.MotiLimitacion = null;
@@ -127,6 +127,7 @@ sap.ui.define([
             } else {
                 visible.MotiLimitacion = false;
             }
+            this.ctr.modeloVisibleModel.refresh();
             this._oView.getModel("eventos").updateBindings(true);
             //refresh model
         },

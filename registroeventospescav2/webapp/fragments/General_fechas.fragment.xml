@@ -15,7 +15,7 @@
 									<DateTimePicker value="{eventos>/FICAL} {eventos>/HICAL}" id="dtp_fechaIniCala" width="50%" displayFormat="dd/MM/yyyy HH:mm:ss" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy HH:mm:ss"  />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement id ="FechaEnvaseIni">
+							<form:FormElement id ="FechaEnvaseIni" visible="{visible>/VisibleDescarga}">
 								<form:label>
 									<Label id="labelTextFechIniEnv" text="Fech/hora Inic. envase" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
@@ -51,7 +51,7 @@
 									<DateTimePicker value="{eventos>/FFCAL} {eventos>/HFCAL}" id="dtp_fechaFinCala" width="50%" displayFormat="dd/MM/yyyy HH:mm:ss" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy HH:mm:ss" />
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement id ="FechaEnvaseFin">
+							<form:FormElement id ="FechaEnvaseFin" visible="{visible>/FechFin}">
 								<form:label>
 									<Label text="Fech/hora fin envase" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
