@@ -15,7 +15,7 @@
 									<Input value="{eventos>/CDPTO}" description="{eventos>/DSPTO}" type="Text" showValueHelp="false" enabled="false" visible="true" width="80%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement id="fe_ZonaPesca" visible="true">
+							<form:FormElement id="fe_ZonaPesca" visible="false">
 								<form:label>
 									<Label text="Zona de pesca" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
@@ -28,7 +28,7 @@
 									<!-- <Text text="Zona1" width="25%"/> -->
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement id="fe_Empresa" visible="true">
+							<form:FormElement id="fe_Empresa" visible="false">
 								<form:label>
 									<Label text="Empresa" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
@@ -48,6 +48,10 @@
 								<form:fields>
 									<Input type="Text" value="{eventos>/CDPTA}" description="{eventos>/DESCR}" showValueHelp="false" enabled="false" visible="true" width="70%" required="false" maxLength="0"/>
 								</form:fields>
+							</form:FormElement>
+							<form:FormElement visible="true">
+								<Label text="{eventos>/DescLatiLongZonaPesca}" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+
 							</form:FormElement>
 						</form:formElements>
 					</form:FormContainer>
