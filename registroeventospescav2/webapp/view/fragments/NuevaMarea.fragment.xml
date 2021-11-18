@@ -26,7 +26,7 @@
                                     <Label text="Embarcación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <Input id="txtEmba" valueHelpRequest="onAbrirAyudaEmbarcacion" value="{Form>/Embarcacion}" showValueHelp="true" enabled="true" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" description="{Form>/DescEmbarcacion}"/>
+                                    <Input id="txtEmba" valueHelpRequest="onAbrirAyudaEmbarcacion" value="{/Embarcacion}" showValueHelp="true" width="auto" valueStateText="Invalid entry" description="{DescEmbarcacion}"/>
                                 </form:fields>
                             </form:FormElement>
                         </form:formElements>
@@ -39,7 +39,7 @@
             </form:Form>
         </content>
       <beginButton>
-        <Button type="Emphasized" text="Aceptar" press="onCrearMarea"></Button>
+        <Button type="Emphasized" id="btnAceptarCrearMarea" text="Aceptar" press="onCrearMarea" enabled="false"></Button>
       </beginButton>
       <endButton>
         <Button text="Cancelar" press="onCancelMarea"></Button>

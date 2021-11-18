@@ -288,19 +288,22 @@ sap.ui.define([
                 this.getDialog().close();
             },
 
-            onCrearMarea: function () {
+            onCrearMarea: async function () {
                 var me = this;
                 this.getDialog().close();
+                var formModel = this.getModel("Form");
+                var filtroModel = this.getModel("Filtro");
                 var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
                 modeloDetalleMarea.refresh();
                 var dataDetalleMarea = modeloDetalleMarea.getData();
-                var embarcacion = dataDetalleMarea.FormNewMarea.Planta;
+                var embarcacion = formModel.getProperty("/Embarcacion");//modeloDetalleMarea.GETPROPERTY("/FormNewMarea/Planta");
                 var embaDesc = dataDetalleMarea.FormNewMarea.EmbarcacionDesc
-                var planta = dataDetalleMarea.FormNewMarea.Embarcacion;
-                console.log(modeloDetalleMarea);
+                var planta = sap.ui.getCore().byId("cbxPlantas").getSelectedKey();
+                console.log(embarcacion);
                 if (embarcacion && planta) {
-                    var bOk = me.validaBodMar(embarcacion, planta, embaDesc);
-                    if (!bOk) {
+                    var bOk = await me.validaBodMar(embarcacion, planta, embaDesc);
+                    console.log("validaBodMar: ", bOk);
+                    if (bOk) {
                         me.getOwnerComponent().setModel(models.createInitModel(), "DetalleMarea");
                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                         oRouter.navTo("DetalleMarea");
@@ -337,24 +340,17 @@ sap.ui.define([
 
             validaBodMar: async function (cdemb, cdpta, nmemb) {
                 var bOk = false;
-                var me = this;
-                TasaBackendService.validarBodegaCert(cdemb, cdpta).then(function (response) {
-                    if (response.estado) {
-                        TasaBackendService.validarMareaProd(cdemb, cdpta).then(function (response) {
-                            if (response.p_correcto == "X") {
-                                bOk = true;
-                            } else {
-                                MessageBox.error(me.oBundle.getText("EMBANOPROD", [nmemb]));
-                            }
-                        }).catch(function (error) {
-                            console.log("ERROR: Main.onEditarCrearMarea - " + error);
-                        });
+                var response  = await TasaBackendService.validarBodegaCert(cdemb, cdpta);
+                if (response.estado) {
+                    var response1 = await TasaBackendService.validarMareaProd(cdemb, cdpta);
+                    if (response1.p_correcto == "X") {
+                        bOk = true;
                     } else {
-                        MessageBox.error(me.oBundle.getText("EMBANOPER", [nmemb]));
+                        MessageBox.error(this.oBundle.getText("EMBANOPROD", [nmemb]));
                     }
-                }).catch(function (error) {
-                    console.log("ERROR: Main.onEditarCrearMarea - " + error);
-                });
+                } else {
+                    MessageBox.error(this.oBundle.getText("EMBANOPER", [nmemb]));
+                }
                 return bOk;
             },
 
@@ -365,7 +361,8 @@ sap.ui.define([
                 var dataDetalleMarea = modeloDetalleMarea.getData();
                 var marea = data.s_marea[0];
                 var eventos = data.s_evento;
-
+                var incidental = data.str_pscinc;
+                var biometria = data.str_flbsp;
                 //setear cabecera de formulario
                 var cabecera = dataDetalleMarea.Cabecera;
                 for (var keyC in cabecera) {
@@ -404,7 +401,21 @@ sap.ui.define([
                 }).catch(function (error) {
                     console.log("ERROR: DetalleMarea.cargarCombos - ", error);
                 });
+                
+                for (let index1 = 0; index1 < eventos.length; index1++) {
+                    const element = eventos[index1];
+                    element.Indicador = "E";
+                    element.LatitudD = Utils.getDegrees(element.LTGEO);
+                    element.LatitudM = Utils.getMinutes(element.LTGEO);
+                    element.LongitudD = Utils.getDegrees(element.LNGEO);
+                    element.LongitudM = Utils.getMinutes(element.LNGEO)
+                }
+
+                console.log("Eventos: ", eventos);
+
                 dataDetalleMarea.Eventos.Lista = eventos;
+                dataDetalleMarea.Incidental = incidental;
+                dataDetalleMarea.Biometria = biometria;
 
                 //la pestania de reserva de combustible y venta de combustible se setean en el Detalle
 
@@ -472,7 +483,12 @@ sap.ui.define([
             },
 
             onActionSelPlanta: function (evt) {
-
+                var utils = this.getModel("Utils");
+                var formModel = this.getModel("Form");
+                var embarcacion = formModel.getProperty("/Embarcacion");
+                if(embarcacion){
+                    utils.setProperty("/BtnEnabled", true);
+                }
             },
 
             getEmbaDialog: function () {
@@ -490,10 +506,18 @@ sap.ui.define([
             onSelectEmba:  async function (evt) {
                 var object = evt.getParameter("listItem").getBindingContext("ComboModel").getObject();
                 var formModel = this.getModel("Form");
-                formModel.setProperty("/Embarcacion", object.CDEMB);
-                formModel.setProperty("/DescEmbarcacion", object.NMEMB);
-                await FormCust.verificarCambiosCodigo("EMB", formModel.getProperty("/Embarcacion"));
-
+                /*formModel.setProperty("/Embarcacion", object.CDEMB);
+                formModel.setProperty("/DescEmbarcacion", object.NMEMB);*/
+                this.getEmbaDialog().close();
+                BusyIndicator.show(0);
+                var bOk = await FormCust.verificarCambiosCodigo("EMB", object.CDEMB);
+                if(!bOk){
+                    sap.ui.getCore().byId("txtEmba").setValue(formModel.getProperty("/Embarcacion"));
+                    sap.ui.getCore().byId("txtEmba").setDescription(formModel.getProperty("/DescEmbarcacion"));
+                    sap.ui.getCore().byId("btnAceptarCrearMarea").setEnabled(true);
+                }
+                BusyIndicator.hide();
+                //await FormCust.buscarArmador(object.CDEMB);
                 /*var s = await FormCust.consultarPermisoZarpe(object.CDEMB)
                 console.log(s);*/
                 //var a  = new FormCust;

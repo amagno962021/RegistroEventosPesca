@@ -35,7 +35,7 @@ sap.ui.define([
             //validar fechas nulas en tabla de eventos
             this.validaFechaNulaEvt();
 
-            
+
             //cargar combos
             this.cargarCombos();
 
@@ -118,7 +118,7 @@ sap.ui.define([
                 var object = selectedItem.getBindingContext("DetalleMarea").getObject();
                 if (object.NREVN == eventos.length) {
                     //validar y eliminar evento
-                    var inprpEvento =  object.INPRP;
+                    var inprpEvento = object.INPRP;
                     if (object.CDTEV !== "6") {
                         MessageBox.confirm("Realmente desea eliminar este evento ?", {
                             actions: [MessageBox.Action.OK, MessageBox.Action.CLOSE],
@@ -128,14 +128,14 @@ sap.ui.define([
                                 }
                             }
                         });
-                    }else{
-                        if(motivoMarea == "2" && inprpEvento == "P"){
-                            if(!that.verificarCambiosDescarga()){
+                    } else {
+                        if (motivoMarea == "2" && inprpEvento == "P") {
+                            if (!that.verificarCambiosDescarga()) {
                                 that.eliminarEvento(object);
-                            }else{
+                            } else {
                                 MessageBox.information(this.oBundle.getText("NOANULDESCARGA"));
                             }
-                        }else{
+                        } else {
                             that.eliminarEvento(object);
                         }
                     }
@@ -153,12 +153,12 @@ sap.ui.define([
 
         },
 
-        verificarCambiosDescarga: function(){
+        verificarCambiosDescarga: function () {
             //VALIDAR CON ERICK ESTE METODO POR QUE ES DE EVENTOCUST
             return true;
         },
 
-        anularDescarga: function(){
+        anularDescarga: function () {
             //VALIDAR CON ERICK ESTE METODO POR QUE ES DE EVENTOCUST
             return true;
         },
@@ -290,165 +290,170 @@ sap.ui.define([
             var numeroMarea = dataDetalleMarea.Cabecera.NRMAR;
             var estMar = dataDetalleMarea.DatosGenerales.ESMAR;
             var eventos = dataDetalleMarea.Eventos.Lista;
-            var ultimoEvento = eventos[eventos.length - 1];
-            var tipoUltEvento = ultimoEvento.CDTEV;
-            if (indicadorPro == "P" && motivoResCombu.includes(motivo)) {
-                TasaBackendService.obtenerNroReserva(numeroMarea, usuario).then(function(response){
-                    dataDetalleMarea.Config.visibleTabReserva = true;
-                    var numeroReserva = response.data[0].NRRSV;
-                    var mostrarTab = numeroReserva ? true : false;
-                    var mareaCerrada = estMar == "C";
-                    if(!mareaCerrada){
-                        if(motivo == "3" || motivo == "7" || motivo == "8"){
-                            mostrarTab = true;
-                        }else{
-                            if((tipoUltEvento == "4" || tipoUltEvento == "5" || tipoUltEvento == "6") && !mostrarTab){
+            if (eventos) {
+                var ultimoEvento = eventos[eventos.length - 1];
+                var tipoUltEvento = ultimoEvento.CDTEV;
+                if (indicadorPro == "P" && motivoResCombu.includes(motivo)) {
+                    TasaBackendService.obtenerNroReserva(numeroMarea, usuario).then(function (response) {
+                        dataDetalleMarea.Config.visibleTabReserva = true;
+                        var numeroReserva = response.data[0].NRRSV;
+                        var mostrarTab = numeroReserva ? true : false;
+                        var mareaCerrada = estMar == "C";
+                        if (!mareaCerrada) {
+                            if (motivo == "3" || motivo == "7" || motivo == "8") {
                                 mostrarTab = true;
+                            } else {
+                                if ((tipoUltEvento == "4" || tipoUltEvento == "5" || tipoUltEvento == "6") && !mostrarTab) {
+                                    mostrarTab = true;
+                                }
+
+                            }
+                        }
+                        if (mostrarTab) {
+                            if (!mareaCerrada) {
+
+
+                            } else {
+
                             }
 
                         }
-                    }
-                    if(mostrarTab){
-                        if(!mareaCerrada){
-                            
-
-                        }else{
-
-                        }
-
-                    }
-                    modeloDetalleMarea.refresh();
-                }).catch(function (error) {
-                    console.log("Error: DetalleMarea.validarReservaCombustible - ", error);
-                });
+                        modeloDetalleMarea.refresh();
+                    }).catch(function (error) {
+                        console.log("Error: DetalleMarea.validarReservaCombustible - ", error);
+                    });
+                }
             }
 
 
         },
 
-        cargarCombos: function(){
+        cargarCombos: function () {
             var me = this;
             var currentUser = this.getCurrentUser();
             var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
             var dataDetalleMarea = modeloDetalleMarea.getData();
 
             //combo departamentos
-            TasaBackendService.obtenerDepartamentos(currentUser).then(function(response){
+            TasaBackendService.obtenerDepartamentos(currentUser).then(function (response) {
                 var departamentos = response.data;
                 dataDetalleMarea.Config.datosCombo.Departamentos = departamentos;
                 modeloDetalleMarea.refresh();
-            }).catch(function(error){
-                console.log("ERROR: DetalleMarea.cargarCombos - ", error );
+            }).catch(function (error) {
+                console.log("ERROR: DetalleMarea.cargarCombos - ", error);
             });
 
             //combo motivos de marea
-            TasaBackendService.obtenerDominio("ZDO_ZCDMMA").then(function(response){
+            TasaBackendService.obtenerDominio("ZDO_ZCDMMA").then(function (response) {
                 var sData = response.data[0].data;
                 var inprp = dataDetalleMarea.Cabecera.INPRP;
                 var items = [];
-                if(inprp == "P"){
+                if (inprp == "P") {
                     items = sData
-                }else{
+                } else {
                     for (let index = 0; index < sData.length; index++) {
                         const element = sData[index];
-                        if(element.id == "1" || element.id == "2"){
+                        if (element.id == "1" || element.id == "2") {
                             items.push(element);
                         }
                     }
                 }
                 dataDetalleMarea.Config.datosCombo.MotivosMarea = items;
                 modeloDetalleMarea.refresh();
-            }).catch(function(error){
-                console.log("ERROR: DetalleMarea.cargarCombos - ", error );
+            }).catch(function (error) {
+                console.log("ERROR: DetalleMarea.cargarCombos - ", error);
             });
 
             //combo ubicacion de pesca
-            TasaBackendService.obtenerDominio("ZDO_ZINUBC").then(function(response){
+            TasaBackendService.obtenerDominio("ZDO_ZINUBC").then(function (response) {
                 var sData = response.data[0].data;
                 dataDetalleMarea.Config.datosCombo.UbicPesca = sData;
                 modeloDetalleMarea.refresh();
-            }).catch(function(error){
-                console.log("ERROR: DetalleMarea.cargarCombos - ", error );
+            }).catch(function (error) {
+                console.log("ERROR: DetalleMarea.cargarCombos - ", error);
             });
 
             //combo estado de marea
-            TasaBackendService.obtenerDominio("ZDO_ZESMAR").then(function(response){
+            TasaBackendService.obtenerDominio("ZDO_ZESMAR").then(function (response) {
                 var sData = response.data[0].data;
                 dataDetalleMarea.Config.datosCombo.EstMar = sData;
                 modeloDetalleMarea.refresh();
-            }).catch(function(error){
-                console.log("ERROR: DetalleMarea.cargarCombos - ", error );
+            }).catch(function (error) {
+                console.log("ERROR: DetalleMarea.cargarCombos - ", error);
             });
 
             //combo tipo de eventos
-            TasaBackendService.obtenerDominio("ZCDTEV").then(function(response){
+            TasaBackendService.obtenerDominio("ZCDTEV").then(function (response) {
                 var sData = response.data[0].data;
                 me.validaComboTipoEvento(sData);
-            }).catch(function(error){
-                console.log("ERROR: DetalleMarea.cargarCombos - ", error );
+            }).catch(function (error) {
+                console.log("ERROR: DetalleMarea.cargarCombos - ", error);
             });
         },
 
-        validaFechaNulaEvt: function(){
+        validaFechaNulaEvt: function () {
             var me = this;
             var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
+            console.log(modeloDetalleMarea);
             var dataDetalleMarea = modeloDetalleMarea.getData();
             var eventos = dataDetalleMarea.Eventos.Lista;
-            for (let index = 0; index < eventos.length; index++) {
-                const element = eventos[index];
-                if (element.FIEVN != "null") {
-                    element.FECHOINI = element.FIEVN + " " + element.HIEVN;
-                } else {
-                    element.FECHOINI = "";
-                }
-                if (element.FFEVN != "null") {
-                    element.FECHOFIN = element.FFEVN + " " + element.HFEVN;
-                } else {
-                    element.FECHOFIN = "";
+            if (eventos) {
+                for (let index = 0; index < eventos.length; index++) {
+                    const element = eventos[index];
+                    if (element.FIEVN != "null") {
+                        element.FECHOINI = element.FIEVN + " " + element.HIEVN;
+                    } else {
+                        element.FECHOINI = "";
+                    }
+                    if (element.FFEVN != "null") {
+                        element.FECHOFIN = element.FFEVN + " " + element.HFEVN;
+                    } else {
+                        element.FECHOFIN = "";
+                    }
                 }
             }
             modeloDetalleMarea.refresh();
         },
 
-        obtenerDatosDistribFlota: function(){
+        obtenerDatosDistribFlota: function () {
             var me = this;
             var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
             var dataDetalleMarea = modeloDetalleMarea.getData();
             var embarcacion = dataDetalleMarea.Cabecera.CDEMB;
             var currentUser = this.getCurrentUser();
             var distFlota = dataDetalleMarea.DistribFlota;
-            TasaBackendService.obtenerDatosDstrFlota(embarcacion, currentUser).then(function(response){
-                for(var keyD in distFlota){
-                    if(response.hasOwnProperty(keyD)){
+            TasaBackendService.obtenerDatosDstrFlota(embarcacion, currentUser).then(function (response) {
+                for (var keyD in distFlota) {
+                    if (response.hasOwnProperty(keyD)) {
                         distFlota[keyD] = response[keyD];
                     }
                 }
-            }).catch(function(error){
-                console.log("ERROR: DetalleMarea.obtenerDatosDistribFlota - ", error );
+            }).catch(function (error) {
+                console.log("ERROR: DetalleMarea.obtenerDatosDistribFlota - ", error);
             });
         },
 
-        obtenerDatosMareaAnt: function(){
+        obtenerDatosMareaAnt: function () {
             var me = this;
             var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
             var dataDetalleMarea = modeloDetalleMarea.getData();
             var estMar = dataDetalleMarea.DatosGenerales.ESMAR;
             var currentUser = this.getCurrentUser();
-            console.log("Est Mar: " + estMar);            
-            if(estMar == "A"){
+            console.log("Est Mar: " + estMar);
+            if (estMar == "A") {
                 var embarcacion = dataDetalleMarea.Cabecera.CDEMB;
                 var marea = dataDetalleMarea.Cabecera.NRMAR;
-                TasaBackendService.obtenerMareaAnterior(marea, embarcacion, currentUser).then(function(response){
+                TasaBackendService.obtenerMareaAnterior(marea, embarcacion, currentUser).then(function (response) {
                     //preparar servicio para obtener marea anterior
-                }).catch(function(error){
-                    console.log("ERROR: DetalleMarea.obtenerDatosMareaAnt - ", error );
+                }).catch(function (error) {
+                    console.log("ERROR: DetalleMarea.obtenerDatosMareaAnt - ", error);
                 });
             }
         },
 
-        onValidaMotivo: function(evt){
+        onValidaMotivo: function (evt) {
             var oValidatedComboBox = evt.getSource();
-			var sSelectedKey = oValidatedComboBox.getSelectedKey();
+            var sSelectedKey = oValidatedComboBox.getSelectedKey();
         },
 
         validarLimiteVeda: function () {
@@ -457,38 +462,38 @@ sap.ui.define([
             var dataDetalleMarea = modeloDetalleMarea.getData();
             var motMarea = dataDetalleMarea.Cabecera.CDMMA;
             var estMarea = dataDetalleMarea.DatosGenerales.ESMAR;
-            if(motMarea == "8" && estMarea == "A"){
+            if (motMarea == "8" && estMarea == "A") {
                 //preparar servicio para validar limite de veda
             }
         },
-        
-        validarVista: function(){
+
+        validarVista: function () {
             var me = this;
             var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
             var dataDetalleMarea = modeloDetalleMarea.getData();
             var motMarea = dataDetalleMarea.Cabecera.CDMMA;
             var indProp = dataDetalleMarea.Cabecera.INPRP;
-            if(motMarea == "3" || motMarea == "7" || motMarea == "8"){//motivos de marea sin zarpe
+            if (motMarea == "3" || motMarea == "7" || motMarea == "8") {//motivos de marea sin zarpe
                 dataDetalleMarea.Config.readOnlyFechIni = false;
                 dataDetalleMarea.Config.visibleFecHoEta = false;
                 dataDetalleMarea.Config.visibleFechIni = false;
                 dataDetalleMarea.Config.visibleFechFin = false;
             }
 
-            if(motMarea == "1" || motMarea == "2" ){//motivos de marea con pesca (descargas)
+            if (motMarea == "1" || motMarea == "2") {//motivos de marea con pesca (descargas)
                 dataDetalleMarea.Config.visibleUbiPesca = true;
             }
 
-            if(indProp == "P"){
+            if (indProp == "P") {
                 dataDetalleMarea.Config.visibleLinkCrearArmador = false;
-            }else{
+            } else {
                 dataDetalleMarea.Config.visibleLinkCrearArmador = true;
             }
 
             modeloDetalleMarea.refresh();
         },
 
-        onNavEventos: function(){
+        onNavEventos: function () {
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("DetalleEvento");
         }

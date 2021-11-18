@@ -1,54 +1,57 @@
 sap.ui.define([
-	"./FormCust",
+    "./FormCust",
     "../Service/TasaBackendService",
     "sap/m/MessageBox",
-    "./Utils"
-], function(FormCust, TasaBackendService, MessageBox, Utils) {
-	"use strict";
+    "./Utils",
+    "sap/ui/core/BusyIndicator"
+], function (FormCust, TasaBackendService, MessageBox, Utils, BusyIndicator) {
+    "use strict";
 
-	return {
+    return {
 
         bckEmbarcacion: null,
         bckArmador: null,
 
-        getModel: function(sName){
+        getModel: function (sName) {
             return sap.ui.getCore().getModel(sName);
         },
 
-        setModel: function(sName, model){
+        setModel: function (sName, model) {
             return sap.ui.getCore().setModel(model, sName);
         },
 
-        getResourceModel: function(){
+        getResourceModel: function () {
             return sap.ui.getCore().getModel("i18n").getResourceBundle();
         },
 
-        init: function(){
+        init: function () {
             this.bckEmbarcacion = null;
             this.bckArmador = null;
         },
 
-        verificarCambiosCodigo: async function(tipo, codigo){
+        verificarCambiosCodigo: async function (tipo, codigo) {
             var form = this.getModel("Form");
+            var bOk = null;
             if (codigo != null && codigo.trim().length > 0) {
                 codigo = codigo.trim();
                 if (tipo == "EMB") {
                     if (this.bckEmbarcacion == null || codigo != this.bckEmbarcacion) {
                         form.setProperty("/MotMarea", null);
-                        await this.buscarEmbarcacion(codigo);
+                        bOk = await this.buscarEmbarcacion(codigo);
                     }
                 } else if (tipo == "ARM") {
                     if (this.bckArmador == null || codigo != this.bckArmador) {
-                        await this.buscarArmador(codigo);
+                        bOk = await this.buscarArmador(codigo);
                     }
                 }
             }
+            return bOk;
         },
 
-        buscarEmbarcacion: async function(codigo){
+        buscarEmbarcacion: async function (codigo) {
             var me = this;
             var indPropiedad = "";
-	        var clearData = false;
+            var clearData = false;
             var form = this.getModel("Form");
             var filtro = this.getModel("Filtro")
             var dataSesionModel = this.getModel("DataSession");
@@ -58,16 +61,16 @@ sap.ui.define([
             var valFijoPlanta = filtro.getProperty("/ValFijoPlanta");
             visibleModel.setProperty("/EnlMarAnterior", false);
             var emba = await TasaBackendService.buscarEmbarcacion(codigo, usuario);
-            if(emba){
+            if (emba) {
                 await this.obtenerDatosMareaAnt(0, codigo);
                 var mareaAnterior = this.getModel("MareaAnterior");
                 var estMarAnt = mareaAnterior.getProperty("/EstMarea");
                 var cieMarAnt = mareaAnterior.getProperty("/EstCierre");
                 var ce_embaElement = emba[0];
                 indPropiedad = ce_embaElement.INPRP;
-                if(estMarAnt == "C"){
+                if (estMarAnt == "C") {
                     console.log("Mare Anterior Cerrada");
-                    if(ce_embaElement.ESEMB == "O"){
+                    if (ce_embaElement.ESEMB == "O") {
                         form.setProperty("/Embarcacion", ce_embaElement.CDEMB);
                         form.setProperty("/DescEmbarcacion", ce_embaElement.NMEMB);
                         form.setProperty("/MatrEmbarcacion", ce_embaElement.MREMB);
@@ -76,24 +79,24 @@ sap.ui.define([
                         form.setProperty("/DescArmador", ce_embaElement.NAME1);
                         form.setProperty("/PermisoSur", ce_embaElement.CNVPS);
                         form.setProperty("/FechaPermisoSur", ce_embaElement.FCVPS);
-                        if(ce_embaElement.TCBPS){
+                        if (ce_embaElement.TCBPS) {
                             var sum = parseFloat(ce_embaElement.CPPMS) + parseFloat(ce_embaElement.TCBPS);
                             form.setProperty("/CapBodegaPermiso", sum.toFixed(3));
                         }
                         var consultarPermisoZarpe = await this.consultarPermisoZarpe(codigo);
-                        if(indPropiedad == "P"){
+                        if (indPropiedad == "P") {
                             form.setProperty("/CenEmbarcacion", ce_embaElement.WERKS);
                             var obtenerDatosDistribFlota = await this.obtenerDatosDistribFlota(codigo)
-                            if(obtenerDatosDistribFlota){
+                            if (obtenerDatosDistribFlota) {
                                 clearData = !consultarPermisoZarpe;
                             } else {
                                 var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + this.getResourceModel().getText("NOUBICENDISTRIB");
                                 MessageBox.error(mssg);
                                 clearData = true;
                             }
-                        } else if(indPropiedad == "T"){
+                        } else if (indPropiedad == "T") {
                             var obtenerDatosPlantaDist = await this.obtenerDatosPlantaDist(valFijoPlanta);
-                            if(obtenerDatosPlantaDist){
+                            if (obtenerDatosPlantaDist) {
                                 clearData = !consultarPermisoZarpe;
                             } else {
                                 var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + this.getResourceModel().getText("SELECCPLANTA");
@@ -106,17 +109,18 @@ sap.ui.define([
                             clearData = true;
                         }
 
-                        if (!clearData) { 
-                            clearData = !me.validarPermisoPescaSur();
+                        if (!clearData) {
+                            var valPerPescSur = this.validarPermisoPescaSur();
+                            clearData = !valPerPescSur;
                         }
                     } else {
                         var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + this.getResourceModel().getText("EMBNOPERATIVO");
                         MessageBox.error(mssg);
                         clearData = true;
                     }
-                } else if(estMarAnt == "A"){
+                } else if (estMarAnt == "A") {
                     console.log("Mare Anterior Abierta");
-                    if(!cieMarAnt){
+                    if (!cieMarAnt) {
                         visibleModel.setProperty("/EnlMarAnterior", true);
                         var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + this.getResourceModel().getText("EMBMAREAABIERTA");
                         console.log(mssg);
@@ -133,7 +137,8 @@ sap.ui.define([
                 MessageBox.information(mssg);
                 clearData = true;
             }
-            if(clearData){
+            if (clearData) {
+                
                 this.bckEmbarcacion = null;
                 form.setProperty("/Embarcacion", null);
                 form.setProperty("/DescEmbarcacion", null);
@@ -146,14 +151,33 @@ sap.ui.define([
                 this.bckEmbarcacion = codigo;
             }
             utils.setProperty("/VedaVerificada", false);
-
+            return clearData;
         },
 
-        buscarArmador: async function(codigo){
-
+        buscarArmador: async function (codigo) {
+            var clearData = false;
+            var dataSesionModel = this.getModel("DataSession");
+            var usuario = dataSesionModel.getProperty("/User");
+            var response = await TasaBackendService.buscarArmador(codigo, usuario);
+            if(response){
+                var form = this.getModel("Form");
+                var data = response.data[0];
+                form.setProperty("/DescArmador", data.DSEMP);
+            }else{
+                var mssg = this.getResourceModel().getText("NORESULTADOARMADOR");
+                MessageBox.information(mssg);
+                clearData = true;
+            }
+            if(clearData){
+                this.bckArmador = null;
+                form.setProperty("/Armador", null);
+                form.setProperty("/DescArmador", null);
+            }else{
+                this.bckArmador = codigo;
+            }
         },
 
-        validarIndPropiedad: function(ind){
+        validarIndPropiedad: function (ind) {
             var visible = this.getModel("Visible");
             var form = this.getModel("Form");
             if (ind == null || (ind != null && ind == "T")) {
@@ -169,102 +193,91 @@ sap.ui.define([
             }
         },
 
-        obtenerDatosMareaAnt: async function(marea, codigo){
+        obtenerDatosMareaAnt: async function (marea, codigo) {
             var utilitario = this.getModel("Utilitario");
             var dataSesionModel = this.getModel("DataSession");
             var usuario = dataSesionModel.getProperty("/User");
             var mareaAnterior = this.getModel("MareaAnterior");
-            await TasaBackendService.obtenerMareaAnterior(marea, codigo, usuario).then(function(response){
-                if(response){
-                    var mareaAnt = response.data[0];
-                    mareaAnterior.setProperty("/Marea", parseInt(mareaAnt.NRMAR));
-                    mareaAnterior.setProperty("/MotMarea", mareaAnt.CDMMA);
-                    mareaAnterior.setProperty("/EstMarea", mareaAnt.ESMAR);
-                    mareaAnterior.setProperty("/DescMotivoMarea", mareaAnt.DESC_CDMMA);
-                    mareaAnterior.setProperty("/FecApertura", mareaAnt.FEMAR);
-                    mareaAnterior.setProperty("/HorApertura", mareaAnt.HAMAR);
-                    mareaAnterior.setProperty("/FecCierre", mareaAnt.FXMAR);
-                    mareaAnterior.setProperty("/HorCierre", mareaAnt.HXMAR);
-                    mareaAnterior.setProperty("/FecInicio", mareaAnt.FIMAR);
-                    mareaAnterior.setProperty("/HorInicio", mareaAnt.HIMAR);
-                    mareaAnterior.setProperty("/FecFin", mareaAnt.FFMAR);
-                    mareaAnterior.setProperty("/HorFin", mareaAnt.HFMAR);
-                    mareaAnterior.setProperty("/EstCierre", mareaAnt.ESCMA);
-                    if(!utilitario.getProperty("/motivoSinZarpe").includes(mareaAnt.CDMMA)){
-                        TasaBackendService.obtenerEventoAnterior(parseInt(mareaAnt.NRMAR), usuario).then(function(response1){
-                            if(response1){
-                                var eventoAnt = response1.data[0];
-                                if(eventoAnt){
-                                    mareaAnterior.setProperty("/EventosMarAnt/Numero", parseInt(eventoAnt.NREVN));
-                                    mareaAnterior.setProperty("/EventosMarAnt/TipoEvento", eventoAnt.CDTEV);
-                                    mareaAnterior.setProperty("/EventosMarAnt/DescTipoEvento", eventoAnt.DESC_CDTEV);
-                                    mareaAnterior.setProperty("/EventosMarAnt/FechIni", eventoAnt.FIEVN);
-                                    mareaAnterior.setProperty("/EventosMarAnt/HoraIni", eventoAnt.HIEVN);
-                                    mareaAnterior.setProperty("/EventosMarAnt/FechFin", eventoAnt.FFEVN);
-                                    mareaAnterior.setProperty("/EventosMarAnt/HoraFin", eventoAnt.HFEVN);
-                                }
-                            }
-                        }).catch(function(error){
-                            console.log("ERROR: FormCust.obtenerDatosMareaAnt 2 - ", error );
-                        });
+            var response = await TasaBackendService.obtenerMareaAnterior(marea, codigo, usuario);
+            if (response) {
+                var mareaAnt = response.data[0];
+                mareaAnterior.setProperty("/Marea", parseInt(mareaAnt.NRMAR));
+                mareaAnterior.setProperty("/MotMarea", mareaAnt.CDMMA);
+                mareaAnterior.setProperty("/EstMarea", mareaAnt.ESMAR);
+                mareaAnterior.setProperty("/DescMotivoMarea", mareaAnt.DESC_CDMMA);
+                mareaAnterior.setProperty("/FecApertura", mareaAnt.FEMAR);
+                mareaAnterior.setProperty("/HorApertura", mareaAnt.HAMAR);
+                mareaAnterior.setProperty("/FecCierre", mareaAnt.FXMAR);
+                mareaAnterior.setProperty("/HorCierre", mareaAnt.HXMAR);
+                mareaAnterior.setProperty("/FecInicio", mareaAnt.FIMAR);
+                mareaAnterior.setProperty("/HorInicio", mareaAnt.HIMAR);
+                mareaAnterior.setProperty("/FecFin", mareaAnt.FFMAR);
+                mareaAnterior.setProperty("/HorFin", mareaAnt.HFMAR);
+                mareaAnterior.setProperty("/EstCierre", mareaAnt.ESCMA);
+                if (!utilitario.getProperty("/motivoSinZarpe").includes(mareaAnt.CDMMA)) {
+                    var response1 = await TasaBackendService.obtenerEventoAnterior(parseInt(mareaAnt.NRMAR), usuario);
+                    if (response1) {
+                        var eventoAnt = response1.data[0];
+                        if (eventoAnt) {
+                            mareaAnterior.setProperty("/EventosMarAnt/Numero", parseInt(eventoAnt.NREVN));
+                            mareaAnterior.setProperty("/EventosMarAnt/TipoEvento", eventoAnt.CDTEV);
+                            mareaAnterior.setProperty("/EventosMarAnt/DescTipoEvento", eventoAnt.DESC_CDTEV);
+                            mareaAnterior.setProperty("/EventosMarAnt/FechIni", eventoAnt.FIEVN);
+                            mareaAnterior.setProperty("/EventosMarAnt/HoraIni", eventoAnt.HIEVN);
+                            mareaAnterior.setProperty("/EventosMarAnt/FechFin", eventoAnt.FFEVN);
+                            mareaAnterior.setProperty("/EventosMarAnt/HoraFin", eventoAnt.HFEVN);
+                        }
                     }
                 }
-            }).catch(function(error){
-                console.log("ERROR: FormCust.obtenerDatosMareaAnt 1 - ", error );
-            });
+            }
         },
 
-        obtenerDatosDistribFlota: async function(codigo){
+        obtenerDatosDistribFlota: async function (codigo) {
             var me = this;
             var dataSesionModel = this.getModel("DataSession");
             var usuario = dataSesionModel.getProperty("/User");
             var distribFlota = this.getModel("DistribFlota");
             var constantsUtility = this.getModel("ConstantsUtility");
             var caracterEditar = constantsUtility.getProperty("/CARACTEREDITAR");
-            var bOk = await TasaBackendService.obtenerDatosDstrFlota(codigo, usuario).then(function(response){
-                if(response){
-                    distribFlota.setProperty("/Indicador", caracterEditar);
-                    distribFlota.setProperty("/Planta", response.CDPTA);
-                    distribFlota.setProperty("/DescPlanta", response.DESCR);
-                    distribFlota.setProperty("/Puerto", response.CDPTO);
-                    distribFlota.setProperty("/DescPuerto", response.DSPTO);
-                    distribFlota.setProperty("/LatPuerto", response.LTGEO);
-                    distribFlota.setProperty("/IntLatPuerto", parseInt(response.LTGEO));
-                    distribFlota.setProperty("/LonPuerto", response.LNGEO);
-                    distribFlota.setProperty("/IntLonPuerto", parseInt(response.LNGEO));
-                    distribFlota.setProperty("/FecArribo", response.FEARR);
-                    distribFlota.setProperty("/HorArribo", response.HEARR);
-                    distribFlota.setProperty("/Empresa", response.EMPLA);
-                    distribFlota.setProperty("/CentPlanta", response.WKSPT);
-                    distribFlota.setProperty("/UbicPlanta", response.CDUPT);
-                    if(response.DSEMP || response.INPRP){
-                        distribFlota.setProperty("/DescEmpresa", response.DSEMP);
-                        distribFlota.setProperty("/IndPropPlanta", response.INPRP);
-                    } else {
-                        var mssg = me.getResourceModel().getText("PLANTASINEMPRESA");
-                        MessageBox.error(mssg);
-                    }
-                    return true;
+            var response = await TasaBackendService.obtenerDatosDstrFlota(codigo, usuario);
+            if (response) {
+                distribFlota.setProperty("/Indicador", caracterEditar);
+                distribFlota.setProperty("/Planta", response.CDPTA);
+                distribFlota.setProperty("/DescPlanta", response.DESCR);
+                distribFlota.setProperty("/Puerto", response.CDPTO);
+                distribFlota.setProperty("/DescPuerto", response.DSPTO);
+                distribFlota.setProperty("/LatPuerto", response.LTGEO);
+                distribFlota.setProperty("/IntLatPuerto", parseInt(response.LTGEO));
+                distribFlota.setProperty("/LonPuerto", response.LNGEO);
+                distribFlota.setProperty("/IntLonPuerto", parseInt(response.LNGEO));
+                distribFlota.setProperty("/FecArribo", response.FEARR);
+                distribFlota.setProperty("/HorArribo", response.HEARR);
+                distribFlota.setProperty("/Empresa", response.EMPLA);
+                distribFlota.setProperty("/CentPlanta", response.WKSPT);
+                distribFlota.setProperty("/UbicPlanta", response.CDUPT);
+                if (response.DSEMP || response.INPRP) {
+                    distribFlota.setProperty("/DescEmpresa", response.DSEMP);
+                    distribFlota.setProperty("/IndPropPlanta", response.INPRP);
                 } else {
-                    return false;
+                    var mssg = me.getResourceModel().getText("PLANTASINEMPRESA");
+                    MessageBox.error(mssg);
                 }
-            }).catch(function(error){
-                console.log("ERROR: FormCust.obtenerDatosDistribFlota - ", error );
-                return null;
-            });
-            return bOk;
+                return true;
+            } else {
+                return false;
+            }
         },
 
-        consultarPermisoZarpe: async function(codigo){
+        consultarPermisoZarpe: async function (codigo) {
             var me = this;
             var dataSesionModel = this.getModel("DataSession");
             var usuario = dataSesionModel.getProperty("/User");
             var form = this.getModel("Form");
-            var puedeZarpar = await TasaBackendService.obtenerPermisoZarpe(codigo, usuario).then(function(response){
+            var puedeZarpar = await TasaBackendService.obtenerPermisoZarpe(codigo, usuario).then(function (response) {
                 var bOk = true;
-                if(response.data){
+                if (response.data) {
                     var permiso = response.data[0];
-                    if(permiso.ESPMS != "V"){
+                    if (permiso.ESPMS != "V") {
                         form.setProperty("/Armador", null);
                         form.setProperty("/DescArmador", null);
                         var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + me.getResourceModel().getText("EMBSUSPENDIDA");
@@ -273,22 +286,22 @@ sap.ui.define([
                     }
                 }
                 return bOk;
-            }).catch(function(error){
+            }).catch(function (error) {
                 console.log("ERROR: FormCust.consultarPermisoZarpe - ", error);
                 return null;
             });
             return puedeZarpar;
         },
 
-        obtenerDatosPlantaDist: async function(planta){
+        obtenerDatosPlantaDist: async function (planta) {
             var me = this;
             var dataSesionModel = this.getModel("DataSession");
             var usuario = dataSesionModel.getProperty("/User");
             var distribFlota = this.getModel("DistribFlota");
             var constantsUtility = this.getModel("ConstantsUtility");
             var caracterNuevo = constantsUtility.getProperty("/CARACTERNUEVO");
-            var bOk = await TasaBackendService.obtenerDatosPlantaDist(planta, usuario).then(function(response){
-                if(response){
+            var bOk = await TasaBackendService.obtenerDatosPlantaDist(planta, usuario).then(function (response) {
+                if (response) {
                     distribFlota.setProperty("/Indicador", caracterNuevo);
                     distribFlota.setProperty("/Planta", response.CDPTA);
                     distribFlota.setProperty("/DescPlanta", response.DESCR);
@@ -300,40 +313,40 @@ sap.ui.define([
                     distribFlota.setProperty("/IntLonPuerto", parseInt(response.LNGEO));
                     distribFlota.setProperty("/Empresa", response.CDEMP);
                     distribFlota.setProperty("/UbicPlanta", response.CDUPT);
-                    if(response.DSEMP || response.INPRP){
+                    if (response.DSEMP || response.INPRP) {
                         distribFlota.setProperty("/DescEmpresa", response.DSEMP);
                         distribFlota.setProperty("/IndPropPlanta", response.INPRP);
-                    }else{
+                    } else {
                         var mssg = me.getResourceModel().getText("PLANTASINEMPRESA");
                         MessageBox.error(mssg);
                     }
                     return true;
-                }   else {
+                } else {
                     var mssg = me.getResourceModel().getText("NODATOSPLANTA");
                     MessageBox.error(mssg);
                     return false;
                 }
-            }).catch(function(error){
-                console.log("ERROR: FormCust.obtenerDatosDistribFlota - ", error );
+            }).catch(function (error) {
+                console.log("ERROR: FormCust.obtenerDatosDistribFlota - ", error);
                 return null;
             });
             return bOk;
         },
 
-        validarPermisoPescaSur: function(){
+        validarPermisoPescaSur: function () {
             var me = this;
             var bOk = true;
             var distribFlota = this.getModel("DistribFlota");
             var form = this.getModel("Form");
-            var constantes = this.getModel("constantes");
+            var constantes = this.getModel("Constantes");
             var ubicPlanta = distribFlota.getProperty("/UbicPlanta");
             var permisoSur = form.getProperty("/PermisoSur");
             var fechaPerSur = form.getProperty("/FechaPermisoSur");
             var fechaPermiso = Utils.strDateToDate(fechaPerSur);
             var fechaActual = new Date();
-            if(ubicPlanta == constantes.getProperty("/CodUbicSur")){
-                if(permisoSur == "S"){
-                    if(fechaActual > fechaPermiso){
+            if (ubicPlanta == constantes.getProperty("/CodUbicSur")) {
+                if (permisoSur == "S") {
+                    if (fechaActual > fechaPermiso) {
                         bOk = false;
                         var mssg = me.getResourceModel().getText("PERMISOSURVENCIO", [fechaPerSur]);
                         MessageBox.error(mssg);

@@ -57,6 +57,8 @@ sap.ui.define([
                     Lista: [],
                     CurrentEvento: {}
 				},
+                Incidental: [],
+                Biometria: [],
                 ResCombustible: {},
                 VentaCombustible: {},
                 DistribFlota: {
@@ -198,7 +200,8 @@ sap.ui.define([
 
         createUtilsModel: function(){
             var data = {
-                VedaVerificada: true
+                VedaVerificada: true,
+                BtnEnabled: false
             };
             var oModel = new JSONModel(data);
 			return oModel;
