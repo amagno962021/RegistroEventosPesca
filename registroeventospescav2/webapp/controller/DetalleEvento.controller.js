@@ -49,7 +49,8 @@ sap.ui.define([
 		 onInit: function () {
             this.router = this.getOwnerComponent().getRouter();
             this.router.getRoute("DetalleEvento").attachPatternMatched(this._onPatternMatched, this);
-
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.session);
+                oStore.put("flagFragment", true);
         },
 
         onBackDetalleMarea: function(){
@@ -68,7 +69,7 @@ sap.ui.define([
             console.log("FormEvent_cont: ", FormEvent_cont);
 
             /********* Carga de variables globales **********/
-            this._elementAct = "0";//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
+            this._elementAct = "2";//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
             this._utilNroEventoBio = "001";
             this._utilNroEventoIncid = "001";
             this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA;
@@ -76,12 +77,12 @@ sap.ui.define([
             this._nroEvento = "3";//ESTE ES EL NUMERO DEL EVENTO SELECCIONADO DE LA LISTA DE DETALLE
             this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "";//"165728";
             this._nroDescarga = ListaEventos_cont[this._elementAct].NRDES;//"TCHI001444";
-            this._indicador = ListaEventos_cont[this._elementAct].INPRP;//"E";
+            this._indicador = "E"//ListaEventos_cont[this._elementAct].INPRP;//"E";
             this._indicadorProp = ListaEventos_cont[this._elementAct].INPRP;
             this._codPlanta = FormEvent_cont.Cabecera.CDPTA;
             this._embarcacion = FormEvent_cont.Cabecera.CDEMB;//"0000000012";
             this._indicadorPropXPlanta = FormEvent_cont.Cabecera.INPRP;
-            this._soloLectura = true;//data de session solo lectura obtenida desde el principal
+            this._soloLectura = false;//data de session solo lectura obtenida desde el principal
             this._EsperaMareaAnt = EsperaMareaAnt_cont;//[{ "id": "0" }, { "id": "1" }]; 
             this._listaEventos = ListaEventos_cont;
             this._FormMarea = FormEvent_cont.Cabecera;
@@ -136,11 +137,13 @@ sap.ui.define([
             /************ Carga de fragments de los eventos **************/
             let self = this;
             await this.cargarServiciosPreEvento().then(r => {
-                if (r) {
-                    self.getFragment();
-                } else {
-                    alert("Error");
-                }
+                
+                    if (r) {
+                        self.getFragment();
+                    } else {
+                        alert("Error");
+                    }
+                
             })
             
         },
@@ -257,6 +260,11 @@ sap.ui.define([
         },
 
         getFragment: async function () {
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.session);
+            let flag = oStore.get("flagFragment");
+            console.log("flag : "+ flag);
+            if(flag){
+
             var o_tabGeneral = this.getView().byId("idGeneral");
             var o_tabDistribucion = this.getView().byId("idDistribucion");
             var o_tabPescaDeclarada = this.getView().byId("idPescaDecl");
@@ -297,6 +305,9 @@ sap.ui.define([
             o_tabSiniestro.addContent(o_fragment11.getcontrol());
             o_tabAccidente.addContent(o_fragment12.getcontrol());
             o_tabBiometria.addContent(o_fragment13.getcontrol());
+            }
+
+            oStore.put("flagFragment", false);
 
             //SETEAR VALOR GLOBAL FRAGMENTS
             this.Dat_Horometro = o_fragment9;
@@ -444,7 +455,7 @@ sap.ui.define([
         },
 
         prepararVista: function (nuevoEvento) {
-            //this.resetView();
+            this.resetView();
             var exisEspMarAnt = false;
             if (this._EsperaMareaAnt != null && this._EsperaMareaAnt.length > 0) { exisEspMarAnt = true; } else { exisEspMarAnt = false; }
 
@@ -564,7 +575,7 @@ sap.ui.define([
                     this.getView().byId("FechaEnvaseIni").setVisible(false);
                     this.getView().byId("FechaEnvaseFin").setVisible(false);
 
-                    this.getView().byId("fe_estadoOperacion").setVisible(true);//cambiar a false
+                    this.getView().byId("fe_estadoOperacion").setVisible(false);//cambiar a false
                     this.getView().byId("fe_tipoDescarga").setVisible(true);
 
                     if (this._indicadorProp == textValidaciones.INDIC_PROPIEDAD_TERCEROS || this._indicadorPropXPlanta == textValidaciones.INDIC_PROPIEDAD_PROPIOS) {
@@ -791,21 +802,47 @@ sap.ui.define([
 
         },
         obtenerCoordZonaPesca: function () {
+            let mensajes_o = this.getOwnerComponent().getModel("i18n").getResourceBundle();
             if (this._listasServicioCargaIni[2] ? true : false) {
+               
                 let elementoCoordZonaPesca = JSON.parse(this._listasServicioCargaIni[2]).data[0];
+
+                let descLatiLong = mensajes_o.getText("DESCLATLONGINIFIN", [elementoCoordZonaPesca.LTMIN,elementoCoordZonaPesca.LTMAX,elementoCoordZonaPesca.LNMIN,elementoCoordZonaPesca.LNMAX]);
+                //this.formatGeoCoord('00830');
                 this._listaEventos[this._elementAct].ZPLatiIni = elementoCoordZonaPesca.LTMIN;
                 this._listaEventos[this._elementAct].ZPLatiFin = elementoCoordZonaPesca.LTMAX;
                 this._listaEventos[this._elementAct].ZPLongIni = elementoCoordZonaPesca.LNMIN;
                 this._listaEventos[this._elementAct].ZPLongFin = elementoCoordZonaPesca.LNMAX;
+                this._listaEventos[this._elementAct].DescLatiLongZonaPesca = descLatiLong;
                 //wdContext.currentEventosElement().setDescLatiLongZonaPesca(descLatiLong);
             }
 
+        },
+        formatGeoCoord:function (value) {
+            let geoCord = "";
+            geoCord = value;
+            let cadenaGeo ="";
+            
+            if (value != "") {
+                let myPattern = /(\d){5}/;
+                value = value.trim();
+                let myMatcher = myPattern.test(value);
+                
+                if (myMatcher) {
+                    let ss = geoCord.substr(0,3); 
+                    cadenaGeo = geoCord.substr(0,3) + "º" + geoCord.substr(3,4) + "'";
+                }else{
+                    cadenaGeo = "";
+                }
+            }
+            
+            return cadenaGeo;
         },
 
         obtenerPescaDeclarada: function () {
             let sumaCantPesca = Number(0);
             if (this._listasServicioCargaIni[3] ? true : false) {
-                this._listaEventos[this._elementAct].ListaPescaDeclarada = JSON.parse(this._listasServicioCargaIni[3]).data
+                this._listaEventos[this._elementAct].ListaPescaDeclarada = JSON.parse(this._listasServicioCargaIni[3]).data;
                 for (var j = 0; j < this._listaEventos[this._elementAct].ListaPescaDeclarada.length; j++) {
 
                     sumaCantPesca = sumaCantPesca + Number(this._listaEventos[this._elementAct].ListaPescaDeclarada[j].CNPCM);
@@ -1127,7 +1164,7 @@ sap.ui.define([
             this.getView().byId("dtf_FechaProduccion").setEnabled(false);
             this.getView().byId("dtp_fechaFinCala").setEnabled(false);
             this.getView().byId("dtf_fechaFinEnv").setEnabled(false);
-            this.getView().byId("cmb_estaOperacion").setEnabled(true);//cambiar a false
+            this.getView().byId("cmb_estaOperacion").setEnabled(false);//cambiar a false
             this.getView().byId("cb_tipoDescarga").setEnabled(false);
             this.getView().byId("i_temperaturaMar").setEnabled(false);
             this.getView().byId("i_stockCombustible").setEnabled(false);
@@ -1279,7 +1316,6 @@ sap.ui.define([
             this.getView().byId("FechaEnvaseIni").setVisible(false);
             this.getView().byId("FechaEnvaseFin").setVisible(false);
             this.getView().byId("fe_Empresa").setVisible(false);
-            this.getView().byId("btn_Planta").setVisible(false);
             this.getView().byId("fe_ZonaPesca").setVisible(false);
             this.getView().byId("f_LatitudLongitud").setVisible(false);
             this.getView().byId("fe_muestra").setVisible(false);

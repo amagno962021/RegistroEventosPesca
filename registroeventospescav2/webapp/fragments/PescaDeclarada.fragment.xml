@@ -12,19 +12,9 @@
 				<extension>
 					<m:OverflowToolbar id="ext_pesca_declarada" style="Clear">
 						<m:Title id="title" text="Cantidad de pesca en bodegas: "/>
-						<m:Text text="50 "/>
+						<m:Text text="{eventos>/CantTotalPescDecla}"/>
 						<m:Text text="TM"/>
 						<m:ToolbarSpacer/>
-						<m:Button
-							icon="sap-icon://decline"
-							tooltip="Clear all filters"
-							press="clearAllFilters"/>
-						<m:ToolbarSeparator/>
-						<m:SearchField
-							placeholder="Filter"
-							value="{ui>/globalFilter}"
-							search="filterGlobally"
-							width="15rem"/>
 					</m:OverflowToolbar>
 				</extension>
 				<columns>
@@ -48,7 +38,8 @@
 					<Column id="col_porc_pesc_desc" width="9rem">
 						<m:Label text="% pesca" />
 						<template>
-							<m:Input value="{eventos>PorcPesca}" type="Number" visible="true" submit="onActionCalcCantPescaDecla"/>
+							<m:Text text="{eventos>PorcPesca}" wrapping="false" />
+							<!-- <m:Input value="{eventos>PorcPesca}" type="Number" visible="true" submit="onActionCalcCantPescaDecla"/> -->
 						</template>
 					</Column>
 					<Column
