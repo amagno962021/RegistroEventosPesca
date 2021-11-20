@@ -69,6 +69,7 @@ sap.ui.define([
             console.log("FormEvent_cont: ", FormEvent_cont);
 
             /********* Carga de variables globales **********/
+            this._listaIncidental = dataDetalleMarea.Incidental;
             this._elementAct = "2";//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
             this._utilNroEventoBio = "001";
             this._utilNroEventoIncid = "001";
@@ -156,7 +157,7 @@ sap.ui.define([
             this._listaEventos[this._elementAct].ListaEquipamiento = [];
             this._listaEventos[this._elementAct].ListaAccidente = [];
             this._listaEventos[this._elementAct].ListaSiniestros = [];
-            this._listaEventos[this._elementAct].ListaIncidental = [];
+            this._listaEventos[this._elementAct].ListaIncidental = this._listaIncidental;
             this._listaEventos[this._elementAct].eListaPescaDeclarada = [];
         },
 
@@ -221,6 +222,7 @@ sap.ui.define([
             this.getView().getModel("eventos").setProperty("/ListaPescaDeclarada", this._listaEventos[this._elementAct].ListaPescaDeclarada);
             this.getView().getModel("eventos").setProperty("/ListaHorometros", this._listaEventos[this._elementAct].ListaHorometros);
             this.getView().getModel("eventos").setProperty("/ListaEquipamiento", this._listaEventos[this._elementAct].ListaEquipamiento);
+            this.getView().getModel("eventos").setProperty("/ListaIncidental", this._listaEventos[this._elementAct].ListaIncidental);
             this.getView().getModel("eventos").updateBindings(true);
         },
 
@@ -809,10 +811,10 @@ sap.ui.define([
 
                 let descLatiLong = mensajes_o.getText("DESCLATLONGINIFIN", [elementoCoordZonaPesca.LTMIN,elementoCoordZonaPesca.LTMAX,elementoCoordZonaPesca.LNMIN,elementoCoordZonaPesca.LNMAX]);
                 //this.formatGeoCoord('00830');
-                this._listaEventos[this._elementAct].ZPLatiIni = elementoCoordZonaPesca.LTMIN;
-                this._listaEventos[this._elementAct].ZPLatiFin = elementoCoordZonaPesca.LTMAX;
-                this._listaEventos[this._elementAct].ZPLongIni = elementoCoordZonaPesca.LNMIN;
-                this._listaEventos[this._elementAct].ZPLongFin = elementoCoordZonaPesca.LNMAX;
+                this._listaEventos[this._elementAct].ZPLatiIni = elementoCoordZonaPesca.LTMIN_S;
+                this._listaEventos[this._elementAct].ZPLatiFin = elementoCoordZonaPesca.LTMAX_S;
+                this._listaEventos[this._elementAct].ZPLongIni = elementoCoordZonaPesca.LNMIN_S;
+                this._listaEventos[this._elementAct].ZPLongFin = elementoCoordZonaPesca.LNMAX_S;
                 this._listaEventos[this._elementAct].DescLatiLongZonaPesca = descLatiLong;
                 //wdContext.currentEventosElement().setDescLatiLongZonaPesca(descLatiLong);
             }
