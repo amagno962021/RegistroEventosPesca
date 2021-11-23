@@ -330,20 +330,23 @@ sap.ui.define([
 
         },
 
-        cargarCombos: function () {
+        cargarCombos: async function () {
             var me = this;
             var currentUser = this.getCurrentUser();
             var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
             var dataDetalleMarea = modeloDetalleMarea.getData();
 
             //combo departamentos
-            TasaBackendService.obtenerDepartamentos(currentUser).then(function (response) {
+            /*var resDepartamentos = await TasaBackendService.obtenerDepartamentos(currentUser).then(function (response) {
                 var departamentos = response.data;
                 dataDetalleMarea.Config.datosCombo.Departamentos = departamentos;
                 modeloDetalleMarea.refresh();
             }).catch(function (error) {
                 console.log("ERROR: DetalleMarea.cargarCombos - ", error);
             });
+            if(resDepartamentos){
+
+            }*/
 
             //combo motivos de marea
             TasaBackendService.obtenerDominio("ZDO_ZCDMMA").then(function (response) {

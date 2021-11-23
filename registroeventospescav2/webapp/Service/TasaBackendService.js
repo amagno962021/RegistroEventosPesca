@@ -95,19 +95,19 @@ sap.ui.define([
             return data;
         },
 
-        obtenerDepartamentos: function (sUsuario) {
-            var uri = UtilService.getHostService() + "/api/General/Read_Table/";
-            var sBody = UtilService.getBodyReadTable();
-            sBody.delimitador = "|";
-            sBody.fields.push("BLAND");
-            sBody.fields.push("BEZEI");
-            sBody.option[0].wa = "SPRAS EQ 'ES' AND LAND1 EQ 'PE'";
+        obtenerDepartamentos: async function (sUsuario) {
+            var uri = UtilService.getHostService() + "/api/General/ConsultaGeneral/";
+            var sBody = UtilService.getConsultaGeneral();
+            sBody.nombreConsulta = "CONSGENDPTO";
             sBody.p_user = sUsuario;
-            sBody.tabla = "T005U";
-            return this.http(uri).post(null, sBody).then(function (response) {
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
                 var data = JSON.parse(response);
                 return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerDepartamentos: ", error);
+                return null
             });
+            return data;
         },
 
         validarBodegaCert: async function (embarcacion, planta) {
