@@ -350,7 +350,8 @@ sap.ui.define([], function () {
 				LinkRemover:false,
 				LinkDescartar:false,
 				TabHorometro : false,
-				VisibleObsvComb:false
+				VisibleObsvComb:false,
+				VisibleObservAdicional :false
 			}
 		}
 

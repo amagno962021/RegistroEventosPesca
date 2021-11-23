@@ -35,9 +35,6 @@ sap.ui.define([
             this.ctr = o_this;
             this.previousTab = "General";
             this.nextTab = "";
-            this.calendarioPescaCHD = [];
-            this.calendarioPescaCHI = [];
-            this.calendarioPescaVED = [];
             console.log(textValidaciones.eventAttTabGeneral);
 
         },
@@ -564,8 +561,8 @@ sap.ui.define([
             var espePermitida = [];
 	        var espeZonaPesca = [];
 	        var espeVeda = [];
-            var listCalendario = motivoMarea == "1" ? this.calendarioPescaCHD : this.calendarioPescaCHI;
-            this.calendarioPescaVED
+            var listCalendario = motivoMarea == "1" ? this.ctr.calendarioPescaCHD : this.ctr.calendarioPescaCHI;
+            this.ctr.calendarioPescaVED
             for (let index = 0; index < listCalendario.length; index++) {
                 const element = listCalendario[index];
                 var latiIni = element.IntLatIni;
@@ -589,8 +586,8 @@ sap.ui.define([
 
             if(espePermitida != null && espePermitida.length > 0){
                 if(valiCoordCala){
-                    for (let i = 0, j = 0; i < this.calendarioPescaVED.length; i++) {
-                        const calendarioVED = this.calendarioPescaVED[i];
+                    for (let i = 0, j = 0; i < this.ctr.calendarioPescaVED.length; i++) {
+                        const calendarioVED = this.ctr.calendarioPescaVED[i];
                         var latiIni = calendarioVED.IntLatIni;
 				        var latiFin = calendarioVED.IntLatFin;
 				        var longIni = calendarioVED.IntLonIni;
