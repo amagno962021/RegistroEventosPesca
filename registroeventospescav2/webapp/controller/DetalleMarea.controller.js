@@ -6,6 +6,7 @@ sap.ui.define([
     "sap/m/MessageBox",
     "../Service/TasaBackendService",
     "sap/ui/core/BusyIndicator",
+    "./Utils",
 ], function (
     Controller,
     JSONModel,
@@ -13,7 +14,8 @@ sap.ui.define([
     formatter,
     MessageBox,
     TasaBackendService,
-    BusyIndicator
+    BusyIndicator,
+    Utils
 ) {
     "use strict";
 
@@ -451,9 +453,88 @@ sap.ui.define([
             }
         },
 
-        onValidaMotivo: function (evt) {
+        onValidaMotivo: async function (evt) {
             var oValidatedComboBox = evt.getSource();
             var sSelectedKey = oValidatedComboBox.getSelectedKey();
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var listaMotivos = modelo.getProperty("/Config/datosCombo/MotivosMarea");
+            var motivo = listaMotivos.find(obj => obj.id == sSelectedKey);
+            modelo.setProperty("/Cabecera/DESC_CDMMA", motivo.descripcion);
+            if(sSelectedKey == "1" || sSelectedKey == "2"){
+                modelo.setProperty("/Config/visibleFecHoEta", true);
+                modelo.setProperty("/Config/visibleUbiPesca", false);
+                modelo.setProperty("/Config/visibleFechIni", false);
+                modelo.setProperty("/Cabecera/TXTNOTIF", "");
+                modelo.setProperty("/Cabecera/TXTNOTIF1", "");
+            }else if(sSelectedKey == "3" || sSelectedKey == "7" || sSelectedKey == "8"){
+                modelo.setProperty("/Config/visibleFecHoEta", false);
+                modelo.setProperty("/Config/visibleUbiPesca", true);
+                modelo.setProperty("/Config/visibleFechIni", true);
+                modelo.setProperty("/Config/readOnlyFechIni", false);
+                modelo.setProperty("/Config/readOnlyEstaMar", true);
+                var MareAntNrmar = modelo.getProperty("/MareaAnterior/NRMAR");
+                var MareAntDesc = modelo.getProperty("/MareaAnterior/DESC_CDMMA");
+                var MareAntEvt = modelo.getProperty("/MareaAnterior/EventoMarAnt/DESC_CDTEV");
+                var MareAntFech = modelo.getProperty("/MareaAnterior/FFMAR");
+                var MareAntHora = modelo.getProperty("/MareaAnterior/HFMAR");
+                var mssg = this.oBundle.getText("NOTIFULTMAREA", [MareAntNrmar, MareAntDesc, MareAntEvt, MareAntFech, MareAntHora]);
+                modelo.setProperty("/Cabecera/TXTNOTIF", mssg);
+                modelo.setProperty("/DatosGenerales/FIMAR", MareAntFech);
+                modelo.setProperty("/DatosGenerales/HIMAR", MareAntHora);
+                modelo.setProperty("/Cabecera/TXTNOTIF1", "");
+                if(sSelectedKey == "8"){
+                    BusyIndicator.show(0);
+                    await this.validarFechaVeda();
+                    BusyIndicator.hide();
+                }
+            }else if(sSelectedKey == "4" || sSelectedKey == "5"){
+                modelo.setProperty("/Config/visibleUbiPesca", true);
+                modelo.setProperty("/Config/visibleFecHoEta", true);
+                modelo.setProperty("/Config/visibleEstMarea", true);
+                modelo.setProperty("/Config/readOnlyEstaMar", false);
+                modelo.setProperty("/Config/visibleFechIni", false);
+                modelo.setProperty("/Config/visibleFechFin", false);
+                modelo.setProperty("/DatosGenerales/ESMAR", "A");//Seteamos marea abierta
+                modelo.setProperty("/Cabecera/TXTNOTIF", "");
+                modelo.setProperty("/Cabecera/TXTNOTIF1", "");
+            }
+            this.validarComboEventos();
+        },
+
+        validarComboEventos: async function(){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var motivo = modelo.getProperty("/DatosGenerales/CDMMA");
+            var tmpEventos = [];
+            var response = await TasaBackendService.obtenerDominio("ZCDTEV");
+            if(response){
+                var eventos = response.data[0].data;
+                if(eventos){
+                    console.log("Eventos: ", eventos);
+                    if(motivo == "1" || motivo == "2" || motivo == "4" || motivo == "5" || motivo == "6"){
+                        for (let index = 0; index < eventos.length; index++) {
+                            const element = eventos[index];
+                            if(element.id == "1" || element.id == "8"){
+                                tmpEventos.push(element);
+                            }
+                        }
+                    } else if(motivo == "3"){
+                        for (let index = 0; index < eventos.length; index++) {
+                            const element = eventos[index];
+                            if(element.id == "8"){
+                                tmpEventos.push(element);
+                            }
+                        }
+                    } else if(motivo == "7" || motivo == "8"){
+                        for (let index = 0; index < eventos.length; index++) {
+                            const element = eventos[index];
+                            if(element.id == "8" || element.id == "H" || element.id == "T"){
+                                tmpEventos.push(element);
+                            }
+                        }
+                    }
+                }
+                modelo.setProperty("/Config/datosCombo/TipoEventos", tmpEventos);
+            }
         },
 
         validarLimiteVeda: function () {
@@ -468,29 +549,111 @@ sap.ui.define([
         },
 
         validarVista: function () {
-            var me = this;
-            var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
-            var dataDetalleMarea = modeloDetalleMarea.getData();
-            var motMarea = dataDetalleMarea.Cabecera.CDMMA;
-            var indProp = dataDetalleMarea.Cabecera.INPRP;
-            if (motMarea == "3" || motMarea == "7" || motMarea == "8") {//motivos de marea sin zarpe
-                dataDetalleMarea.Config.readOnlyFechIni = false;
-                dataDetalleMarea.Config.visibleFecHoEta = false;
-                dataDetalleMarea.Config.visibleFechIni = false;
-                dataDetalleMarea.Config.visibleFechFin = false;
-            }
-
-            if (motMarea == "1" || motMarea == "2") {//motivos de marea con pesca (descargas)
-                dataDetalleMarea.Config.visibleUbiPesca = true;
-            }
-
+            //ocultar link armador
+            //ocultar fecha horta eta
+            //ocultar fecha inicio fecha fin
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var indProp = modelo.getProperty("/Cabecera/INPRP");
             if (indProp == "P") {
-                dataDetalleMarea.Config.visibleLinkCrearArmador = false;
+                modelo.setProperty("/Config/visibleLinkCrearArmador", false);
             } else {
-                dataDetalleMarea.Config.visibleLinkCrearArmador = true;
+                modelo.setProperty("/Config/visibleLinkCrearArmador", true);
             }
 
-            modeloDetalleMarea.refresh();
+            modelo.setProperty("/Config/visibleFecHoEta", false);
+            modelo.setProperty("/Config/visibleFechIni", false);
+            modelo.setProperty("/Config/visibleFechFin", false);
+            modelo.setProperty("/Config/visibleUbiPesca", false);
+            modelo.setProperty("/Config/visibleTabReserva", false);
+            modelo.setProperty("/Config/visibleTabVenta", false);
+            modelo.setProperty("/Config/visibleTabSepComb", false);
+        },
+
+        validarTemporadaVeda: async function(){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var fechaIni = modelo.getProperty("/DatosGenerales/FIMAR");
+            var veda = false
+            if(fechaIni){
+                var usuario = this.getCurrentUser();
+                var strFecha = fechaIni.split("/")[2] + fechaIni.split("/")[1] + fechaIni.split("/")[0] + "";
+                var response = await TasaBackendService.obtenerTemporadaVeda(strFecha, usuario);
+                if(response.data){
+                    var latVed = modelo.getProperty("/DistribFlota/IntLatPuerto");
+                    var litorales = response.data;
+                    for (let index = 0; index < litorales.length; index++) {
+                        const element = litorales[index];
+                        var latIni = parseInt(element.LTINI.replace('°', '').replace("'", ''));
+                        var latFin = parseInt(element.LTFIN.replace('°', '').replace("'", ''));
+                        var millas = parseFloat(element.MILLA).toFixed(3);
+                        if (latVed >= latIni && latVed <= latFin && millas > 0) {
+                            veda = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            return veda;
+        },
+
+        validarFechaVeda: async function(){
+            var veda = await this.validarTemporadaVeda();
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var fechaIni = modelo.getProperty("/DatosGenerales/FIMAR");
+            var puerto = modelo.getProperty("/DistribFlota/CDPTA");
+            var descPuerto = modelo.getProperty("/DistribFlota/DESCR");
+            if(veda){
+                await this.obtenerLimiteVeda();
+            } else{
+                modelo.setProperty("/DatosGenerales/CDMMA", "");
+                modelo.setProperty("/DatosGenerales/FIMAR", "");
+                modelo.setProperty("/DatosGenerales/HIMAR", "");
+                var strPuerto = puerto + " " + descPuerto;
+                var mssg = this.oBundle.getText("NOVEDFECHAPTO", [fechaIni, strPuerto]);
+                MessageBox.error(mssg);
+            }
+            return veda;
+        },
+
+        obtenerLimiteVeda: async function(){
+            var veda = true;
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var fechaIni = modelo.getProperty("/DatosGenerales/FIMAR");
+            var dateFechaIni = Utils.strDateToDate(fechaIni);
+            var fechaActual = new Date();
+            if(fechaActual.getTime() > dateFechaIni.getTime()){
+                dateFechaIni.setDate(dateFechaIni.getDate() + 1);
+                var strNextDay = Utils.dateToStrDate(dateFechaIni);
+                modelo.setProperty("/DatosGenerales/FIMAR", strNextDay);
+                veda = await this.validarTemporadaVeda();
+                if(!veda){
+                    var mssg = this.oBundle.getText("SOLOVEDAHASTA");
+                    modelo.setProperty("/Cabecera/TXTNOTIF1", mssg)
+                } 
+            }
+        },
+
+        onSelectTabMarea: function(evt){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var motivo = modelo.getProperty("/DatosGenerales/CDMMA");
+            var ubicPesca = modelo.getProperty("/DatosGenerales/INUBC");
+            var key = evt.getParameter("key");
+            var previousKey = evt.getParameter("previousKey");
+            var iconTabBar = this.getView().byId("itbDetalleMarea");
+            if(key == "itfEventos" && previousKey == "itfDatosGenerales"){
+                if(!motivo){
+                    iconTabBar.setSelectedKey("itfDatosGenerales");
+                    var mssg = this.oBundle.getText("MISSMOTMAR");
+                    MessageBox.error(mssg);
+                }else{
+                    if(motivo == "3" || motivo == "7" || motivo == "8"){
+                        if(!ubicPesca){
+                            iconTabBar.setSelectedKey("itfDatosGenerales");
+                            var mssg = this.oBundle.getText("MISSUBICPESCA");
+                            MessageBox.error(mssg);
+                        }
+                    }
+                }
+            }
         },
 
         onNavEventos: function () {

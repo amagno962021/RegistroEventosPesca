@@ -1,316 +1,331 @@
-<mvc:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:layout="sap.ui.layout" xmlns:form="sap.ui.layout.form"
+<mvc:View
+	xmlns:core="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	xmlns:layout="sap.ui.layout"
+	xmlns:form="sap.ui.layout.form"
 	controllerName="com.tasa.registroeventospescav2.controller.DetalleMarea" displayBlock="true"
 	height="100%">
 	<!-- <App> removed -->
 	<!--	<pages> removed -->
-			<Page title="Detalle de Marea" showNavButton="true" navButtonPress="onBackListMarea" showFooter="true">
-				<content>
-					<layout:VerticalLayout width="100%" visible="true">
-						<layout:content>
-							<ObjectHeader intro="{path: 'DetalleMarea>/Cabecera/CDMMA', formatter: '.formatter.motivoMareaTexto'}" title="{DetalleMarea>/Cabecera/NRMAR}" icon="sap-icon://product" number="" numberUnit="" numberState="None" titleActive="false"
+	<Page title="Detalle de Marea" showNavButton="true" navButtonPress="onBackListMarea" showFooter="true">
+		<content>
+			<layout:VerticalLayout width="100%" visible="true">
+				<layout:content>
+					<ObjectHeader intro="{DetalleMarea>/Cabecera/DESC_CDMMA}" title="{DetalleMarea>/Cabecera/NRMAR}" icon="sap-icon://product" number="" numberUnit="" numberState="None" titleActive="false"
 								backgroundDesign="Translucent" condensed="false" visible="true">
-								<attributes>
-									<ObjectAttribute title="Embarcacion" text="{DetalleMarea>/Cabecera/CDEMB} {DetalleMarea>/Cabecera/NMEMB}" active="false" visible="true"/>
-									<ObjectAttribute title="Matricula" text="{DetalleMarea>/Cabecera/MREMB}" active="false" visible="true"/>
-									<ObjectAttribute title="Armador" text="{DetalleMarea>/Cabecera/CDEMP} {DetalleMarea>/Cabecera/NAME1}" active="false" visible="true"/>
-								</attributes>
-								<statuses>
-									<ObjectStatus text="Abierto" state="Success" icon="sap-icon://status-completed" visible="true"/>
-								</statuses>
-								<markers/>
-							</ObjectHeader>
-						</layout:content>
-					</layout:VerticalLayout>
-					<IconTabBar expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true"
-						selectedKey="Ok">
-						<items>
-							<IconTabFilter iconColor="Default" text="Datos Generales" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true"
+						<attributes>
+							<ObjectAttribute title="Embarcacion" text="{DetalleMarea>/Cabecera/CDEMB} {DetalleMarea>/Cabecera/NMEMB}" active="false" visible="true"/>
+							<ObjectAttribute title="Matricula" text="{DetalleMarea>/Cabecera/MREMB}" active="false" visible="true"/>
+							<ObjectAttribute title="Armador" text="{DetalleMarea>/Cabecera/CDEMP} {DetalleMarea>/Cabecera/NAME1}" active="false" visible="true"/>
+							<ObjectAttribute text="{DetalleMarea>/Cabecera/TXTNOTIF}" active="false" visible="true"/>
+							<ObjectAttribute text="{DetalleMarea>/Cabecera/TXTNOTIF1}" active="false" visible="true"/>
+						</attributes>
+						<statuses>
+							<ObjectStatus text="Abierto" state="Success" icon="sap-icon://status-completed" visible="true"/>
+						</statuses>
+						<markers/>
+					</ObjectHeader>
+				</layout:content>
+			</layout:VerticalLayout>
+			<IconTabBar expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true"
+						selectedKey="Ok" select="onSelectTabMarea" id="itbDetalleMarea">
+				<items>
+					<IconTabFilter key="itfDatosGenerales" iconColor="Default" text="Datos Generales" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true"
 								visible="true" iconDensityAware="false">
-								<content>
-									<form:Form width="100%" editable="true" visible="true">
-										<form:title>
-											<core:Title text="Pertenencia" level="Auto"/>
-										</form:title>
-										<form:formContainers>
-											<form:FormContainer visible="true">
-												<form:formElements>
-													<form:FormElement visible="true">
-														<form:label>
-															<Label text="Embarcacion" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-														</form:label>
-														<form:fields>
-															<Input value="{DetalleMarea>/DatosGenerales/CDEMB}"  description="{DetalleMarea>/DatosGenerales/NMEMB}"  enabled="false"  width="60%"
+						<content>
+							<form:Form width="100%" editable="true" visible="true">
+								<form:title>
+									<core:Title text="Pertenencia" level="Auto"/>
+								</form:title>
+								<form:formContainers>
+									<form:FormContainer visible="true">
+										<form:formElements>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Embarcacion" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Input value="{DetalleMarea>/DatosGenerales/CDEMB}"  description="{DetalleMarea>/DatosGenerales/NMEMB}"  enabled="false"  width="60%"
 																 valueStateText="Invalid entry"/>
-															
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorComercial}">
-														<form:label>
-															<Label text="Armador Comercial" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-														</form:label>
-														<form:fields>
-															<Input value="{DetalleMarea>/DatosGenerales/CDEMP}" description="{DetalleMarea>/DatosGenerales/NAME1}" enabled="false" 
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorComercial}">
+												<form:label>
+													<Label text="Armador Comercial" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Input value="{DetalleMarea>/DatosGenerales/CDEMP}" description="{DetalleMarea>/DatosGenerales/NAME1}" enabled="false" 
 																width="60%" valueStateText="Invalid entry"/>
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="{DetalleMarea>/Config/visibleLinkCrearArmador}">
-														<form:label>
-															<Label text=""/>
-														</form:label>
-														<form:fields>
-															<Link text="Crear Armador" press="onCrearArmador" />
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorRuc}">
-														<form:label>
-															<Label text="RUC"/>
-														</form:label>
-														<form:fields>
-															<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/RUC}" width="60%"/>
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorRazon}">
-														<form:label>
-															<Label text="Razón Social"/>
-														</form:label>
-														<form:fields>
-															<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/RAZON}" width="60%"/>
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorCalle}">
-														<form:label>
-															<Label text="Calle"/>
-														</form:label>
-														<form:fields>
-															<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/CALLE}" width="60%"/>
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorDistrito}">
-														<form:label>
-															<Label text="Distrito"/>
-														</form:label>
-														<form:fields>
-															<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/DISTRITO}" width="60%"/>
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorProvincia}">
-														<form:label>
-															<Label text="Provincia"/>
-														</form:label>
-														<form:fields>
-															<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/PROVINCIA}" width="60%"/>
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorDepartamento}">
-														<form:label>
-															<Label text="Departamento"/>
-														</form:label>
-														<form:fields>
-															<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/NuevoArmador/DEPARTAMENTO}" items="{DetalleMarea>/Config/datosCombo/Departamentos}" width="25%">
-																<core:Item key="{DetalleMarea>BLAND}" text="{DetalleMarea>BEZEI}" />
-															</ComboBox>
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="{DetalleMarea>/Config/visibleLinkSelecArmador}">
-														<form:label>
-															<Label text=""/>
-														</form:label>
-														<form:fields>
-															<Link text="Seleccionar Armador" press="onSeleccionarArmador" />
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement>
-														<form:label>
-															<Label text="Sistema de Pesca" width="100%"/>
-														</form:label>
-														<form:fields>
-															<Text text="{DetalleMarea>/DatosGenerales/CDSPE} {DetalleMarea>/DatosGenerales/DSSPE}" width="auto" maxLines="1" wrapping="false"/>
-														</form:fields>
-													</form:FormElement>
-												</form:formElements>
-												<form:title/>
-											</form:FormContainer>
-										</form:formContainers>
-										<form:layout>
-											<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
-										</form:layout>
-									</form:Form>
-									<form:Form width="100%" editable="true" >
-										<form:title>
-											<core:Title text="Travesia" level="Auto"/>
-										</form:title>
-										<form:formContainers>
-											<form:FormContainer>
-												<form:formElements>
-													<form:FormElement visible="{DetalleMarea>/Config/visibleMotMarea}">
-														<form:label>
-															<Label text="Motivo de Marea" width="100%" />
-														</form:label>
-														<form:fields>
-															<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/CDMMA}" items="{DetalleMarea>/Config/datosCombo/MotivosMarea}" width="25%" change="onValidaMotivo">
-																<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
-															</ComboBox>
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="{DetalleMarea>/Config/visibleUbiPesca}">
-														<form:label>
-															<Label text="Ubicación de Pesca"  width="100%" />
-														</form:label>
-														<form:fields>
-															<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/INUBC}" items="{DetalleMarea>/Config/datosCombo/UbicPesca}" width="25%">
-																<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
-															</ComboBox>
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="{DetalleMarea>/Config/visibleFecHoEta}">
-														<form:label>
-															<Label text="Fecha/Hora ETA." width="100%" />
-														</form:label>
-														<form:fields>
-															<DateTimePicker value="{DetalleMarea>/DatosGenerales/FEARR}" width="25%" displayFormat="medium"  valueStateText="Invalid entry" 
-																 valueFormat="yyyyMMddHHmmss"/>
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="{DetalleMarea>/DatosGenerales/FEINI}">
-														<form:label>
-															<Label text="Fecha de Inicio" width="100%" />
-														</form:label>
-														<form:fields>
-															<DateTimePicker value="{DetalleMarea>/DatosGenerales/FIMAR}" width="25%" displayFormat="medium"  valueStateText="Invalid entry" 
-																 valueFormat="yyyyMMddHHmmss" enabled="{DetalleMarea>/Config/readOnlyFechIni}"/>
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="{DetalleMarea>/DatosGenerales/FEFIN}">
-														<form:label>
-															<Label text="Fecha de Fin" width="100%" />
-														</form:label>
-														<form:fields>
-															<DateTimePicker value="{DetalleMarea>/DatosGenerales/FFMAR}" width="25%" displayFormat="medium"  valueStateText="Invalid entry" 
-																 valueFormat="yyyyMMddHHmmss"/>
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="{DetalleMarea>/Config/visibleEstMarea}">
-														<form:label>
-															<Label text="Estado de Marea" width="100%"/>
-														</form:label>
-														<form:fields>
-															<ComboBox width="25%" selectedKey="{DetalleMarea>/DatosGenerales/ESMAR}" items="{DetalleMarea>/Config/datosCombo/EstMar}">
-																<items>
-																	<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
-																</items>
-															</ComboBox>
-														</form:fields>
-													</form:FormElement>
-												</form:formElements>
-												<form:title/>
-											</form:FormContainer>
-										</form:formContainers>
-										<form:layout>
-											<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
-										</form:layout>
-									</form:Form>
-								</content>
-							</IconTabFilter>
-							<IconTabSeparator icon="" iconDensityAware="false"/>
-							<IconTabFilter iconColor="Default" text="Eventos" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true"
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="{DetalleMarea>/Config/visibleLinkCrearArmador}">
+												<form:label>
+													<Label text=""/>
+												</form:label>
+												<form:fields>
+													<Link text="Crear Armador" press="onCrearArmador" />
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorRuc}">
+												<form:label>
+													<Label text="RUC"/>
+												</form:label>
+												<form:fields>
+													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/RUC}" width="60%"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorRazon}">
+												<form:label>
+													<Label text="Razón Social"/>
+												</form:label>
+												<form:fields>
+													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/RAZON}" width="60%"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorCalle}">
+												<form:label>
+													<Label text="Calle"/>
+												</form:label>
+												<form:fields>
+													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/CALLE}" width="60%"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorDistrito}">
+												<form:label>
+													<Label text="Distrito"/>
+												</form:label>
+												<form:fields>
+													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/DISTRITO}" width="60%"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorProvincia}">
+												<form:label>
+													<Label text="Provincia"/>
+												</form:label>
+												<form:fields>
+													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/PROVINCIA}" width="60%"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorDepartamento}">
+												<form:label>
+													<Label text="Departamento"/>
+												</form:label>
+												<form:fields>
+													<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/NuevoArmador/DEPARTAMENTO}" items="{DetalleMarea>/Config/datosCombo/Departamentos}" width="25%">
+														<core:Item key="{DetalleMarea>BLAND}" text="{DetalleMarea>BEZEI}" />
+													</ComboBox>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="{DetalleMarea>/Config/visibleLinkSelecArmador}">
+												<form:label>
+													<Label text=""/>
+												</form:label>
+												<form:fields>
+													<Link text="Seleccionar Armador" press="onSeleccionarArmador" />
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement>
+												<form:label>
+													<Label text="Sistema de Pesca" width="100%"/>
+												</form:label>
+												<form:fields>
+													<Text text="{DetalleMarea>/DatosGenerales/CDSPE} {DetalleMarea>/DatosGenerales/DSSPE}" width="auto" maxLines="1" wrapping="false"/>
+												</form:fields>
+											</form:FormElement>
+										</form:formElements>
+										<form:title/>
+									</form:FormContainer>
+								</form:formContainers>
+								<form:layout>
+									<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+								</form:layout>
+							</form:Form>
+							<form:Form width="100%" editable="true" >
+								<form:title>
+									<core:Title text="Travesia" level="Auto"/>
+								</form:title>
+								<form:formContainers>
+									<form:FormContainer>
+										<form:formElements>
+											<form:FormElement visible="{DetalleMarea>/Config/visibleMotMarea}">
+												<form:label>
+													<Label text="Motivo de Marea" width="100%" />
+												</form:label>
+												<form:fields>
+													<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/CDMMA}" items="{DetalleMarea>/Config/datosCombo/MotivosMarea}" width="27.5%" change="onValidaMotivo">
+														<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
+													</ComboBox>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="{DetalleMarea>/Config/visibleUbiPesca}">
+												<form:label>
+													<Label text="Ubicación de Pesca"  width="100%" />
+												</form:label>
+												<form:fields>
+													<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/INUBC}" items="{DetalleMarea>/Config/datosCombo/UbicPesca}" width="27.5%">
+														<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
+													</ComboBox>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="{DetalleMarea>/Config/visibleFecHoEta}">
+												<form:label>
+													<Label text="Fecha/Hora ETA." width="100%" />
+												</form:label>
+												<form:fields>
+													<HBox>
+														<DatePicker value="{DetalleMarea>/DatosGenerales/FEARR}" width="90%"  valueStateText="Invalid entry" 
+																 	valueFormat="dd/MM/yyyy HH:mm" displayFormat="dd/MM/yyyy HH:mm"/>
+														<TimePicker id="TP2" value="{DetalleMarea>/DatosGenerales/HEARR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%"/>
+													</HBox>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="{DetalleMarea>/Config/visibleFechIni}">
+												<form:label>
+													<Label text="Fecha de Inicio" width="100%" />
+												</form:label>
+												<form:fields>
+													<HBox>
+														<DatePicker value="{DetalleMarea>/DatosGenerales/FIMAR}" width="90%"  valueStateText="Invalid entry" 
+																	valueFormat="dd/MM/yyyy" displayFormat="dd/MM/yyyy" enabled="{DetalleMarea>/Config/readOnlyFechIni}" />
+														<TimePicker id="TP1" value="{DetalleMarea>/DatosGenerales/HIMAR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%" enabled="{DetalleMarea>/Config/readOnlyFechIni}"/>
+													</HBox>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="{DetalleMarea>/Config/visibleFechFin}">
+												<form:label>
+													<Label text="Fecha de Fin" width="100%" />
+												</form:label>
+												<form:fields>
+													<HBox>
+														<DatePicker value="{DetalleMarea>/DatosGenerales/FFMAR}" width="90%"  valueStateText="Invalid entry" 
+																 valueFormat="dd/MM/yyyy HH:mm" displayFormat="dd/MM/yyyy HH:mm"/>
+														<TimePicker id="TP3" value="{DetalleMarea>/DatosGenerales/HFMAR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%"/>
+													</HBox>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="{DetalleMarea>/Config/visibleEstMarea}">
+												<form:label>
+													<Label text="Estado de Marea" width="100%"/>
+												</form:label>
+												<form:fields>
+													<ComboBox width="27.5%" selectedKey="{DetalleMarea>/DatosGenerales/ESMAR}" items="{DetalleMarea>/Config/datosCombo/EstMar}" enabled="{DetalleMarea>/Config/readOnlyEstaMar}">
+														<items>
+															<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
+														</items>
+													</ComboBox>
+												</form:fields>
+											</form:FormElement>
+										</form:formElements>
+										<form:title/>
+									</form:FormContainer>
+								</form:formContainers>
+								<form:layout>
+									<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+								</form:layout>
+							</form:Form>
+						</content>
+					</IconTabFilter>
+					<IconTabSeparator icon="" iconDensityAware="false"/>
+					<IconTabFilter key="itfEventos" iconColor="Default" text="Eventos" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true"
 								visible="true" iconDensityAware="false">
-								<content>
-									<Table id="tblEventos" width="auto" noDataText="No data" mode="SingleSelectLeft"  growing="true" growingThreshold="20"
+						<content>
+							<Table id="tblEventos" width="auto" noDataText="No data" mode="SingleSelectLeft"  growing="true" growingThreshold="20"
 										growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'DetalleMarea>/Eventos/Lista', templateShareable:true}">
-										<infoToolbar>
-											<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
-												<content>
-													<Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</content>
-											</Toolbar>
-										</infoToolbar>
-										<headerToolbar>
-											<OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
-												<content>
-													<Title text="{DetalleMarea>/Eventos/TituloEventos}" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
-													<ToolbarSpacer width=""/>
-													<OverflowToolbarButton text="Add" type="Default" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true"
+								<infoToolbar>
+									<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+										<content>
+											<Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</content>
+									</Toolbar>
+								</infoToolbar>
+								<headerToolbar>
+									<OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+										<content>
+											<Title text="{DetalleMarea>/Eventos/TituloEventos}" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+											<ToolbarSpacer width=""/>
+											<OverflowToolbarButton text="Add" type="Default" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true"
 														iconDensityAware="false" press="abrirCrearEvento"/>
-													<OverflowToolbarButton text="Delete" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true"
+											<OverflowToolbarButton text="Delete" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true"
 														iconDensityAware="false" press="onEliminarEvento"/>
-												</content>
-											</OverflowToolbar>
-										</headerToolbar>
-										<columns>
-											<Column width="5%" hAlign="Center" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Evento" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Fecha/Hora Ini." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Fecha/Hora Fin" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Zona de Pesca" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Puerto" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Planta" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Pesc. Decl" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Pesc Desc." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-					<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-										</columns>
-										<items>
-											<ColumnListItem >
-												<cells>
-													<Text text="{DetalleMarea>NREVN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <ObjectIdentifier title="{path: 'DetalleMarea>DESCEVT'}" text="" titleActive="false" visible="true"/>
-                            <Text text="{DetalleMarea>FECHOINI}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="{DetalleMarea>FECHOFIN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <ObjectIdentifier title="{DetalleMarea>DSZPC}" text="{DetalleMarea>CDZPC}" titleActive="false" visible="true"/>
-                            <ObjectIdentifier title="{DetalleMarea>DSPTO}" text="{DetalleMarea>CDPTO}" titleActive="false" visible="true"/>
-                            <ObjectIdentifier title="{DetalleMarea>DESCR}" text="{DetalleMarea>CDPTA}" titleActive="false" visible="true"/>
-                            <ObjectNumber number="{DetalleMarea>CNPDC}" unit="Tn." emphasized="true" state="None"/>
-                            <ObjectNumber number="{DetalleMarea>CNPDS}" unit="Tn." emphasized="true" state="None"/>
-							<Link
+										</content>
+									</OverflowToolbar>
+								</headerToolbar>
+								<columns>
+									<Column width="5%" hAlign="Center" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Evento" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Fecha/Hora Ini." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Fecha/Hora Fin" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Zona de Pesca" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Puerto" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Planta" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Pesc. Decl" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Pesc Desc." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem >
+										<cells>
+											<Text text="{DetalleMarea>NREVN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<ObjectIdentifier title="{path: 'DetalleMarea>DESCEVT'}" text="" titleActive="false" visible="true"/>
+											<Text text="{DetalleMarea>FECHOINI}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="{DetalleMarea>FECHOFIN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<ObjectIdentifier title="{DetalleMarea>DSZPC}" text="{DetalleMarea>CDZPC}" titleActive="false" visible="true"/>
+											<ObjectIdentifier title="{DetalleMarea>DSPTO}" text="{DetalleMarea>CDPTO}" titleActive="false" visible="true"/>
+											<ObjectIdentifier title="{DetalleMarea>DESCR}" text="{DetalleMarea>CDPTA}" titleActive="false" visible="true"/>
+											<ObjectNumber number="{DetalleMarea>CNPDC}" unit="Tn." emphasized="true" state="None"/>
+											<ObjectNumber number="{DetalleMarea>CNPDS}" unit="Tn." emphasized="true" state="None"/>
+											<Link
 														text="Detalle"
 														press="onNavEventos"
 														width="auto"
@@ -319,417 +334,419 @@
 														textDirection="Inherit"
 														visible="true"
 													/>
-												</cells>
-											</ColumnListItem>
-										</items>
-									</Table>
-								</content>
-							</IconTabFilter>
-							<IconTabSeparator icon="" iconDensityAware="false"/>
-							<IconTabFilter iconColor="Default" text="Reserva Combustible" count=""  visible="{DetalleMarea>/Config/visibleTabReserva}" iconDensityAware="false">
-								<content>
-									<form:Form width="100%" editable="true" visible="true">
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</content>
+					</IconTabFilter>
+					<IconTabSeparator icon="" iconDensityAware="false"/>
+					<IconTabFilter key="itfResComb" iconColor="Default" text="Reserva Combustible" count=""  visible="{DetalleMarea>/Config/visibleTabReserva}" iconDensityAware="false">
+						<content>
+							<form:Form width="100%" editable="true" visible="true">
+								<form:title/>
+								<form:formContainers>
+									<form:FormContainer visible="true">
+										<form:formElements>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Embarcacion" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Text text="000000065 TASA 417" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Marea" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Text text="0000171452 PESCA CHI" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Evento" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Text text="Salida de Zona de Pesca" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Fecha de Reserva" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Text text="30/07/2021" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:fields>
+											</form:FormElement>
+										</form:formElements>
 										<form:title/>
-										<form:formContainers>
-											<form:FormContainer visible="true">
-												<form:formElements>
-													<form:FormElement visible="true">
-														<form:label>
-															<Label text="Embarcacion" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-														</form:label>
-														<form:fields>
-															<Text text="000000065 TASA 417" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="true">
-														<form:label>
-															<Label text="Marea" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-														</form:label>
-														<form:fields>
-															<Text text="0000171452 PESCA CHI" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="true">
-														<form:label>
-															<Label text="Evento" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-														</form:label>
-														<form:fields>
-															<Text text="Salida de Zona de Pesca" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-														</form:fields>
-													</form:FormElement>
-													<form:FormElement visible="true">
-														<form:label>
-															<Label text="Fecha de Reserva" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-														</form:label>
-														<form:fields>
-															<Text text="30/07/2021" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-														</form:fields>
-													</form:FormElement>
-												</form:formElements>
-												<form:title/>
-											</form:FormContainer>
-										</form:formContainers>
-										<form:layout>
-											<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
-										</form:layout>
-									</form:Form>
-									<Table width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true"
+									</form:FormContainer>
+								</form:formContainers>
+								<form:layout>
+									<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+								</form:layout>
+							</form:Form>
+							<Table width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true"
 										class="sapUiResponsiveMargin">
-										<infoToolbar>
-											<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
-												<content>
-													<Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</content>
-											</Toolbar>
-										</infoToolbar>
-										<headerToolbar>
-											<OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
-												<content>
-													<Title text="Reservas" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
-													<ToolbarSpacer width=""/>
-													<Button text="Nueva Reserva" type="Default" icon="sap-icon://add-product" iconFirst="true" width="auto" enabled="true" visible="true"
+								<infoToolbar>
+									<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+										<content>
+											<Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</content>
+									</Toolbar>
+								</infoToolbar>
+								<headerToolbar>
+									<OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+										<content>
+											<Title text="Reservas" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+											<ToolbarSpacer width=""/>
+											<Button text="Nueva Reserva" type="Default" icon="sap-icon://add-product" iconFirst="true" width="auto" enabled="true" visible="true"
 														iconDensityAware="false" />
-												</content>
-											</OverflowToolbar>
-										</headerToolbar>
-										<columns>
-											<Column width="5%" hAlign="Center" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-												<header>
-													<Text text="Nro." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</header>
-												<footer/>
-											</Column>
-											<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-												<header>
-													<Text text="Suministro" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</header>
-												<footer/>
-											</Column>
-											<Column width="12%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-												<header>
-													<Text text="Cantidad" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</header>
-												<footer/>
-											</Column>
-											<Column width="12%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-												<header>
-													<Text text="UM" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</header>
-												<footer/>
-											</Column>
-											<Column width="15%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-												<header>
-													<Text text="Centro" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</header>
-												<footer/>
-											</Column>
-											<Column width="15%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-												<header>
-													<Text text="Almacenes" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</header>
-												<footer/>
-											</Column>
-										</columns>
-										<items>
-											<ColumnListItem type="Inactive">
-												<cells>
-													<Text text="001" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-													<Text text="PETROLEO DIESEL B5 S50 PD TASA" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit"
+										</content>
+									</OverflowToolbar>
+								</headerToolbar>
+								<columns>
+									<Column width="5%" hAlign="Center" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Nro." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Suministro" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="12%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Cantidad" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="12%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="UM" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="15%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Centro" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="15%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Almacenes" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem type="Inactive">
+										<cells>
+											<Text text="001" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="PETROLEO DIESEL B5 S50 PD TASA" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit"
 														visible="true"/>
-													<Text text="3000" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-													<Text text="GALONES" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-													<Text text="TCNO" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-													<Text text="CALLAO" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</cells>
-											</ColumnListItem>
-										</items>
-									</Table>
-								</content>
-							</IconTabFilter>
-							<IconTabSeparator icon="" iconDensityAware="false"/>
-							<IconTabFilter iconColor="Default" text="Venta de Combustible" count="" design="Vertical" showAll="false" textDirection="Inherit"
+											<Text text="3000" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="GALONES" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="TCNO" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="CALLAO" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</content>
+					</IconTabFilter>
+					<IconTabSeparator icon="" iconDensityAware="false" visible="{DetalleMarea>/Config/visibleTabSepComb}"/>
+					<IconTabFilter key="itfVentaComb" iconColor="Default" text="Venta de Combustible" count="" design="Vertical" showAll="false" textDirection="Inherit"
 								enabled="true" visible="{DetalleMarea>/Config/visibleTabVenta}" iconDensityAware="false">
-								<content>
-									<Table width="100%" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true">
-                <infoToolbar>
-                    <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
-                        <content>
-                            <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </content>
-                    </Toolbar>
-                </infoToolbar>
-                <headerToolbar>
-                    <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
-                        <content>
-                            <Title text="Items (3)" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
-                            <ToolbarSpacer width=""/>
-                            <OverflowToolbarButton text="Add" type="Transparent" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
-                        </content>
-                    </OverflowToolbar>
-                </headerToolbar>
-                <columns>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Nro. Pedido" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Embarcacion" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Marea" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Mot. Marea" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Fecha Pedido" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Cant. Total" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="UM" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Estado" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="5%" hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="5%" hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                </columns>
-                <items>
-                    <ColumnListItem type="Inactive">
-                        <cells>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Button text="" type="Reject" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
-                            <Button text="" type="Default" icon="sap-icon://detail-view" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table>
-            <form:Form width="100%" editable="true" visible="true">
-                <form:title/>
-                <form:formContainers>
-                    <form:FormContainer visible="true">
-                        <form:formElements>
-                            <form:FormElement visible="true">
-                                <form:label>
-                                    <Label text="Embarcación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                                </form:label>
-                                <form:fields>
-                                    <Input type="Text" description="Description" showValueHelp="false" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
-                                </form:fields>
-                            </form:FormElement>
-                            <form:FormElement visible="true">
-                                <form:label>
-                                    <Label text="Marea" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                                </form:label>
-                                <form:fields>
-                                    <Text text="Text" width="25%" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                                    <Text text="Text" width="25%" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                                </form:fields>
-                            </form:FormElement>
-                            <form:FormElement visible="true">
-                                <form:label>
-                                    <Label text="Evento" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                                </form:label>
-                                <form:fields>
-                                    <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                                </form:fields>
-                            </form:FormElement>
-                            <form:FormElement visible="true">
-                                <form:label>
-                                    <Label text="Fecha de  Reserva" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                                </form:label>
-                                <form:fields>
-                                    <DatePicker width="auto" displayFormat="medium" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
-                                </form:fields>
-                            </form:FormElement>
-                        </form:formElements>
-                        <form:title/>
-                    </form:FormContainer>
-                </form:formContainers>
-                <form:layout>
-                    <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
-                </form:layout>
-            </form:Form>
-            <Table width="100%" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true">
-                <infoToolbar>
-                    <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
-                        <content>
-                            <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </content>
-                    </Toolbar>
-                </infoToolbar>
-                <headerToolbar>
-                    <OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
-                        <content>
-                            <Title text="Items (3)" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
-                            <ToolbarSpacer width=""/>
-                            <Button text="Vender" type="Accept" icon="sap-icon://sales-order" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
-                            <Button text="Cancelar" type="Reject" icon="sap-icon://sys-cancel" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
-                        </content>
-                    </OverflowToolbar>
-                </headerToolbar>
-                <columns>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Nro." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Suministro" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Cantidad" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="UM" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Centro" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Almacen" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                </columns>
-                <items>
-                    <ColumnListItem type="Navigation">
-                        <cells>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="Supplier Name" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table>
-            <Table width="100%" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true">
-                <infoToolbar>
-                    <Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
-                        <content>
-                            <Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </content>
-                    </Toolbar>
-                </infoToolbar>
-                <headerToolbar/>
-                <columns>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Nro. Pedido" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Fecha de Pedido" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="Cant. Total" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                    <Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                        <header>
-                            <Text text="UM" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </header>
-                        <footer/>
-                    </Column>
-                </columns>
-                <items>
-                    <ColumnListItem type="Navigation">
-                        <cells>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                            <Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                        </cells>
-                    </ColumnListItem>
-                </items>
-            </Table>
-								</content>
-							</IconTabFilter>
-						</items>
 						<content>
-							<Text text="Tab Bar Content goes here ..." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit"
+							<Table width="100%" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true">
+								<infoToolbar>
+									<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+										<content>
+											<Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</content>
+									</Toolbar>
+								</infoToolbar>
+								<headerToolbar>
+									<OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+										<content>
+											<Title text="Items (3)" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+											<ToolbarSpacer width=""/>
+											<OverflowToolbarButton text="Add" type="Transparent" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+										</content>
+									</OverflowToolbar>
+								</headerToolbar>
+								<columns>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Nro. Pedido" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Embarcacion" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Marea" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Mot. Marea" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Fecha Pedido" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Cant. Total" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="UM" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Estado" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="5%" hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="5%" hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem type="Inactive">
+										<cells>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Button text="" type="Reject" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+											<Button text="" type="Default" icon="sap-icon://detail-view" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+							<form:Form width="100%" editable="true" visible="true">
+								<form:title/>
+								<form:formContainers>
+									<form:FormContainer visible="true">
+										<form:formElements>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Embarcación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Input type="Text" description="Description" showValueHelp="false" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Marea" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Text text="Text" width="25%" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+													<Text text="Text" width="25%" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Evento" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:fields>
+											</form:FormElement>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Fecha de  Reserva" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<DatePicker width="auto" displayFormat="medium" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd"/>
+												</form:fields>
+											</form:FormElement>
+										</form:formElements>
+										<form:title/>
+									</form:FormContainer>
+								</form:formContainers>
+								<form:layout>
+									<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+								</form:layout>
+							</form:Form>
+							<Table width="100%" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true">
+								<infoToolbar>
+									<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+										<content>
+											<Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</content>
+									</Toolbar>
+								</infoToolbar>
+								<headerToolbar>
+									<OverflowToolbar width="auto" height="auto" design="Transparent" visible="true" enabled="true">
+										<content>
+											<Title text="Items (3)" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
+											<ToolbarSpacer width=""/>
+											<Button text="Vender" type="Accept" icon="sap-icon://sales-order" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+											<Button text="Cancelar" type="Reject" icon="sap-icon://sys-cancel" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false"/>
+										</content>
+									</OverflowToolbar>
+								</headerToolbar>
+								<columns>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Nro." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Suministro" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Cantidad" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="UM" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Centro" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Almacen" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem type="Navigation">
+										<cells>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="Supplier Name" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+							<Table width="100%" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true">
+								<infoToolbar>
+									<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
+										<content>
+											<Label text="Label" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</content>
+									</Toolbar>
+								</infoToolbar>
+								<headerToolbar/>
+								<columns>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Nro. Pedido" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Fecha de Pedido" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="Cant. Total" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<header>
+											<Text text="UM" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</header>
+										<footer/>
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem type="Navigation">
+										<cells>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="Text" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</content>
+					</IconTabFilter>
+				</items>
+				<content>
+					<Text text="Tab Bar Content goes here ..." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit"
 								visible="true"/>
-						</content>
-					</IconTabBar>
 				</content>
-				<footer>
-					<OverflowToolbar width="100%" height="46px" design="Auto" enabled="true" visible="true">
-						<content>
-							<ToolbarSpacer width=""/>
-							<Button text="Guardar" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true"
+			</IconTabBar>
+		</content>
+		<footer>
+			<OverflowToolbar width="100%" height="46px" design="Auto" enabled="true" visible="true">
+				<content>
+					<ToolbarSpacer width=""/>
+					<Button text="Guardar" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true"
 								iconDensityAware="false"/>
-							<Button text="Crear" type="Accept" icon="sap-icon://create" iconFirst="true" width="auto" enabled="true" visible="true"
+					<Button text="Siguiente" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true"
 								iconDensityAware="false"/>
-							<Button text="Eliminar" type="Reject" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true"
+					<Button text="Crear" type="Accept" icon="sap-icon://create" iconFirst="true" width="auto" enabled="true" visible="true"
 								iconDensityAware="false"/>
-						</content>
-					</OverflowToolbar>
-				</footer>
-			</Page>
-		<!--	</pages> removed -->
+					<Button text="Eliminar" type="Reject" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true"
+								iconDensityAware="false"/>
+				</content>
+			</OverflowToolbar>
+		</footer>
+	</Page>
+	<!--	</pages> removed -->
 	<!-- </App> removed -->
 </mvc:View>

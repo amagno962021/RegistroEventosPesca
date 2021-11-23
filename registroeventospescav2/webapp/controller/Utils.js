@@ -76,11 +76,34 @@ sap.ui.define([
             var date = null;
             if(strDate){ // dd/MM/yyyy
                 var anio = parseInt(strDate.split("/")[2]);
-                var mes = parseInt(strDate.split("/")[1]) + 1;
+                var mes = parseInt(strDate.split("/")[1]) - 1;
                 var dia = parseInt(strDate.split("/")[0]);
                 date = new Date(anio, mes, dia);
             }
             return date;
+        },
+
+        dateToStrDate: function(date){
+            if(date){
+                var dia = date.getDate();
+                var mes = date.getMonth() + 1;
+                var anio = date.getFullYear();
+                var strDia = "";
+                if(dia > 0 && dia < 10){
+                    strDia = "0" + dia;
+                }else{
+                    strDia = dia;
+                }
+                var strMes = "";
+                if(mes > 0 && mes < 10){
+                    strMes = "0" + mes;
+                }else{
+                    strMes = mes;
+                }
+                return strDia + "/" + strMes + "/" + anio;
+            }else{
+                return null;
+            }
         }
 
 

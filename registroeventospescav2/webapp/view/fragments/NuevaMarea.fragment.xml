@@ -14,7 +14,7 @@
                                     <Label text="Planta" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <ComboBox id="cbxPlantas" width="auto" items="{ComboModel>/Plantas}" selectedKey="{Filtro>/ValFijoPlanta}" change="onActionSelPlanta">
+                                    <ComboBox id="cbxPlantas" width="auto" items="{ComboModel>/Plantas}" selectedKey="{DetalleMarea>/DatosGenerales/CDPTA}" change="onActionSelPlanta">
                                         <items>
                                             <core:Item text="{ComboModel>DESCR}" enabled="true" key="{ComboModel>CDPTA}"/>
                                         </items>
@@ -26,7 +26,7 @@
                                     <Label text="Embarcación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <Input id="txtEmba" valueHelpRequest="onAbrirAyudaEmbarcacion" value="{/Embarcacion}" showValueHelp="true" width="auto" valueStateText="Invalid entry" description="{DescEmbarcacion}"/>
+                                    <Input id="txtEmba" valueHelpRequest="onAbrirAyudaEmbarcacion" value="{DetalleMarea>/DatosGenerales/CDEMB}" showValueHelp="true" width="auto" valueStateText="Invalid entry" description="{DetalleMarea>/DatosGenerales/NMEMB}"/>
                                 </form:fields>
                             </form:FormElement>
                         </form:formElements>

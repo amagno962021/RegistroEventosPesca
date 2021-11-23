@@ -85,10 +85,14 @@ sap.ui.define([
             var uri = UtilService.getHostService() + "/api/dominios/Listar";
             var sBody = UtilService.getBodyDominio();
             sBody.dominios[0].domname = dominio;
-            return this.http(uri).post(null, sBody).then(function (response) {
+            var data = this.http(uri).post(null, sBody).then(function (response) {
                 var data = JSON.parse(response);
                 return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerDominio: ", error);
+                return null;
             });
+            return data;
         },
 
         obtenerDepartamentos: function (sUsuario) {
@@ -639,6 +643,44 @@ sap.ui.define([
                 return data;
             }).catch(function(error){
                 console.log("ERROR: TasaBackendService.buscarArmador: ", error);
+                return null;
+            });
+            return data;
+        },
+
+        obtenerEmbarcacion: async function(options, options2){
+            var uri = UtilService.getHostService() + "/api/embarcacion/ConsultarEmbarcacion/";
+            var sBody = UtilService.getBodyEmba();
+            sBody.options = options;
+            sBody.options2 = options2;
+            sBody.p_user = "BUSQEMB";
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                if(data.data){
+                    return data.data;
+                }else{
+                    return null;
+                }
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerEmbarcacion: ", error);
+                return null;
+            });
+            return data;
+        },
+
+        obtenerTemporadaVeda: async function(fecha, usuario){
+            var uri = UtilService.getHostService() + "/api/General/Read_Table/";
+            var sBody = UtilService.getBodyReadTable();
+            sBody.delimitador = "|";
+            sBody.fields = ["LTINI", "LNINI", "LTFIN", "LGFIN", "MILLA"];
+            sBody.option[0].wa = "CDTPC = 'V' AND FHCAL LIKE '" + fecha + "'";
+            sBody.p_user = usuario;
+            sBody.tabla = "ZFLCLT";
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerTemporadaVeda: ", error);
                 return null;
             });
             return data;

@@ -47,9 +47,11 @@ sap.ui.define([
                 this.segundoOption = [];
                 this.currentPage = "";
                 this.lastPage = "";
-                //this.filtarMareas("001","0012");//por defecto muestra la primera opcion
+                this.bckEmbarcacion = null,
+                    this.bckArmador = null,
+                    //this.filtarMareas("001","0012");//por defecto muestra la primera opcion
 
-                this.loadInitData();
+                    this.loadInitData();
             },
 
             _onPatternMatched: function () {
@@ -126,18 +128,35 @@ sap.ui.define([
                 var str_di = sData.str_di;
                 var propios = [];
                 var terceros = [];
+                var mareaSinNumero = [];
                 for (let index = 0; index < str_di.length; index++) {
                     const element = str_di[index];
-                    if (element.ESMAR == "A" || element.ESMAR == "C" || element.ESCMA == "P") {
-                        if (element.INPRP == "P") {
-                            propios.push(element);
-                        } else if (element.INPRP == "T") {
-                            terceros.push(element);
-                        }
+                    if (element.NMEMB == "TASA 55") {
+                        console.log("TASA 55: ", element);
                     }
+                    //if (element.ESMAR = "" || (element.ESMAR == "A" && element.ESCMA == "") || (element.ESMAR == "C" && element.ESCMA == "P")) {
+                    if (element.INPRP == "P") {
+                        propios.push(element);
+                    } else if (element.INPRP == "T") {
+                        terceros.push(element);
+                    }
+
+                    if (element.NRMAR == 0) {
+                        mareaSinNumero.push(element);
+                    }
+
+                    //}
                 }
+
                 var tmpPropios = Utils.removeDuplicateArray(propios, it => it.NRMAR);
                 var tmpTerceros = Utils.removeDuplicateArray(terceros, it => it.NRMAR);
+
+                //agregamos las mareas sin numero
+                for (let index1 = 0; index1 < mareaSinNumero.length; index1++) {
+                    const element1 = mareaSinNumero[index1];
+                    tmpPropios.push(element1);
+                }
+
                 var jsonModelPropios = new JSONModel(tmpPropios);
                 var jsonModelTerceros = new JSONModel(tmpTerceros);
                 console.log("Modelo Propios: ", jsonModelPropios);
@@ -172,10 +191,14 @@ sap.ui.define([
                 var num = 0;
                 var num1 = 0;
                 var totalPescaDeclarada = 0;
-
+                console.log("modeloPropios: ", dataModeloPropios);
                 //filtrar propios
                 for (let index = 0; index < dataModeloPropios.length; index++) {
                     const element = dataModeloPropios[index];
+                    if (element.NMEMB == "TASA 55") {
+                        console.log("TASA 55 Filter: ", element);
+                    }
+
                     if (element.CDTEM == cdtem && element.CDPTA == cdpta) {
                         num++;
                         var tmpElement = Object.assign({}, element);
@@ -187,6 +210,7 @@ sap.ui.define([
                             fehoarr = fearr + " " + tmpElement.HEARR;
                         }
                         tmpElement.FEHOARR = fehoarr;
+
                         tmpElement.DESCESMAR = "";
                         if (tmpElement.ESMAR == "A" || tmpElement.ESMAR == 'C') {
                             tmpElement.DESCESMAR = tmpElement.ESMAR == "A" ? "Abierto" : "Cerrado"
@@ -260,7 +284,9 @@ sap.ui.define([
                         me.validarDataMareas(mareas);
                         me.filtarMareas(me.CDTEM, me.CDPTA);
                         BusyIndicator.hide();
-                        MessageBox.success("Se actualizó correctamente...");
+                        MessageBox.success("Se actualizó correctamente...", {
+                            title: "Exitoso"
+                        });
                     }).catch(function (error) {
                         console.log("ERROR: Main.onActualizaMareas - " + error);
                     });
@@ -289,9 +315,9 @@ sap.ui.define([
             },
 
             onCrearMarea: async function () {
-                var me = this;
+                //var me = this;
                 this.getDialog().close();
-                var formModel = this.getModel("Form");
+                /*var formModel = this.getModel("Form");
                 var filtroModel = this.getModel("Filtro");
                 var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
                 modeloDetalleMarea.refresh();
@@ -301,19 +327,36 @@ sap.ui.define([
                 var planta = sap.ui.getCore().byId("cbxPlantas").getSelectedKey();
                 console.log(embarcacion);
                 if (embarcacion && planta) {
-                    var bOk = await me.validaBodMar(embarcacion, planta, embaDesc);
+                    var bOk = await this.validaBodMar(embarcacion, planta, embaDesc);
                     console.log("validaBodMar: ", bOk);
                     if (bOk) {
-                        me.getOwnerComponent().setModel(models.createInitModel(), "DetalleMarea");
+                        this.getOwnerComponent().setModel(models.createInitModel(), "DetalleMarea");
                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                         oRouter.navTo("DetalleMarea");
                     }
                 } else {
                     MessageBox.information(this.oBundle.getText("NEWMAREAMISSFIELD"));
+                }*/
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var codemba = modelo.getProperty("/DatosGenerales/CDPTA");
+                var codPlanta = modelo.getProperty("/DatosGenerales/CDEMB");
+                var nmbemb = modelo.getProperty("/DatosGenerales/NMEMB");
+                var validaBodCert = await this.validarBodegaCert(codemba, codPlanta);
+                if (!validaBodCert) { //se puso la admiracion para pruebas
+                    var valMareaProd = await this.ValidacionMareaProduce(codemba, codPlanta);
+                    if (!valMareaProd) {//se puso la admiracion para pruebas
+                        modelo.setProperty("/Cabecera/INDICADOR", "N");
+                        var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                        oRouter.navTo("DetalleMarea");
+                    } else {
+                        MessageBox.error(this.oBundle.getText("EMBANOPROD", [nmbemb]));
+                    }
+                } else {
+                    MessageBox.error(this.oBundle.getText("EMBANOPER", [nmbemb]));
                 }
             },
 
-            onEditarCrearMarea: function (evt) {
+            onEditarCrearMarea: async function (evt) {
                 var selectedItem = evt.getSource().getParent().getBindingContext().getObject();
                 var me = this;
                 if (selectedItem) {
@@ -327,20 +370,58 @@ sap.ui.define([
                             console.log("ERROR: Main.onEditarCrearMarea - " + error);
                         });
                     } else {
-                        var bOk = this.validaBodMar(selectedItem.CDEMB, selectedItem.CDPTA, selectedItem.NMEMB);
-                        if (bOk) {
-                            me.preparaFormulario();
+                        //buscar embarcacion
+                        var options = [{
+                            "cantidad": "20",
+                            "control": "COMBOBOX",
+                            "key": "ESEMB",
+                            "valueHigh": "",
+                            "valueLow": "O"
+                        }, {
+                            "cantidad": "20",
+                            "control": "INPUT",
+                            "key": "CDEMB",
+                            "valueHigh": "",
+                            "valueLow": selectedItem.CDEMB
+                        }];
+
+                        var emba = await TasaBackendService.obtenerEmbarcacion(options, []);
+                        if (emba) {
+                            var bOk = await this.verificarCambiosCodigo("EMB", selectedItem.CDEMB, emba[0]);
+                            if (!bOk) {
+                                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                                var codemba = modelo.getProperty("/DatosGenerales/CDPTA");
+                                var codPlanta = modelo.getProperty("/DatosGenerales/CDEMB");
+                                var nmbemb = modelo.getProperty("/DatosGenerales/NMEMB");
+                                var validaBodCert = await this.validarBodegaCert(codemba, codPlanta);
+                                if (!validaBodCert) { //se puso la admiracion para pruebas
+                                    var valMareaProd = await this.ValidacionMareaProduce(codemba, codPlanta);
+                                    if (!valMareaProd) {//se puso la admiracion para pruebas
+                                        modelo.setProperty("/Cabecera/INDICADOR", "N");
+                                        var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                                        oRouter.navTo("DetalleMarea");
+                                    } else {
+                                        MessageBox.error(this.oBundle.getText("EMBANOPROD", [nmbemb]));
+                                    }
+                                } else {
+                                    MessageBox.error(this.oBundle.getText("EMBANOPER", [nmbemb]));
+                                }
+                            }
+                        } else {
+                            MessageBox.error(this.oBundle.getText("NORESULTADOEMB"));
                         }
                     }
 
                 } else {
                     console.log("ERROR: Main.onEditarCrearMarea - " + this.oBundle.getText("ERRORITEMSELECCIONADO"));
                 }
+
+
             },
 
             validaBodMar: async function (cdemb, cdpta, nmemb) {
                 var bOk = false;
-                var response  = await TasaBackendService.validarBodegaCert(cdemb, cdpta);
+                var response = await TasaBackendService.validarBodegaCert(cdemb, cdpta);
                 if (response.estado) {
                     var response1 = await TasaBackendService.validarMareaProd(cdemb, cdpta);
                     if (response1.p_correcto == "X") {
@@ -401,7 +482,7 @@ sap.ui.define([
                 }).catch(function (error) {
                     console.log("ERROR: DetalleMarea.cargarCombos - ", error);
                 });
-                
+
                 for (let index1 = 0; index1 < eventos.length; index1++) {
                     const element = eventos[index1];
                     element.Indicador = "E";
@@ -486,7 +567,7 @@ sap.ui.define([
                 var utils = this.getModel("Utils");
                 var formModel = this.getModel("Form");
                 var embarcacion = formModel.getProperty("/Embarcacion");
-                if(embarcacion){
+                if (embarcacion) {
                     utils.setProperty("/BtnEnabled", true);
                 }
             },
@@ -503,20 +584,20 @@ sap.ui.define([
                 this.getEmbaDialog().open();
             },
 
-            onSelectEmba:  async function (evt) {
+            onSelectEmba: async function (evt) {
                 var object = evt.getParameter("listItem").getBindingContext("ComboModel").getObject();
-                var formModel = this.getModel("Form");
+                //var formModel = this.getModel("Form");
                 /*formModel.setProperty("/Embarcacion", object.CDEMB);
                 formModel.setProperty("/DescEmbarcacion", object.NMEMB);*/
                 this.getEmbaDialog().close();
-                BusyIndicator.show(0);
-                var bOk = await FormCust.verificarCambiosCodigo("EMB", object.CDEMB);
-                if(!bOk){
-                    sap.ui.getCore().byId("txtEmba").setValue(formModel.getProperty("/Embarcacion"));
-                    sap.ui.getCore().byId("txtEmba").setDescription(formModel.getProperty("/DescEmbarcacion"));
+
+                var bOk = await this.verificarCambiosCodigo("EMB", object.CDEMB, object);
+                if (!bOk) {
+                    /*sap.ui.getCore().byId("txtEmba").setValue(formModel.getProperty("/Embarcacion"));
+                    sap.ui.getCore().byId("txtEmba").setDescription(formModel.getProperty("/DescEmbarcacion"));*/
                     sap.ui.getCore().byId("btnAceptarCrearMarea").setEnabled(true);
                 }
-                BusyIndicator.hide();
+
                 //await FormCust.buscarArmador(object.CDEMB);
                 /*var s = await FormCust.consultarPermisoZarpe(object.CDEMB)
                 console.log(s);*/
@@ -767,6 +848,385 @@ sap.ui.define([
                 sap.ui.getCore().byId("goLastPag").setEnabled(false);
                 sap.ui.getCore().byId("goNextPag").setEnabled(false);
                 sap.ui.getCore().byId("comboPaginacion").setSelectedKey("1");
+            },
+
+            verificarCambiosCodigo: async function (tipo, codigo, embarcacion) {
+                //var form = this.getModel("Form");
+                BusyIndicator.show(0);
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var bOk = null;
+                if (codigo != null && codigo.trim().length > 0) {
+                    codigo = codigo.trim();
+                    if (tipo == "EMB") {
+                        if (this.bckEmbarcacion == null || codigo != this.bckEmbarcacion) {
+                            modelo.setProperty("/DatosGenerales/CDMMA", null);
+                            bOk = await this.buscarEmbarcacion(codigo, embarcacion);
+                        }
+                    } else if (tipo == "ARM") {
+                        if (this.bckArmador == null || codigo != this.bckArmador) {
+                            bOk = await this.buscarArmador(codigo);
+                        }
+                    }
+                }
+                BusyIndicator.hide();
+                return bOk;
+            },
+
+            buscarArmador: async function (codigo) {
+                var clearData = false;
+                //var dataSesionModel = this.getModel("DataSession");
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var usuario = this.getCurrentUser();
+                var response = await TasaBackendService.buscarArmador(codigo, usuario);
+                if (response) {
+                    //var form = this.getModel("Form");
+                    var data = response.data[0];
+                    modelo.setProperty("/DatosGenerales/NAME1", data.DSEMP);
+                } else {
+                    var mssg = this.oBundle.getText("NORESULTADOARMADOR");
+                    MessageBox.information(mssg);
+                    clearData = true;
+                }
+                if (clearData) {
+                    this.bckArmador = null;
+                    //form.setProperty("/Armador", null);
+                    modelo.setProperty("/Cabecera/CDEMP", null);
+                    modelo.setProperty("/DatosGenerales/CDEMP", null);
+                    //form.setProperty("/DescArmador", null);
+                    modelo.setProperty("/Cabecera/NAME1", null);
+                    modelo.setProperty("/DatosGenerales/NAME1", null);
+                } else {
+                    this.bckArmador = codigo;
+                }
+            },
+
+            buscarEmbarcacion: async function (codigo, embarcacion) {
+                //var me = this;
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var indPropiedad = "";
+                var clearData = false;
+                //var form = this.getModel("Form");
+                //var filtro = this.getModel("Filtro")
+                //var dataSesionModel = this.getModel("DataSession");
+                //var visibleModel = this.getModel("Visible");
+                //var utils = this.getModel("Utils");
+                var usuario = this.getCurrentUser();
+                var valFijoPlanta = modelo.getProperty("/DatosGenerales/CDPTA");
+                //visibleModel.setProperty("/EnlMarAnterior", false);
+                //var emba = await TasaBackendService.buscarEmbarcacion(codigo, usuario);
+                if (embarcacion) {
+                    await this.obtenerDatosMareaAnt(0, codigo);
+                    //var mareaAnterior = this.getModel("MareaAnterior");
+                    //var estMarAnt = mareaAnterior.getProperty("/EstMarea");
+                    var estMarAnt = modelo.getProperty("/MareaAnterior/ESMAR");
+                    //var cieMarAnt = mareaAnterior.getProperty("/EstCierre");
+                    var cieMarAnt = modelo.getProperty("/MareaAnterior/ESCMA");
+                    //var ce_embaElement = emba[0];
+                    var ce_embaElement = embarcacion;
+                    indPropiedad = ce_embaElement.INPRP;
+                    if (estMarAnt == "C") {
+                        console.log("Mare Anterior Cerrada");
+                        if (ce_embaElement.ESEMB == "O") {
+                            var cabecera = modelo.getProperty("/Cabecera");
+                            var datosGenerales = modelo.getProperty("/DatosGenerales");
+                            for (var key in ce_embaElement) {
+                                if (cabecera.hasOwnProperty(key)) {
+                                    cabecera[key] = ce_embaElement[key];
+                                }
+                                if (datosGenerales.hasOwnProperty(key)) {
+                                    datosGenerales[key] = ce_embaElement[key];
+                                }
+                            }
+
+                            modelo.setProperty("/Cabecera/CDEMP", ce_embaElement.LIFNR);
+                            modelo.setProperty("/DatosGenerales/CDEMP", ce_embaElement.LIFNR);
+
+                            if (ce_embaElement.TCBPS) {
+                                modelo.setProperty("/Cabecera/CPPMS", ce_embaElement.CPPMS);
+                                modelo.setProperty("/Cabecera/TCBPS", ce_embaElement.TCBPS);
+                                var sum = parseFloat(ce_embaElement.CPPMS) + parseFloat(ce_embaElement.TCBPS);
+                                modelo.setProperty("/Cabecera/CBODP", sum.toFixed(3));
+                            }
+                            var consultarPermisoZarpe = await this.consultarPermisoZarpe(codigo);
+                            if (indPropiedad == "P") {
+                                modelo.setProperty("/Cabecera/WERKS", ce_embaElement.WERKS);
+                                modelo.setProperty("/DatosGenerales/WERKS", ce_embaElement.WERKS);
+                                var obtenerDatosDistribFlota = await this.obtenerDatosDistribFlota(codigo)
+                                if (obtenerDatosDistribFlota) {
+                                    clearData = !consultarPermisoZarpe;
+                                } else {
+                                    var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + this.oBundle.getText("NOUBICENDISTRIB");
+                                    MessageBox.error(mssg);
+                                    clearData = true;
+                                }
+                            } else if (indPropiedad == "T") {
+                                var obtenerDatosPlantaDist = await this.obtenerDatosPlantaDist(valFijoPlanta);
+                                if (obtenerDatosPlantaDist) {
+                                    clearData = !consultarPermisoZarpe;
+                                } else {
+                                    var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + this.oBundle.getText("SELECCPLANTA");
+                                    MessageBox.error(mssg);
+                                    clearData = true;
+                                }
+                            } else {
+                                var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + this.oBundle.getText("NOINDPROPIEDAD");
+                                MessageBox.error(mssg);
+                                clearData = true;
+                            }
+
+                            if (!clearData) {
+                                var valPerPescSur = this.validarPermisoPescaSur();
+                                clearData = !valPerPescSur;
+                            }
+                        } else {
+                            var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + this.oBundle.getText("EMBNOPERATIVO");
+                            MessageBox.error(mssg);
+                            clearData = true;
+                        }
+                    } else if (estMarAnt == "A") {
+                        if (!cieMarAnt) {
+                            //visibleModel.setProperty("/EnlMarAnterior", true);
+                            var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + this.oBundle.getText("EMBMAREAABIERTA");
+                            console.log(mssg);
+                            MessageBox.error(mssg);
+                            clearData = true;
+                        } else {
+                            var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + this.oBundle.getText("MAREATRATADAADMIN");
+                            MessageBox.error(mssg);
+                            clearData = true;
+                        }
+                    }
+                } else {
+                    var mssg = this.oBundle.getText("NORESULTADOEMB");
+                    MessageBox.information(mssg);
+                    clearData = true;
+                }
+                if (clearData) {
+
+                    this.bckEmbarcacion = null;
+                    //form.setProperty("/Embarcacion", null);
+                    modelo.setProperty("/Cabecera/CDEMB", null);
+                    //form.setProperty("/DescEmbarcacion", null);
+                    modelo.setProperty("/Cabecera/NMEMB", null);
+                    //form.setProperty("/Armador", null);
+                    modelo.setProperty("/Cabecera/CDEMP", null);
+                    modelo.setProperty("/DatosGenerales/CDEMP", null);
+                    //form.setProperty("/DescArmador", null);
+                    modelo.setProperty("/Cabecera/NAME1", null);
+                    modelo.setProperty("/DatosGenerales/NAME1", null);
+                    //form.setProperty("/SistPesca", null);
+                    modelo.setProperty("/DatosGenerales/CDSPE", null);
+                    modelo.setProperty("/DatosGenerales/DSSPE", null);
+                    //form.setProperty("/MotMarea", null);
+                    modelo.setProperty("/DatosGenerales/CDMMA", null);
+                } else {
+                    this.validarIndPropiedad(indPropiedad);
+                    this.bckEmbarcacion = codigo;
+                }
+                //utils.setProperty("/VedaVerificada", false);
+                return clearData;
+            },
+
+            validarIndPropiedad: function (ind) {
+                //var visible = this.getModel("Visible");
+                //var form = this.getModel("Form");
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+
+                if (ind == null || (ind != null && ind == "T")) {
+                    //modelo.setProperty("/BtnArmador", true);//activar ayuda de bsuqeuda de armador
+                    modelo.setProperty("/Config/visibleLinkCrearArmador", true);
+                    modelo.setProperty("/Cabecera/CDEMP", null);
+                    modelo.setProperty("/Cabecera/NAME1", null);
+                    modelo.setProperty("/Cabecera/INPRP", "T");
+                } else {//setArmLectura
+                    //modelo.setProperty("/BtnArmador", false);//DESACTIVAR  ayuda de bsuqeuda de armador
+                    modelo.setProperty("/Config/visibleLinkCrearArmador", false);
+                    modelo.setProperty("/Cabecera/INPRP", "P");
+                }
+            },
+
+            validarPermisoPescaSur: function () {
+                //var me = this;
+                var bOk = true;
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                //var distribFlota = modelo.getProperty("/DistribFlota");
+                //var form = this.getModel("Form");
+                var constantes = this.getModel("Constantes");
+                var ubicPlanta = modelo.getProperty("/DistribFlota/CDUPT");
+                var permisoSur = modelo.getProperty("/Cabecera/CNVPS");
+                var fechaPerSur = modelo.getProperty("/Cabecera/FCVPS");
+                var fechaPermiso = Utils.strDateToDate(fechaPerSur);
+                var fechaActual = new Date();
+                if (ubicPlanta == constantes.getProperty("/CodUbicSur")) {
+                    if (permisoSur == "S") {
+                        if (fechaActual > fechaPermiso) {
+                            bOk = false;
+                            var mssg = this.oBundle.getText("PERMISOSURVENCIO", [fechaPerSur]);
+                            MessageBox.error(mssg);
+                        }
+                    } else {
+                        bOk = false;
+                        var mssg = this.oBundle.getText("NOPERMISOSUR");
+                        MessageBox.error(mssg);
+                    }
+                }
+                return bOk;
+            },
+
+            obtenerDatosPlantaDist: async function (planta) {
+                //var me = this;
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                //var dataSesionModel = this.getModel("DataSession");
+                //var usuario = dataSesionModel.getProperty("/User");
+                var usuario = this.getCurrentUser();
+                //var distribFlota = this.getModel("DistribFlota");
+                var distribFlota = modelo.getProperty("/DistribFlota");
+                var constantsUtility = this.getModel("ConstantsUtility");
+                var caracterNuevo = constantsUtility.getProperty("/CARACTERNUEVO");
+                var response = await TasaBackendService.obtenerDatosPlantaDist(planta, usuario);
+                if (response) {
+                    for (var key in response) {
+                        if (distribFlota.hasOwnProperty(key)) {
+                            distribFlota[key] = response[key];
+                        }
+                    }
+                    modelo.setProperty("/DistribFlota/Indicador", caracterNuevo);
+                    modelo.setProperty("/DistribFlota/IntLatPuerto", parseInt(response.LTGEO));
+                    modelo.setProperty("/DistribFlota/IntLonPuerto", parseInt(response.LNGEO));
+                    if (!response.DSEMP || !response.INPRP) {
+                        var mssg = this.oBundle.getText("PLANTASINEMPRESA");
+                        MessageBox.error(mssg);
+                    }
+                    return true;
+                } else {
+                    var mssg = this.oBundle.getText("NODATOSPLANTA");
+                    MessageBox.error(mssg);
+                    return false;
+                }
+            },
+
+            obtenerDatosDistribFlota: async function (codigo) {
+                //var me = this;
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                //var dataSesionModel = this.getModel("DataSession");
+                //var usuario = dataSesionModel.getProperty("/User");
+                var usuario = this.getCurrentUser();
+                //var distribFlota = this.getModel("DistribFlota");
+                var distribFlota = modelo.getProperty("/DistribFlota");
+                var constantsUtility = this.getModel("ConstantsUtility");
+                var caracterEditar = constantsUtility.getProperty("/CARACTEREDITAR");
+                var response = await TasaBackendService.obtenerDatosDstrFlota(codigo, usuario);
+                if (response) {
+                    for (var key in response) {
+                        if (distribFlota.hasOwnProperty(key)) {
+                            distribFlota[key] = response[key];
+                        }
+                    }
+                    modelo.setProperty("/DistribFlota/Indicador", caracterEditar);
+                    modelo.setProperty("/DistribFlota/IntLatPuerto", parseInt(response.LTGEO));
+                    modelo.setProperty("/DistribFlota/IntLonPuerto", parseInt(response.LNGEO));
+                    if (!response.DSEMP || !response.INPRP) {
+                        var mssg = this.oBundle.getText("PLANTASINEMPRESA");
+                        MessageBox.error(mssg);
+                    }
+                    modelo.refresh();
+                    return true;
+                } else {
+                    return false;
+                }
+            },
+
+            obtenerDatosMareaAnt: async function (marea, codigo) {
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var mareaAnterior = modelo.getProperty("/MareaAnterior");
+                //var utilitario = this.getModel("Utilitario");
+                //var dataSesionModel = this.getModel("DataSession");
+                var usuario = this.getCurrentUser();
+                var motivosSinZarpe = ["3", "7", "8"]; // motivos sin zarpe
+                //var mareaAnterior = this.getModel("MareaAnterior");
+                var response = await TasaBackendService.obtenerMareaAnterior(marea, codigo, usuario);
+                if (response) {
+                    var mareaAnt = response.data[0];
+                    for (var key in mareaAnt) {
+                        if (mareaAnterior.hasOwnProperty(key)) {
+                            mareaAnterior[key] = mareaAnt[key];
+                        }
+                    }
+                    if (!motivosSinZarpe.includes(mareaAnt.CDMMA)) {
+                        var response1 = await TasaBackendService.obtenerEventoAnterior(parseInt(mareaAnt.NRMAR), usuario);
+                        if (response1) {
+                            var eventoAnt = response1.data[0];
+                            if (eventoAnt) {
+                                var evtMarAnt = modelo.getProperty("/MareaAnterior/EventoMarAnt");
+                                for (var key in eventoAnt) {
+                                    if (evtMarAnt.hasOwnProperty(key)) {
+                                        evtMarAnt[key] = eventoAnt[key];
+                                    }
+                                }
+                                /*mareaAnterior.setProperty("/EventoMarAnt/NREVN", parseInt(eventoAnt.NREVN));
+                                mareaAnterior.setProperty("/EventoMarAnt/CDTEV", eventoAnt.CDTEV);
+                                mareaAnterior.setProperty("/EventoMarAnt/DESC_CDTEV", eventoAnt.DESC_CDTEV);
+                                mareaAnterior.setProperty("/EventoMarAnt/FIEVN", eventoAnt.FIEVN);
+                                mareaAnterior.setProperty("/EventoMarAnt/HIEVN", eventoAnt.HIEVN);
+                                mareaAnterior.setProperty("/EventoMarAnt/FFEVN", eventoAnt.FFEVN);
+                                mareaAnterior.setProperty("/EventoMarAnt/HFEVN", eventoAnt.HFEVN);*/
+                            }
+                        }
+                    }
+                }
+                modelo.refresh();
+            },
+
+            consultarPermisoZarpe: async function (codigo) {
+                //var me = this;
+                //var dataSesionModel = this.getModel("DataSession");
+                var usuario = this.getCurrentUser();
+                //var form = this.getModel("Form");
+                var form = this.getOwnerComponent().getModel("DetalleMarea");
+                var puedeZarpar = await TasaBackendService.obtenerPermisoZarpe(codigo, usuario).then(function (response) {
+                    var bOk = true;
+                    if (response.data) {
+                        var permiso = response.data[0];
+                        if (permiso.ESPMS != "V") {
+                            form.setProperty("/Cabecera/CDEMP", null);
+                            form.setProperty("/Cabecera/NAME1", null);
+                            var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + this.oBundle.getText("EMBSUSPENDIDA");
+                            MessageBox.error(mssg);
+                            bOk = false;
+                        }
+                    }
+                    return bOk;
+                }).catch(function (error) {
+                    console.log("ERROR: Main.consultarPermisoZarpe - ", error);
+                    return null;
+                });
+                return puedeZarpar;
+            },
+
+            validarBodegaCert: async function (codEmba, codPlanta) {
+                var bOk = false;
+                var response = await TasaBackendService.validarBodegaCert(codEmba, codPlanta);
+                if (response) {
+                    bOk = response.estado;
+                } else {
+                    bOk = null;
+                }
+                return bOk;
+            },
+
+            ValidacionMareaProduce: async function (codEmba, codPlanta) {
+                var bOk = false;
+                var response1 = await TasaBackendService.validarMareaProd(codEmba, codPlanta);
+                if (response1) {
+                    if (response1.p_correcto == "X") {
+                        bOk = true;
+                    } else {
+                        bOk = false;
+                    }
+                } else {
+                    bOk = null;
+                }
+                return bOk;
             },
 
             onTest: function () {

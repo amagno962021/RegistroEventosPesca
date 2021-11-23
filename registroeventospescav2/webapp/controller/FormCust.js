@@ -138,7 +138,7 @@ sap.ui.define([
                 clearData = true;
             }
             if (clearData) {
-                
+
                 this.bckEmbarcacion = null;
                 form.setProperty("/Embarcacion", null);
                 form.setProperty("/DescEmbarcacion", null);
@@ -159,20 +159,20 @@ sap.ui.define([
             var dataSesionModel = this.getModel("DataSession");
             var usuario = dataSesionModel.getProperty("/User");
             var response = await TasaBackendService.buscarArmador(codigo, usuario);
-            if(response){
+            if (response) {
                 var form = this.getModel("Form");
                 var data = response.data[0];
                 form.setProperty("/DescArmador", data.DSEMP);
-            }else{
+            } else {
                 var mssg = this.getResourceModel().getText("NORESULTADOARMADOR");
                 MessageBox.information(mssg);
                 clearData = true;
             }
-            if(clearData){
+            if (clearData) {
                 this.bckArmador = null;
                 form.setProperty("/Armador", null);
                 form.setProperty("/DescArmador", null);
-            }else{
+            } else {
                 this.bckArmador = codigo;
             }
         },
@@ -358,6 +358,27 @@ sap.ui.define([
                 }
             }
             return bOk;
+        },
+
+        validarBodegaCert: async function (codEmba, codPlanta) {
+            var bOk = false;
+            var response = await TasaBackendService.validarBodegaCert(cdemb, cdpta);
+            if (response) {
+                bOk = response.estado;
+            } else {
+                bOk = null;
+                MessageBox.error(this.oBundle.getText("EMBANOPER", [nmemb]));
+            }
+            return bOk;
+        },
+
+        ValidacionMareaProduce: async function (codEmba, codPlanta) {
+            var response1 = await TasaBackendService.validarMareaProd(cdemb, cdpta);
+            if (response1.p_correcto == "X") {
+                bOk = true;
+            } else {
+                MessageBox.error(this.oBundle.getText("EMBANOPROD", [nmemb]));
+            }
         }
 
 

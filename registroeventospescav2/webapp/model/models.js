@@ -16,6 +16,7 @@ sap.ui.define([
 		createInitModel: function(){
 			var initModel = {
 				Cabecera: {
+                    INDICADOR: "",
 					NRMAR: "",
                     CDMMA: "",
                     OBMAR: "",
@@ -26,7 +27,16 @@ sap.ui.define([
                     CDEMP: "",
                     NAME1: "",
                     INPRP: "",
-                    WERKS: ""
+                    WERKS: "",
+                    CNVPS: "",
+                    FCVPS: "",
+                    LIFNR: "",
+                    CPPMS: "",
+                    TCBPS: "",
+                    CBODP: 0,
+                    DESC_CDMMA: "",
+                    TXTNOTIF: "",
+                    TXTNOTIF1: ""
 				},
                 DatosGenerales: {
 					CDEMB: "",
@@ -40,8 +50,11 @@ sap.ui.define([
                     INUBC: "",
                     ESMAR: "",
                     FEARR: "",
+                    HEARR: "",
                     FIMAR: "",
+                    HIMAR: "",
                     FFMAR: "",
+                    HFMAR: "",
                     WERKS: "",
                     NuevoArmador: {
                         RUC: "",
@@ -62,12 +75,15 @@ sap.ui.define([
                 ResCombustible: {},
                 VentaCombustible: {},
                 DistribFlota: {
+                    Indicador: "",
                     CDPTA: "",
                     DESCR: "",
                     CDPTO: "",
                     DSPTO: "",
                     LTGEO: "",
+                    IntLatPuerto: 0,
                     LNGEO: "",
+                    IntLonPuerto: 0,
                     FEARR: "",
                     HEARR: "",
                     EMPLA: "",
@@ -89,9 +105,11 @@ sap.ui.define([
                     FFMAR: "",
                     HFMAR: "",
                     ESCMA: "",
+                    DESC_CDMMA: "",
                     EventoMarAnt: {
                         NREVN: "",
                         CDTEV: "",
+                        DESC_CDTEV: "",
                         FIEVN: "",
                         HIEVN: "",
                         FFEVN: "",
@@ -122,7 +140,9 @@ sap.ui.define([
                     visibleFechFin: true,
                     visibleTabReserva: true,
                     visibleTabVenta: true,
+                    visibleTabSepComb: true,
                     readOnlyFechIni: true,
+                    readOnlyEstaMar: true,
 					datosCombo: {
                         Departamentos: [],
                         MotivosMarea: [],

@@ -193,6 +193,20 @@ sap.ui.define([
                 rowcount: ""
             };
             return sBody;
+        },
+
+        getBodyEmba: function(){
+            var sBody = {
+                "option": [
+                ],
+                "option2": [
+                ],
+                "options": [],
+                "options2": [],
+                "p_user": "",
+                //"p_pag": "1" //por defecto la primera parte
+            };
+            return sBody;
         }
 
     }
