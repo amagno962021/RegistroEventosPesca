@@ -73,7 +73,7 @@ sap.ui.define([
             this.calendarioPescaCHI = [];
             this.calendarioPescaVED = [];
             this._listaIncidental = dataDetalleMarea.Incidental;
-            this._elementAct = "2";//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
+            this._elementAct = modeloDetalleMarea.getProperty("/Eventos/LeadSelEvento");//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
             this._utilNroEventoBio = "001";
             this._utilNroEventoIncid = "001";
             this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA;

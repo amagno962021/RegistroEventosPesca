@@ -656,7 +656,11 @@ sap.ui.define([
             }
         },
 
-        onNavEventos: function () {
+        onNavEventos: function (evt) {
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var object = evt.getSource().getParent().getBindingContext("DetalleMarea").getObject();
+            var indexEvento = object.NREVN - 1;
+            modelo.setProperty("/Eventos/LeadSelEvento", indexEvento)
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("DetalleEvento");
         }

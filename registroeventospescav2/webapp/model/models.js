@@ -68,7 +68,7 @@ sap.ui.define([
                 Eventos: {
 					TituloEventos: "",
                     Lista: [],
-                    CurrentEvento: {}
+                    LeadSelEvento: 0
 				},
                 Incidental: [],
                 Biometria: [],
