@@ -99,15 +99,22 @@ sap.ui.define([
 
         setColumnDinamic:function(textCol,idCol,paramModel){
             let CampoSet = "{eventos>" + paramModel + "}";
+            let that = this;
             if(idCol != ""){
                 this._oView.byId("table_biometria").addColumn( new sap.ui.table.Column(idCol,{
                     label: new sap.m.Label({
                         text: textCol 
                     }),
                     template : new sap.m.Input({
-                        value: CampoSet 
-                       // enabled : textCol
-                       // enabled : textCol ===  "CodEspecie"? false: true
+                        value: CampoSet, 
+                        liveChange : function(evt){
+                            //let value = evt.getParameter("value");
+                            // let o_control_porcPesca = evt.getSource().getParent().getAggregation("cells")[7];
+                            // console.log(evt.getSource().getParent().getAggregation("cells")[7]);
+                            // o_control_porcPesca.setText(value);
+                            that.CargaDatosBiometria(evt);
+
+                        }
                     })
                 }));
             }
@@ -122,6 +129,20 @@ sap.ui.define([
                     width : '10rem'
                 }));
             }
+        },
+        CargaDatosBiometria :function(event){
+            let value = event.getParameter("value");
+            let cantidadCol = Number(event.getSource().getParent().getAggregation("cells").length);
+            let o_control_porcPesca = event.getSource().getParent().getAggregation("cells")[7];
+            console.log(event.getSource().getParent().getAggregation("cells")[7]);
+            o_control_porcPesca.setText(value);
+            if(this.ctr._motivoMarea == "2"){
+
+            }else{
+
+            }
+            
+
         },
 
         getcontrol:function(){
@@ -179,7 +200,7 @@ sap.ui.define([
 			let motivoMarea = this.ctr._motivoMarea;
 			let especie = sap.ui.getCore().byId("cb_especies_espec").getSelectedKey();
 			let cantPesca = sap.ui.getCore().byId("ip_especies_cp").getValue();
-			let especiePermitida = this.ctr._listaEventos[this.ctr._elementAct].EspePermitida;
+			let especiePermitida = this.ctr._listaEventos[this.ctr._elementAct].EspePermitida;//trae vacio
             let bOk = true;
             let Pesca= {};
             
@@ -251,25 +272,6 @@ sap.ui.define([
                  this._oView.getModel("eventos").updateBindings(true);
                 
 			}
-
-
-
-            // this.lst_Biometria = [];
-            // self= this;
-            // //let oSelectedItem = this._oView.byId("myDialog").getItems(); 
-            // var aContexts = oEvent.getParameter("selectedContexts");
-            // if (aContexts && aContexts.length) {
-            //     aContexts.map(function (oContext) 
-            //     { 
-            //         self.lst_Biometria.push({
-            //             CodEspecie: oContext.getObject().id,
-            //             Especie: oContext.getObject().descripcion
-            //          });
-                
-            //     })
-            // }
-            // this._oView.getModel("eventos").setProperty("/ListaBiometria", this.lst_Biometria);
-            // this._oView.getModel("eventos").updateBindings(true);
 
             this.getDialog_add_especie().close();
         },

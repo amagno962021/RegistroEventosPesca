@@ -78,7 +78,7 @@ sap.ui.define([
             this._utilNroEventoIncid = "001";
             this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA;
             this._tipoEvento = ListaEventos_cont[this._elementAct].CDTEV;
-            this._nroEvento = "3";//ESTE ES EL NUMERO DEL EVENTO SELECCIONADO DE LA LISTA DE DETALLE
+            this._nroEvento = ListaEventos_cont[this._elementAct].NREVN;//ESTE ES EL NUMERO DEL EVENTO SELECCIONADO DE LA LISTA DE DETALLE
             this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "";//"165728";
             this._nroDescarga = ListaEventos_cont[this._elementAct].NRDES;//"TCHI001444";
             this._indicador = "E"//ListaEventos_cont[this._elementAct].INPRP;//"E";
