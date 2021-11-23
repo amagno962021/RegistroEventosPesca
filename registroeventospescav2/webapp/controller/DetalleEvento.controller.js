@@ -69,6 +69,9 @@ sap.ui.define([
             console.log("FormEvent_cont: ", FormEvent_cont);
 
             /********* Carga de variables globales **********/
+            this.calendarioPescaCHD = [];
+            this.calendarioPescaCHI = [];
+            this.calendarioPescaVED = [];
             this._listaIncidental = dataDetalleMarea.Incidental;
             this._elementAct = "2";//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
             this._utilNroEventoBio = "001";
@@ -159,6 +162,9 @@ sap.ui.define([
             this._listaEventos[this._elementAct].ListaSiniestros = [];
             this._listaEventos[this._elementAct].ListaIncidental = this._listaIncidental;
             this._listaEventos[this._elementAct].eListaPescaDeclarada = [];
+            this._listaEventos[this._elementAct].EspePermitida = [];
+            this._listaEventos[this._elementAct].EspeZonaPesca = [];
+            this._listaEventos[this._elementAct].EspeVeda = [];
         },
 
         obtenerTab :function(event){
