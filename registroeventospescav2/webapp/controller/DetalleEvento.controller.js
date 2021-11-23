@@ -494,8 +494,6 @@ sap.ui.define([
                 if (this._tipoEvento == textValidaciones.TIPOEVENTOARRIBOPUE) {
                     var fechaIniEnvase = this.getView().byId("FechaEnvaseIni");
                     fechaIniEnvase.setVisible(true);
-                    var btn_Planta = this.getView().byId("btn_Planta");
-                    btn_Planta.setVisible(true);
                 }
             }
 
@@ -1354,6 +1352,15 @@ sap.ui.define([
             this.getView().byId("col_porc_pesc_desc").setVisible(false);
             this.getView().byId("ext_pesca_declarada").setVisible(false);
             this.getView().byId("ext_siniestro").setVisible(false);
+            //tabs
+            this.getView().byId("idDistribucion").setVisible(false);
+            this.getView().byId("idBiometria").setVisible(false);
+            this.getView().byId("idPescaDesc").setVisible(false);
+            this.getView().byId("idPescaDecl").setVisible(false);
+            this.getView().byId("idHorometro").setVisible(false);
+            this.getView().byId("idSiniestro").setVisible(false);
+            this.getView().byId("idAccidente").setVisible(false);
+            this.getView().byId("idEquipamiento").setVisible(false);
 
         },
 

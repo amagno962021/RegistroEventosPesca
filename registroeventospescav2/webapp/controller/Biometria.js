@@ -134,7 +134,7 @@ sap.ui.define([
             let value = event.getParameter("value");
             let cantidadCol = Number(event.getSource().getParent().getAggregation("cells").length);
             let o_control_porcPesca = event.getSource().getParent().getAggregation("cells")[7];
-            console.log(event.getSource().getParent().getAggregation("cells")[7]);
+            console.log(event.getSource().getParent().getParent().getAggregation("columns")[0].getAggregation("label").getProperty("text"));
             o_control_porcPesca.setText(value);
             if(this.ctr._motivoMarea == "2"){
 
