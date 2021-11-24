@@ -70,15 +70,19 @@ sap.ui.define([
             });
         },
 
-        obtenerDetalleMarea: function (marea, sUsuario) {
+        obtenerDetalleMarea: async function (marea, sUsuario) {
             var uri = UtilService.getHostService() + "/api/embarcacion/consultaMarea/";
             var sBody = UtilService.getBodyDetalleMarea();
             sBody.p_marea = marea;
             sBody.user = sUsuario;
-            return this.http(uri).post(null, sBody).then(function (response) {
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
                 var data = JSON.parse(response);
                 return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerDetalleMarea: ", error);
+                return null;
             });
+            return data
         },
 
         obtenerDominio: function (dominio) {
@@ -113,8 +117,8 @@ sap.ui.define([
         validarBodegaCert: async function (embarcacion, planta) {
             var uri = UtilService.getHostService() + "/api/embarcacion/ValidarBodegaCert/";
             var sBody = UtilService.getBodyValidaCert();
-            sBody.codEmba = embarcacion;
-            sBody.codPlanta = planta;
+            sBody.codEmba = planta;
+            sBody.codPlanta = embarcacion;
             var data = await this.http(uri).post(null, sBody).then(function (response) {
                 var data = JSON.parse(response);
                 return data;
@@ -141,6 +145,24 @@ sap.ui.define([
         },
 
         obtenerDatosDstrFlota: async function (embarcacion, sUsuario) {
+            var uri = UtilService.getHostService() + "/api/General/ConsultaGeneral/";
+            var sBody = UtilService.getConsultaGeneral();
+            sBody.nombreConsulta = "CONSGENDSTRFLOTA";
+            sBody.parametro1 = embarcacion;
+            sBody.p_user = sUsuario;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                if(data.data){
+                    return data.data[0];
+                }else{
+                    return null;
+                }
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerDepartamentos: ", error);
+                return null
+            });
+            return data;
+            /*
             var uri = UtilService.getHostService() + "/api/General/Read_Table/";
             var sBody = UtilService.getBodyReadTable();
             sBody.delimitador = "|";
@@ -200,10 +222,29 @@ sap.ui.define([
                     return null;
                 });
             }
-            return data1;
+            return data1;*/
         },
 
         obtenerMareaAnterior: async function (marea, embarcacion, sUsuario) {
+            var uri = UtilService.getHostService() + "/api/General/ConsultaGeneral/";
+            var sBody = UtilService.getConsultaGeneral();
+            sBody.nombreConsulta = "CONSGENMAREAANT";
+            sBody.parametro1 = marea;
+            sBody.parametro2 = embarcacion;
+            sBody.p_user = sUsuario;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                if(data.data){
+                    return data;
+                }else{
+                    return null;
+                }
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerDepartamentos: ", error);
+                return null
+            });
+            return data;
+            /*
             var uri = UtilService.getHostService() + "/api/General/Read_Table/";
             var sBody = UtilService.getBodyReadTable();
             sBody.delimitador = "|";
@@ -220,10 +261,28 @@ sap.ui.define([
                 console.log("ERROR: TasaBackendService.obtenerMareaAnterior : ", error);
                 return null;
             });
-            return data;
+            return data;*/
         },
 
-        obtenerEventoAnterior: function (marea, sUsuario) {
+        obtenerEventoAnterior: async function (marea, sUsuario) {
+            var uri = UtilService.getHostService() + "/api/General/ConsultaGeneral/";
+            var sBody = UtilService.getConsultaGeneral();
+            sBody.nombreConsulta = "CONSGENEVENTANT";
+            sBody.parametro1 = marea;
+            sBody.p_user = sUsuario;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                if(data.data){
+                    return data;
+                }else{
+                    return null;
+                }
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerDepartamentos: ", error);
+                return null
+            });
+            return data;
+            /*
             var uri = UtilService.getHostService() + "/api/General/Read_Table/";
             var sBody = UtilService.getBodyReadTable();
             sBody.delimitador = "|";
@@ -240,10 +299,28 @@ sap.ui.define([
                 console.log("ERROR: TasaBackendService.obtenerEventoAnterior : ", error);
                 return null;
             });
-            return data;
+            return data;*/
         },
 
-        obtenerNroReserva: function (nrmar, sUsuario) {
+        obtenerNroReserva: async function (nrmar, sUsuario) {
+            var uri = UtilService.getHostService() + "/api/General/ConsultaGeneral/";
+            var sBody = UtilService.getConsultaGeneral();
+            sBody.nombreConsulta = "CONSGENNRORESERVA";
+            sBody.parametro1 = nrmar;
+            sBody.p_user = sUsuario;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                if(data.data){
+                    return data;
+                }else{
+                    return null;
+                }
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerDepartamentos: ", error);
+                return null
+            });
+            return data;
+            /*
             var uri = UtilService.getHostService() + "/api/General/Read_Table/";
             var sBody = UtilService.getBodyReadTable();
             sBody.delimitador = "|";
@@ -253,7 +330,7 @@ sap.ui.define([
             sBody.p_user = sUsuario;
             return this.http(uri).post(null, sBody).then(function (response) {
                 return response;
-            });
+            });*/
         },
 
         obtenerCodigoTipoPreservacion: function (cdemb, user) {
@@ -449,8 +526,27 @@ sap.ui.define([
                 return data;
             });
         },
-        verificarTemporada: function (codTemp, fecha) {
-            var uri = UtilService.getHostService() + "/api/General/Read_Table/";
+        verificarTemporada: async function (codTemp, fecha) {
+            var uri = UtilService.getHostService() + "/api/General/ConsultaGeneral/";
+            var sBody = UtilService.getConsultaGeneral();
+            sBody.nombreConsulta = "CONSGENVERIFTEMP";
+            sBody.parametro1 = "|";
+            sBody.p_user = "Fgarcia";
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                if(data.data){
+                    return data;
+                }else{
+                    return null;
+                }
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerDepartamentos: ", error);
+                return null
+            });
+            return data;
+
+
+            /*var uri = UtilService.getHostService() + "/api/General/Read_Table/";
             var sBody = UtilService.getBodyReadTable();
             sBody.delimitador = "|";
             sBody.fields = ["CDTPC"];
@@ -458,11 +554,30 @@ sap.ui.define([
             sBody.tabla = "ZFLCLT";
             return this.http(uri).post(null, sBody).then(function (response) {
                 return response;
-            });
+            });*/
         },
 
-        obtenerTemporadas: function (codTemp, fecha) {
-            var uri = UtilService.getHostService() + "/api/General/Read_Table/";
+        obtenerTemporadas: async function (codTemp, fecha) {
+            var uri = UtilService.getHostService() + "/api/General/ConsultaGeneral/";
+            var sBody = UtilService.getConsultaGeneral();
+            sBody.nombreConsulta = "CONSGENTEMP";
+            sBody.parametro1 = codTemp;
+            sBody.parametro2 = fecha;
+            sBody.p_user = "Fgarcia";
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                if(data.data){
+                    return data;
+                }else{
+                    return null;
+                }
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerDepartamentos: ", error);
+                return null
+            });
+            return data;
+
+            /*var uri = UtilService.getHostService() + "/api/General/Read_Table/";
             var sBody = UtilService.getBodyReadTable();
             sBody.delimitador = "|";
             sBody.fields = ["CDSPC", "DSSPC", "LTINI", "LNINI", "LTFIN", "LGFIN", "MILLA", "MANDT"];
@@ -470,7 +585,7 @@ sap.ui.define([
             sBody.tabla = "ZV_FLCP";
             return this.http(uri).post(null, sBody).then(function (response) {
                 return response;
-            });
+            });*/
         },
 
         obtenerEspeciesPermitidas: function (cdemb, codTemp) {
@@ -600,9 +715,9 @@ sap.ui.define([
                 return null;
             });
             if(data){
-                var empla = data[0].EMPLA;
+                var cdemp = data[0].CDEMP;
                 sBody.fields = ["DSEMP", "INPRP", "MANDT"];
-                sBody.option[0].wa = "CDEMP LIKE '" + empla + "'";
+                sBody.option[0].wa = "CDEMP LIKE '" + cdemp + "'";
                 sBody.tabla = "ZV_FLMP";
                 data1 = await this.http(uri).post(null, sBody).then(function (sResponse) {
                     var sData = JSON.parse(sResponse);
@@ -613,10 +728,7 @@ sap.ui.define([
                         DSPTO: data[0].DSPTO,
                         LTGEO: data[0].LTGEO,
                         LNGEO: data[0].LNGEO,
-                        FEARR: data[0].FEARR,
-                        HEARR: data[0].HEARR,
-                        EMPLA: data[0].EMPLA,
-                        WKSPT: data[0].WKSPT,
+                        CDEMP: data[0].CDEMP,
                         CDUPT: data[0].CDUPT,
                         DSEMP: sData.data.length > 0 ? sData.data[0].DSEMP : null,
                         INPRP: sData.data.length > 0 ? sData.data[0].INPRP : null,
@@ -685,6 +797,24 @@ sap.ui.define([
             });
             return data;
         },
+        
+        obtenerReservas: async function(marea, reserva, flag, usuario){
+            var uri = UtilService.getHostService() + "/api/embarcacion/ConsultaReserva/";
+            var sBody = UtilService.getConsultaReserva();
+            sBody.flagDetalle = flag ? flag : "";
+            sBody.marea = marea ? parseInt(marea) : 0;
+            sBody.reserva = reserva ? reserva : "";
+            sBody.usuario = usuario;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerReservas: ", error);
+                return null;
+            });
+            return data;
+        },
+
 
         test: function () {
             var latiCalaD = "";

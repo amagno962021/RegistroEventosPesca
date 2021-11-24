@@ -32,6 +32,8 @@ sap.ui.define([
 
         _onPatternMatched: function (oEvent) {
             var modeloMarea = this.getOwnerComponent().getModel("DetalleMarea");
+            var indicador = modeloMarea.getProperty("/Cabecera/INDICADOR");
+
 
 
             //validar fechas nulas en tabla de eventos
@@ -42,18 +44,18 @@ sap.ui.define([
             this.cargarCombos();
 
             //obtener datos de distribucion de flota
-            this.obtenerDatosDistribFlota();
+            //this.obtenerDatosDistribFlota();
 
             //obtener datos de marea anterior
-            this.obtenerDatosMareaAnt();
+            //this.obtenerDatosMareaAnt();
 
             //validacion de reserva de combustible
-            this.validarReservaCombustible();
+            //this.validarReservaCombustible();
 
             //validar limite de veda
-            this.validarLimiteVeda();
+            //this.validarLimiteVeda();
 
-            //validaciones de oibjetos de vista
+            //validaciones de objetos de vista
             this.validarVista();
 
         },
@@ -337,16 +339,12 @@ sap.ui.define([
             var dataDetalleMarea = modeloDetalleMarea.getData();
 
             //combo departamentos
-            /*var resDepartamentos = await TasaBackendService.obtenerDepartamentos(currentUser).then(function (response) {
-                var departamentos = response.data;
-                dataDetalleMarea.Config.datosCombo.Departamentos = departamentos;
-                modeloDetalleMarea.refresh();
-            }).catch(function (error) {
-                console.log("ERROR: DetalleMarea.cargarCombos - ", error);
-            });
+            var resDepartamentos = await TasaBackendService.obtenerDepartamentos(currentUser);
             if(resDepartamentos){
-
-            }*/
+                var departamentos = resDepartamentos.data;
+                modeloDetalleMarea.setProperty("/Config/datosCombo/Departamentos", departamentos);
+                //dataDetalleMarea.Config.datosCombo.Departamentos = departamentos;
+            }
 
             //combo motivos de marea
             TasaBackendService.obtenerDominio("ZDO_ZCDMMA").then(function (response) {

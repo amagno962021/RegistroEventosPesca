@@ -72,7 +72,19 @@ sap.ui.define([
 				},
                 Incidental: [],
                 Biometria: [],
-                ResCombustible: {},
+                ResCombustible: [],
+                Suministro:{
+                    NRRSV: "",
+                    MAKTX: "",
+                    NRPOS: "",
+                    CDALM: "",
+                    CNSUM: 0,
+                    DSALM: "",
+                    DSUMD: "",
+                    CDSUM: "",
+                    CDUMD: "",
+                    CDPTA: ""
+                },
                 VentaCombustible: {},
                 DistribFlota: {
                     Indicador: "",
