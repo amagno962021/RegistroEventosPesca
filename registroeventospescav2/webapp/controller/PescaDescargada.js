@@ -38,7 +38,11 @@ sap.ui.define([
         constructor: function (oView, sFragName,o_this) {
 
             this._oView = oView;
-            this._oControl = sap.ui.xmlfragment(oView.getId(), "com.tasa.registroeventospescav2.fragments." + sFragName, this);
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.session);
+            let flag = oStore.get("flagFragment");
+            if(flag){
+                this._oControl = sap.ui.xmlfragment(oView.getId(), "com.tasa.registroeventospescav2.fragments."+ sFragName,this);
+            }
             this._bInit = false;
             this._DataPopup;
             this._controler = o_this;

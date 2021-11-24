@@ -54,6 +54,8 @@ sap.ui.define([
         },
 
         onBackDetalleMarea: function(){
+            let o_iconTabBar =  sap.ui.getCore().byId("__xmlview3--Tab_eventos");
+            o_iconTabBar.setSelectedKey("");
             history.go(-1);
         },
 
@@ -243,7 +245,7 @@ sap.ui.define([
             var s6 = TasaBackendService.obtenerListaPescaBodegas(this._nroMarea, this._nroEvento, this.getCurrentUser());
             var s7 = TasaBackendService.obtenerListaPuntosDescarga(this._codPlanta, this.getCurrentUser());
             var s8 = TasaBackendService.obtenerListaPescaDescargada(this._nroDescarga, this.getCurrentUser());
-            //var s9 = TasaBackendService.obtenerListaSiniestros(this._nroMarea, this._nroEvento); ---> PENDIENTE EN REVISAR
+            //--var s9 = TasaBackendService.obtenerListaSiniestros(this._nroMarea, this._nroEvento); ---> PENDIENTE EN REVISAR
             var s10 = TasaBackendService.obtenerListaHorometro(this._FormMarea.WERKS, this._tipoEvento, this._nroMarea, this._nroEvento);
             var s11 = TasaBackendService.obtenerConfiguracionEvento();
             var s12 = TasaBackendService.obtenerDominio("1ZONAPESCA");
@@ -273,46 +275,61 @@ sap.ui.define([
             console.log("flag : "+ flag);
             if(flag){
 
-            var o_tabGeneral = this.getView().byId("idGeneral");
-            var o_tabDistribucion = this.getView().byId("idDistribucion");
-            var o_tabPescaDeclarada = this.getView().byId("idPescaDecl");
-            var o_tabPescaDescargada = this.getView().byId("idPescaDesc");
-            var o_tabHorometro = this.getView().byId("idHorometro");
-            var o_tabEquipamiento = this.getView().byId("idEquipamiento");
-            var o_tabSiniestro = this.getView().byId("idSiniestro");
-            var o_tabAccidente = this.getView().byId("idAccidente");
-            var o_tabBiometria = this.getView().byId("idBiometria");
+                var o_tabGeneral = this.getView().byId("idGeneral");
+                var o_tabDistribucion = this.getView().byId("idDistribucion");
+                var o_tabPescaDeclarada = this.getView().byId("idPescaDecl");
+                var o_tabPescaDescargada = this.getView().byId("idPescaDesc");
+                var o_tabHorometro = this.getView().byId("idHorometro");
+                var o_tabEquipamiento = this.getView().byId("idEquipamiento");
+                var o_tabSiniestro = this.getView().byId("idSiniestro");
+                var o_tabAccidente = this.getView().byId("idAccidente");
+                var o_tabBiometria = this.getView().byId("idBiometria");
 
-            var o_fragment = new General(this.getView(), "General",this);
-            var o_fragment2 = new General(this.getView(), "General_fechas",this);
-            var o_fragment3 = new General(this.getView(), "General_operacion",this);
-            var o_fragment4 = new General(this.getView(), "General_espera",this);
-            var o_fragment5 = new General(this.getView(), "General_adicional",this);
+                var o_fragment = new General(this.getView(), "General",this);
+                var o_fragment2 = new General(this.getView(), "General_fechas",this);
+                var o_fragment3 = new General(this.getView(), "General_operacion",this);
+                var o_fragment4 = new General(this.getView(), "General_espera",this);
+                var o_fragment5 = new General(this.getView(), "General_adicional",this);
 
-            var o_fragment6 = new Distribucion(this.getView(), "Distribucion");
-            var o_fragment7 = new PescaDeclarada(this.getView(), "PescaDeclarada",this);
-            var o_fragment8 = new PescaDescarga(this.getView(), "PescaDescargada",this);
-            var o_fragment9 = new Horometro(this.getView(), "Horometro",this);
-            var o_fragment10 = new Equipamiento(this.getView(), "Equipamiento");
-            var o_fragment11 = new Siniestro(this.getView(), "Siniestro",this);
-            var o_fragment12 = new Accidente(this.getView(), "Accidente");
-            var o_fragment13 = new Biometria(this.getView(), "Biometria", this._utilNroEventoBio, this);
+                var o_fragment6 = new Distribucion(this.getView(), "Distribucion");
+                var o_fragment7 = new PescaDeclarada(this.getView(), "PescaDeclarada",this);
+                var o_fragment8 = new PescaDescarga(this.getView(), "PescaDescargada",this);
+                var o_fragment9 = new Horometro(this.getView(), "Horometro",this);
+                var o_fragment10 = new Equipamiento(this.getView(), "Equipamiento");
+                var o_fragment11 = new Siniestro(this.getView(), "Siniestro",this);
+                var o_fragment12 = new Accidente(this.getView(), "Accidente");
+                var o_fragment13 = new Biometria(this.getView(), "Biometria", this._utilNroEventoBio, this);
 
 
-            o_tabGeneral.addContent(o_fragment.getcontrol());
-            o_tabGeneral.addContent(o_fragment2.getcontrol());
-            o_tabGeneral.addContent(o_fragment3.getcontrol());
-            o_tabGeneral.addContent(o_fragment4.getcontrol());
-            o_tabGeneral.addContent(o_fragment5.getcontrol());
+                o_tabGeneral.addContent(o_fragment.getcontrol());
+                o_tabGeneral.addContent(o_fragment2.getcontrol());
+                o_tabGeneral.addContent(o_fragment3.getcontrol());
+                o_tabGeneral.addContent(o_fragment4.getcontrol());
+                o_tabGeneral.addContent(o_fragment5.getcontrol());
 
-            o_tabDistribucion.addContent(o_fragment6.getcontrol());
-            o_tabPescaDeclarada.addContent(o_fragment7.getcontrol());
-            o_tabPescaDescargada.addContent(o_fragment8.getcontrol());
-            o_tabHorometro.addContent(o_fragment9.getcontrol());
-            o_tabEquipamiento.addContent(o_fragment10.getcontrol());
-            o_tabSiniestro.addContent(o_fragment11.getcontrol());
-            o_tabAccidente.addContent(o_fragment12.getcontrol());
-            o_tabBiometria.addContent(o_fragment13.getcontrol());
+                o_tabDistribucion.addContent(o_fragment6.getcontrol());
+                o_tabPescaDeclarada.addContent(o_fragment7.getcontrol());
+                o_tabPescaDescargada.addContent(o_fragment8.getcontrol());
+                o_tabHorometro.addContent(o_fragment9.getcontrol());
+                o_tabEquipamiento.addContent(o_fragment10.getcontrol());
+                o_tabSiniestro.addContent(o_fragment11.getcontrol());
+                o_tabAccidente.addContent(o_fragment12.getcontrol());
+                o_tabBiometria.addContent(o_fragment13.getcontrol());
+            }else{
+                var o_fragment = new General(this.getView(), "General",this);
+                var o_fragment2 = new General(this.getView(), "General_fechas",this);
+                var o_fragment3 = new General(this.getView(), "General_operacion",this);
+                var o_fragment4 = new General(this.getView(), "General_espera",this);
+                var o_fragment5 = new General(this.getView(), "General_adicional",this);
+
+                var o_fragment6 = new Distribucion(this.getView(), "Distribucion");
+                var o_fragment7 = new PescaDeclarada(this.getView(), "PescaDeclarada",this);
+                var o_fragment8 = new PescaDescarga(this.getView(), "PescaDescargada",this);
+                var o_fragment9 = new Horometro(this.getView(), "Horometro",this);
+                var o_fragment10 = new Equipamiento(this.getView(), "Equipamiento");
+                var o_fragment11 = new Siniestro(this.getView(), "Siniestro",this);
+                var o_fragment12 = new Accidente(this.getView(), "Accidente");
+                var o_fragment13 = new Biometria(this.getView(), "Biometria", this._utilNroEventoBio, this);
             }
 
             oStore.put("flagFragment", false);
@@ -323,6 +340,7 @@ sap.ui.define([
             this.Dat_PescaDeclarada = o_fragment7;
             this.Dat_Siniestro = o_fragment11;
             this.Dat_PescaDescargada = o_fragment8;
+            this.Dat_Biometria = o_fragment13;
 
             if (this._listasServicioCargaIni[9] ? true : false) {
                 this._ConfiguracionEvento = this._listasServicioCargaIni[9];
@@ -399,6 +417,7 @@ sap.ui.define([
                 }
 
                 if (this._tipoEvento == textValidaciones.TIPOEVENTOCALA) {
+                    this.Dat_Biometria.cargarDataBiometria();
                     this.obtenerCoordZonaPesca();
                     this.obtenerPescaDeclarada();
                     if (this._motivoMarea == "1") {
@@ -1157,9 +1176,10 @@ sap.ui.define([
                 var porcPesca = element.PorcPesca;
                 element.Editado = true;
                 element.PorcPesca = porcPesca;
-                element.CantPesca = cantTotal * (porcPesca * 0.01);
+                let cantidadCalc = cantTotal * (porcPesca * 0.01);
+                element.CNPCM = cantidadCalc.toFixed(2);
             }
-            this.getView().getModel("eventos").updateBindings(true);
+            //this.getView().getModel("eventos").updateBindings(true);
             //refrescar modelo
         },
 
@@ -1361,6 +1381,8 @@ sap.ui.define([
             this.getView().byId("idSiniestro").setVisible(false);
             this.getView().byId("idAccidente").setVisible(false);
             this.getView().byId("idEquipamiento").setVisible(false);
+            //
+            //this.getView().byId("idEquipamiento")
 
         },
 

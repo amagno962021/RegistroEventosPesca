@@ -7,7 +7,8 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
 	"sap/ui/integration/library",
-    "sap/m/MessageBox"
+    "sap/m/MessageBox",
+    "../Service/TasaBackendService"
 ], function(
 	FilterOperator,
     Filter,
@@ -17,7 +18,8 @@ sap.ui.define([
     JSONModel,
     MessageToast,
     integrationLibrary,
-    MessageBox
+    MessageBox,
+    TasaBackendService
 ) {
 	"use strict";
 
@@ -26,11 +28,13 @@ sap.ui.define([
         constructor: function(oView,sFragName,idBiometria, oThis) {
 
             this._oView = oView;
-            this._oControl = sap.ui.xmlfragment(oView.getId(), "com.tasa.registroeventospescav2.fragments."+ sFragName,this);
-            this._bInit = false;
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.session);
+            let flag = oStore.get("flagFragment");
+            if(flag){
+                this._oControl = sap.ui.xmlfragment(oView.getId(), "com.tasa.registroeventospescav2.fragments."+ sFragName,this);
+            }
             this.ctr = oThis;
             this._navBio = idBiometria;
-            this.cargarDataBiometria();
             console.log("TextoNav : " + idBiometria)
 
         },
@@ -108,14 +112,10 @@ sap.ui.define([
                     template : new sap.m.Input({
                         value: CampoSet, 
                         liveChange : function(evt){
-                            //let value = evt.getParameter("value");
-                            // let o_control_porcPesca = evt.getSource().getParent().getAggregation("cells")[7];
-                            // console.log(evt.getSource().getParent().getAggregation("cells")[7]);
-                            // o_control_porcPesca.setText(value);
                             that.CargaDatosBiometria(evt);
-
                         }
-                    })
+                    }),
+                    width : '5rem'
                 }));
             }
             else{
@@ -130,18 +130,79 @@ sap.ui.define([
                 }));
             }
         },
-        CargaDatosBiometria :function(event){
+        CargaDatosBiometria :async function(event){
             let value = event.getParameter("value");
+            let idMod = event.getParameter("id");
             let cantidadCol = Number(event.getSource().getParent().getAggregation("cells").length);
-            let o_control_porcPesca = event.getSource().getParent().getAggregation("cells")[7];
-            console.log(event.getSource().getParent().getParent().getAggregation("columns")[0].getAggregation("label").getProperty("text"));
-            o_control_porcPesca.setText(value);
-            if(this.ctr._motivoMarea == "2"){
+            let lista_Cols = cantidadCol -3;
+            let o_control_muestra = event.getSource().getParent().getAggregation("cells")[cantidadCol - 2];
+            let o_control_porcPesca = event.getSource().getParent().getAggregation("cells")[cantidadCol - 1];
+            let o_control_moda = event.getSource().getParent().getAggregation("cells")[cantidadCol - 3];
+            let TallaMinPorcJuvenil = Number(0);
+            let col_CodEspecie = event.getSource().getParent().getAggregation("cells")[0];
+            let o_Source = event.getSource();
+            let ser_medidaMin = await TasaBackendService.obtenerMedidaEspecie(col_CodEspecie.getProperty("text"), this.ctr.getCurrentUser());
+            TallaMinPorcJuvenil = Number(ser_medidaMin.data[0].TMMIN);
+            console.log(o_Source.getParent().getParent().getAggregation("columns")[0].getAggregation("label").getProperty("text"));
+           
+            let sumaTotal_Muestra = Number(0);
+            let sumaMuestraJuvenil = Number(0);
+            let v_Moda = Number(0);
+            let v_cant_col = Number(0);
+            for(let i = 2; i < lista_Cols; i++){
+                let talla_col = Number(o_Source.getParent().getParent().getAggregation("columns")[i].getAggregation("label").getProperty("text"));
+                let v_col = o_Source.getParent().getAggregation("cells")[i];
+                if(idMod == v_col.sId){
+                    if(v_cant_col<value){
+                        v_cant_col = value;
+                        v_Moda = talla_col;
+                    }
+                    sumaTotal_Muestra += Number(value);
+                }else{
+                    let v_sum = v_col.getProperty("value") == '' ? Number(0) : Number(v_col.getProperty("value"));
+                    if(v_cant_col<v_sum){
+                        v_cant_col = v_sum;
+                        v_Moda = talla_col;
+                    }
+                    sumaTotal_Muestra += v_sum;
+                }
+                
+                if(talla_col <= TallaMinPorcJuvenil){
+                    if(idMod == v_col.sId){
+                        sumaMuestraJuvenil += Number(value);
+                    }else{
+                        let v_sum = v_col.getProperty("value") == '' ? Number(0) : Number(v_col.getProperty("value"));
+                        sumaMuestraJuvenil += v_sum;
+                    } 
+                }
+            }
+            o_control_moda.setText(v_Moda);
+            o_control_muestra.setText(sumaTotal_Muestra);
+            let calculo_porc = Number(0);
+            calculo_porc = (sumaMuestraJuvenil * 100)/sumaTotal_Muestra
+            o_control_porcPesca.setText(calculo_porc + "%")
 
-            }else{
+            //----------------------------Lista pesca declarada -----------------//
+            let ListaPescaDeclarada = this.ctr._listaEventos[this.ctr._elementAct].ListaPescaDeclarada;
+            let ListaBiometria = this.ctr._listaEventos[this.ctr._elementAct].ListaBiometria;
+            let Muestra_Total = Number(0);
+            for(let j = 0; j < ListaBiometria.length; j++){
+                Muestra_Total +=  Number(ListaBiometria[j].Muestra);
+            }
 
+            for(let j = 0; j < ListaBiometria.length; j++){
+                for(let i = 0; i < ListaPescaDeclarada.length; i++){
+                    if(ListaPescaDeclarada[i].CDSPC == ListaBiometria[j].CodEspecie){
+                        let porcentPD = Number(0);
+                        porcentPD = (Number(ListaBiometria[j].Muestra) * 100)/Muestra_Total;
+                        ListaPescaDeclarada[i].PorcPesca = porcentPD.toFixed(2);
+                        ListaPescaDeclarada[i].ZMODA = ListaBiometria[j].Moda;
+                    }
+                }
             }
             
+            this.ctr.onActionCalcCantPescaDecla();
+
 
         },
 
@@ -316,7 +377,28 @@ sap.ui.define([
 
         cargarDataBiometria: async function(){
             if (this.ctr._listasServicioCargaIni[18] ? true : false) {
-                let listaDataBio = this.ctr._listasServicioCargaIni[18].str_flbsp_matched;
+                let lista_total_bio = this.ctr._listasServicioCargaIni[18].str_flbsp_matched;
+                let listaDataBio = [];
+                //-------------------------Cargar las biometria pertenecientes solo a ese evento --------------//
+                for(let w = 0; w < lista_total_bio.length; w++){
+                    if(this.ctr._nroEvento == lista_total_bio[w].NREVN){
+                        listaDataBio.push(lista_total_bio[w]);
+                    }
+                    
+                }
+                //------------------------ Cargar el Incidental pertenecientes a ese evento
+                let lista_incidental = this.ctr._listaIncidental;
+                let listaIncEve = [];
+                for(let w = 0; w < lista_incidental.length; w++){
+                    if(this.ctr._nroEvento == lista_incidental[w].NREVN){
+                        listaIncEve.push(lista_incidental[w]);
+                    }
+                    
+                }
+                this.ctr._listaEventos[this.ctr._elementAct].ListaIncidental = listaIncEve;
+                //this._oView.getModel("eventos").setProperty("/ListaPescaDeclarada",ListaPescaDecl);
+
+
                 if(listaDataBio.length != 0){
                     let tmn = Number(0);
                     let tmy = Number(0);;
@@ -352,7 +434,6 @@ sap.ui.define([
                         obj_bio['Especie'] = listaDataBio[i].DESC_CDSPC;
                         obj_bio['Moda'] = listaDataBio[i].MODA;
                         obj_bio['Muestra'] = listaDataBio[i].CDSPC_TOTAL;
-                        // obj_bio['PorcJuveniles'] = listaDataBio[i];
                         
                         if(this.ctr._motivoMarea == "2"){
                             for (let k = tmn; k <= tmy; k++) {
