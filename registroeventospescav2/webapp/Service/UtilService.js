@@ -207,6 +207,16 @@ sap.ui.define([
                 //"p_pag": "1" //por defecto la primera parte
             };
             return sBody;
+        },
+
+        getConsultaReserva: function(){
+            var sBody = {
+                flagDetalle: "",
+                marea: 0,
+                reserva: "",
+                usuario: ""
+            };
+            return sBody;
         }
 
     }

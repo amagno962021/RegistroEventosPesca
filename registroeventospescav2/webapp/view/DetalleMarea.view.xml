@@ -8,7 +8,7 @@
 	height="100%">
 	<!-- <App> removed -->
 	<!--	<pages> removed -->
-	<Page title="Detalle de Marea" showNavButton="true" navButtonPress="onBackListMarea" showFooter="true">
+	<Page title="Ingresar datos" showNavButton="true" navButtonPress="onBackListMarea" showFooter="true">
 		<content>
 			<layout:VerticalLayout width="100%" visible="true">
 				<layout:content>
@@ -36,6 +36,30 @@
 						<content>
 							<form:Form width="100%" editable="true" visible="true">
 								<form:title>
+									<core:Title text="Observación" level="Auto"/>
+								</form:title>
+								<form:formContainers>
+									<form:FormContainer visible="true">
+										<form:formElements>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Observación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Input value="{DetalleMarea>/Cabecera/OBMAR}"  enabled="true"  width="27.5%"
+																valueStateText="Invalid entry"/>
+												</form:fields>
+											</form:FormElement>	
+										</form:formElements>
+										<form:title/>
+									</form:FormContainer>
+								</form:formContainers>
+								<form:layout>
+									<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+								</form:layout>
+							</form:Form>
+							<form:Form width="100%" editable="true" visible="true">
+								<form:title>
 									<core:Title text="Pertenencia" level="Auto"/>
 								</form:title>
 								<form:formContainers>
@@ -46,7 +70,7 @@
 													<Label text="Embarcacion" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 												</form:label>
 												<form:fields>
-													<Input value="{DetalleMarea>/DatosGenerales/CDEMB}"  description="{DetalleMarea>/DatosGenerales/NMEMB}"  enabled="false"  width="60%"
+													<Input value="{DetalleMarea>/DatosGenerales/CDEMB}"  description="{DetalleMarea>/DatosGenerales/NMEMB}"  enabled="false"  width="27.5%"
 																 valueStateText="Invalid entry"/>
 												</form:fields>
 											</form:FormElement>
@@ -72,7 +96,7 @@
 													<Label text="RUC"/>
 												</form:label>
 												<form:fields>
-													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/RUC}" width="60%"/>
+													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/RUC}" width="27.5%"/>
 												</form:fields>
 											</form:FormElement>
 											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorRazon}">
@@ -80,7 +104,7 @@
 													<Label text="Razón Social"/>
 												</form:label>
 												<form:fields>
-													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/RAZON}" width="60%"/>
+													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/RAZON}" width="27.5%"/>
 												</form:fields>
 											</form:FormElement>
 											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorCalle}">
@@ -88,7 +112,7 @@
 													<Label text="Calle"/>
 												</form:label>
 												<form:fields>
-													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/CALLE}" width="60%"/>
+													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/CALLE}" width="27.5%"/>
 												</form:fields>
 											</form:FormElement>
 											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorDistrito}">
@@ -96,7 +120,7 @@
 													<Label text="Distrito"/>
 												</form:label>
 												<form:fields>
-													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/DISTRITO}" width="60%"/>
+													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/DISTRITO}" width="27.5%"/>
 												</form:fields>
 											</form:FormElement>
 											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorProvincia}">
@@ -104,7 +128,7 @@
 													<Label text="Provincia"/>
 												</form:label>
 												<form:fields>
-													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/PROVINCIA}" width="60%"/>
+													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/PROVINCIA}" width="27.5%"/>
 												</form:fields>
 											</form:FormElement>
 											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorDepartamento}">
@@ -112,7 +136,7 @@
 													<Label text="Departamento"/>
 												</form:label>
 												<form:fields>
-													<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/NuevoArmador/DEPARTAMENTO}" items="{DetalleMarea>/Config/datosCombo/Departamentos}" width="25%">
+													<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/NuevoArmador/DEPARTAMENTO}" items="{DetalleMarea>/Config/datosCombo/Departamentos}" width="27.5%">
 														<core:Item key="{DetalleMarea>BLAND}" text="{DetalleMarea>BEZEI}" />
 													</ComboBox>
 												</form:fields>
