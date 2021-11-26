@@ -16,7 +16,8 @@ sap.ui.define([
     "sap/ui/integration/library",
     "sap/ui/core/Fragment",
     "../Service/TasaBackendService",
-    "sap/m/MessageBox"
+    "sap/m/MessageBox",
+    'sap/ui/core/BusyIndicator'
 ], function (
 	Controller,
 	General,
@@ -35,7 +36,8 @@ sap.ui.define([
     integrationLibrary,
     Fragment,
     TasaBackendService,
-    MessageBox
+    MessageBox,
+    BusyIndicator
 ) {
 	"use strict";
 
@@ -61,6 +63,7 @@ sap.ui.define([
 
         _onPatternMatched: async function (oEvent) {
             //modelo de alejandro
+            BusyIndicator.show(0);
             var modeloDetalleMarea = this.getOwnerComponent().getModel("DetalleMarea");
             var dataDetalleMarea = modeloDetalleMarea.getData();
             let ListaEventos_cont = dataDetalleMarea.Eventos.Lista; 
@@ -97,7 +100,7 @@ sap.ui.define([
             this._mareaReabierta = false;
             this._zonaPesca = ListaEventos_cont[this._elementAct].CDZPC;
             this._IsRolRadOpe = true; //ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
-            this._IsRolIngComb = true;//ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
+            this._IsRolIngComb = false;//ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
             this._tipoPreservacion = ""; //viene de la consulta al servicio
             this._opSistFrio = false; //VALOR DE UTILITARIO DE LA VISTA GLOBAL
             this._listasServicioCargaIni;
@@ -147,6 +150,7 @@ sap.ui.define([
                     if (r) {
                         self.getFragment();
                     } else {
+                        BusyIndicator.hide(); 
                         alert("Error");
                     }
                 
@@ -348,6 +352,7 @@ sap.ui.define([
             var ss = this._listasServicioCargaIni[11].data[0].data;
             await this.prepararRevisionEvento(false);
             this.cargaModelos();
+            BusyIndicator.hide(); 
 
         },
 
@@ -575,9 +580,22 @@ sap.ui.define([
             }
 
             if (this._tipoEvento == textValidaciones.TIPOEVENTOARRIBOPUE
-                && this._listaEventos[this._elementAct].MotiNoPesca != "") {
+                && this._listaEventos[this._elementAct].CDMNP != "") {
                 this.getView().byId("FechaEnvaseIni").setVisible(true);
                 this.getView().byId("fe_MotiNoPesca").setVisible(true);
+                let cantidadItemSel =  Number(this._elementAct) + 1;
+                if(cantidadItemSel == this._listaEventos.length ){
+                    this.getView().byId("cmb_estaOperacion").setEnabled(true);
+                }
+            }
+
+            //------------------------- seteo de visibilidad de elementos -----------------// --LOGICA DE CARLOS NO ENCONTRADA EN PORTAL
+            if (this._tipoEvento == textValidaciones.TIPOEVENTOARRIBOPUE) {
+                let cantidadItemSel =  Number(this._elementAct) + 1;
+                if(cantidadItemSel == this._listaEventos.length ){
+                    this.getView().byId("cmb_estaOperacion").setEnabled(true);
+                    this.getView().byId("cmb_motivoLim").setEnabled(true);
+                }
             }
 
             if (this._tipoEvento == textValidaciones.TIPOEVENTOESPERA) {
@@ -1204,8 +1222,14 @@ sap.ui.define([
             this.getView().byId("ip_longitud1").setEnabled(false);
             this.getView().byId("ip_longitud2").setEnabled(false);
 
-            this.getView().getModel("products").setProperty("/enabledEspecie", false);
             this.getView().getModel("eventos").setProperty("/enabledBodCantpesca", false);
+            this.getView().getModel("eventos").setProperty("/enabledCantPescDeclarada", false);
+            this.getView().getModel("eventos").setProperty("/enabledCantPescDescargada", false);
+            this.getView().getModel("eventos").setProperty("/enabledCantPescDeclDesc", false);
+            this.getView().getModel("eventos").setProperty("/enabledPuntoDescarga", false);
+            this.getView().getModel("eventos").setProperty("/enabledFechProdDesc", false);
+            this.getView().getModel("eventos").setProperty("/enabledAveriado", false);
+            this.getView().getModel("eventos").setProperty("/enabledCantEquipamiento", false);
 
         },
         //------METODOS ALEJANDRO-------------
@@ -1310,33 +1334,33 @@ sap.ui.define([
         //-----------------------------
 
         resetView: function () {
-            this.getView().byId("cb_ZonaPesca").setEnabled(false);
-            this.getView().byId("dtp_fechaIniCala").setEnabled(false);
-            this.getView().byId("dtf_fechaIniEnv").setEnabled(false);
-            this.getView().byId("dtf_FechaProduccion").setEnabled(false);
-            this.getView().byId("dtp_fechaFinCala").setEnabled(false);
-            this.getView().byId("dtf_fechaFinEnv").setEnabled(false);
-            this.getView().byId("cmb_estaOperacion").setEnabled(false);//cambiar a false
-            this.getView().byId("cb_tipoDescarga").setEnabled(false);
-            this.getView().byId("i_temperaturaMar").setEnabled(false);
-            this.getView().byId("i_stockCombustible").setEnabled(false);
-            this.getView().byId("ip_muestra").setEnabled(false);
-            this.getView().byId("ip_sistema_frio").setEnabled(false);
-            this.getView().byId("cmb_motivoLim").setEnabled(false);
-            this.getView().byId("cmb_motivoEspera").setEnabled(false);
-            this.getView().byId("ip_observacion").setEnabled(false);
-            this.getView().byId("ip_latitud1").setEnabled(false);
-            this.getView().byId("ip_latitud2").setEnabled(false);
-            this.getView().byId("ip_longitud1").setEnabled(false);
-            this.getView().byId("ip_longitud2").setEnabled(false);
+            this.getView().byId("cb_ZonaPesca").setEnabled(true);
+            this.getView().byId("dtp_fechaIniCala").setEnabled(true);
+            this.getView().byId("dtf_fechaIniEnv").setEnabled(true);
+            this.getView().byId("dtf_FechaProduccion").setEnabled(true);
+            this.getView().byId("dtp_fechaFinCala").setEnabled(true);
+            this.getView().byId("dtf_fechaFinEnv").setEnabled(true);
+            this.getView().byId("cmb_estaOperacion").setEnabled(true);//cambiar a false
+            this.getView().byId("cb_tipoDescarga").setEnabled(true);
+            this.getView().byId("i_temperaturaMar").setEnabled(true);
+            this.getView().byId("i_stockCombustible").setEnabled(true);
+            this.getView().byId("ip_muestra").setEnabled(true);
+            this.getView().byId("ip_sistema_frio").setEnabled(true);
+            this.getView().byId("cmb_motivoLim").setEnabled(true);
+            this.getView().byId("cmb_motivoEspera").setEnabled(true);
+            this.getView().byId("ip_observacion").setEnabled(true);
+            this.getView().byId("ip_latitud1").setEnabled(true);
+            this.getView().byId("ip_latitud2").setEnabled(true);
+            this.getView().byId("ip_longitud1").setEnabled(true);
+            this.getView().byId("ip_longitud2").setEnabled(true);
 
-            this.getView().getModel("eventos").setProperty("/enabledBodCantpesca", false);
-            this.getView().getModel("eventos").setProperty("/enabledCantPescDeclarada", false);
-            this.getView().getModel("eventos").setProperty("/enabledCantPescDescargada", false);
-            this.getView().getModel("eventos").setProperty("/enabledCantPescDeclDesc", false);
-            this.getView().getModel("eventos").setProperty("/enabledPuntoDescarga", false);
-            this.getView().getModel("eventos").setProperty("/enabledFechProdDesc", false);
-            this.getView().getModel("eventos").setProperty("/enabledAveriado", false);
+            this.getView().getModel("eventos").setProperty("/enabledBodCantpesca", true);
+            this.getView().getModel("eventos").setProperty("/enabledCantPescDeclarada", true);
+            this.getView().getModel("eventos").setProperty("/enabledCantPescDescargada", true);
+            this.getView().getModel("eventos").setProperty("/enabledCantPescDeclDesc", true);
+            this.getView().getModel("eventos").setProperty("/enabledPuntoDescarga", true);
+            this.getView().getModel("eventos").setProperty("/enabledFechProdDesc", true);
+            this.getView().getModel("eventos").setProperty("/enabledAveriado", true);
             this.getView().getModel("eventos").setProperty("/enabledCantEquipamiento", false);
 
             this.getView().byId("FechaEnvaseIni").setVisible(false);

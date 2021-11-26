@@ -215,20 +215,20 @@ sap.ui.define([
             let me = this;
             me.getDialog_add_especie().open();
             if (this.ctr._motivoMarea == "1") {
-                this._oView.byId("fe_popup_cantPesca").setVisible(true);
+                sap.ui.getCore().byId("fe_popup_cantPesca").setVisible(false);
             
                         
             } else {
-                this._oView.byId("fe_popup_cantPesca").setVisible(false);
+                sap.ui.getCore().byId("fe_popup_cantPesca").setVisible(true);
             }
             
 		},
         getDialog_add_especie: function () {
-            if (!this.oDialog_I) {
-                this.oDialog_I = sap.ui.xmlfragment("com.tasa.registroeventospescav2.fragments.Popup_especie", this);
-                this._oView.addDependent(this.oDialog_I);
+            if (!this.oDialog_e) {
+                this.oDialog_e = sap.ui.xmlfragment("com.tasa.registroeventospescav2.fragments.Popup_especie", this);
+                this._oView.addDependent(this.oDialog_e);
             }
-            return this.oDialog_I;
+            return this.oDialog_e;
         },
         cerrarPopup_esp :function(){
             this.getDialog_add_especie().close();
@@ -516,15 +516,34 @@ sap.ui.define([
             this.getDialog_add_Incidental().close();
         },
         agregarPopup_Inc : function(){
-
-            this.ctr._listaEventos[this.ctr._elementAct].ListaIncidental.push({
-                CDSPC: sap.ui.getCore().byId("cb_incidental_espec").getSelectedKey(),
-                DSSPC: sap.ui.getCore().byId("cb_incidental_espec").getSelectedItem().getText(),
-                PCSPC: sap.ui.getCore().byId("ip_incidental_porc").getValue()
-             });
-             
-             this._oView.getModel("eventos").updateBindings(true);
-             this.getDialog_add_Incidental().close();
+            let listaInc = this.ctr._listaEventos[this.ctr._elementAct].ListaIncidental;
+            let especie = sap.ui.getCore().byId("cb_incidental_espec").getSelectedKey();
+            let key = true;
+            
+            if(especie == ""){
+                let mensaje = this.ctr.oBundle.getText("MISSINGFIELD", "Especie");
+                MessageBox.error(mensaje);
+            }else{
+                for (let i = 0; i < listaInc.length; i++) {			
+                    if (listaInc[i].CDSPC == especie ) {
+                        key = false;
+                        let mensaje = this.ctr.oBundle.getText("EXISTEESPDECLARADA");
+                        MessageBox.error(mensaje);
+                        break;
+                    }
+                                             
+                }
+            }
+            if(key){
+                this.ctr._listaEventos[this.ctr._elementAct].ListaIncidental.push({
+                    CDSPC: sap.ui.getCore().byId("cb_incidental_espec").getSelectedKey(),
+                    DSSPC: sap.ui.getCore().byId("cb_incidental_espec").getSelectedItem().getText(),
+                    PCSPC: sap.ui.getCore().byId("ip_incidental_porc").getValue()
+                 });
+                 
+                 this._oView.getModel("eventos").updateBindings(true);
+            }
+            this.getDialog_add_Incidental().close();
         },
         deleteIncidentalItems : function(oevent){
             let tablaBio = this._oView.byId("table_Incidental");

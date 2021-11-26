@@ -226,14 +226,14 @@ sap.ui.define([
                                 visible.VisibleDescarga = false;
                                 if (index == (cantEventos - 1)) {
                                     if(cantTotalDec < 0 || cantTotalDec == 0){
-                                        element.MotiNoPesca = "7";
+                                        element.CDMNP = "7";
                                         element.Editado = true;
                                         // falta mensaje
                                         mensaje = this.oBundle.getText("EVEARRCAMBMOTNOPES");
                                         MessageBox.error(mensaje);
                                     }
                                 } else {
-                                    element.MotiNoPesca = null;
+                                    element.CDMNP = null;
                                     element.Editado = true;
                                 }
                             } else if(element.TipoEvento == "6"){

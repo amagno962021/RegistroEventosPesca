@@ -122,10 +122,10 @@ sap.ui.define([
         onActionVerMotiLimitacion: function () {
             console.log("onActionVerMotiLimitacion");
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct];
-            var estOper = eventoActual.EstaOperacion;
+            var estOper = eventoActual.ESOPE;
             var visible = this.ctr.modeloVisible;//nodo visible
             eventoActual.MotiLimitacion = null;
-            if (estOper.equalsIgnoreCase("L")) {
+            if (estOper =="L") {
                 eventoActual.MotiLimitacion = null;
                 visible.MotiLimitacion = true;
             } else {
