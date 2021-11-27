@@ -436,23 +436,24 @@ sap.ui.define([
                         obj_bio['Muestra'] = listaDataBio[i].CDSPC_TOTAL;
                         
                         if(this.ctr._motivoMarea == "2"){
-                            for (let k = tmn; k <= tmy; k++) {
-                                let v_talla_bio = Number(0);
+                            let v_talla_bio = Number(0);
+                            for (let k = tmn; k <= tmy; k = k + Number(0.5)) {
                                 if(k == tmn){
                                     v_talla_bio = tmn;
                                 }else{
-                                    v_talla_bio = Number(v_talla_bio) + Number('0.5')
+                                    v_talla_bio++;
+                                   // v_talla_bio = Number(v_talla_bio) + Number('0.5')
                                 }
-                                let v_talla_bio_s = "" + v_talla_bio;
+                                let v_talla_bio_s = "" + k;
                                 let val_dec = v_talla_bio_s.indexOf(".5");
                                 if(val_dec == "-1"){
                                     let contBio = 0;
                                     for (let j = 0; j < item_bio_key.length; j++) {
                                         contBio++;
-                                        let v2 = "TNMED" + "_" + v_talla_bio + "_" + "00";
+                                        let v2 = "TNMED" + "_" + k + "_" + "00";
                                         if(item_bio_key[j] == v2 ){
                                             let v3 = Number(contBio) - Number(1);
-                                            obj_bio['col_' + k] = item_bio_value[v3];
+                                            obj_bio['col_' + v_talla_bio] = item_bio_value[v3];
                                             break;
                                         }
                                     }
@@ -465,7 +466,7 @@ sap.ui.define([
                                         let v2 = "TNMED" + "_" + v1[0] + "_" + "50";
                                         if(item_bio_key[j] == v2 ){
                                             let v3 = Number(contBio) - Number(1);
-                                            obj_bio['col_' + k] = item_bio_value[v3];
+                                            obj_bio['col_' + v_talla_bio] = item_bio_value[v3];
                                             break;
                                         }
                                     }

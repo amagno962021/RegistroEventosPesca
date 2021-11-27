@@ -364,7 +364,7 @@ sap.ui.define([
             console.log(o_event);
         },
 
-        prepararRevisionEvento: function (soloDatos) {
+        prepararRevisionEvento: async function (soloDatos) {
             if (this._tipoEvento == textValidaciones.TIPOEVENTOCALA) {
                 var fechaIniEnvase = this.getView().byId("FechaEnvaseIni");
                 fechaIniEnvase.setVisible(true);
@@ -374,6 +374,8 @@ sap.ui.define([
                 var fechaIniEnvaseText = this.getView().byId("0001");
                 fechaIniEnvaseText.setHeaderText("Fechas");
             }
+            
+            await this.obtenerDetalleEvento();
 
             if (this._tipoEvento == textValidaciones.TIPOEVENTODESCARGA
                 && this.buscarValorFijo(textValidaciones.MOTIVOPESCADES, this._motivoMarea)) {
@@ -383,8 +385,6 @@ sap.ui.define([
                 fechaFinEnvase.setVisible(false);
                 this.obtenerPescaDeclDescarga();
             }
-
-            this.obtenerDetalleEvento();
 
             if (!soloDatos) {
                 this.prepararVista(false);
@@ -975,7 +975,7 @@ sap.ui.define([
         obtenerCantTotalPescaDeclDesc: function (nroEventoTope) {
             let cantTotal = Number[0];
             for (var j = 0; j < this._listaEventos.length; j++) {
-                if (this._tipoEvento == textValidaciones.TIPOEVENTODESCARGA) {
+                if (this._listaEventos[j].CDTEV == textValidaciones.TIPOEVENTODESCARGA) {
                     this.getView().byId("FechaEnvaseIni").setVisible(false);
                     this.getView().byId("FechaEnvaseFin").setVisible(false);
                     if (this._listaEventos[j].Numero == this._nroEvento) {
