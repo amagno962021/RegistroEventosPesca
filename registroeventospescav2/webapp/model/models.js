@@ -34,9 +34,21 @@ sap.ui.define([
                     CPPMS: "",
                     TCBPS: "",
                     CBODP: 0,
+                    ESCMA: "",
+                    FCCRE: "",
+                    HRCRE: "",
+                    ATCRE: "",
+                    FCMOD: "",
+                    HRMOD: "",
+                    ATMOD: "",
                     DESC_CDMMA: "",
                     TXTNOTIF: "",
-                    TXTNOTIF1: ""
+                    TXTNOTIF1: "",
+                    TERRORES: false,
+                    VEDAVERIF: false,
+                    FECVEDMAX: "",
+                    NUEVOARM: "",
+                    OBSCOMB: ""
 				},
                 DatosGenerales: {
 					CDEMB: "",
@@ -55,6 +67,8 @@ sap.ui.define([
                     HIMAR: "",
                     FFMAR: "",
                     HFMAR: "",
+                    FEMAR: "",
+                    HAMAR: "",
                     WERKS: "",
                     NuevoArmador: {
                         RUC: "",
@@ -168,6 +182,33 @@ sap.ui.define([
                     Planta: "",
                     Embarcacion: "",
                     EmbarcacionDesc: ""
+                },
+                DataSession:{
+                    User: "FGARCIA",
+                    IsAllOk: false,
+                    IsRollngComb: false,
+                    IsRolRadOpe: false,
+                    MareaReabierta: false,
+                    RolFlota: "",
+                    SoloLectura: false,
+                    Type: ""
+                },
+                RolesFlota:{
+                    RolRadOpe: [
+                        "pcd:portal_content/com.tasa.SistemaFlota/com.tasa.Roles/com.tasa.flota_ro",
+                        "pcd:portal_content/com.tasa.SistemaFlota/com.tasa.Roles/com.tasa.flota_rcp",
+                        "pcd:portal_content/com.tasa.SistemaFlota/com.tasa.Roles/com.tasa.flota_ro_protesto"
+                    ],
+                    RolIngCom: [
+                        "pcd:portal_content/com.tasa.SistemaFlota/com.tasa.Roles/com.tasa.flota_acc"
+                    ]
+                },
+                Utils:{
+                    VedaVerificada: true,
+                    BtnEnabled: false,
+                    TextoConfirmacion: "",
+                    VisibleEstCierre: false,
+                    VisibleObsvComb: false
                 }
 			};
 			var oModel = new JSONModel(initModel);

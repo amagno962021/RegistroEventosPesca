@@ -341,7 +341,7 @@
 									<ColumnListItem >
 										<cells>
 											<Text text="{DetalleMarea>NREVN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-											<ObjectIdentifier title="{path: 'DetalleMarea>DESCEVT'}" text="" titleActive="false" visible="true"/>
+											<ObjectIdentifier title="{DetalleMarea>DESC_CDTEV}" text="" titleActive="false" visible="true"/>
 											<Text text="{DetalleMarea>FECHOINI}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 											<Text text="{DetalleMarea>FECHOFIN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 											<ObjectIdentifier title="{DetalleMarea>DSZPC}" text="{DetalleMarea>CDZPC}" titleActive="false" visible="true"/>
@@ -760,7 +760,7 @@
 				<content>
 					<ToolbarSpacer width=""/>
 					<Button text="Guardar" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true"
-								iconDensityAware="false"/>
+								iconDensityAware="false" press="onSave"/>
 					<Button text="Siguiente" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true"
 								iconDensityAware="false"/>
 					<Button text="Crear" type="Accept" icon="sap-icon://create" iconFirst="true" width="auto" enabled="true" visible="true"

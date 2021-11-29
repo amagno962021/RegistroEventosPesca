@@ -50,7 +50,9 @@ sap.ui.define([
             this.router = this.getOwnerComponent().getRouter();
             this.router.getRoute("DetalleEvento").attachPatternMatched(this._onPatternMatched, this);
             var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.session);
-                oStore.put("flagFragment", true);
+            oStore.put("flagFragment", true);
+            this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+            console.log(this.getOwnerComponent().getModel("DetalleMarea"));
         },
 
         onBackDetalleMarea: function(){
@@ -106,7 +108,7 @@ sap.ui.define([
             /************ Listas iniciales vacias **************/
             this._ConfiguracionEvento = {};
             this._cmbPuntosDescarga = [];
-            this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+            //this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
 
             // var cardManifests = new JSONModel();
             var EventosModelo = new JSONModel();
@@ -449,8 +451,8 @@ sap.ui.define([
                 }
 
             }
-            cantTotalDecl = this.obtenerCantTotalPescaDecla(nroEventoTope);
-            cantTotalDeclDesc = this.obtenerCantTotalPescaDeclDesc(nroEventoTope);
+            cantTotalDecl = this.obtenerCantTotalPescaDecla(nroEventoTope, null);
+            cantTotalDeclDesc = this.obtenerCantTotalPescaDeclDesc(nroEventoTope, null);
             cantTotalDeclRest =  cantTotalDecl - cantTotalDeclDesc;
 
             if (this._listaEventos[this._elementAct].ListaPescaDescargada[0].CantPescaDeclarada ? true : false) {
@@ -913,50 +915,74 @@ sap.ui.define([
             }
 
         },
-        obtenerCantTotalPescaDecla: function (nroEventoTope) {
-            let cantTotal = Number[0];
-            for (var j = 0; j < this._listaEventos.length; j++) {
-                if (this._tipoEvento == textValidaciones.TIPOEVENTOCALA) {
-                    if (this._listaEventos[j].Numero == this._nroEvento) {
-                        if (this._listaEventos[j].CantTotalPescDecla != null) {
-                            cantTotal = cantTotal + Number[this._listaEventos[j].CantTotalPescDecla];
+        obtenerCantTotalPescaDecla: function (nroEventoTope, me) {
+            var modelo = me.getOwnerComponent().getModel("DetalleMarea");
+            let cantTotal = 0;
+            var listaEventos = this._listaEventos ? this._listaEventos : modelo.getProperty("/Eventos/Lista");
+            for (var j = 0; j < listaEventos.length; j++) {
+                //if (this._tipoEvento == textValidaciones.TIPOEVENTOCALA)
+                if (listaEventos[j].CDTEV == "3") {
+                    var pescDecla = listaEventos[j].CNPDC;
+                    if(pescDecla && !isNaN(pescDecla)){
+                        cantTotal += pescDecla;
+                    }else{
+                        cantTotal += 0;
+                    }
+
+                    /*if (listaEventos[j].NREVN == this._nroEvento) {
+                        if (listaEventos[j].CantTotalPescDecla != null) {
+                            cantTotal = cantTotal + Number[listaEventos[j].CantTotalPescDecla];
                         }
                     } else {
                         this.obtenerDetalleEvento();
 
-                        cantTotal = cantTotal + Number[this._listaEventos[j].CantTotalPescDecla];
-                    }
+                        cantTotal = cantTotal + Number[listaEventos[j].CantTotalPescDecla];
+                    }*/
                 }
-
-                if (this._listaEventos[j].Numero == nroEventoTope) {
+                if (listaEventos[j].NREVN == nroEventoTope) {
                     break;
                 }
             }
             return cantTotal;
 
         },
-        obtenerCantTotalPescaDeclDesc: function (nroEventoTope) {
-            let cantTotal = Number[0];
-            for (var j = 0; j < this._listaEventos.length; j++) {
-                if (this._tipoEvento == textValidaciones.TIPOEVENTODESCARGA) {
-                    this.getView().byId("FechaEnvaseIni").setVisible(false);
-                    this.getView().byId("FechaEnvaseFin").setVisible(false);
-                    if (this._listaEventos[j].Numero == this._nroEvento) {
-                        if (this._listaEventos[j].ListaPescaDescargada[0].CantPescaDeclarada ? true : false) {
-                            cantTotal = cantTotal + Number[this._listaEventos[j].ListaPescaDescargada[0].CantPescaDeclarada];
+        obtenerCantTotalPescaDeclDesc: function (nroEventoTope, me) {
+            //let cantTotal = Number[0];
+            var modelo = me.getOwnerComponent().getModel("DetalleMarea");
+            let cantTotal = 0;
+            var listaEventos = this._listaEventos ? this._listaEventos : modelo.getProperty("/Eventos/Lista");
+            for (var j = 0; j < listaEventos.length; j++) {
+                if (listaEventos[j].CDTEV == "6") {
+                    if(!me){
+                        this.getView().byId("FechaEnvaseIni").setVisible(false);
+                        this.getView().byId("FechaEnvaseFin").setVisible(false);
+                    }
+                    var pescDesc = listaEventos[j].CNPDS;
+                    if(pescDesc && !isNaN(pescDesc)){
+                        cantTotal += pescDesc;
+                    }else{
+                        cantTotal += 0;
+                    }
+
+
+
+
+                    /*if (listaEventos[j].Numero == this._nroEvento) {
+                        if (listaEventos[j].ListaPescaDescargada[0].CantPescaDeclarada ? true : false) {
+                            cantTotal = cantTotal + Number[listaEventos[j].ListaPescaDescargada[0].CantPescaDeclarada];
                         }
                     } else {
                         this.obtenerDetalleEvento();
-                        if (this._listaEventos[j].ListaPescaDescargada[0] ? true : false) {
-                            if (this._listaEventos[j].ListaPescaDescargada[0].CantPescaDeclarada ? true : false){
-                                cantTotal = cantTotal + Number[this._listaEventos[j].ListaPescaDescargada[0].CantPescaDeclarada];
+                        if (listaEventos[j].ListaPescaDescargada[0] ? true : false) {
+                            if (listaEventos[j].ListaPescaDescargada[0].CantPescaDeclarada ? true : false){
+                                cantTotal = cantTotal + Number[listaEventos[j].ListaPescaDescargada[0].CantPescaDeclarada];
                             }
                             
                         }
-                    }
+                    }*/
                 }
 
-                if (this._listaEventos[j].Numero == nroEventoTope) {
+                if (listaEventos[j].NREVN == nroEventoTope) {
                     break;
                 }
             }
@@ -1205,8 +1231,8 @@ sap.ui.define([
                     break;
                 }
             }
-            cantTotalDecl = this.obtenerCantTotalPescaDecla(nroEventoTope);
-            cantTotalDeclDesc =this.obtenerCantTotalPescaDeclDesc(nroEventoTope);
+            cantTotalDecl = this.obtenerCantTotalPescaDecla(nroEventoTope, null);
+            cantTotalDeclDesc =this.obtenerCantTotalPescaDeclDesc(nroEventoTope, null);
             if(cantTotalDecl > cantTotalDeclDesc){
                 var mensaje = this.oBundle.getText("PESCDECDESCMAYPESCDEC");
                 MessageBox.error(mensaje);
@@ -1244,7 +1270,7 @@ sap.ui.define([
                 visible.VisibleDescarga = true;
             }
 
-            var validarMareaEventos = this.validarMareaEventos();
+            var validarMareaEventos = this.validarMareaEventos(this);
             var validarDatosEvento = this.Dat_PescaDescargada.validarDatosEvento();
             if(validarMareaEventos){
                 if(validarDatosEvento && !detalleMarea.TieneErrores){
@@ -1266,19 +1292,21 @@ sap.ui.define([
             }
             return this.oDialog;
         },
-        validarMareaEventos:function(){
-            let motMarea = this._motivoMarea;
-    
+        validarMareaEventos:function(me){
+            //this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+            var modelo = me.getOwnerComponent().getModel("DetalleMarea");
+            let motMarea = this._motivoMarea ? this._motivoMarea : modelo.getProperty("/Cabecera/CDMMA");
+            let _listaEventos = modelo.getProperty("/Eventos/Lista");
             if (!this.buscarValorFijo(textValidaciones.MOTIVOSINZARPE, motMarea)) {
-                if (this._listaEventos != null) {
-                    for (let i = 0; i < this._listaEventos.length; i++){
+                if (_listaEventos != null) {
+                    for (let i = 0; i < _listaEventos.length; i++){
                         
-                        if (this._listaEventos[i].TipoEvento == "1") { // Valido si existe al menos un evento de zarpe
+                        if (_listaEventos[i].CDTEV == "1") { // Valido si existe al menos un evento de zarpe
                             return true;
                         }
                     }
                 }
-                var mensaje = this.oBundle.getText("NOEXISTEZARPE");
+                var mensaje = me.oBundle.getText("NOEXISTEZARPE");
                 MessageBox.error(mensaje);
 
             } else {

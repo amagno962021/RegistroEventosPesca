@@ -815,6 +815,19 @@ sap.ui.define([
             return data;
         },
 
+        crearActualizarMarea: async function(sBody){
+            console.log("Guardar Marea: ", sBody);
+            var uri = UtilService.getHostService() + "/api/embarcacion/CrearMarea/";
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.crearActualizarMarea: ", error);
+                return null;
+            });
+            return data;
+        },
+
 
         test: function () {
             var latiCalaD = "";

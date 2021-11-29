@@ -47,11 +47,11 @@ sap.ui.define([
                 this.segundoOption = [];
                 this.currentPage = "";
                 this.lastPage = "";
-                this.bckEmbarcacion = null,
-                    this.bckArmador = null,
-                    //this.filtarMareas("001","0012");//por defecto muestra la primera opcion
+                this.bckEmbarcacion = null;
+                this.bckArmador = null;
+                //this.filtarMareas("001","0012");//por defecto muestra la primera opcion
 
-                    this.loadInitData();
+                this.loadInitData();
             },
 
             _onPatternMatched: function () {
@@ -93,6 +93,8 @@ sap.ui.define([
                         plantas = data.data;
                         this.getOwnerComponent().getModel("ComboModel").setProperty("/Plantas", plantas);
                     }).catch(error => console.log(error));
+                
+                this.validarRoles();
             },
 
             prepararDataTree: function (dataTipoEmba, dataPlantas) {
@@ -268,7 +270,8 @@ sap.ui.define([
                 this.getView().byId("itfTerceros").setCount(dataTerceros.length);
 
                 //setear header para total de pesca declarada
-                this.getView().byId("idObjectHeader").setNumber(totalPescaDeclarada);
+                var ttPescaDecl = totalPescaDeclarada.toString();
+                this.getView().byId("idObjectHeader").setNumber(ttPescaDecl);
                 this.getView().byId("idIconTabBar").setSelectedKey("itfPropios");
             },
 
@@ -364,7 +367,7 @@ sap.ui.define([
                     var currentUser = this.getCurrentUser();
                     if (selectedItem.ESMAR == "A") {
                         var response = await TasaBackendService.obtenerDetalleMarea(selectedItem.NRMAR, currentUser);
-                        if(response){
+                        if (response) {
                             await this.setDetalleMarea(response);
                         }
                     } else {
@@ -442,11 +445,12 @@ sap.ui.define([
                 var eventos = data.s_evento;
                 var incidental = data.str_pscinc;
                 var biometria = data.str_flbsp;
+                var motivoResCombu = ["1", "2", "4", "5", "6", "7", "8"];
 
                 modeloDetalleMarea.setProperty("/Cabecera/INDICADOR", "E");
                 //setear cabecera de formulario
                 //var cabecera = dataDetalleMarea.Cabecera;
-                var cabecera =  modeloDetalleMarea.getProperty("/Cabecera");
+                var cabecera = modeloDetalleMarea.getProperty("/Cabecera");
                 for (var keyC in cabecera) {
                     if (marea.hasOwnProperty(keyC)) {
                         cabecera[keyC] = marea[keyC];
@@ -455,7 +459,7 @@ sap.ui.define([
 
                 //setear pestania datos generales
                 //var datsoGenerales = dataDetalleMarea.DatosGenerales;
-                var datsoGenerales =  modeloDetalleMarea.getProperty("/DatosGenerales");
+                var datsoGenerales = modeloDetalleMarea.getProperty("/DatosGenerales");
                 for (var keyC in datsoGenerales) {
                     if (marea.hasOwnProperty(keyC)) {
                         datsoGenerales[keyC] = marea[keyC];
@@ -468,7 +472,7 @@ sap.ui.define([
 
                 var estMarea = modeloDetalleMarea.getProperty("/DatosGenerales/ESMAR");
                 var marea = modeloDetalleMarea.getProperty("/Cabecera/NRMAR");
-                if(estMarea == "A"){
+                if (estMarea == "A") {
                     await this.obtenerDatosMareaAnt(marea, codigo);
                 }
 
@@ -493,11 +497,12 @@ sap.ui.define([
                 modeloDetalleMarea.setProperty("/Biometria", biometria);
 
                 var inprp = modeloDetalleMarea.getProperty("/Cabecera/INPRP");
-                if(inprp == "P"){
+                var motivo = modeloDetalleMarea.getProperty("/Cabecera/CDMMA");;
+                if (inprp == "P" && motivoResCombu.includes(motivo)) {
                     await this.obtenerReservasCombustible(marea, codigo);
-                }   
+                }
 
-                if(inprp == "T"){
+                if (inprp == "T") {
 
                 }
 
@@ -517,7 +522,7 @@ sap.ui.define([
                 oRouter.navTo("DetalleMarea");
             },
 
-            obtenerReservasCombustible: async function (marea, codigo){
+            obtenerReservasCombustible: async function (marea, codigo) {
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 var motivoSinZarpe = ["3", "7", "8"];
                 var eveReserCombus = ["4", "5", "6"];
@@ -528,39 +533,39 @@ sap.ui.define([
                 var response = await TasaBackendService.obtenerNroReserva(marea, usuario);
                 var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
 
-                if(response){
-                    if(response.data){
+                if (response) {
+                    if (response.data) {
                         mostrarTab = true;
                     }
                 }
 
-                if(!mareaCerrada){
-                    if(!motivoSinZarpe.includes(motivoMarea)){
+                if (!mareaCerrada) {
+                    if (!motivoSinZarpe.includes(motivoMarea)) {
                         var listaEventos = modelo.getProperty("/Eventos/Lista");
                         var ultimoEvento = listaEventos[listaEventos.length - 1];
                         var tipoUltEvnt = ultimoEvento.CDTEV;
                         visibleNuevo = eveReserCombus.includes(tipoUltEvnt);
-                        if(!mostrarTab && visibleNuevo){
+                        if (!mostrarTab && visibleNuevo) {
                             mostrarTab = true;
                         }
-                    }else{
+                    } else {
                         mostrarTab = true;
                     }
                 }
 
                 modelo.setProperty("/Config/visibleTabReserva", mostrarTab);
-                if(mostrarTab){
+                if (mostrarTab) {
                     var marea = modelo.getProperty("/Cabecera/NRMAR")
                     var response = await TasaBackendService.obtenerReservas(marea, null, null, usuario);
-                    if(response){
+                    if (response) {
                         var reservas = response.t_reservas;
                         modelo.setProperty("/ResCombustible", reservas);
-                        if(!mareaCerrada){
+                        if (!mareaCerrada) {
                             //mostrar formulario externo
-                            
-                        }else{
+
+                        } else {
                             //mostrar tabla interna
-                            
+
                         }
                     }
                 }
@@ -579,6 +584,10 @@ sap.ui.define([
 
             getCurrentUser: function () {
                 return "fgarcia";
+            },
+
+            getRolUser: function(){
+                return [];//este metodo debe devolver la lista de roles asignado. Ejem. ["Administrador", "Operador"]
             },
 
             getDialog: function () {
@@ -612,8 +621,8 @@ sap.ui.define([
                 } else {
                     MessageBox.error(this.oBundle.getText("ERRORSELECPESTANIA"));
                 }
-
-                this.getView().byId("idObjectHeader").setNumber(totalPescaDeclarada);
+                var ttPescaDeca = totalPescaDeclarada.toString();
+                this.getView().byId("idObjectHeader").setNumber(ttPescaDeca);
             },
 
             onActionSelPlanta: function (evt) {
@@ -1076,6 +1085,7 @@ sap.ui.define([
                     this.validarIndPropiedad(indPropiedad);
                     this.bckEmbarcacion = codigo;
                 }
+                modelo.setProperty("/Cabecera/VEDAVERIF", false);
                 //utils.setProperty("/VedaVerificada", false);
                 return clearData;
             },
@@ -1150,7 +1160,7 @@ sap.ui.define([
                         var mssg = this.oBundle.getText("PLANTASINEMPRESA");
                         MessageBox.error(mssg);
                         return false;
-                    }else{
+                    } else {
                         return true;
                     }
                 } else {
@@ -1275,6 +1285,24 @@ sap.ui.define([
                     bOk = null;
                 }
                 return bOk;
+            },
+
+            validarRoles: function(){
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var rolesRadOpe = modelo.getProperty("/RolesFlota/RolRadOpe");
+                var rolIngCOmb = modelo.getProperty("/RolesFlota/RolIngCom");
+                var rolesUsuario = this.getRolUser();
+                for (let index = 0; index < rolesUsuario.length; index++) {
+                    const rol = rolesUsuario[index];
+                    if(rolesRadOpe.includes(rol)){
+                        modelo.setProperty("/DataSession/IsRolRadOpe", true);
+                    }  
+                    
+                    if(rolIngCOmb.includes(rol)){
+                        modelo.setProperty("/DataSession/IsRollngComb", true);
+                    }
+                }
+                //modelo.setProperty("/DataSession/RolFlota", true);
             },
 
             onTest: function () {

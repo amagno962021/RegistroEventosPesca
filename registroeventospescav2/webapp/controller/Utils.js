@@ -83,6 +83,19 @@ sap.ui.define([
             return date;
         },
 
+        strDateHourToDate: function(strDate, strHour){ // dd/MM/yyyy hh:mm
+            var date = null;
+            if(strDate && strHour){
+                var anio = parseInt(strDate.split("/")[2]);
+                var mes = parseInt(strDate.split("/")[1]) - 1;
+                var dia = parseInt(strDate.split("/")[0]);
+                var hour = parseInt(strHour.split(":")[0]);
+                var minute = parseInt(strHour.split(":")[1]);
+                date = new Date(anio, mes, dia, hour, minute);
+            }
+            return date;
+        },
+
         dateToStrDate: function(date){
             if(date){
                 var dia = date.getDate();
@@ -104,6 +117,41 @@ sap.ui.define([
             }else{
                 return null;
             }
+        },
+
+        strDateToSapDate: function(date){
+            var newDate = "";
+            if(date){
+                var dateSplit = date.split("/");
+                var dia = dateSplit[0];
+                var mes = dateSplit[1];
+                var anio = dateSplit[2];
+                newDate = dia + mes + anio + "";
+            }
+            return newDate;
+        },
+
+        strHourToSapHo: function(hour){
+            var newHour = "";
+            if(hour){
+                var dateSplit = hour.split(":");
+                var hora = dateSplit[0];
+                var minuto = dateSplit[1];
+                newHour = hora + minuto + "";
+            }
+            return newHour;
+        },
+
+        getEtiqueta: function(path){
+            var etiqueta = "";
+            if(etiqueta == "/DatosGenerales/CDEMB"){
+                etiqueta = "Embarcación";
+            }
+            if(etiqueta == "/DatosGenerales/CDEMP"){
+                etiqueta = "Armador Comercial";
+            }
+
+            return etiqueta;
         }
 
 
