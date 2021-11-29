@@ -66,7 +66,7 @@
 					<Column width="12rem" hAlign="End" filterProperty="Quantity">
 						<m:Label text="Pto. Descarga" />
 						<template>
-							<m:ComboBox placeholder="Zona de pesca" items="{path:'combPuntoDescarga>/data', templateShareable:false}" editable="true" enabled="true" visible="true" width="100%" valueState="None" maxWidth="100%">
+							<m:ComboBox placeholder="Zona de pesca" items="{path:'combPuntoDescarga>/data', templateShareable:false}" selectedKey="{eventos>CDPDG}" editable="true" enabled="true" visible="true" width="100%" valueState="None" maxWidth="100%">
 								<m:items>
 									<core:Item key="{combPuntoDescarga>CDPDG}" text="{combPuntoDescarga>DSPDG}" />
 								</m:items>
@@ -82,19 +82,19 @@
 					<Column width="15rem" hAlign="End" filterProperty="Quantity">
 						<m:Label text="Fecha/hora inicio" />
 						<template>
-							<m:DateTimePicker design="Bold" value="{eventos>FIDES}{eventos>HIDES}" displayFormat="medium" required="false" valueStateText="Invalid entry" enabled="false" visible="true" valueFormat="yyyyMMddHHmmss" />
+							<m:DateTimePicker design="Bold" value="{eventos>FIDES} {eventos>HIDES}" displayFormat="dd/MM/yyyy HH:mm:ss" required="false" valueStateText="Invalid entry" enabled="false" visible="true" valueFormat="yyyyMMddHHmmss" />
 						</template>
 					</Column>
 					<Column width="15rem" hAlign="End" filterProperty="Quantity">
 						<m:Label text="Fecha/hora fin" />
 						<template>
-							<m:DateTimePicker value="{eventos>FFDES}{eventos>HFDES}" displayFormat="medium" required="false" valueStateText="Invalid entry" enabled="false" visible="true" valueFormat="yyyyMMddHHmmss" />
+							<m:DateTimePicker value="{eventos>FFDES} {eventos>HFDES}" displayFormat="dd/MM/yyyy HH:mm:ss" required="false" valueStateText="Invalid entry" enabled="false" visible="true" valueFormat="yyyyMMddHHmmss" />
 						</template>
 					</Column>
 					<Column width="15rem" hAlign="End" filterProperty="Quantity" filterType="sap.ui.model.type.Integer">
 						<m:Label text="Fecha de producción" />
 						<template>
-							<m:DateTimePicker value="{eventos>FECCONMOV}" enabled="{eventos>/enabledFechProdDesc}" displayFormat="medium" required="false" valueStateText="Invalid entry" visible="true" valueFormat="yyyyMMdd" />
+							<m:DateTimePicker value="{eventos>FECCONMOV}" enabled="{eventos>/enabledFechProdDesc}" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" visible="true" valueFormat="yyyyMMdd" />
 						</template>
 					</Column>
 				</columns>
@@ -191,7 +191,7 @@
 							<m:Input value="{eventos>CNPDS}" type="Number" showValueHelp="false" enabled="{eventos>/enabledCantPescDescargada}" visible="true" />
 						</template>
 					</Column>
-					<Column id="price3" width="9rem" filterProperty="Price">
+					<Column id="price3" width="9rem" filterProperty="Price" visible="false">
 						<m:Label text="Cant. pesca" />
 						<template>
 							<m:Text text="{eventos>CNPDS}" target="_blank" />
@@ -207,6 +207,18 @@
 						<m:Label text="Lado descarga" />
 						<template>
 							<m:Text text="{eventos>CDLDS}" href="{ProductPicUrl}" target="_blank" />
+						</template>
+					</Column>
+					<Column width="15rem" hAlign="End" filterProperty="Quantity">
+						<m:Label text="Fecha/hora inicio" />
+						<template>
+							<m:DateTimePicker design="Bold" value="{eventos>FIDES} {eventos>HIDES}" displayFormat="dd/MM/yyyy HH:mm:ss" required="false" valueStateText="Invalid entry" enabled="false" visible="true" valueFormat="yyyyMMddHHmmss" />
+						</template>
+					</Column>
+					<Column width="15rem" hAlign="End" filterProperty="Quantity">
+						<m:Label text="Fecha/hora fin" />
+						<template>
+							<m:DateTimePicker value="{eventos>FFDES} {eventos>HFDES}" displayFormat="dd/MM/yyyy HH:mm:ss" required="false" valueStateText="Invalid entry" enabled="false" visible="true" valueFormat="yyyyMMddHHmmss" />
 						</template>
 					</Column>
 					<Column width="10rem" hAlign="End" filterProperty="Quantity">

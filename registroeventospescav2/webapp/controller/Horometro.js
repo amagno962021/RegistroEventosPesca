@@ -22,7 +22,11 @@ sap.ui.define([
 		constructor: function (oView, sFragName, o_this) {
 
             this._oView = oView;
-            this._oControl = sap.ui.xmlfragment(oView.getId(), "com.tasa.registroeventospescav2.fragments." + sFragName, this);
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.session);
+            let flag = oStore.get("flagFragment");
+            if(flag){
+                this._oControl = sap.ui.xmlfragment(oView.getId(), "com.tasa.registroeventospescav2.fragments."+ sFragName,this);
+            }
             this._bInit = false;
             this.ctr = o_this;
             console.log("entrooooo");
@@ -118,10 +122,10 @@ sap.ui.define([
         onActionVerMotiLimitacion: function () {
             console.log("onActionVerMotiLimitacion");
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct];
-            var estOper = eventoActual.EstaOperacion;
+            var estOper = eventoActual.ESOPE;
             var visible = this.ctr.modeloVisible;//nodo visible
             eventoActual.MotiLimitacion = null;
-            if (estOper.equalsIgnoreCase("L")) {
+            if (estOper =="L") {
                 eventoActual.MotiLimitacion = null;
                 visible.MotiLimitacion = true;
             } else {

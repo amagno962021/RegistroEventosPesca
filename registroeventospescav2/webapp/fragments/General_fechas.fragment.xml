@@ -36,7 +36,7 @@
 									<Label text="Fecha/hora ETA" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<DateTimePicker value="{DetalleMarea>/DatosGenerales/FEARR}" width="50%" displayFormat="dd/MM/yyyy HH:mm:ss" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMddHHmmss" />
+									<DateTimePicker value="{DetalleMarea>/DatosGenerales/FEARR} {DetalleMarea>/DatosGenerales/HEARR}" width="50%" displayFormat="dd/MM/yyyy HH:mm:ss" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMddHHmmss" />
 								</form:fields>
 							</form:FormElement>
 						</form:formElements>

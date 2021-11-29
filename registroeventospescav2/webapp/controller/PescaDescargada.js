@@ -38,7 +38,11 @@ sap.ui.define([
         constructor: function (oView, sFragName,o_this) {
 
             this._oView = oView;
-            this._oControl = sap.ui.xmlfragment(oView.getId(), "com.tasa.registroeventospescav2.fragments." + sFragName, this);
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.session);
+            let flag = oStore.get("flagFragment");
+            if(flag){
+                this._oControl = sap.ui.xmlfragment(oView.getId(), "com.tasa.registroeventospescav2.fragments."+ sFragName,this);
+            }
             this._bInit = false;
             this._DataPopup;
             this._controler = o_this;
@@ -222,14 +226,14 @@ sap.ui.define([
                                 visible.VisibleDescarga = false;
                                 if (index == (cantEventos - 1)) {
                                     if(cantTotalDec < 0 || cantTotalDec == 0){
-                                        element.MotiNoPesca = "7";
+                                        element.CDMNP = "7";
                                         element.Editado = true;
                                         // falta mensaje
                                         mensaje = this.oBundle.getText("EVEARRCAMBMOTNOPES");
                                         MessageBox.error(mensaje);
                                     }
                                 } else {
-                                    element.MotiNoPesca = null;
+                                    element.CDMNP = null;
                                     element.Editado = true;
                                 }
                             } else if(element.TipoEvento == "6"){

@@ -400,7 +400,21 @@ sap.ui.define([
                 return response;
             });
         },
-
+        obtenerMedidaEspecie: async function(cod_especie, user){
+            var uri = UtilService.getHostService() + "/api/General/ConsultaGeneral/";
+            var sBody = UtilService.getConsultaGeneral();
+            sBody.nombreConsulta = "CONSGENOBTTALLAMIN";
+            sBody.parametro1 = cod_especie;
+            sBody.p_user = user;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerMedidaEspecie: ", error);
+                return null;
+            });
+            return data;
+        },
         obtenerListaPuntosDescarga: function (codPlanta, user) {
             var uri = UtilService.getHostService() + "/api/General/ConsultaGeneral/";
             var sBody = UtilService.getConsultaGeneral();

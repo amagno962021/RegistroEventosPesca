@@ -22,40 +22,40 @@
 							</ObjectListItem>
 						</layout:content>
 					</layout:VerticalLayout>
-					<IconTabBar select=".obtenerTab"  expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true" selectedKey="Ok">
+					<IconTabBar id="Tab_eventos" select="obtenerTab"  expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true" selectedKey="Gen">
 						<items>
-							<IconTabFilter id="idGeneral" iconColor="Default" text="General" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false">
+							<IconTabFilter key="Gen" id="idGeneral" iconColor="Default" text="General" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false">
 
 							</IconTabFilter>
-							<IconTabFilter id="idDistribucion" iconColor="Default" text="Distribucion" count="" design="Vertical" showAll="false" 
+							<IconTabFilter key="Dist" id="idDistribucion" iconColor="Default" text="Distribucion" count="" design="Vertical" showAll="false" 
 							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
 
 							</IconTabFilter>
-							<IconTabFilter id="idBiometria" iconColor="Default" text="Biometria" count="" design="Vertical" showAll="false" 
+							<IconTabFilter key="Biom" id="idBiometria" iconColor="Default" text="Biometria" count="" design="Vertical" showAll="false" 
 							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
 								
 							</IconTabFilter>
-							<IconTabFilter id="idPescaDesc" iconColor="Default" text="Pesca descargada" count="" design="Vertical" showAll="false" 
+							<IconTabFilter key="PDesc" id="idPescaDesc" iconColor="Default" text="Pesca descargada" count="" design="Vertical" showAll="false" 
 							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
 								
 							</IconTabFilter>
-							<IconTabFilter id="idPescaDecl" iconColor="Default" text="Pesca declarada" count="" design="Vertical" showAll="false" 
+							<IconTabFilter key="PDecl" id="idPescaDecl" iconColor="Default" text="Pesca declarada" count="" design="Vertical" showAll="false" 
 							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
 								
 							</IconTabFilter>
-							<IconTabFilter id="idHorometro" iconColor="Default" text="Horometro" count="" design="Vertical" showAll="false" 
+							<IconTabFilter key="Horo" id="idHorometro" iconColor="Default" text="Horometro" count="" design="Vertical" showAll="false" 
 							textDirection="Inherit" enabled="true" visible="{visible>/TabHorometro}" iconDensityAware="false">
 								
 							</IconTabFilter>
-							<IconTabFilter id="idEquipamiento" iconColor="Default" text="Equipamiento" count="" design="Vertical" showAll="false" 
+							<IconTabFilter key="Equi" id="idEquipamiento" iconColor="Default" text="Equipamiento" count="" design="Vertical" showAll="false" 
 							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
 								
 							</IconTabFilter>
-							<IconTabFilter id="idSiniestro" iconColor="Default" text="Siniestro" count="" design="Vertical" showAll="false" 
+							<IconTabFilter key="Sini" id="idSiniestro" iconColor="Default" text="Siniestro" count="" design="Vertical" showAll="false" 
 							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
 								
 							</IconTabFilter>
-							<IconTabFilter id="idAccidente" iconColor="Default" text="Accidente" count="" design="Vertical" showAll="false" 
+							<IconTabFilter key="Acci" id="idAccidente" iconColor="Default" text="Accidente" count="" design="Vertical" showAll="false" 
 							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
 								
 							</IconTabFilter>
