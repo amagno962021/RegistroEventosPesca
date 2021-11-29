@@ -145,8 +145,15 @@ sap.ui.define([
                 EsperaMareaAnt: {
 
                 },
-                Eventos: {
-
+                MareaCLH: {
+                    NRMAR: "",
+                    EventoCLH:{
+                        FIEVN: "",
+                        HIEVN: "",
+                        NREVN: "",
+                        CDTEV: "",
+                        HorometrosCLH:[]
+                    }
                 },
                 Config: {
 					visibleArmadorComercial: true,

@@ -632,10 +632,14 @@ sap.ui.define([
             var sBody = UtilService.getBodyConHorom();
             sBody.ip_cdemb = cdemb;
             sBody.ip_nrmar = nrmar;
-            return this.http(uri).post(null, sBody).then(function (response) {
+            var data = this.http(uri).post(null, sBody).then(function (response) {
                 var data = JSON.parse(response);
                 return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.consultarHorometro : ", error);
+                return null;
             });
+            return data;
         },
 
         obtenerMillasLitoral: function (latiCalaD, latiCalaM) {

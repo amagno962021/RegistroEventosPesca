@@ -599,7 +599,7 @@ sap.ui.define([
             },
 
             onSelectTab: function (evt) {
-                var key = evt.getParameter("key").selectedKey;
+                var key = evt.getParameter("key");
                 var totalPescaDeclarada = 0;
                 var modelo = null;
                 if (key.includes("itfPropios")) {

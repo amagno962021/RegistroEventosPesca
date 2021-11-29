@@ -177,7 +177,7 @@
 													<Label text="Motivo de Marea" width="100%" />
 												</form:label>
 												<form:fields>
-													<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/CDMMA}" items="{DetalleMarea>/Config/datosCombo/MotivosMarea}" width="27.5%" change="onValidaMotivo">
+													<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/CDMMA}" items="{DetalleMarea>/Config/datosCombo/MotivosMarea}" width="27.5%" change="onValidaMotivo" >
 														<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
 													</ComboBox>
 												</form:fields>

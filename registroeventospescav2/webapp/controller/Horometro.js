@@ -284,7 +284,7 @@ sap.ui.define([
                     }
                 }
             } else if (LectUltHoro) {
-                var eventoCLH = detalleMarea.EventoCLH;
+                var eventoCLH = detalleMarea.MareaCLH.EventoCLH;
                 var nodoHoroActual = eventoActual.ListaHorometros;
                 var nodoHoroCompar = eventoCLH.HorometrosCLH;
                 var fechIniEveAct = eventoActual.FechIni; //dd/MM/yyyy
@@ -374,39 +374,37 @@ sap.ui.define([
             return capaTanEmba;
         },
 
-        obtenerLectUltHoro: function () {
-            var detalleMarea = {};
-            var cdemb = detalleMarea.Embarcacion;
-            var nrmar = detalleMarea.Marea;
-            var mareaClh = detalleMarea.MareaCLH;
-            TasaBackendService.consultarHorometro(cdemb, nrmar).then(function(response){
+        obtenerLectUltHoro: async function () {
+            var modelo = this.ctr.getOwnerComponent().getModel("DetalleMarea");
+            var cdemb = modelo.getProperty("/Cabecera/CDEMB");
+            var nrmar = modelo.getProperty("/Cabecera/NRMAR");
+            //var mareaClh = detalleMarea.MareaCLH;
+            var response = await TasaBackendService.consultarHorometro(cdemb, nrmar);
+            if(response){
                 var nodoMareaRFC = response.t_marea;
                 var nodoEnventoRFC = response.t_event;
                 var nodoLecHorRFC = response.t_lechor;
-                var nodoHoroCLH = mareaClh.EventoCLH.HorometrosCLH;
                 if(nodoMareaRFC.length > 0){
-                    mareaClh.Marea = nodoMareaRFC[0].NRMAR;
-                    mareaClh.EventoCLH.Numero = nodoEnventoRFC[0].NREVN;
-                    mareaClh.EventoCLH.TipoEvento = nodoEnventoRFC[0].CDTEV;
-                    mareaClh.EventoCLH.FechIni = nodoEnventoRFC[0].FIEVN;
-                    mareaClh.EventoCLH.HoraIni = nodoEnventoRFC[0].HIEVN;
+                    modelo.setProperty("/MareaCLH/NRMAR", nodoMareaRFC[0].NRMAR);
+                    modelo.setProperty("/MareaCLH/EventoCLH/HIEVN", nodoEnventoRFC[0].HIEVN);
+                    modelo.setProperty("/MareaCLH/EventoCLH/FIEVN", nodoEnventoRFC[0].FIEVN);
+                    modelo.setProperty("/MareaCLH/EventoCLH/NREVN", nodoEnventoRFC[0].NREVN);
+                    modelo.setProperty("/MareaCLH/EventoCLH/CDTEV", nodoEnventoRFC[0].CDTEV);
+                    var horometros = [];
                     for (let index = 0; index < nodoLecHorRFC.length; index++) {
                         const element = nodoLecHorRFC[index];
                         var obj = {
-                            TipoHorometro: element.CDTHR,
-                            Lectura: element.LCHOR,
-                            Averiado: element.NORAV
+                            CDTHR: element.CDTHR,
+                            LCHOR: element.LCHOR,
+                            NORAV: element.NORAV
                         };
-                        nodoHoroCLH.push(obj);
+                        horometros.push(obj);
                     }
-                    //REFRESCAR MODELO PRINCIPAL DE ALEJANDRO
-                    //refrescar modelo mareaClh
+                    modelo.setProperty("/MareaCLH/EventoCLH/HorometrosCLH", horometros);
+                    return true;
                 }
-            }).catch(function(error){
-                console.log("ERROR: Horometro.obtenerLectUltHoro - ", error );
-                return false;
-            });
-            return true;
+            }
+            return false;
         },
 
         onCheckBoxSelected: function (oEvent) {//EVENTO DE PRUEBA
