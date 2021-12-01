@@ -798,17 +798,20 @@ sap.ui.define([
         },
 
         validateFormFields: function(campos){
+            var bOk = true;
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             for (let index = 0; index < campos.length; index++) {
                 const path = campos[index];
                 var value = modelo.getProperty(path);
                 if(!value){
+                    bOk = false;
                     var etiqueta = Utils.getEtiqueta(path);
                     var mssg = this.oBundle.getText("MISSFORMFIELD", [etiqueta]);
                     MessageBox.error(mssg);
                     break;
                 }
             }
+            return bOk;
         },
 
         prepararVistaConfirm: function(){
@@ -854,6 +857,59 @@ sap.ui.define([
                 return verEstCierre;
             }
             return false;
+        },
+
+        onPressNuevoSuministro: function(){
+            this.getNuevaMareaDialog().open();
+        },
+
+        onCancelNuevaMarea: function(){
+            this.getNuevaMareaDialog().close();
+        },
+
+        onReservar: async function(){
+            var validar = await this.validarCabeceraSuministro();
+            if(validar){
+
+            }
+        },
+
+        validarCabeceraSuministro: async function(){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var campos = ["/Cabecera/CDEMB", "/Suministro/0/CNSUM"];
+            var bOk = this.validateFormFields(campos);
+            if(bOk){
+                var cantSuministro = modelo.getProperty("/Suministro/0/CNSUM");
+                if(!isNaN(cantSuministro)){
+                    if(Number(cantSuministro) > 0){
+
+                    }else{
+                        bOk = false;
+                        
+                        var mssg = this.oBundle.getText("CANTSUMNOCERO");
+                        MessageBox.error(mssg);
+                    }
+                }else{
+                    bOk = false;
+                    var mssg = this.oBundle.getText("CANTSUMNOINT");
+                    MessageBox.error(mssg);
+                }
+            }
+            return bOk;
+        },
+
+        getNuevaMareaDialog: function(){
+            if (!this.oDialogNuevoSum) {
+                this.oDialogNuevoSum = sap.ui.xmlfragment("com.tasa.registroeventospescav2.view.fragments.NuevoSuministro", this);
+                this.getView().addDependent(this.oDialogNuevoSum);
+            }
+            return this.oDialogNuevoSum;
+        },
+
+        onSelectAlmacen: function(evt){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var descAlmacen = evt.getParameter("value");
+            modelo.setProperty("/Suministro/0/DSALM", descAlmacen);
         }
 
 

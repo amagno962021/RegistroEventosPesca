@@ -395,6 +395,14 @@ sap.ui.define([
                 CDSPC: pescaDescargada.CDSPC,
                 
             }
+        },
+
+        MainObtenerReservasCombustible: async function(){
+
+        },
+
+        sObtenerReservas: async function(){
+            
         }
 
 

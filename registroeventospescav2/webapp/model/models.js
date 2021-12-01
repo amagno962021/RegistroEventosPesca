@@ -41,6 +41,9 @@ sap.ui.define([
                     FCMOD: "",
                     HRMOD: "",
                     ATMOD: "",
+                    CDTEV: "",
+                    DESC_CDTEV: "",
+                    FIEVN: "",
                     DESC_CDMMA: "",
                     TXTNOTIF: "",
                     TXTNOTIF1: "",
@@ -86,18 +89,42 @@ sap.ui.define([
 				},
                 Incidental: [],
                 Biometria: [],
-                ResCombustible: [],
-                Suministro:{
-                    NRRSV: "",
-                    MAKTX: "",
-                    NRPOS: "",
-                    CDALM: "",
-                    CNSUM: 0,
-                    DSALM: "",
-                    DSUMD: "",
-                    CDSUM: "",
-                    CDUMD: "",
-                    CDPTA: ""
+                ReservaCombustible: {
+                    Reserva1: {
+                        CDEMB: "",
+                        NMEMB: "",
+                        NRMAR: "",
+                        DESC_CDMMA: "",
+                        DESC_CDTEV: "",
+                        FHRSV: "",
+                        Sumistro: []
+                    },
+                    Reserva2: {
+
+                    },
+                    Reserva3: {
+
+                    },
+                    Suministro:{
+                        NRRSV: "",
+                        NMEMB: "",
+                        NRMAR: "",
+                        DESC_CDMMA: "",
+                        DESC_CDTEV: "",
+                        FHRSV: "",
+                        DESC_ESRSV: "",
+                        CDEMB: "",
+                        NMEMB: "",
+                        Lista: []
+                    }
+                },
+                Suministro: [],
+                ReservasCombustible: [],
+                ConfigReservas: {
+                    BWART: "",
+                    MATNR: "",
+                    WERKS: "",
+                    Almacenes: []
                 },
                 VentaCombustible: {},
                 DistribFlota: {
@@ -176,6 +203,10 @@ sap.ui.define([
                     visibleTabSepComb: true,
                     readOnlyFechIni: true,
                     readOnlyEstaMar: true,
+                    visibleReserva1: false,
+                    visibleReserva2: false,
+                    visibleReserva3: false,
+                    visibleBtnNuevaReserva: false,
 					datosCombo: {
                         Departamentos: [],
                         MotivosMarea: [],
@@ -216,6 +247,11 @@ sap.ui.define([
                     TextoConfirmacion: "",
                     VisibleEstCierre: false,
                     VisibleObsvComb: false
+                },
+                Constantes:{
+                    CodUbicSur: "",
+                    PorcCalRangComb: "",
+                    ValMaxFlujPanga: 250
                 }
 			};
 			var oModel = new JSONModel(initModel);

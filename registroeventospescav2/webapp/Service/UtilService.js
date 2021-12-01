@@ -217,6 +217,21 @@ sap.ui.define([
                 usuario: ""
             };
             return sBody;
+        },
+
+        getBodySuministro: function(){
+            var sBody = {
+                "material": "",
+                "usuario": ""
+            };
+            return sBody;
+        },
+
+        getBodyConfigRes: function(){
+            var sBody = {
+                "usuario": ""
+            };
+            return sBody;
         }
 
     }
