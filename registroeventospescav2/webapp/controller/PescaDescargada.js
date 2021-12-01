@@ -339,92 +339,94 @@ sap.ui.define([
             var DetalleMarea = this._controler._FormMarea;//modelo detalle de marea
             var eventoActual = this._controler._listaEventos[this._controler._elementAct];//modelo evento actual
             var PescaDescargada = eventoActual.ListaPescaDescargada[0]; //actual pesca descargada
-            var tipoDescarga = eventoActual.TipoDescarga;
+            var tipoDescarga = eventoActual.TipoDescarga;// VALOR SE LLENA EN NUEVO EVENTO
             var indPropPlanta = this._controler._indicadorPropXPlanta;
             var motMarea = this._controler._motivoMarea;;
             var centEmba = DetalleMarea.CenEmbarcacion;
             var atributos = ["CantPescaDescargada", "CantPescaDeclarada"];
             var mensaje = "";
-            if(indPropPlanta == "T"){
-                if(PescaDescargada.Especie == "0000000000"){
-                    mensaje = this.oBundle.getText("SELECCESPECIE");
-                    MessageBox.error(mensaje);
-                    bOk = false;
-                }
-                if(PescaDescargada.Indicador == "N"){
-                    PescaDescargada.NroDescarga = tipoDescarga + centEmba;
-                    //Refrescar modelo
-                    this._oView.getModel("eventos").updateBindings(true);
-                }
-                PescaDescargada.FechContabilizacion = eventoActual.FechProduccion;
-                PescaDescargada.Planta = eventoActual.Planta;
-            }else if(indPropPlanta == "P"){
-                if(motMarea == "1"){
-                    atributos = ["CantPescaDeclarada"];
-                }else{
-                    atributos = ["CantPescaDeclarada", "PuntDescarga", "FechContabilizacion"];
-                }
-                eventoActual.FechProduccion = PescaDescargada.FechContabilizacion;
-                eventoActual.CantTotalPescDecla = PescaDescargada.CantPescaDeclarada;
-                //refrescar modelo
-                this._oView.getModel("eventos").updateBindings(true);
-                if (PescaDescargada.NroDescarga) {
-                    mensaje = this.oBundle.getText("SELECCDESCARGA");
-                    MessageBox.error(mensaje);
-                    bOk = false;
-                }
-            }
-
-            if(atributos){
-                var actualPescaDescargada = PescaDescargada//actual pesca descargada
-                for (let index = 0; index < atributos.length; index++) {
-                    const element = atributos[index];
-                    var valor = actualPescaDescargada[element];
-                    if(!valor){
-                        bOk = false;
-                        mensaje = this.oBundle.getText("MISSINGFIELD", [element]);
-                        MessageBox.error(mensaje);
-                    }
-                    
-                }
-            }
-
-            if(bOk){
+            if(eventoActual.ListaPescaDescargada.length > 0){
                 if(indPropPlanta == "T"){
-                    PescaDescargada.CantPescaModificada = PescaDescargada.CantPescaDescargada;
+                    if(PescaDescargada.CDSPC == "0000000000"){
+                        mensaje = this.oBundle.getText("SELECCESPECIE");
+                        MessageBox.error(mensaje);
+                        bOk = false;
+                    }
+                    if(PescaDescargada.INDTR == "N"){
+                        PescaDescargada.Nro_descarga = tipoDescarga + centEmba;
+                        //Refrescar modelo
+                        this._oView.getModel("eventos").updateBindings(true);
+                    }
+                    PescaDescargada.FECCONMOV = eventoActual.FechProduccion;
+                    PescaDescargada.CDPTA = eventoActual.CDPTA;
+                }else if(indPropPlanta == "P"){
+                    if(motMarea == "1"){
+                        atributos = ["CantPescaDeclarada"];
+                    }else{
+                        atributos = ["CantPescaDeclarada", "PuntDescarga", "FechContabilizacion"];
+                    }
+                    eventoActual.FechProduccion = PescaDescargada.FECCONMOV;
+                    eventoActual.CantTotalPescDecla = PescaDescargada.CNPCM;
                     //refrescar modelo
                     this._oView.getModel("eventos").updateBindings(true);
+                    if (PescaDescargada.Nro_descarga) {
+                        mensaje = this.oBundle.getText("SELECCDESCARGA");
+                        MessageBox.error(mensaje);
+                        bOk = false;
+                    }
                 }
-                if(PescaDescargada.CantPescaModificada < 0){
-                    bOk = false;
-                    mensaje = this.oBundle.getText("CANTDESCARGANOCERO");
-                    MessageBox.error(mensaje);
+
+                if(atributos){
+                    var actualPescaDescargada = PescaDescargada//actual pesca descargada
+                    for (let index = 0; index < atributos.length; index++) {
+                        const element = atributos[index];
+                        var valor = actualPescaDescargada[element];
+                        if(!valor){
+                            bOk = false;
+                            mensaje = this.oBundle.getText("MISSINGFIELD", [element]);
+                            MessageBox.error(mensaje);
+                        }
+                        
+                    }
                 }
 
                 if(bOk){
-                    if(PescaDescargada.CantPescaDeclarada < 0){
+                    if(indPropPlanta == "T"){
+                        PescaDescargada.PESACUMOD = PescaDescargada.CNPDS;
+                        //refrescar modelo
+                        this._oView.getModel("eventos").updateBindings(true);
+                    }
+                    if(PescaDescargada.PESACUMOD < 0){
                         bOk = false;
-                        mensaje = this.oBundle.getText("CANTDECLDESCNOCERO");// no se encontro en el pool de mensajes CANTDECLDESCNOCERO
+                        mensaje = this.oBundle.getText("CANTDESCARGANOCERO");
                         MessageBox.error(mensaje);
                     }
 
                     if(bOk){
-                        bOk = this._controler.validarCantPescaDeclDesc(); //llamar a metodo validarCantPescaDeclDesc
-                        if(bOk && motMarea == "2" && indPropPlanta == "P"){
-                            if(PescaDescargada.CantPescaModificada != PescaDescargada.BckCantPescaModificada){
-                                if(PescaDescargada.CantPescaModificada > PescaDescargada.BckCantPescaModificada){
-                                    PescaDescargada.IndEjecucion = "R";
-                                }else{
-                                    bOk = false;
-                                    mensaje = this.oBundle.getText("ERRORCANTREINT");
-                                    MessageBox.error(mensaje);
+                        if(PescaDescargada.CNPCM < 0){
+                            bOk = false;
+                            mensaje = this.oBundle.getText("CANTDECLDESCNOCERO");// no se encontro en el pool de mensajes CANTDECLDESCNOCERO
+                            MessageBox.error(mensaje);
+                        }
+
+                        if(bOk){
+                            bOk = this._controler.validarCantPescaDeclDesc(); //llamar a metodo validarCantPescaDeclDesc
+                            if(bOk && motMarea == "2" && indPropPlanta == "P"){
+                                if(PescaDescargada.PESACUMOD != PescaDescargada.BckCantPescaModificada){
+                                    if(PescaDescargada.PESACUMOD > PescaDescargada.BckCantPescaModificada){
+                                        PescaDescargada.INDEJ = "R";
+                                    }else{
+                                        bOk = false;
+                                        mensaje = this.oBundle.getText("ERRORCANTREINT");
+                                        MessageBox.error(mensaje);
+                                    }
                                 }
                             }
                         }
                     }
+                }else{
+                    bOk = false;
                 }
-            }else{
-                bOk = false;
             }
             return bOk;
         },
@@ -690,7 +692,7 @@ sap.ui.define([
                         
                 }
                 ListaPescaDescElim[0].EsNuevo = true;
-                ListaPescaDescElim[0].Indicador = "N";
+                ListaPescaDescElim[0].INDTR = "N";
                 ListaPescaDescElim[0].CNPCM = textValidaciones.CantPescaDeclaRestante;
                 if (this._controler._motivoMarea == "1") {
 					ListaPescaDescElim[0].CDTPC = "D";
@@ -707,8 +709,8 @@ sap.ui.define([
                     this._oView.byId("pdt_col_BuscarDesc").setVisible(true);
                     this._oView.byId("pdt_col_EliminarDesc").setVisible(false);
 
-                        ListaPescaDescElim[0].Indicador = "E";
-						ListaPescaDescElim[0].IndEjecucion = "C";
+                        ListaPescaDescElim[0].INDTR = "E";
+						ListaPescaDescElim[0].INDEJ = "C";
 				}
 
                 this._oView.getModel("eventos").setProperty("/ListaPescaDescargada",ListaPescaDescElim);
@@ -785,7 +787,7 @@ sap.ui.define([
                     // wdContext.nodePreciosMareaEliminados().addElement(
                     //     precioMareaElim);
                 }
-                ListaPescaDescElim[0].Indicador = "N";
+                ListaPescaDescElim[0].INDTR = "N";
                 ListaPescaDescElim[0].EsNuevo = true;
                 ListaPescaDescElim[0].CNPCM = textValidaciones.CantPescaDeclaRestante;
                 if (this._controler._motivoMarea == "1") {
@@ -803,8 +805,8 @@ sap.ui.define([
                     this._oView.byId("pdt_col_BuscarDesc").setVisible(true);
                     this._oView.byId("pdt_col_EliminarDesc").setVisible(false);
 
-                        ListaPescaDescElim[0].Indicador = "E";
-						ListaPescaDescElim[0].IndEjecucion = "C";
+                        ListaPescaDescElim[0].INDTR = "E";
+						ListaPescaDescElim[0].INDEJ = "C";
 				}
 
                 this._oView.getModel("eventos").setProperty("/ListaPescaDescargada",ListaPescaDescElim);
