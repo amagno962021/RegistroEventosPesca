@@ -96,6 +96,7 @@ sap.ui.define([
                     element.Editado = true;
                     element.PorcPesca = porcPesca;
                     element.CantPesca = cantTotal * (porcPesca * 0.01);
+                    element.CNPCM = element.CantPesca;
                 }
             }
             this._oView.getModel("eventos").updateBindings(true);

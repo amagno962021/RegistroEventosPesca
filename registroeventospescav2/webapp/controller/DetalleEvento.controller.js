@@ -93,7 +93,7 @@ sap.ui.define([
             this._codPlanta = FormEvent_cont.Cabecera.CDPTA;
             this._embarcacion = FormEvent_cont.Cabecera.CDEMB;//"0000000012";
             this._indicadorProp = FormEvent_cont.Cabecera.INPRP;
-            this._soloLectura = false;//data de session solo lectura obtenida desde el principal
+            this._soloLectura = FormEvent_cont.DataSession.SoloLectura;//data de session solo lectura obtenida desde el principal
             this._EsperaMareaAnt = EsperaMareaAnt_cont;//[{ "id": "0" }, { "id": "1" }]; 
             this._listaEventos = ListaEventos_cont;
             this._FormMarea = FormEvent_cont.Cabecera;
@@ -104,7 +104,7 @@ sap.ui.define([
             this._IsRolRadOpe = true; //ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
             this._IsRolIngComb = false;//ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
             this._tipoPreservacion = ""; //viene de la consulta al servicio
-            this._opSistFrio = false; //VALOR DE UTILITARIO DE LA VISTA GLOBAL
+            this._opSistFrio = FormEvent_cont.Utils.OpSistFrio; //VALOR DE UTILITARIO DE LA VISTA GLOBAL
             this._listasServicioCargaIni;
             this._listaEventosBkup;
             this._listaMareaAnterior = MareaAnterior_cont;
@@ -475,8 +475,8 @@ sap.ui.define([
                 }
 
             }
-            cantTotalDecl = this.obtenerCantTotalPescaDecla(nroEventoTope, null);
-            cantTotalDeclDesc = this.obtenerCantTotalPescaDeclDesc(nroEventoTope, null);
+            cantTotalDecl = this.obtenerCantTotalPescaDecla(nroEventoTope, this);
+            cantTotalDeclDesc = this.obtenerCantTotalPescaDeclDesc(nroEventoTope, this);
             cantTotalDeclRest =  cantTotalDecl - cantTotalDeclDesc;
 
             if (this._listaEventos[this._elementAct].ListaPescaDescargada[0].CantPescaDeclarada ? true : false) {
@@ -591,7 +591,7 @@ sap.ui.define([
                 }
             }
 
-            //------------------------- seteo de visibilidad de elementos -----------------// --LOGICA DE CARLOS NO ENCONTRADA EN PORTAL
+            //------------------------- seteo de visibilidad de elementos -----------------// --LOGICA DE CARLOS ---NO ENCONTRADA EN PORTAL
             if (this._tipoEvento == textValidaciones.TIPOEVENTOARRIBOPUE) {
                 let cantidadItemSel =  Number(this._elementAct) + 1;
                 if(cantidadItemSel == this._listaEventos.length ){
@@ -1274,8 +1274,8 @@ sap.ui.define([
                     break;
                 }
             }
-            cantTotalDecl = this.obtenerCantTotalPescaDecla(nroEventoTope, null);
-            cantTotalDeclDesc =this.obtenerCantTotalPescaDeclDesc(nroEventoTope, null);
+            cantTotalDecl = this.obtenerCantTotalPescaDecla(nroEventoTope, this);
+            cantTotalDeclDesc =this.obtenerCantTotalPescaDeclDesc(nroEventoTope, this);
             if(cantTotalDecl > cantTotalDeclDesc){
                 var mensaje = this.oBundle.getText("PESCDECDESCMAYPESCDEC");
                 MessageBox.error(mensaje);

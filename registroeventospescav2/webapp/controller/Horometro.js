@@ -45,7 +45,6 @@ sap.ui.define([
         validarLecturaHorometros: function () {
             this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
             var bOk = true;
-            var eventoActual = {}; //nodo evento actual
             var horometroActual = this.ctr._listaEventos[this.ctr._elementAct].ListaHorometros;// nodo horometros de evento actual
             for (let index = 0; index < horometroActual.length; index++) {
                 const element = horometroActual[index];
@@ -66,7 +65,7 @@ sap.ui.define([
             var cantTotal = 0;
             for (let index = 0; index < bodegas.length; index++) {
                 const element = bodegas[index];
-                var cantPesca = element.CantPesca;
+                var cantPesca = Number(element.CantPesca);
                 if (cantPesca) {
                     cantTotal += cantPesca;
                 }
@@ -98,7 +97,7 @@ sap.ui.define([
         validarSiniestros: function () {
             var bOk = true;
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct];
-            var numeroSiniestros = eventoActual.Siniestros.length;
+            var numeroSiniestros = eventoActual.ListaSiniestros.length;
             if (numeroSiniestros < 1) {
                 bOk = false;
                 var mssg = this.oBundle.getText("NOEXISINIESTROS");
@@ -185,45 +184,48 @@ sap.ui.define([
             //refresh model
         },
 
-        validarHorometrosEvento: function () {
+        validarHorometrosEvento: async function () {
             this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
+            let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
             var bOk = true;
             var listaEventos = this.ctr._listaEventos; //modelo de lista de eventos
             var detalleMarea = this.ctr._FormMarea;//cargar modelo detalle marea
             var eventoActual = listaEventos[this.ctr._elementAct];//model ode evento
             var eventoCompar = null;
-            var tipoEvento = eventoActual.TipoEvento;
-            var motivoMarea = detalleMarea.MotMar;
-            var indActual = eventoActual.Posicion;
+            var tipoEvento = eventoActual.CDTEV;
+            var motivoMarea = detalleMarea.CDMMA;
+            var indActual = this.ctr._elementAct;
             var indCompar = -1;
-            var visible = {};
+            var visible = this.ctr.modeloVisible;
             var evenLimi = {
                 "1": ["5", "6"],
                 "5": ["1"],
                 "6": ["5", "6"]
             };
-            var evenLimites = evenLimi[tipoEvento];
-            for (let index = indActual - 1; index >= 0; index--) {
-                const element = array[index];
-                eventoCompar = listaEventos[index];
-                if (evenLimites.includes(eventoCompar.TipoEvento)) {
-                    indCompar = index;
-                    this.ctr.obtenerDetalleEvento();
-                    break;
+            let evenLimites = evenLimi[tipoEvento];
+            if(evenLimites ? true : false){
+                for (let index = indActual - 1; index >= 0; index--) {
+                    eventoCompar = listaEventos[index];
+                    if (evenLimites.includes(eventoCompar.CDTEV)) {
+                        indCompar = index;
+                        this.ctr.obtenerDetalleEvento();
+                        break;
+                    }
                 }
             }
+            
 
-            if (eventoActual.FechIni == null || eventoActual.HoraIni == null) {
+            if (eventoActual.FIEVN == null || eventoActual.HIEVN == null) {
                 bOk = false;
             }
 
-            var capaTanBarca = this.getCapaTanEmba(detalleMarea.Embarcacion);
-            var LectUltHoro = this.obtenerLectUltHoro();
-            if (indCompar > -1 && eventoActual.FechIni != null && eventoCompar.FechIni != null) {
+            var capaTanBarca = this.getCapaTanEmba(detalleMarea.CDEMB);
+            var LectUltHoro = await this.obtenerLectUltHoro();
+            if (indCompar > -1 && eventoActual.FIEVN != null && eventoCompar.FIEVN != null) {
                 var nodoHoroActual = eventoActual.ListaHorometros;
                 var nodoHoroCompar = eventoCompar.ListaHorometros;
-                var fechIniEveAct = eventoActual.FechIni; //dd/MM/yyyy
-                var horaIniEveAct = eventoActual.HoraIni; // hh:mm formato 24h
+                var fechIniEveAct = eventoActual.FIEVN; //dd/MM/yyyy
+                var horaIniEveAct = eventoActual.HIEVN; // hh:mm formato 24h
                 var dateIniEveAct = null;
                 if (fechIniEveAct && horaIniEveAct) {
                     var anio = fechIniEveAct.split("/")[2];
@@ -233,8 +235,8 @@ sap.ui.define([
                     var minutos = horaIniEveAct.split(":")[1];
                     dateIniEveAct = new Date(anio, mes, dia, hora, minutos);
                 }
-                var fechIniEveComp = eventoCompar.FechIni; //dd/MM/yyyy
-                var horaIniEveComp = eventoCompar.HoraIni; // hh:mm formato 24h
+                var fechIniEveComp = eventoCompar.FIEVN; //dd/MM/yyyy
+                var horaIniEveComp = eventoCompar.HIEVN; // hh:mm formato 24h
                 var dateIniEveComp = null;
                 if (fechIniEveComp && horaIniEveComp) {
                     var anio = fechIniEveComp.split("/")[2];
@@ -284,11 +286,11 @@ sap.ui.define([
                     }
                 }
             } else if (LectUltHoro) {
-                var eventoCLH = detalleMarea.MareaCLH.EventoCLH;
+                var eventoCLH = mod.getProperty("/MareaCLH/EventoCLH");
                 var nodoHoroActual = eventoActual.ListaHorometros;
                 var nodoHoroCompar = eventoCLH.HorometrosCLH;
-                var fechIniEveAct = eventoActual.FechIni; //dd/MM/yyyy
-                var horaIniEveAct = eventoActual.HoraIni; // hh:mm formato 24h
+                var fechIniEveAct = eventoActual.FIEVN; //dd/MM/yyyy
+                var horaIniEveAct = eventoActual.HIEVN; // hh:mm formato 24h
                 var dateIniEveAct = null;
                 if (fechIniEveAct && horaIniEveAct) {
                     var anio = fechIniEveAct.split("/")[2];
@@ -298,8 +300,8 @@ sap.ui.define([
                     var minutos = horaIniEveAct.split(":")[1];
                     dateIniEveAct = new Date(anio, mes, dia, hora, minutos);
                 }
-                var fechIniEveComp = eventoCompar.FechIni; //dd/MM/yyyy
-                var horaIniEveComp = eventoCompar.HoraIni; // hh:mm formato 24h
+                var fechIniEveComp = eventoCLH.FIEVN; //dd/MM/yyyy
+                var horaIniEveComp = eventoCLH.HIEVN; // hh:mm formato 24h
                 var dateIniEveComp = null;
                 if (fechIniEveComp && horaIniEveComp) {
                     var anio = fechIniEveComp.split("/")[2];

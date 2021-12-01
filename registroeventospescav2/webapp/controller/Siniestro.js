@@ -2,12 +2,14 @@ sap.ui.define([
 	"sap/ui/base/ManagedObject",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageToast",
-	"sap/ui/integration/library"
+	"sap/ui/integration/library",
+    "sap/m/MessageBox"
 ], function(
 	ManagedObject,
     JSONModel,
     MessageToast,
-    integrationLibrary
+    integrationLibrary,
+    MessageBox
 ) {
 	"use strict";
 
@@ -39,7 +41,7 @@ sap.ui.define([
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //nodo evento actual
             var siniestros = eventoActual.ListaSiniestros;
             if(siniestros.length < 1){
-                var mssg = this.oBundle.getText("NOEXISINIESTROS");
+                var mssg = this.ctr.oBundle.getText("NOEXISINIESTROS");
                 MessageBox.error(mssg);
                 bOk = false;
             }

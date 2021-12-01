@@ -544,7 +544,8 @@ sap.ui.define([
             var uri = UtilService.getHostService() + "/api/General/ConsultaGeneral/";
             var sBody = UtilService.getConsultaGeneral();
             sBody.nombreConsulta = "CONSGENVERIFTEMP";
-            sBody.parametro1 = "|";
+            sBody.parametro1 = codTemp;
+            sBody.parametro2 = fecha;
             sBody.p_user = "Fgarcia";
             var data = await this.http(uri).post(null, sBody).then(function (response) {
                 var data = JSON.parse(response);

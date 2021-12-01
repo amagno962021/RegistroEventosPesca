@@ -37,7 +37,7 @@ sap.ui.define([
             }
             this._bInit = false;
             this.ctr = o_this;
-            this.previousTab = "General";
+            //this.previousTab = "General";
             this.nextTab = "";
             console.log(textValidaciones.eventAttTabGeneral);
 
@@ -111,8 +111,9 @@ sap.ui.define([
         validarCamposGeneral: function(bool){
             var bOk = false;
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //nodo evento actual
+            let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
             //var detalleMarea = {};//modelo detalle marea
-            var Utils = {};//modelo Utils
+            var Utils = mod.getProperty("/Utils");;//modelo Utils
             var visible = this.ctr.modeloVisible;//modelo visible
             //var eventAttTabGeneral = {};//modelo con los atributos de los tab por tipo de evento
             var motivoMarea = this.ctr._motivoMarea;
@@ -122,7 +123,7 @@ sap.ui.define([
             var eveCampGeneVal = ["1", "5", "6", "H", "T"]; //Tipos de evento con campos generales distintos a validar 
             if(indPropiedad == "P"){
                 if(Utils.OpSistFrio && parseInt(tipoEvento) < 6){
-                    if(eventoActual.SistemaFrio){
+                    if(eventoActual.ESTSF != ""){
                         var mssg = this.oBundle.getText("MISSINGSISTFRIO");
                         MessageBox.error(mssg);
                         bOk = false;
@@ -136,7 +137,6 @@ sap.ui.define([
                     bOk =  this.validarLatitudLongitud();
                 }
             } else {
-                var estOperacion = eventoActual.EstaOperacion;
                 var eventosValidar = textValidaciones.eventAttTabGeneral[Number(tipoEvento)];
                 if(tipoEvento == "1"){
                     this.ctr.modeloVisible.VisibleDescarga = true;
@@ -203,9 +203,9 @@ sap.ui.define([
             }
 
             if(bOk){
-                eventoActual.FechHoraIni = eventoActual.FechIni + " " + eventoActual.HoraIni;
+                eventoActual.FechHoraIni = eventoActual.FIEVN + " " + eventoActual.HIEVN;
                 if(this.ctr.modeloVisible.FechFin){
-                    eventoActual.FechHoraFin = eventoActual.FechFin + " " + eventoActual.HoraFin;
+                    eventoActual.FechHoraFin = eventoActual.FFEVN + " " + eventoActual.HFEVN;
                 }
             }
             this.ctr.modeloVisibleModel.refresh();
@@ -252,7 +252,7 @@ sap.ui.define([
                     eventoActual.ObteEspePermitidas = true;
                 }
                 eventoActual.BackLatitud = sLatitud;
-                eventoActual.BckLongitud = Longitud;
+                eventoActual.BckLongitud = sLongitud;
             }
             return bOk;
         },
@@ -291,8 +291,11 @@ sap.ui.define([
             return bOk;
         },
 
-        onActionSelectTab: function(tab_seleccionado){
+        onActionSelectTab: async function(tab_seleccionado){
             this.nextTab = tab_seleccionado;
+            if(this.previousTab == undefined){
+                this.previousTab = "General";
+            }
             var visible = this.ctr.modeloVisible;//modelo visible
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //nodo evento actual
             var motivoEnCalend = ["1", "2", "8"]; // Motivos de marea con registros en calendario
@@ -300,9 +303,9 @@ sap.ui.define([
             if(!this.ctr._soloLectura){
                 visible.LinkRemover = false;
                 visible.LinkDescartar = false;
-                var tipoEvento = eventoActual.TipoEvento;
-                var motivoMarea = detalleMarea.MotMar;
-                var fechEvento = new Date(eventoActual.FechIni);
+                var tipoEvento = eventoActual.CDTEV;
+                var motivoMarea = detalleMarea.CDMMA;
+                var fechEvento = new Date(eventoActual.FIEVN);
                 if(this.previousTab == "General"){
                     var validarStockCombustible = this.validarStockCombustible();
                     if(!this.validarCamposGeneral(true)){
@@ -325,11 +328,11 @@ sap.ui.define([
                         var bOk = true;
                         this.ctr.Dat_Horometro.calcularCantTotalBodegaEve();
                         var validarBodegas = this.ctr.Dat_PescaDescargada.validarBodegaPesca(true);
-                        if(bOk && this.previousTab == "General" && this.nextTab == "PescaDeclarada" && !validarBodegas){
+                        if(bOk && this.previousTab == "General" && this.nextTab == "Pesca declarada" && !validarBodegas){
                             this.nextTab = "Distribucion";
                         }
 
-                        if(this.previousTab == "Distribucion" && this.nextTab == "PescaDeclarada" && !validarBodegas){
+                        if(this.previousTab == "Distribucion" && this.nextTab == "Pesca declarada" && !validarBodegas){
                             this.nextTab = this.previousTab;
                         }
 
@@ -348,9 +351,9 @@ sap.ui.define([
 
                     if((this.nextTab == "PescaDeclarada" && eventoActual.ObteEspePermitidas) || 
                         (this.nextTab == "Biometria" && eventoActual.ObteEspePermitidas)){
-                            this.obtenerTemporadas(motivoMarea, eventoActual.FechIni);
-                            this.obtenerTemporadas("8", eventoActual.FechIni);
-                            this.consultarPermisoPesca(eventoActual.Embarcacion, motivoMarea);
+                            this.obtenerTemporadas(motivoMarea, eventoActual.FIEVN);
+                            this.obtenerTemporadas("8", eventoActual.FIEVN);
+                            await this.consultarPermisoPesca(eventoActual.Embarcacion, motivoMarea);
                             this.obtenerEspeciesPermitidas();//obtenerEspeciesPermitidas - falta metodo
                     }
                 }
@@ -362,7 +365,7 @@ sap.ui.define([
                 }
 
                 var validarLecturaHorometros = this.ctr.Dat_Horometro.validarLecturaHorometros();
-                var validarHorometrosEvento = this.ctr.Dat_Horometro.validarHorometrosEvento();
+                var validarHorometrosEvento = await this.ctr.Dat_Horometro.validarHorometrosEvento();
                 if(this.previousTab == "Horometro" && (!validarLecturaHorometros || !validarHorometrosEvento)){
                     this.nextTab = this.previousTab;
                 }
@@ -371,17 +374,16 @@ sap.ui.define([
                     this.prepararInputsDescargas();
                 }
 
-                var validarPescaDescargada = PescaDescargada.validarPescaDescargada();
-                if(this.previousTab == "PescaDescargada" && !validarPescaDescargada){
+                if(this.previousTab == "PescaDescargada" && !this.ctr.Dat_PescaDescargada.validarPescaDescargada()){
                     this.nextTab = this.previousTab;
                 }
 
-                var valSiniestro = Siniestro.validarSiniestros();
-                if(this.previousTab == "Siniestro" && !valSiniestro){
+                if(this.previousTab == "Siniestro" && !this.ctr.Dat_Siniestro.validarSiniestros()){
                     this.nextTab = this.previousTab;
                 }
 
             }
+            this.previousTab = tab_seleccionado;
             this.ctr.modeloVisibleModel.refresh();
             this._oView.getModel("eventos").updateBindings(true);
             //refrescar modelos
@@ -392,12 +394,12 @@ sap.ui.define([
             var DetalleMarea =  this.ctr._FormMarea;// modelo detalle marea
             var ListaEventos = this.ctr._listaEventos; // mapear modelo de lista de eventos
             var eventosElement = ListaEventos[indActual - 1];
-            var fechaIni = eventosElement.FechIni;
-            var horaIni = eventosElement.HoraIni;
+            var fechaIni = eventosElement.FIEVN;
+            var horaIni = eventosElement.HIEVN;
             var eveVisFechaFin = ["3", "6", "7"];
-            var motMarea = DetalleMarea.MotMarea;
+            var motMarea = DetalleMarea.CDMMA;
             var inputsDescarga = {};// mapear modelo de inputs descarga
-            if(eveVisFechaFin.includes(eventosElement.TipoEvento)){
+            if(eveVisFechaFin.includes(eventosElement.CDTEV)){
                 fechaIni = eventosElement.FechFin;
                 horaIni = eventosElement.HoraFin;
             }
@@ -428,8 +430,9 @@ sap.ui.define([
             //refresh model
         },
 
-        verificarTemporada: function(motivo, fecha){
+        verificarTemporada: async function(motivo, fecha){
             //desarrollar servicio verificar temporada
+            let bok = false;
             var codTemp = "";
             if(motivo == "1"){
                 codTemp = "D";
@@ -441,19 +444,26 @@ sap.ui.define([
                 }
             }
 
-            TasaBackendService.verificarTemporada(codTemp, fecha).then(function(response){
-                //obtener repsonse
-                return true
+            await TasaBackendService.verificarTemporada(codTemp, fecha).then(function(response){
+                //ob
+                console.log(response.data);
+                if(response.data != null && response.data.length > 0){
+                    bok = true;
+                }else{
+                    let mssg = this.ctr.oBundle.getText("NOTEMPCH" + codTemp);
+                    MessageBox.error(mssg);
+                    bOk = false;
+                }
             }).catch(function(error){
                 console.log("ERROR: General.verificarTemporada - ", error );
             });
 
-            return false;
+            return bok;
 
         },
 
-        consultarPermisoPesca: function(cdemb, motivo){
-            var detalleMarea = this._controler._FormMarea;//modelo detalle marea
+        consultarPermisoPesca: async function(cdemb, motivo){
+            var detalleMarea = this.ctr._FormMarea;//modelo detalle marea
             var codTemp = "";
             if(motivo == "1"){
                 codTemp = "D";
@@ -465,9 +475,9 @@ sap.ui.define([
                 }
             }
 
-            TasaBackendService.obtenerEspeciesPermitidas(cdemb, codTemp).then(function(response){
+            await TasaBackendService.obtenerEspeciesPermitidas(cdemb, codTemp).then(function(response){
                 //obtener repsonse
-                //detalleMarea.EspPermitida = repsonse;
+                detalleMarea.EspPermitida = response;
             }).catch(function(error){
                 console.log("ERROR: General.consultarPermisoPesca - ", error );
             });

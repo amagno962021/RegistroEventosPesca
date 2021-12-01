@@ -246,7 +246,8 @@ sap.ui.define([
                     BtnEnabled: false,
                     TextoConfirmacion: "",
                     VisibleEstCierre: false,
-                    VisibleObsvComb: false
+                    VisibleObsvComb: false,
+                    OpSistFrio : false
                 },
                 Constantes:{
                     CodUbicSur: "",

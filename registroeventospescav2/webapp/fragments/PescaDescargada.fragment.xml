@@ -188,13 +188,13 @@
 					<Column  width="9rem" filterProperty="Available">
 						<m:Label text="Cant. descargada" />
 						<template>
-							<m:Input value="{eventos>CNPDS}" type="Number" showValueHelp="false" enabled="{eventos>/enabledCantPescDescargada}" visible="true" />
+							<m:Input value="{eventos>PESACUMOD}" type="Number" showValueHelp="false" enabled="{eventos>/enabledCantPescDescargada}" visible="true" />
 						</template>
 					</Column>
 					<Column id="price3" width="9rem" filterProperty="Price" visible="false">
 						<m:Label text="Cant. pesca" />
 						<template>
-							<m:Text text="{eventos>CNPDS}" target="_blank" />
+							<m:Text text="{eventos>PESACUMOD}" target="_blank" />
 						</template>
 					</Column>
 					<Column width="10rem" hAlign="End" filterProperty="Quantity">
