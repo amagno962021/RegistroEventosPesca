@@ -217,7 +217,22 @@ sap.ui.define([
                     VisibleEstCierre: false,
                     VisibleObsvComb: false,
                     OpSistFrio : false
-                }
+                },
+                InputsDescargas :{
+                    CentPlanta : "",
+                    DescEmbarcacion : "",
+                    DescPlanta : "",
+                    Embarcacion : "",
+                    Estado : "",
+                    FechInicio : "",
+                    HoraInicio : "",
+                    Matricula : "",
+                    Planta : "",
+                    TipoPesca : ""
+                },
+                calendarioPescaCHD :[],
+                calendarioPescaCHI :[],
+                calendarioPescaVED :[]
 			};
 			var oModel = new JSONModel(initModel);
 			//oModel.setDefaultBindingMode("OneWay");
