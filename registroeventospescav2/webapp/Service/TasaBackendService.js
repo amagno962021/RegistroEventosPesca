@@ -835,13 +835,41 @@ sap.ui.define([
         },
 
         crearActualizarMarea: async function(sBody){
-            console.log("Guardar Marea: ", sBody);
             var uri = UtilService.getHostService() + "/api/embarcacion/CrearMarea/";
             var data = await this.http(uri).post(null, sBody).then(function (response) {
                 var data = JSON.parse(response);
                 return data;
             }).catch(function(error){
                 console.log("ERROR: TasaBackendService.crearActualizarMarea: ", error);
+                return null;
+            });
+            return data;
+        },
+
+        obtenerConfigReservas: async function(usuario){
+            var uri = UtilService.getHostService() + "/api/embarcacion/ObtenerConfigReservas/";
+            var sBody = UtilService.getBodyConfigRes();
+            sBody.usuario = usuario;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerConfigReservas: ", error);
+                return null;
+            });
+            return data;
+        },
+
+        obtenerSuministro: async function(usuario, material){
+            var uri = UtilService.getHostService() + "/api/embarcacion/ObtenerSuministro/";
+            var sBody = UtilService.getBodySuministro();
+            sBody.material = material;
+            sBody.usuario = usuario;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerSuministro: ", error);
                 return null;
             });
             return data;

@@ -446,7 +446,7 @@ sap.ui.define([
                 var incidental = data.str_pscinc;
                 var biometria = data.str_flbsp;
                 var motivoResCombu = ["1", "2", "4", "5", "6", "7", "8"];
-
+                console.log("Marea: ", marea);
                 modeloDetalleMarea.setProperty("/Cabecera/INDICADOR", "E");
                 //setear cabecera de formulario
                 //var cabecera = dataDetalleMarea.Cabecera;
@@ -496,8 +496,10 @@ sap.ui.define([
                 //dataDetalleMarea.Biometria = biometria;
                 modeloDetalleMarea.setProperty("/Biometria", biometria);
 
+                modeloDetalleMarea.setProperty("/Config/visibleTabReserva", false);
+                modeloDetalleMarea.setProperty("/Config/visibleTabVenta", false);
                 var inprp = modeloDetalleMarea.getProperty("/Cabecera/INPRP");
-                var motivo = modeloDetalleMarea.getProperty("/Cabecera/CDMMA");;
+                var motivo = modeloDetalleMarea.getProperty("/Cabecera/CDMMA");
                 if (inprp == "P" && motivoResCombu.includes(motivo)) {
                     await this.obtenerReservasCombustible(marea, codigo);
                 }
@@ -532,7 +534,10 @@ sap.ui.define([
                 var usuario = this.getCurrentUser();
                 var response = await TasaBackendService.obtenerNroReserva(marea, usuario);
                 var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
-
+                var eventos = modelo.getProperty("/Eventos/Lista");
+                modelo.setProperty("/Config/visibleReserva1", false);
+                modelo.setProperty("/Config/visibleReserva2", false);
+                modelo.setProperty("/Config/visibleReserva3", false);
                 if (response) {
                     if (response.data) {
                         mostrarTab = true;
@@ -561,11 +566,67 @@ sap.ui.define([
                         var reservas = response.t_reservas;
                         modelo.setProperty("/ResCombustible", reservas);
                         if (!mareaCerrada) {
-                            //mostrar formulario externo
-
+                            var configReservas = await TasaBackendService.obtenerConfigReservas(usuario);
+                            if(configReservas){
+                                modelo.setProperty("/ConfigReservas/BWART", configReservas.bwart);
+                                modelo.setProperty("/ConfigReservas/MATNR", configReservas.matnr);
+                                modelo.setProperty("/ConfigReservas/WERKS", configReservas.werks);
+                                modelo.setProperty("/ConfigReservas/Almacenes", configReservas.almacenes);
+                            }
+                            if(reservas.length != 0){
+                                modelo.setProperty("/Config/visibleReserva2", true);
+                                if(visibleNuevo){
+                                    modelo.setProperty("/Config/visibleBtnNuevaReserva", true);
+                                }else{
+                                    modelo.setProperty("/Config/visibleBtnNuevaReserva", false);
+                                }
+                                for (let index = 0; index < reservas.length; index++) {
+                                    const element = reservas[index];
+                                    element.CHKDE = false;
+                                }
+                                modelo.setProperty("/ReservasCombustible", reservas);
+                            }else{
+                                modelo.setProperty("/Config/visibleReserva1", true);
+                                var ultimoEvento = eventos.length > 0 ? eventos[eventos.length - 1] : null;
+                                var descEvento = ultimoEvento ? ultimoEvento.DESC_CDTEV : "";
+                                var fechIniEve = ultimoEvento ? ultimoEvento.FIEVN : "";
+                                modelo.setProperty("/Cabecera/DESC_CDTEV", descEvento);
+                                modelo.setProperty("/Cabecera/FIEVN", fechIniEve);
+                                var planta = ultimoEvento ? ultimoEvento.CDPTA : "";
+                                var descr = ultimoEvento ? ultimoEvento.DESCR : "";
+                                var centro = modelo.getProperty("/ConfigReservas/WERKS");
+                                var material = modelo.getProperty("/ConfigReservas/MATNR");
+                                var data = await TasaBackendService.obtenerSuministro(usuario, material);
+                                if(data){
+                                    var suministro = data.data;
+                                    var dsalm = "";
+                                    var cdale = "";
+                                    var almacenes = modelo.getProperty("/ConfigReservas/Almacenes");
+                                    for (let index = 0; index < almacenes.length; index++) {
+                                        const element = almacenes[index];
+                                        if(element.DSALM == descr){
+                                            dsalm = element.DSALM;
+                                            cdale = element.CDALE;
+                                        }
+                                    }
+                                    var listaSuministro = [{
+                                        NRPOS: "001",
+                                        CDSUM: suministro.CDSUM,
+                                        MAKTX: suministro.MAKTX,
+                                        CDUMD: suministro.CDUMD,
+                                        DSUMD: suministro.DSUMD,
+                                        CDPTA: planta,
+                                        DESCR: descr,
+                                        WERKS: centro,
+                                        DSALM: dsalm,
+                                        CDALE: cdale
+                                    }];
+                                    modelo.setProperty("/Suministro", listaSuministro);
+                                }
+                            }
                         } else {
-                            //mostrar tabla interna
-
+                            modelo.setProperty("/ReservasCombustible", reservas);
+                            modelo.setProperty("/Config/visibleReserva3", true);
                         }
                     }
                 }
@@ -673,6 +734,7 @@ sap.ui.define([
                 var data = this.getView().getModel("ComboModel").oData.Embarcaciones[indices].CDEMB;
                 sap.ui.getCore().byId("txtEmba").setValue(data);
                 this.onCerrarEmba();*/
+
             },
 
             clearFilterEmba: function () {
