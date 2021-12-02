@@ -101,30 +101,39 @@ sap.ui.define([
             var cantTotBod = eventoActual.CantTotalPescDecla;
             if ((cantTotBod > 1 && cantPesca == 0) || (cantTotBod == 0 && cantPesca > 0)) {
                 if (cantPesca > 0) {
-                    if (!this.oApproveDialog) {
-                        this.oApproveDialog = new Dialog({
-                            type: DialogType.Message,
-                            title: "Confirm",
-                            content: new Text({ text: "Do you want to submit this order?" }),
-                            beginButton: new Button({
-                                type: ButtonType.Emphasized,
-                                text: "Submit",
-                                press: function () {
-                                    this.eliminarPescaDeclarada();
-                                    MessageToast.show("Submit pressed!");
-                                    this.oApproveDialog.close();
-                                }.bind(this)
-                            }),
-                            endButton: new Button({
-                                text: "Cancel",
-                                press: function () {
-                                    this.oApproveDialog.close();
-                                }.bind(this)
-                            })
-                        });
+                    let that = this;
+                    MessageBox.confirm("Las bodegas están vacías y existe pesca declarada, ¿Desea eliminar la pesca declarada?", {
+                    title: "Eliminar pesca descargada",
+                    onclose: function(sOk){
+                        if(sOk == "Ok"){
+                            that.eliminarPescaDeclarada();
+                        }
+
                     }
 
-                    this.oApproveDialog.open();
+                })
+                    // if (!this.oApproveDialog) {
+                    //     this.oApproveDialog = new Dialog({
+                    //         type: DialogType.Message,
+                    //         title: "Confirm",
+                    //         content: new Text({ text: "Do you want to submit this order?" }),
+                    //         beginButton: new Button({
+                    //             type: ButtonType.Emphasized,
+                    //             text: "Submit",
+                    //             press: function () {
+                    //                 this.eliminarPescaDeclarada();
+                    //                 MessageToast.show("Submit pressed!");
+                    //                 this.oApproveDialog.close();
+                    //             }.bind(this)
+                    //         }),
+                    //         endButton: new Button({
+                    //             text: "Cancel",
+                    //             press: function () {
+                    //                 this.oApproveDialog.close();
+                    //             }.bind(this)
+                    //         })
+                    //     });
+                    // }
                 } else {
                     mensaje = this.oBundle.getText("BODDECPESCANODEC");
                     MessageBox.error(mensaje);

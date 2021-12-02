@@ -76,9 +76,9 @@ sap.ui.define([
             console.log("FormEvent_cont: ", FormEvent_cont);
 
             /********* Carga de variables globales **********/
-            this.calendarioPescaCHD = [];
-            this.calendarioPescaCHI = [];
-            this.calendarioPescaVED = [];
+            this.calendarioPescaCHD = dataDetalleMarea.calendarioPescaCHD;
+            this.calendarioPescaCHI = dataDetalleMarea.calendarioPescaCHI;
+            this.calendarioPescaVED = dataDetalleMarea.calendarioPescaVED;
             this._listaIncidental = dataDetalleMarea.Incidental;
             this._elementAct = modeloDetalleMarea.getProperty("/Eventos/LeadSelEvento");//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
             this._utilNroEventoBio = "001";
@@ -959,22 +959,22 @@ sap.ui.define([
             for (var j = 0; j < listaEventos.length; j++) {
                 //if (this._tipoEvento == textValidaciones.TIPOEVENTOCALA)
                 if (listaEventos[j].CDTEV == "3") {
-                    var pescDecla = listaEventos[j].CNPDC;
+                    var pescDecla = listaEventos[j].CantTotalPescDecla;
                     if(pescDecla && !isNaN(pescDecla)){
                         cantTotal += pescDecla;
                     }else{
                         cantTotal += 0;
                     }
 
-                    /*if (listaEventos[j].NREVN == this._nroEvento) {
-                        if (listaEventos[j].CantTotalPescDecla != null) {
-                            cantTotal = cantTotal + Number[listaEventos[j].CantTotalPescDecla];
-                        }
-                    } else {
-                        this.obtenerDetalleEvento();
+                    // if (listaEventos[j].NREVN == this._nroEvento) {
+                    //     if (listaEventos[j].CantTotalPescDecla != null) {
+                    //         cantTotal = cantTotal + Number[listaEventos[j].CantTotalPescDecla];
+                    //     }
+                    // } else {
+                    //     this.obtenerDetalleEvento();
 
-                        cantTotal = cantTotal + Number[listaEventos[j].CantTotalPescDecla];
-                    }*/
+                    //     cantTotal = cantTotal + Number[listaEventos[j].CantTotalPescDecla];
+                    // }
                 }
                 if (listaEventos[j].NREVN == nroEventoTope) {
                     break;
@@ -995,7 +995,7 @@ sap.ui.define([
                         this.getView().byId("FechaEnvaseIni").setVisible(false);
                         this.getView().byId("FechaEnvaseFin").setVisible(false);
                     }
-                    var pescDesc = listaEventos[j].CNPDS;
+                    var pescDesc = listaEventos[j].CantPescaDeclarada;
                     if(pescDesc && !isNaN(pescDesc)){
                         cantTotal += pescDesc;
                     }else{
@@ -1357,6 +1357,12 @@ sap.ui.define([
             }
             return false;
 
+        },
+        distribuirDatosDescarga :function () {
+            
+        },
+        distribuirDatosDescargaCHD : function(){
+            
         },
         //-----------------------------
 

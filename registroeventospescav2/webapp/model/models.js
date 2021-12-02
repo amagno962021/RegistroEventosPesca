@@ -264,7 +264,7 @@ sap.ui.define([
                 calendarioPescaCHD :[],
                 calendarioPescaCHI :[],
                 calendarioPescaVED :[],
-                Constantes:{//pendiente de llenar con servicio
+                Constantes:{
                     CodUbicSur: "",
                     PorcCalRangComb: "",
                     ValMaxFlujPanga: 250

@@ -284,10 +284,19 @@ sap.ui.define([
             var longCala = longCalaD*100 + longCalaM;
             TasaBackendService.obtenerMillasLitoral(latiCalaD, latiCalaM).then(function(response){
                 //no hay registro en la tabla de SAP S/4 QAS
+                if(response.data.length > 0){
+
+                }else{
+                    eventoActual.ValiCoordCala = false;
+                    let mssg = this.oBundle.getText("NODATACOORDCOSTA");
+                    MessageBox.error(mssg)
+                }
                 
             }).catch(function(error){
                 console.log("ERROR: General.validarMillasLitoral - ", error);
+                eventoActual.ValiCoordCala = false;
             });
+            this._oView.getModel("eventos").updateBindings(true);
             return bOk;
         },
 
@@ -327,7 +336,7 @@ sap.ui.define([
                     if(motivoMarea == "1"){
                         var bOk = true;
                         this.ctr.Dat_Horometro.calcularCantTotalBodegaEve();
-                        var validarBodegas = this.ctr.Dat_PescaDescargada.validarBodegaPesca(true);
+                        var validarBodegas = this.ctr.Dat_PescaDescargada.validarBodegas(true);
                         if(bOk && this.previousTab == "General" && this.nextTab == "Pesca declarada" && !validarBodegas){
                             this.nextTab = "Distribucion";
                         }
@@ -351,8 +360,8 @@ sap.ui.define([
 
                     if((this.nextTab == "PescaDeclarada" && eventoActual.ObteEspePermitidas) || 
                         (this.nextTab == "Biometria" && eventoActual.ObteEspePermitidas)){
-                            this.obtenerTemporadas(motivoMarea, eventoActual.FIEVN);
-                            this.obtenerTemporadas("8", eventoActual.FIEVN);
+                            await this.obtenerTemporadas(motivoMarea, eventoActual.FIEVN);
+                            await this.obtenerTemporadas("8", eventoActual.FIEVN);
                             await this.consultarPermisoPesca(eventoActual.Embarcacion, motivoMarea);
                             this.obtenerEspeciesPermitidas();//obtenerEspeciesPermitidas - falta metodo
                     }
@@ -390,7 +399,8 @@ sap.ui.define([
         },
 
         prepararInputsDescargas: function(){
-            var indActual = 0;//indicie actual de la lista de eventos
+            let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
+            var indActual = this.ctr._elementAct;//indicie actual de la lista de eventos
             var DetalleMarea =  this.ctr._FormMarea;// modelo detalle marea
             var ListaEventos = this.ctr._listaEventos; // mapear modelo de lista de eventos
             var eventosElement = ListaEventos[indActual - 1];
@@ -398,33 +408,32 @@ sap.ui.define([
             var horaIni = eventosElement.HIEVN;
             var eveVisFechaFin = ["3", "6", "7"];
             var motMarea = DetalleMarea.CDMMA;
-            var inputsDescarga = {};// mapear modelo de inputs descarga
             if(eveVisFechaFin.includes(eventosElement.CDTEV)){
-                fechaIni = eventosElement.FechFin;
-                horaIni = eventosElement.HoraFin;
+                fechaIni = eventosElement.FIEVN;
+                horaIni = eventosElement.HIEVN;
             }
             if(motMarea == "1"){
-                inputsDescarga.Planta = eventosElement.Planta;
-                inputsDescarga.Matricula = DetalleMarea.Matricula;
-                inputsDescarga.CentPlanta ="FP12";
-			    inputsDescarga.DescPlanta = "TASA CHD";
-			    inputsDescarga.Embarcacion = DetalleMarea.Embarcacion;
-			    inputsDescarga.DescEmbarcacion = DetalleMarea.DescEmbarcacion;
-			    inputsDescarga.FechInicio = fechaIni;
-			    inputsDescarga.HoraInicio = horaIni;
-			    inputsDescarga.Estado = "N";
-			    inputsDescarga.TipoPesca = "D";
+                mod.setProperty("/InputsDescargas/Planta",eventosElement.CDPTA);
+                mod.setProperty("/InputsDescargas/Matricula",DetalleMarea.MREMB);
+                mod.setProperty("/InputsDescargas/CentPlanta","FP12");
+                mod.setProperty("/InputsDescargas/DescPlanta","TASA CHD");
+                mod.setProperty("/InputsDescargas/Embarcacion",DetalleMarea.CDEMB);
+                mod.setProperty("/InputsDescargas/DescEmbarcacion",DetalleMarea.NMEMB);
+                mod.setProperty("/InputsDescargas/FechInicio",fechaIni);
+                mod.setProperty("/InputsDescargas/HoraInicio",horaIni);
+                mod.setProperty("/InputsDescargas/Estado","N");
+                mod.setProperty("/InputsDescargas/TipoPesca","D");
             }else if(motMarea == "2"){
-                inputsDescarga.Planta = eventosElement.Planta;
-                inputsDescarga.Matricula = DetalleMarea.Matricula;
-                inputsDescarga.CentPlanta = eventosElement.CentPlanta;
-			    inputsDescarga.DescPlanta = eventosElement.DescPlanta;
-			    inputsDescarga.Embarcacion = DetalleMarea.Embarcacion;
-			    inputsDescarga.DescEmbarcacion = DetalleMarea.DescEmbarcacion;
-			    inputsDescarga.FechInicio = fechaIni;
-			    inputsDescarga.HoraInicio = horaIni;
-			    inputsDescarga.Estado = "N";
-			    inputsDescarga.TipoPesca = "I";
+                mod.setProperty("/InputsDescargas/Planta",eventosElement.CDPTA);
+                mod.setProperty("/InputsDescargas/Matricula",DetalleMarea.MREMB);
+                mod.setProperty("/InputsDescargas/CentPlanta",eventosElement.WERKS);
+                mod.setProperty("/InputsDescargas/DescPlanta",eventosElement.DESCR);
+                mod.setProperty("/InputsDescargas/Embarcacion",DetalleMarea.CDEMB);
+                mod.setProperty("/InputsDescargas/DescEmbarcacion",DetalleMarea.NMEMB);
+                mod.setProperty("/InputsDescargas/FechInicio",fechaIni);
+                mod.setProperty("/InputsDescargas/HoraInicio",horaIni);
+                mod.setProperty("/InputsDescargas/Estado","N");
+                mod.setProperty("/InputsDescargas/TipoPesca","I");
             }
             this._oView.getModel("eventos").updateBindings(true);
             //refresh model
@@ -452,7 +461,7 @@ sap.ui.define([
                 }else{
                     let mssg = this.ctr.oBundle.getText("NOTEMPCH" + codTemp);
                     MessageBox.error(mssg);
-                    bOk = false;
+                    bok = false;
                 }
             }).catch(function(error){
                 console.log("ERROR: General.verificarTemporada - ", error );
@@ -477,13 +486,14 @@ sap.ui.define([
 
             await TasaBackendService.obtenerEspeciesPermitidas(cdemb, codTemp).then(function(response){
                 //obtener repsonse
-                detalleMarea.EspPermitida = response;
+                detalleMarea.EspPermitida = response.data;
             }).catch(function(error){
                 console.log("ERROR: General.consultarPermisoPesca - ", error );
             });
         },
 
-        obtenerTemporadas: function(motivo, fecha){
+        obtenerTemporadas:async function(motivo, fecha){
+            let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
             var calendarioPesca = [];
             var codTemp = "";
             if(motivo == "1"){
@@ -496,18 +506,35 @@ sap.ui.define([
                 }
             }
 
-            TasaBackendService.obtenerTemporadas(codTemp, fecha).then(function(response){
+            await TasaBackendService.obtenerTemporadas(codTemp, fecha).then(function(response){
                 //obtener repsonse
-                var data = [];
+                var data = response.data;
                 for (let index = 0; index < data.length; index++) {
-                    const element = array[index];
-                    var obj = {};//crear objeto calendario
+                    const element = data[index];
+                    var obj = {
+                        CDTPC : codTemp,
+                        CDSPC : element.CDSPC,
+                        DSSPC : element.DSSPC,
+                        LTINI : element.LTINI,
+                        LNINI : element.LNINI,
+                        LTFIN : element.LTFIN,
+                        LGFIN : element.LGFIN,
+                        MILLA : element.MILLA
+                    };//crear objeto calendario
                     calendarioPesca.push(obj);
                 };
                 //setear variable global calendarioPescaCHD calendarioPescaCHI calendarioPescaVED
             }).catch(function(error){
                 console.log("ERROR: General.obtenerTemporadas - ", error );
             });
+
+            if (motivo == "1") {
+                mod.setProperty("/calendarioPescaCHD",calendarioPesca);
+            } else if (motivo == "2") {
+                mod.setProperty("/calendarioPescaCHI",calendarioPesca);
+            } else {
+                mod.setProperty("/calendarioPescaVED",calendarioPesca);
+            }
 
         },
 
@@ -566,8 +593,8 @@ sap.ui.define([
 	        var longCalaD = eventoActual.LongitudD;
 	        var longCalaM = eventoActual.LongitudM;
 	        var longCala = longCalaD*100 + longCalaM; 
-            var indPropiedad = DetalleMarea.IndPropiedad;
-	        var motivoMarea = DetalleMarea.MotMarea;
+            //var indPropiedad = DetalleMarea.IndPropiedad;
+	        var motivoMarea = DetalleMarea.CDMMA;
 	        var indEvento = eventoActual.Indicador;
 	        var espePermitEmb = DetalleMarea.EspPermitida;
             var valiCoordCala = eventoActual.ValiCoordCala;
@@ -576,13 +603,13 @@ sap.ui.define([
 	        var espeZonaPesca = [];
 	        var espeVeda = [];
             var listCalendario = motivoMarea == "1" ? this.ctr.calendarioPescaCHD : this.ctr.calendarioPescaCHI;
-            this.ctr.calendarioPescaVED
+            this.ctr.calendarioPescaVED;
             for (let index = 0; index < listCalendario.length; index++) {
                 const element = listCalendario[index];
-                var latiIni = element.IntLatIni;
-		        var latiFin = element.IntLatFin;
-		        var longIni = element.IntLonIni;
-		        var longFin = element.IntLonFin;
+                var latiIni = element.LTINI;
+		        var latiFin = element.LTFIN;
+		        var longIni = element.LNINI;
+		        var longFin = element.LGFIN;
                 if (((latiIni < latiIniZonaPesca && latiFin > latiIniZonaPesca) || 
 				(latiIni >= latiIniZonaPesca && latiIni < latiFinZonaPesca)) && 
 				((longIni < longIniZonaPesca && longFin > longIniZonaPesca) || 
@@ -590,8 +617,8 @@ sap.ui.define([
 				((latiCala >= latiIni || latiCala <= latiFin) && 
 				(longCala >= longIni || longCala <= longFin))) {
                     var obj = {
-                        CodEspecie: element.CodEspecie,
-                        DescEspecie: element.DescEspecie
+                        CDSPC: element.CDSPC,
+                        DSSPC: element.DSSPC
                     };
                     espeZonaPesca.push(obj);
                     espePermitida.push(obj);
@@ -602,18 +629,18 @@ sap.ui.define([
                 if(valiCoordCala){
                     for (let i = 0, j = 0; i < this.ctr.calendarioPescaVED.length; i++) {
                         const calendarioVED = this.ctr.calendarioPescaVED[i];
-                        var latiIni = calendarioVED.IntLatIni;
-				        var latiFin = calendarioVED.IntLatFin;
-				        var longIni = calendarioVED.IntLonIni;
-				        var longFin = calendarioVED.IntLonFin;
-                        var millas = calendarioVED.Milla;
-				        var especieVeda = calendarioVED.CodEspecie;
+                        var latiIni = calendarioVED.LTINI;
+				        var latiFin = calendarioVED.LTFIN;
+				        var longIni = calendarioVED.LNINI;
+				        var longFin = calendarioVED.LGFIN;
+                        var millas = calendarioVED.MILLA;
+				        var especieVeda = calendarioVED.CDSPC;
                         if ((latiCala >= latiIni && latiCala <= latiFin) && (millaCosta <= millas)) {
-                            var arrayFiltrado = espePermitida.filter(function(el) { return el.CodEspecie != especieVeda; });
+                            var arrayFiltrado = espePermitida.filter(function(el) { return el.CDSPC != especieVeda; });
                             espePermitida = arrayFiltrado;
                             var obj = {
-                                CodEspecie: calendarioVED.CodEspecie,
-                                DescEspecie: calendarioVED.DescEspecie
+                                CDSPC: calendarioVED.CDSPC,
+                                DSSPC: calendarioVED.DSSPC
                             };
                             espeVeda.push(obj);
                         }
@@ -625,23 +652,23 @@ sap.ui.define([
                     if(motivoMarea == "1" && espePermitEmb != null){
                         for (let index = 0; index < espePermitEmb.length; index++) {
                             const element = espePermitEmb[index];
-                            var especie = element.CodEspecie;
-                            var descEspecie = element.DescEspecie;
+                            var especie = element.CDSPC;
+                            var descEspecie = element.DSSPC;
                             for (let index1 = 0; index1 < espePermitida.length; index1++) {
-                                const element = espePermitida[index1];
-                                if(element.CodEspecie == especie){
+                                const element1 = espePermitida[index1];
+                                if(element1.CDSPC == especie){
                                     var obj = {
-                                        Indicador: "N",
-                                        Especie: especie.toString(),
-                                        DescEspecie: descEspecie,
+                                        INDTR: "N",
+                                        CDSPC: especie.toString(),
+                                        DSSPC: descEspecie,
                                         UnidMedida: confEventosPesca.CalaUMPescaDecl,
-                                        DescUnidMedida: confEventosPesca.CalaDescUMPescaDecl
+                                        DSUMD: confEventosPesca.CalaDescUMPescaDecl
                                     };
                                     eventoActual.PescaDeclarada.push(obj);
                                     
                                     var objBiometria = {
                                         CodEspecie: especie.toString(),
-                                        Especie: element.DescEspecie
+                                        Especie: element1.DescEspecie
                                     };
                                     listaBiometria.push(objBiometria);
                                 }
@@ -655,7 +682,7 @@ sap.ui.define([
 				        var obsvEspecie = "";
                         for (let index2 = 0; index2 < espePermitEmb.length; index2++) {
                             const element = espePermitEmb[index2];
-                            if(element.CodEspecie != especieDef){
+                            if(element.CDSPC != especieDef){
                                 espOk = false;
                                 obsvEspecie += this.oBundle.getText("EMBNOPERMISOESP");
                                 break;
@@ -664,7 +691,7 @@ sap.ui.define([
 
                         for (let index3 = 0; index3 < espeZonaPesca.length; index3++) {
                             const element = espeZonaPesca[index3];
-                            if(element.CodEspecie != especieDef){
+                            if(element.CDSPC != especieDef){
                                 espOk = false;
                                 obsvEspecie += this.oBundle.getText("ESPNOPERMITZONA");
                                 break;
@@ -674,7 +701,7 @@ sap.ui.define([
                         if(valiCoordCala){
                             for (let index4 = 0; index4 < espeVeda.length; index4++) {
                                 const element = espeVeda[index4];
-                                if(element.CodEspecie != especieDef){
+                                if(element.CDSPC != especieDef){
                                     espOk = false;
                                     obsvEspecie += this.oBundle.getText("ESPECIEENVEDA");
                                     break;
@@ -687,12 +714,12 @@ sap.ui.define([
                         }
 
                         var obj = {
-                            Indicador: "N",
-                            Especie: especieDef.toString(),
-                            DescEspecie: confEventosPesca.CalaDescEspecieCHI,
-                            Observacion: obsvEspecie,
+                            INDTR: "N",
+                            CDSPC: especieDef.toString(),
+                            DSSPC: confEventosPesca.CalaDescEspecieCHI,
+                            OBSER: obsvEspecie,
                             UnidMedida: confEventosPesca.CalaUMPescaDecl,
-                            DescUnidMedida: confEventosPesca.CalaDescUMPescaDecl
+                            DSUMD: confEventosPesca.CalaDescUMPescaDecl
                         };
                         eventoActual.PescaDeclarada.push(obj);
 
@@ -710,6 +737,8 @@ sap.ui.define([
             eventoActual.EspePermitida = espePermitida;
             eventoActual.EspeZonaPesca = espeZonaPesca;
             eventoActual.EspeVeda = espeVeda;
+
+            this._oView.getModel("eventos").updateBindings(true);
             //refrescar modelo
         }
 
