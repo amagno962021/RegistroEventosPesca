@@ -249,7 +249,22 @@ sap.ui.define([
                     VisibleObsvComb: false,
                     OpSistFrio : false
                 },
-                Constantes:{
+                InputsDescargas :{
+                    CentPlanta : "",
+                    DescEmbarcacion : "",
+                    DescPlanta : "",
+                    Embarcacion : "",
+                    Estado : "",
+                    FechInicio : "",
+                    HoraInicio : "",
+                    Matricula : "",
+                    Planta : "",
+                    TipoPesca : ""
+                },
+                calendarioPescaCHD :[],
+                calendarioPescaCHI :[],
+                calendarioPescaVED :[],
+                Constantes:{//pendiente de llenar con servicio
                     CodUbicSur: "",
                     PorcCalRangComb: "",
                     ValMaxFlujPanga: 250

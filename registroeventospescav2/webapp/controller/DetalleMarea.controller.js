@@ -882,10 +882,14 @@ sap.ui.define([
                 var cantSuministro = modelo.getProperty("/Suministro/0/CNSUM");
                 if(!isNaN(cantSuministro)){
                     if(Number(cantSuministro) > 0){
-
+                        var capTanque = modelo.getProperty("sPath");
+                        var stockComb = modelo.getProperty("sPath");
+                        var cantCombTotal = 0;
+                        if(!isNaN(stockComb)){
+                            cantCombTotal = Number(cantSuministro) + Number(stockComb);
+                        }
                     }else{
                         bOk = false;
-                        
                         var mssg = this.oBundle.getText("CANTSUMNOCERO");
                         MessageBox.error(mssg);
                     }
