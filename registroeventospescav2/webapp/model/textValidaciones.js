@@ -72,6 +72,12 @@ sap.ui.define([], function () {
 				{id : "3"},
 				{id : "4"}
 			],
+			EVEFEINIFEFIN : [ // Eventos cuya fecha de inicio puede ser igual a la fecha fin del evento anterior
+				{id : "3"},
+				{id : "4"},
+				{id : "6"},
+				{id : "7"}
+			],
 			//////////////////////////////////////////////////////////
 			eventAttTabGeneral: [
 					[
@@ -340,6 +346,11 @@ sap.ui.define([], function () {
 				{id : "3"},
 				{id : "7"},
 				{id : "8"}
+			],
+			EVEPERVALFECHA : [
+				{id : "5"},
+				{id : "6"},
+				{id : "7"}
 			],
 			visible : {
 				VisibleDescarga :false,

@@ -350,7 +350,7 @@ sap.ui.define([
             var PescaDescargada = eventoActual.ListaPescaDescargada[0]; //actual pesca descargada
             var tipoDescarga = eventoActual.TipoDescarga;// VALOR SE LLENA EN NUEVO EVENTO
             var indPropPlanta = this._controler._indicadorPropXPlanta;
-            var motMarea = this._controler._motivoMarea;;
+            var motMarea = this._controler._motivoMarea;
             var centEmba = DetalleMarea.CenEmbarcacion;
             var atributos = ["CantPescaDescargada", "CantPescaDeclarada"];
             var mensaje = "";
@@ -681,6 +681,12 @@ sap.ui.define([
             ListaPescDesc.DSSPC = data.DSSPC;
             ListaPescDesc.CNPDS = data.CNPDS;
             this._oView.getModel("eventos").updateBindings(true);
+            if(this._controler._motivoMarea == "1"){
+                this._controler.distribuirDatosDescarga(data);
+            }else if(this._controler._motivoMarea == "2"){
+                this._controler.distribuirDatosDescargaCHD(data);
+            }
+
             this.getDialogConsultaDescarga().close();
             //console.log("Holaaaaaaaaaaaaaa");
         },

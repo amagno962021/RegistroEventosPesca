@@ -152,6 +152,88 @@ sap.ui.define([
             }
 
             return etiqueta;
+        },
+        difPtosLongOPtosLati:function(d1,m1,d2,m2,cDec){
+            let  fReturn = [];
+            let val1 = d1*100 + m1;
+            let val2 = d2*100 + m2;
+            let dDif = 0;
+            let mDif = 0;
+            let signo = -1;
+            let susD = 0;
+            
+            if (val1 > val2) {	
+                let tempD = d1;
+                let tempM = m1;
+                d1 = d2;
+                m1 = m2;
+                d2 = tempD;
+                m2 = tempM; 	
+                signo = 1;
+            }
+            
+            if (m1 > m2) {
+                susD = 1;
+                m2 += 60;
+            } 
+                
+            d2 -= susD;
+            dDif = d2 - d1;
+            mDif = m2 - m1;
+        
+            let bd = Number(mDif);
+            mDif = bd.toFixed(2);
+            
+            fReturn = [signo, dDif, mDif];
+            
+            return fReturn;
+
+        },
+        compPtosLongOPtosLati : function(difPtos){
+            let valor = 0;
+            if (difPtos != null && difPtos.length > 2) {
+                let rPtos = difPtos[0]*(difPtos[1]*100 + difPtos[2]);
+            
+                if (rPtos > 0.0) {
+                    valor = 1;
+                } else if (rPtos == 0.0) {
+                    valor = 0;
+                } else {
+                    valor = -1;
+                }
+            }
+            
+            return valor;
+        },
+        distPtosLongitud:function(difPtos,dl,ml,medida){
+            let longEcuador = 40076;
+            const degrees_to_radians = deg => (deg * Math.PI) / 180.0;
+            let paralelo = Math.cos(degrees_to_radians(dl + ml/60))*longEcuador;
+            let longGradoKM = paralelo/360;
+            let longMinutoKM = longGradoKM/60;
+            let valor  = this.distPtosLatOPtosLong(difPtos, longGradoKM, longMinutoKM, medida);
+            return valor;
+        },
+        distPtosLatOPtosLong :function(difPtos,longGradoKM,longMinutoKM,medida){
+            const medidas_cons = ['MN', 'KM', 'MT'];
+            let valor = Number(0);
+            medida = ((medida != "") || medidas_cons.includes(medida)) ? medida : "MN";
+            if (medida == "MN") {
+                valor =  difPtos[0]*(difPtos[1]*(this.convKmAMillNaut(longGradoKM)) + difPtos[2]*(this.convKmAMillNaut(longMinutoKM)));
+            } else if (medida == "KM" || medida == "MT") {
+                let eq = 1;
+                
+                if (medida == "MT") {
+                    eq = 1000;
+                }
+                
+                valor =  difPtos[0]*(difPtos[1]*longGradoKM + difPtos[2]*longMinutoKM)*eq;
+            }
+            
+            return valor.toFixed(2);	
+        },
+        convKmAMillNaut :function(km){
+            return km/1.852;
         }
 
 
