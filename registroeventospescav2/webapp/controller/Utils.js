@@ -118,6 +118,34 @@ sap.ui.define([
                 return null;
             }
         },
+        dateToStrHours: function(date){
+            if(date){
+                let hora = date.getHours();
+                let minutos = date.getMinutes();
+                let segundos = date.getSeconds();
+                let strHor = "";
+                if(hora > 0 && hora < 10){
+                    strHor = "0" + hora;
+                }else{
+                    strHor = hora;
+                }
+                let strMin = "";
+                if(minutos > 0 && minutos < 10){
+                    strMin = "0" + minutos;
+                }else{
+                    strMin = minutos;
+                }
+                let strSec = "";
+                if(segundos > 0 && segundos < 10){
+                    strSec = "0" + segundos;
+                }else{
+                    strSec = segundos;
+                }
+                return strHor + ":" + strMin + ":" + strSec;
+            }else{
+                return null;
+            }
+        },
 
         strDateToSapDate: function(date){
             var newDate = "";

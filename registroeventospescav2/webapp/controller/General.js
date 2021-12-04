@@ -115,7 +115,7 @@ sap.ui.define([
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //nodo evento actual
             let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
             //var detalleMarea = {};//modelo detalle marea
-            var Utils = mod.getProperty("/Utils");;//modelo Utils
+            var Utils = mod.getProperty("/Utils");//modelo Utils
             var visible = this.ctr.modeloVisible;//modelo visible
             //var eventAttTabGeneral = {};//modelo con los atributos de los tab por tipo de evento
             var motivoMarea = this.ctr._motivoMarea;

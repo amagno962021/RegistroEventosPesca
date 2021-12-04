@@ -1897,5 +1897,250 @@ sap.ui.define([
             return "FGARCIA";
         },
 
+        //----------------------------------------------------------------------  METODOS CREAR EVENTO ------------------------------------------------------------------
+        cerrarCrearEvento : function(){
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            let tipoEvento  =  mod.getProperty("/Utils/TipoEvento");
+            let LstEvento = mod.getProperty("/Eventos/Lista")
+
+            let timeInMilis = new Date();
+            timeInMilis = timeInMilis.getTime();
+            var NuevoEvento = [];
+            
+            if (tipoEvento != null) {
+
+                var obj = {
+                    INDTR : "N",
+                    CDTEV : tipoEvento,
+                    NREVN : Number(LstEvento.length) + 1,
+                    ESEVN : "S",
+                    ACEVN : this.getCurrentUser(),
+                    FCEVN : Utils.dateToStrDate(timeInMilis),
+                    HCEVN : Utils.dateToStrHours(timeInMilis)
+                }
+                mod.setProperty("/Cabecera/FormEditado",true);
+                mod.setProperty("/Cabecera/MareaEditada",true);
+                mod.setProperty("/Cabecera/MareaEditada",true);
+                LstEvento.push(obj);
+                this._eventoNuevo = Number(LstEvento.length) -1;
+                //wdThis.wdGetFormCustController().setVisibleBtnFooter(true, false); -- la botonera de alejandro revisar
+                this.prepararNuevoEvento();
+            }
+            mod.setProperty("/Utils/FlagVistaBiometria",true);
+            mod.setProperty("/Utils/NroEvento_Incidental",Number(LstEvento.length) + 1);
+            
+        },
+        prepararNuevoEvento :function(){
+            this.obtenerDatosDistribFlota();
+            this.prepararVista(true);
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            let bOk = true;
+            let nuevo = mod.getProperty("/Cabecera/EsNuevo");
+            let nodoEventos = mod.getProperty("/Eventos/Lista");
+            let tipoEvento = wdContext.currentEventosElement().getTipoEvento();
+            let motivoMarea = wdContext.currentFormElement().getMotMarea();
+            let indiPropiedad = wdContext.currentFormElement().getIndPropiedad();
+            let indiPropPlanta = wdContext.currentEventosElement().getIndPropPlanta();
+            let attInfoTipoPesca = wdContext.nodeEventos().getNodeInfo().getAttribute("TipoEvento");
+            let cantEventos = nodoEventos.length;
+            let elementAct = this._eventoNuevo;
+            
+            wdThis.setEventoConsultado(wdContext.currentEventosElement().getNumero(), true);
+            wdContext.currentEventosElement().setDescTipoEvento(manageSimpleTypes.getText(attInfoTipoPesca, tipoEvento));
+            wdContext.currentEventosElement().setFechCreacion(new Date(Calendar.getInstance().getTimeInMillis()));
+            wdContext.currentEventosElement().setHoraCreacion(new Time(Calendar.getInstance().getTimeInMillis()));
+            wdContext.currentEventosElement().setAutoMoficicacion(wdThis.wdGetMainCompController().wdGetContext().currentDataSessionElement().getUser());
+
+            wdThis.obtenerDatosFechaAnterior();	
+            
+            if (!tipoEvento.equals("7")) {
+                wdContext.currentEventosElement().setFechIni(new Date(Calendar.getInstance().getTimeInMillis()));
+                wdContext.currentEventosElement().setHoraIni(new Time(Calendar.getInstance().getTimeInMillis()));
+                //BIOMETRIA
+                wdContext.currentEventosElement().setFechIniCala(new Date(Calendar.getInstance().getTimeInMillis()));
+                wdContext.currentEventosElement().setHoraIniCala(new Time(Calendar.getInstance().getTimeInMillis()));
+            }
+            //Cambiar etiqueta a ENVASE sólo cuando se vea calas.
+            if (tipoEvento.equalsIgnoreCase("3")) {
+                wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.VISIBLE);
+                wdContext.currentEventosElement().setTextoFechas("Envase");
+            }else {
+                wdContext.currentEventosElement().setTextoFechas("Fechas");
+            }
+
+            
+            //Limpiar pesca incidental para nuevo evento cala
+            if (tipoEvento.equalsIgnoreCase("3")) {
+                wdContext.nodeIncidental().invalidate();
+                wdContext.currentUtilsElement().setNroEvento_Biometria(wdContext.currentEventosElement().getNumero());
+            }
+            
+            
+            if (manageSimpleTypes.inArray(tipoEvento, Utilitario.eveVisFechaFin)) {
+                wdContext.currentEventosElement().setFechFin(new Date(Calendar.getInstance().getTimeInMillis()));
+                wdContext.currentEventosElement().setHoraFin(new Time(Calendar.getInstance().getTimeInMillis()));
+                //BIOMETRIA
+                wdContext.currentEventosElement().setFechFinCala(new Date(Calendar.getInstance().getTimeInMillis()));
+                wdContext.currentEventosElement().setHoraFinCala(new Time(Calendar.getInstance().getTimeInMillis()));
+            }
+                
+            if (tipoEvento.equals("3")) {
+                wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.VISIBLE);
+                wdThis.posicionarEventoAnterior(elementAct, "2");
+                wdThis.obtenerCoordZonaPesca();
+                
+                let latiMin = wdContext.currentEventosElement().getZPLatiIni();
+                let latiMax = wdContext.currentEventosElement().getZPLatiFin();
+                let longMin = wdContext.currentEventosElement().getZPLongIni();
+                let longMax = wdContext.currentEventosElement().getZPLongFin();
+                let descLatiLongZP = wdContext.currentEventosElement().getDescLatiLongZonaPesca();
+                
+                nodoEventos.setLeadSelection(elementAct);
+
+                wdContext.currentEventosElement().setZPLatiIni(latiMin);
+                wdContext.currentEventosElement().setZPLatiFin(latiMax);
+                wdContext.currentEventosElement().setZPLongIni(longMin);
+                wdContext.currentEventosElement().setZPLongFin(longMax);
+                wdContext.currentEventosElement().setDescLatiLongZonaPesca(descLatiLongZP);
+                wdContext.currentEventosElement().setObteEspePermitidas(true);
+                wdContext.currentEventosElement().setCantTotalPescDecla(new BigDecimal(0));
+            }
+                
+            if (manageSimpleTypes.inArray(tipoEvento, Utilitario.copiarZonaPesc)) {
+                wdThis.posicionarEventoAnterior(elementAct, "2");
+                
+                ListaHorometros zonaPesca = wdContext.currentEventosElement().getZonaPesca();
+                        
+                nodoEventos.setLeadSelection(elementAct);
+                wdContext.currentEventosElement().setZonaPesca(zonaPesca);
+            }	
+            
+            if (tipoEvento.equals("4")) {
+                wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.VISIBLE);
+            }
+            
+            if (tipoEvento.equals("5")) {
+                wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.VISIBLE)
+                ////-------->
+                let totalPescaCala = wdThis.obtenerCantTotalDeclMarea();//.obtenerCantTotalPescaDecla();
+                let totalPescaDeclDesc = wdThis.obtenerCantTotalDeclDescMarea();//.obtenerCantTotalPescaDecla();
+                
+                wdContext.currentEventosElement().setCantTotalPescDecla(totalPescaCala);	//Cantidad total de pesca declarada por marea
+                
+                if (manageSimpleTypes.inArray(motivoMarea, Utilitario.motivoPescaDes) 
+                        && totalPescaCala.compareTo(totalPescaDeclDesc) == 0) {
+                    wdContext.currentVisibleElement().setMotiNoPesca(WDVisibility.VISIBLE);
+                }
+                
+            }
+            
+            if (tipoEvento.equals("6")) {
+                wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.NONE);
+                wdContext.currentVisibleElement().setFechFin(WDVisibility.NONE);
+                if (indiPropiedad.equalsIgnoreCase("T")) {
+                    wdContext.currentEventosElement().setTipoDescarga("P");
+                } else if (indiPropiedad.equalsIgnoreCase("P")) {
+                    if (indiPropPlanta.equalsIgnoreCase("P")) {
+                        wdContext.currentEventosElement().setTipoDescarga("P");
+                    } else {
+                        wdContext.currentEventosElement().setTipoDescarga("T");
+                    }
+                }
+                
+                if (manageSimpleTypes.inArray(motivoMarea, Utilitario.motivoPescaDes)) {
+                    wdThis.wdGetFormCustController().obtenerPuntosDescarga();
+                    wdContext.currentEventosElement().currentPescaDescargadaElement().setCantPescaDeclarada(wdThis.obtenerPescaDeclDescarga());
+                    wdContext.currentEventosElement().currentPescaDescargadaElement().setEsNuevo(true);
+                    
+                    if (indiPropPlanta.equalsIgnoreCase("P")) { 	//Descarga en planta propia
+                        //Si es (CHI o CHD)
+                        if (motivoMarea.equalsIgnoreCase("2") || motivoMarea.equalsIgnoreCase("1")) {
+                            wdContext.currentEventosElement().setFechIni(null);
+                            wdContext.currentEventosElement().setHoraIni(null);
+                            wdContext.currentEventosElement().setFechFin(null);
+                            wdContext.currentEventosElement().setHoraFin(null);
+                        }
+                    } else if (indiPropPlanta.equalsIgnoreCase("T")) {
+                        wdContext.currentEventosElement().currentPescaDescargadaElement().setPlanta(wdContext.currentEventosElement().getPlanta());
+                    }
+                }	
+            }
+            else{
+                wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.VISIBLE);
+            }
+            //Tab Equipamiento
+            if (manageSimpleTypes.inArray(tipoEvento, Utilitario.eveVisTabEquip)) {
+                wdThis.obtenerEquipamiento();
+            }
+
+            //Tab Horometro
+            if (manageSimpleTypes.inArray(tipoEvento, Utilitario.eveVisTabHorom)) {
+                wdThis.obtenerHorometros(tipoEvento);
+            }
+
+            //Tab Pesca Declarada
+            if (manageSimpleTypes.inArray(tipoEvento, Utilitario.eveVisTabPeDcl)) {
+            }
+
+            //Tab Pesca Descargada
+            if (manageSimpleTypes.inArray(tipoEvento, Utilitario.eveVisTabPeDsc)) {		
+                eventoElement.currentPescaDescargadaElement().setIndicador(constantsUtility.CARACTERNUEVO);
+                let nroDescarga = wdContext.currentFormElement().getCenEmbarcacion();
+                
+                if (motivoMarea.equals("1")) {
+                    eventoElement.currentPescaDescargadaElement().setTipoPesca("D");			
+                } else if (motivoMarea.equals("2")) {	
+                    eventoElement.currentPescaDescargadaElement().setTipoPesca("I");			
+                }	
+
+                if (indiPropPlanta.equalsIgnoreCase("P")) {
+                        eventoElement.currentPescaDescargadaElement().setIndicador(constantsUtility.CARACTEREDITAR);
+                        eventoElement.currentPescaDescargadaElement().setIndEjecucion("C");
+                } else {
+                    eventoElement.currentPescaDescargadaElement().setEspecie(Utilitario.codEspecieNull);
+                    eventoElement.currentPescaDescargadaElement().setNroDescarga(nroDescarga + Utilitario.indiDescPesTer);
+                }
+            }
+
+            //Tab Distribucion
+            if (tipoEvento.equals("3")) {
+                wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.VISIBLE);
+                wdThis.obtenerBodegas();
+            }
+            
+            //Mostrar Sistema frio
+            if (wdContext.currentFormElement().getIndPropiedad().equalsIgnoreCase("P")) {
+                let emba = wdContext.currentFormElement().getEmbarcacion();
+                let table = "ZFLEMB";
+                let fields = "CDTPR"; 
+                let options = {"CDEMB = '" + emba + "'", ""};
+                
+                let tipPres = utilCust.getField(table, fields, options );
+                if (eventoElement.getIndicador().equalsIgnoreCase("P")) {
+                    
+                }
+                
+                if (!manageSimpleTypes.isEmpty(tipPres) && !tipPres.equalsIgnoreCase("4")) {
+                    if(manageSimpleTypes.getInt(eventoElement.getTipoEvento()) < 6 && !eventoElement.getTipoEvento().equalsIgnoreCase("H")
+                    && !eventoElement.getTipoEvento().equalsIgnoreCase("T")) {
+                        wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.VISIBLE);
+                        wdContext.currentVisibleElement().setSistFrio(WDVisibility.VISIBLE);
+                        wdContext.currentUtilsElement().setOpSistFrio(true);
+                        
+                    } else {
+                        wdContext.currentVisibleElement().setSistFrio(WDVisibility.NONE);
+                        wdContext.currentUtilsElement().setOpSistFrio(false);
+                    }
+                    
+                } else {
+                    wdContext.currentVisibleElement().setSistFrio(WDVisibility.NONE);
+                    wdContext.currentUtilsElement().setOpSistFrio(false);
+                }
+            }
+        },
+        obtenerDatosDistribFlota :function(){
+
+        }
+
     });
 });
