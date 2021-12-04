@@ -78,6 +78,10 @@ sap.ui.define([], function () {
 				{id : "6"},
 				{id : "7"}
 			],
+			COPIARZONAPESC : [
+				{id : "3"},
+				{id : "4"}
+			],
 			//////////////////////////////////////////////////////////
 			eventAttTabGeneral: [
 					[

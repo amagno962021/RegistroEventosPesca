@@ -862,6 +862,7 @@ sap.ui.define([
                 this._listaEventos[this._elementAct].ZPLongFin = elementoCoordZonaPesca.LNMAX_S;
                 this._listaEventos[this._elementAct].DescLatiLongZonaPesca = descLatiLong;
                 //wdContext.currentEventosElement().setDescLatiLongZonaPesca(descLatiLong);
+                this.getView().getModel("eventos").updateBindings(true);
             }
 
         },
@@ -1024,6 +1025,7 @@ sap.ui.define([
                     break;
                 }
             }
+            this._FormMarea.CantTotalPescDecla = cantTotal;
             return cantTotal;
 
         },
@@ -1936,114 +1938,112 @@ sap.ui.define([
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let bOk = true;
             let nuevo = mod.getProperty("/Cabecera/EsNuevo");
+            let nodoForm = mod.getProperty("/Cabecera/CDMMA");
             let nodoEventos = mod.getProperty("/Eventos/Lista");
-            let tipoEvento = wdContext.currentEventosElement().getTipoEvento();
-            let motivoMarea = wdContext.currentFormElement().getMotMarea();
-            let indiPropiedad = wdContext.currentFormElement().getIndPropiedad();
-            let indiPropPlanta = wdContext.currentEventosElement().getIndPropPlanta();
-            let attInfoTipoPesca = wdContext.nodeEventos().getNodeInfo().getAttribute("TipoEvento");
+            let tipoEvento = nodoEventos[this._eventoNuevo].CDTEV;
+            let motivoMarea = mod.getProperty("/Cabecera/CDMMA");
+            let indiPropiedad = mod.getProperty("/Cabecera/INPRP");
+            let indiPropPlanta = nodoEventos[this._eventoNuevo].INPRP;
             let cantEventos = nodoEventos.length;
             let elementAct = this._eventoNuevo;
+            let fechaSist = new Date();
             
-            wdThis.setEventoConsultado(wdContext.currentEventosElement().getNumero(), true);
-            wdContext.currentEventosElement().setDescTipoEvento(manageSimpleTypes.getText(attInfoTipoPesca, tipoEvento));
-            wdContext.currentEventosElement().setFechCreacion(new Date(Calendar.getInstance().getTimeInMillis()));
-            wdContext.currentEventosElement().setHoraCreacion(new Time(Calendar.getInstance().getTimeInMillis()));
-            wdContext.currentEventosElement().setAutoMoficicacion(wdThis.wdGetMainCompController().wdGetContext().currentDataSessionElement().getUser());
+            //wdContext.currentEventosElement().setDescTipoEvento(manageSimpleTypes.getText(attInfoTipoPesca, tipoEvento));-- descripcion debe estar en el modelo
+            nodoEventos[this._eventoNuevo].FCEVN = Utils.dateToStrDate(fechaSist);
+            nodoEventos[this._eventoNuevo].HCEVN = Utils.dateToStrHours(fechaSist);
+            nodoEventos[this._eventoNuevo].AMEVN = this.getCurrentUser();
 
-            wdThis.obtenerDatosFechaAnterior();	
-            
-            if (!tipoEvento.equals("7")) {
-                wdContext.currentEventosElement().setFechIni(new Date(Calendar.getInstance().getTimeInMillis()));
-                wdContext.currentEventosElement().setHoraIni(new Time(Calendar.getInstance().getTimeInMillis()));
+            this.obtenerDatosFechaAnterior();	
+
+            if (tipoEvento != "7") {
+                nodoEventos[this._eventoNuevo].FIEVN = Utils.dateToStrDate(fechaSist);
+                nodoEventos[this._eventoNuevo].HIEVN = Utils.dateToStrHours(fechaSist);
                 //BIOMETRIA
-                wdContext.currentEventosElement().setFechIniCala(new Date(Calendar.getInstance().getTimeInMillis()));
-                wdContext.currentEventosElement().setHoraIniCala(new Time(Calendar.getInstance().getTimeInMillis()));
+                nodoEventos[this._eventoNuevo].FICAL = Utils.dateToStrDate(fechaSist);
+                nodoEventos[this._eventoNuevo].HICAL = Utils.dateToStrHours(fechaSist);
             }
             //Cambiar etiqueta a ENVASE sólo cuando se vea calas.
-            if (tipoEvento.equalsIgnoreCase("3")) {
-                wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.VISIBLE);
-                wdContext.currentEventosElement().setTextoFechas("Envase");
+            if (tipoEvento == "3") {
+                let fechaIniEnvase = this.getView().byId("FechaEnvaseIni");
+                fechaIniEnvase.setVisible(true);
+                var fechaIniEnvaseText = this.getView().byId("0001");
+                fechaIniEnvaseText.setHeaderText("Envase");
             }else {
-                wdContext.currentEventosElement().setTextoFechas("Fechas");
+                var fechaIniEnvaseText = this.getView().byId("0001");
+                fechaIniEnvaseText.setHeaderText("Fechas");
             }
 
             
             //Limpiar pesca incidental para nuevo evento cala
-            if (tipoEvento.equalsIgnoreCase("3")) {
-                wdContext.nodeIncidental().invalidate();
-                wdContext.currentUtilsElement().setNroEvento_Biometria(wdContext.currentEventosElement().getNumero());
+            if (tipoEvento == "3") {
+                nodoEventos[this._eventoNuevo].ListaIncidental = [];
+                mod.setProperty("/Utils/NroEvento_Biometria",nodoEventos[this._eventoNuevo].NREVN);
             }
             
-            
-            if (manageSimpleTypes.inArray(tipoEvento, Utilitario.eveVisFechaFin)) {
-                wdContext.currentEventosElement().setFechFin(new Date(Calendar.getInstance().getTimeInMillis()));
-                wdContext.currentEventosElement().setHoraFin(new Time(Calendar.getInstance().getTimeInMillis()));
+            if (this.buscarValorFijo(textValidaciones.EVEVISFECHAFIN, tipoEvento)) {
+                nodoEventos[this._eventoNuevo].FFEVN = Utils.dateToStrDate(fechaSist);
+                nodoEventos[this._eventoNuevo].HFEVN = Utils.dateToStrHours(fechaSist);
                 //BIOMETRIA
-                wdContext.currentEventosElement().setFechFinCala(new Date(Calendar.getInstance().getTimeInMillis()));
-                wdContext.currentEventosElement().setHoraFinCala(new Time(Calendar.getInstance().getTimeInMillis()));
+                nodoEventos[this._eventoNuevo].FFCAL = Utils.dateToStrDate(fechaSist);
+                nodoEventos[this._eventoNuevo].HFCAL = Utils.dateToStrHours(fechaSist);
             }
                 
-            if (tipoEvento.equals("3")) {
-                wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.VISIBLE);
-                wdThis.posicionarEventoAnterior(elementAct, "2");
-                wdThis.obtenerCoordZonaPesca();
+            if (tipoEvento == "3") {
+                this.getView().byId("FechaEnvaseIni").setVisible(true);
+                this.posicionarEventoAnterior("2");
+                this.obtenerCoordZonaPesca();
                 
-                let latiMin = wdContext.currentEventosElement().getZPLatiIni();
-                let latiMax = wdContext.currentEventosElement().getZPLatiFin();
-                let longMin = wdContext.currentEventosElement().getZPLongIni();
-                let longMax = wdContext.currentEventosElement().getZPLongFin();
-                let descLatiLongZP = wdContext.currentEventosElement().getDescLatiLongZonaPesca();
+                let latiMin = this._listaEventos[this._elementAct].ZPLatiIni;
+                let latiMax = this._listaEventos[this._elementAct].ZPLatiFin;
+                let longMin = this._listaEventos[this._elementAct].ZPLongIni;
+                let longMax = this._listaEventos[this._elementAct].ZPLongFin;
+                let descLatiLongZP = this._listaEventos[this._elementAct].DescLatiLongZonaPesca;
                 
-                nodoEventos.setLeadSelection(elementAct);
-
-                wdContext.currentEventosElement().setZPLatiIni(latiMin);
-                wdContext.currentEventosElement().setZPLatiFin(latiMax);
-                wdContext.currentEventosElement().setZPLongIni(longMin);
-                wdContext.currentEventosElement().setZPLongFin(longMax);
-                wdContext.currentEventosElement().setDescLatiLongZonaPesca(descLatiLongZP);
-                wdContext.currentEventosElement().setObteEspePermitidas(true);
-                wdContext.currentEventosElement().setCantTotalPescDecla(new BigDecimal(0));
+                this._elementAct = this._eventoNuevo;
+                nodoEventos[this._eventoNuevo].ZPLatiIni = latiMin;
+                nodoEventos[this._eventoNuevo].ZPLatiFin = latiMax;
+                nodoEventos[this._eventoNuevo].ZPLongIni = longMin;
+                nodoEventos[this._eventoNuevo].ZPLongFin = longMax;
+                nodoEventos[this._eventoNuevo].DescLatiLongZonaPesca = descLatiLongZP;
+                nodoEventos[this._eventoNuevo].ObteEspePermitidas = true;
+                nodoEventos[this._eventoNuevo].CantTotalPescDecla = 0;
             }
                 
-            if (manageSimpleTypes.inArray(tipoEvento, Utilitario.copiarZonaPesc)) {
-                wdThis.posicionarEventoAnterior(elementAct, "2");
-                
-                ListaHorometros zonaPesca = wdContext.currentEventosElement().getZonaPesca();
+            if (this.buscarValorFijo(textValidaciones.COPIARZONAPESC, tipoEvento)) {
+                this.posicionarEventoAnterior("2");
+                let zonaPesca = this._listaEventos[this._elementAct].CDZPC;
                         
-                nodoEventos.setLeadSelection(elementAct);
-                wdContext.currentEventosElement().setZonaPesca(zonaPesca);
+                this._elementAct = this._eventoNuevo;
+                nodoEventos[this._eventoNuevo].CDZPC = zonaPesca;
             }	
             
-            if (tipoEvento.equals("4")) {
-                wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.VISIBLE);
+            if (tipoEvento == "4") {
+                this.getView().byId("FechaEnvaseIni").setVisible(true);
             }
             
-            if (tipoEvento.equals("5")) {
-                wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.VISIBLE)
-                ////-------->
-                let totalPescaCala = wdThis.obtenerCantTotalDeclMarea();//.obtenerCantTotalPescaDecla();
-                let totalPescaDeclDesc = wdThis.obtenerCantTotalDeclDescMarea();//.obtenerCantTotalPescaDecla();
+            if (tipoEvento == "5") {
+                this.getView().byId("FechaEnvaseIni").setVisible(true);
+                let totalPescaCala = this.Dat_PescaDeclarada.obtenerCantTotalDeclMarea(0);
+                let totalPescaDeclDesc = this.obtenerCantTotalPescaDeclDesc(0,this);
                 
-                wdContext.currentEventosElement().setCantTotalPescDecla(totalPescaCala);	//Cantidad total de pesca declarada por marea
+                nodoEventos[this._eventoNuevo].CantTotalPescDecla = totalPescaCala;	//Cantidad total de pesca declarada por marea
                 
-                if (manageSimpleTypes.inArray(motivoMarea, Utilitario.motivoPescaDes) 
-                        && totalPescaCala.compareTo(totalPescaDeclDesc) == 0) {
-                    wdContext.currentVisibleElement().setMotiNoPesca(WDVisibility.VISIBLE);
+                if (this.buscarValorFijo(textValidaciones.MOTIVOPESCADES, motivoMarea) && totalPescaCala == totalPescaDeclDesc) {
+                    this.getView().byId("fe_MotiNoPesca").setVisible(true);
                 }
                 
             }
             
-            if (tipoEvento.equals("6")) {
-                wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.NONE);
-                wdContext.currentVisibleElement().setFechFin(WDVisibility.NONE);
-                if (indiPropiedad.equalsIgnoreCase("T")) {
-                    wdContext.currentEventosElement().setTipoDescarga("P");
-                } else if (indiPropiedad.equalsIgnoreCase("P")) {
-                    if (indiPropPlanta.equalsIgnoreCase("P")) {
-                        wdContext.currentEventosElement().setTipoDescarga("P");
+            if (tipoEvento == "6") {
+                this.getView().byId("FechaEnvaseIni").setVisible(false);
+                this.getView().byId("FechaEnvaseFin").setVisible(false);
+                if (indiPropiedad == "T") {
+                    nodoEventos[this._eventoNuevo].CDTDS = "P";
+                } else if (indiPropiedad == "P") {
+                    if (indiPropPlanta == "P") {
+                        nodoEventos[this._eventoNuevo].CDTDS = "P";
                     } else {
-                        wdContext.currentEventosElement().setTipoDescarga("T");
+                        nodoEventos[this._eventoNuevo].CDTDS = "T";
                     }
                 }
                 
@@ -2140,6 +2140,21 @@ sap.ui.define([
         },
         obtenerDatosDistribFlota :function(){
 
+        },
+        obtenerDatosFechaAnterior : function(){
+
+        },
+        posicionarEventoAnterior : function(codEvento){
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            let nodoEventos = mod.getProperty("/Eventos/Lista");
+            
+            for (let i = (nodoEventos.length - 1); i >= 0; i--) {
+                                
+                if (nodoEventos[i].CDTEV ==  codEvento) {
+                    this._elementAct = i;
+                    break;
+                }
+            }
         }
 
     });

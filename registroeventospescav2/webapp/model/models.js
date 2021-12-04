@@ -250,7 +250,8 @@ sap.ui.define([
                     OpSistFrio : false,
                     TipoEvento : "",
                     FlagVistaBiometria : false,
-                    NroEvento_Incidental : ""
+                    NroEvento_Incidental : "",
+                    NroEvento_Biometria : ""
                 },
                 InputsDescargas :{
                     CentPlanta : "",
