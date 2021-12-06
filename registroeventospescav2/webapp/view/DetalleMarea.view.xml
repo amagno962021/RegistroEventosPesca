@@ -472,7 +472,7 @@
 												<Text text="{DetalleMarea>NRPOS}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 												<Text text="{DetalleMarea>CDSUM}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit"
 														visible="true"/>
-												<ObjectNumber number="{DetalleMarea>CNSUM}" unit="{DetalleMarea>CDUMD}"/>
+												<ObjectNumber number="{DetalleMarea>CNSUM}" unit="{DetalleMarea>DSUMD}"/>
 												<Text text="{DetalleMarea>WERKS}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 												<Text text="{DetalleMarea>DSALM}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 											</cells>

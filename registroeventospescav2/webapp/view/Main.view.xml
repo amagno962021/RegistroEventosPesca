@@ -1,798 +1,211 @@
-<mvc:View
-	controllerName="com.tasa.registroeventospescav2.controller.Main"
-	xmlns:mvc="sap.ui.core.mvc"
-	xmlns:tnt="sap.tnt"
-	xmlns:core="sap.ui.core"
-	xmlns="sap.m"
-	displayBlock="true"
-	height="100%"
->
-	<SplitApp>
-		<masterPages>
-			<Page title="Plantas">
-				<tnt:NavigationList
-					id="navigationList"
-					width="auto"
-					items="{path: '/'}"
-					itemSelect="onSearchMarea"
-				>
-					<tnt:NavigationListItem
-						text="{text}"
-						icon="{ref}"
-						items="{path: 'nodes', templateShareable:false}"
-						expanded="false"
-					>
-						<tnt:NavigationListItem
-							text="{text}"
-							icon="sap-icon://factory"
-						/>
-					</tnt:NavigationListItem>
-				</tnt:NavigationList>
-			</Page>
-		</masterPages>
-		<detailPages>
-			<Page title="Detalle de Mareas">
-				<content>
-					<ObjectHeader
-						id="idObjectHeader"
-						icon="sap-icon://factory"
-						titleActive="false"
-						backgroundDesign="Translucent"
-						numberUnit="Tn"
-						numberState="Success"
-					/>
-					<IconTabBar
-						id="idIconTabBar"
-						expandable="false"
-						expanded="true"
-						applyContentPadding="false"
-						backgroundDesign="Solid"
-						upperCase="false"
-						visible="true"
-						select="onSelectTab"
-					>
-						<items>
-							<IconTabFilter
-								id="itfPropios"
-								icon="sap-icon://person-placeholder"
-								iconColor="Default"
-								text="Propios"
-								design="Vertical"
-								showAll="false"
-								textDirection="Inherit"
-								enabled="true"
-								visible="true"
-								iconDensityAware="false"
-							>
-								<content>
-									<Table
-										id="tblMareasPropios"
-										width="auto"
-										noDataText="No data"
-										growing="true"
-										growingThreshold="10"
-										growingScrollToLoad="true"
-										class="sapUiResponsiveMargin"
-										items="{path:'/', templateShareable:true}"
-										
-									>
-										<infoToolbar/>
-										<columns>
-											<Column
-												width="5%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Nro."
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Center"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="10%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Marea"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="12%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Embarcación"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="10%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Mot. Marea"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="10%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Est. Oper."
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="10%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Pesc. Dec."
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="15%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Fecha/Hora Arribo"
-														width="auto"
-														maxLines="2"
-														wrapping="true"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="8%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Estado"
-														width="auto"
-														maxLines="2"
-														wrapping="true"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="5%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text=""
-														width="auto"
-														maxLines="2"
-														wrapping="true"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="5%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text=""
-														width="auto"
-														maxLines="2"
-														wrapping="true"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-										</columns>
-										<items>
-											<ColumnListItem
-												type="Active"
-												press="onNavToDetailMaster"
-											>
-											<customData>
-     											<core:CustomData key="mydata" value="{ESMAR}" writeToDom="true"></core:CustomData>
-   											</customData>
-												<cells>
-													<Text
-														text="{NRO}"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-													<Text
-														text="{NRMAR}"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-													<Text
-														text="{NMEMB}"
-														width="auto"
-														maxLines="2"
-														wrapping="true"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-													<Text
-														text="{DESCMOTMAR}"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-													<Text
-														text="{DSEEC}"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-													<ObjectNumber
-														number="{CNPCM}"
-														unit="Tn"
-													/>
-													<Text
-														text="{FEHOARR}"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-													<Text
-														text="{DESCESMAR}"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-													<Link
-														text="{DESCLINK}"
-														width="auto"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-														press="onEditarCrearMarea"
-													/>
-													<Link
-														text="Anular"
-														width="auto"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</cells>
-											</ColumnListItem>
-										</items>
-									</Table>
-								</content>
-							</IconTabFilter>
-							<IconTabSeparator
-								icon=""
-								iconDensityAware="false"
-							/>
-							<IconTabFilter
-								id="itfTerceros"
-								icon="sap-icon://group"
-								iconColor="Default"
-								text="Terceros"
-								design="Vertical"
-								showAll="false"
-								textDirection="Inherit"
-								enabled="true"
-								visible="true"
-								iconDensityAware="false"
-							>
-								<content>
-									<Table
-										id="tblMareasTerceros"
-										width="auto"
-										noDataText="No data"
-										mode="None"
-										showSeparators="All"
-										growing="true"
-										growingThreshold="20"
-										growingScrollToLoad="true"
-										class="sapUiResponsiveMargin"
-										items="{path:'/', templateShareable:true}"
-									>
-										<infoToolbar/>
-										<columns>
-											<Column
-												width="5%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Nro."
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Center"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="10%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Marea"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="12%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Embarcación"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="10%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Mot. Marea"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="10%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Est. Oper."
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="10%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Pesc. Dec."
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="15%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Fecha/Hora Arribo"
-														width="auto"
-														maxLines="2"
-														wrapping="true"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="8%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text="Estado"
-														width="auto"
-														maxLines="2"
-														wrapping="true"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="5%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text=""
-														width="auto"
-														maxLines="2"
-														wrapping="true"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-											<Column
-												width="5%"
-												hAlign="Left"
-												vAlign="Middle"
-												minScreenWidth="Tablet"
-												demandPopin="true"
-												popinDisplay="Inline"
-												mergeDuplicates="false"
-											>
-												<header>
-													<Text
-														text=""
-														width="auto"
-														maxLines="2"
-														wrapping="true"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</header>
-												<footer/>
-											</Column>
-										</columns>
-										<items>
-											<ColumnListItem type="Active">
-												<customData>
-     												<core:CustomData key="mydata" value="{ESMAR}" writeToDom="true"></core:CustomData>
-   												</customData>
-												<cells>
-													<Text
-														text="{NRO}"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-													<Text
-														text="{NRMAR}"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-													<Text
-														text="{NMEMB}"
-														width="auto"
-														maxLines="2"
-														wrapping="true"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-													<Text
-														text="{DESCMOTMAR}"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-													<Text
-														text="{DSEEC}"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-													<ObjectNumber
-														number="{CNPCM}"
-														unit="Tn"
-													/>
-													<Text
-														text="{FEHOARR}"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-													<Text
-														text="{DESCESMAR}"
-														width="auto"
-														maxLines="1"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-													<Link
-														text="{DESCLINK}"
-														width="auto"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-														press="onEditarCrearMarea"
-													/>
-													<Link
-														text="Anular"
-														width="auto"
-														wrapping="false"
-														textAlign="Begin"
-														textDirection="Inherit"
-														visible="true"
-													/>
-												</cells>
-											</ColumnListItem>
-										</items>
-									</Table>
-								</content>
-							</IconTabFilter>
-						</items>
-					</IconTabBar>
-				</content>
-				<footer>
-					<OverflowToolbar
-						width="auto"
-						height="auto"
-						design="Auto"
-						enabled="true"
-						visible="true"
-					>
-						<content>
-							<ToolbarSpacer width=""/>
-							<Button
-								text="Nueva Marea"
-								type="Default"
-								iconFirst="true"
-								width="auto"
-								enabled="true"
-								visible="true"
-								iconDensityAware="false"
-								press="onActionCrearMarea"
-							/>
-							<Button
-								text="Actualizar"
-								type="Default"
-								iconFirst="true"
-								width="auto"
-								enabled="true"
-								visible="true"
-								iconDensityAware="false"
-								press="onActualizaMareas"
-							/>
-							<Button
-								text="Pesca Declarada"
-								type="Default"
-								iconFirst="true"
-								width="auto"
-								enabled="true"
-								visible="true"
-								iconDensityAware="false"
-								press="onTest"
-							/>
-						</content>
-					</OverflowToolbar>
-				</footer>
-			</Page>
-		</detailPages>
-	</SplitApp>
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:tnt="sap.tnt" controllerName="com.tasa.registroeventospescav2.controller.Main" displayBlock="true" height="100%">
+   <SplitApp>
+      <masterPages>
+         <Page title="Plantas">
+            <tnt:NavigationList id="navigationList" width="auto" items="{path: '/'}" itemSelect="onSearchMarea">
+               <tnt:NavigationListItem text="{text}" icon="{ref}" items="{path: 'nodes', templateShareable:false}" expanded="false">
+                  <tnt:NavigationListItem text="{text}" icon="sap-icon://factory" />
+               </tnt:NavigationListItem>
+            </tnt:NavigationList>
+         </Page>
+      </masterPages>
+      <detailPages>
+         <Page title="Detalle de Mareas">
+            <content>
+               <ObjectHeader id="idObjectHeader" icon="sap-icon://factory" titleActive="false" backgroundDesign="Translucent" numberUnit="Tn" numberState="Success" />
+               <IconTabBar id="idIconTabBar" expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true" select="onSelectTab">
+                  <items>
+                     <IconTabFilter id="itfPropios" icon="sap-icon://person-placeholder" iconColor="Default" text="Propios" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false">
+                        <content>
+                           <Table id="tblMareasPropios" width="auto" noDataText="No data" growing="true" growingThreshold="10" growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'/', templateShareable:true}">
+                              <infoToolbar />
+                              <columns>
+                                 <Column width="5%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Nro." width="auto" maxLines="1" wrapping="false" textAlign="Center" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="10%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Marea" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="12%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Embarcación" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="10%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Mot. Marea" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="10%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Est. Oper." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="10%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Pesc. Dec." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="15%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Fecha/Hora Arribo" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="8%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Estado" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="5%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="5%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                              </columns>
+                              <items>
+                                 <ColumnListItem type="Active" press="onNavToDetailMaster">
+                                    <customData>
+                                       <core:CustomData key="mydata" value="{ESMAR}" writeToDom="true" />
+                                    </customData>
+                                    <cells>
+                                       <Text text="{NRO}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{NRMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{NMEMB}" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{DESCMOTMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{DSEEC}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <ObjectNumber number="{CNPCM}" unit="Tn" />
+                                       <Text text="{FEHOARR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{DESCESMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Link text="{DESCLINK}" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" press="onEditarCrearMarea" />
+                                       <Link text="Anular" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </cells>
+                                 </ColumnListItem>
+                              </items>
+                           </Table>
+                        </content>
+                     </IconTabFilter>
+                     <IconTabSeparator icon="" iconDensityAware="false" />
+                     <IconTabFilter id="itfTerceros" icon="sap-icon://group" iconColor="Default" text="Terceros" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false">
+                        <content>
+                           <Table id="tblMareasTerceros" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'/', templateShareable:true}">
+                              <infoToolbar />
+                              <columns>
+                                 <Column width="5%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Nro." width="auto" maxLines="1" wrapping="false" textAlign="Center" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="10%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Marea" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="12%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Embarcación" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="10%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Mot. Marea" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="10%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Est. Oper." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="10%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Pesc. Dec." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="15%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Fecha/Hora Arribo" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="8%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="Estado" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="5%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                                 <Column width="5%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+                                    <header>
+                                       <Text text="" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </header>
+                                    <footer />
+                                 </Column>
+                              </columns>
+                              <items>
+                                 <ColumnListItem type="Active">
+                                    <customData>
+                                       <core:CustomData key="mydata" value="{ESMAR}" writeToDom="true" />
+                                    </customData>
+                                    <cells>
+                                       <Text text="{NRO}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{NRMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{NMEMB}" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{DESCMOTMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{DSEEC}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <ObjectNumber number="{CNPCM}" unit="Tn" />
+                                       <Text text="{FEHOARR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{DESCESMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Link text="{DESCLINK}" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" press="onEditarCrearMarea" />
+                                       <Link text="Anular" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                    </cells>
+                                 </ColumnListItem>
+                              </items>
+                           </Table>
+                        </content>
+                     </IconTabFilter>
+                  </items>
+               </IconTabBar>
+            </content>
+            <footer>
+               <OverflowToolbar width="auto" height="auto" design="Auto" enabled="true" visible="true">
+                  <content>
+                     <ToolbarSpacer width="" />
+                     <Button text="Nueva Marea" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onActionCrearMarea" />
+                     <Button text="Actualizar" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onActualizaMareas" />
+                     <Button text="Pesca Declarada" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onTest" />
+                  </content>
+               </OverflowToolbar>
+            </footer>
+         </Page>
+      </detailPages>
+   </SplitApp>
 </mvc:View>

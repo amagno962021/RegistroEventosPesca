@@ -1,16 +1,16 @@
 sap.ui.define([
     "./UtilService"
-], function(
+], function (
 ) {
-	"use strict";
+    "use strict";
 
     return {
 
-        getHostService: function(){
+        getHostService: function () {
             return "https://cf-nodejs-qas.cfapps.us10.hana.ondemand.com";
         },
 
-        getBodyDetalleMarea: function(){
+        getBodyDetalleMarea: function () {
             var sBody = {
                 fieldEvento: [
                 ],
@@ -28,7 +28,7 @@ sap.ui.define([
             return sBody;
         },
 
-        getBodyDominio: function(){
+        getBodyDominio: function () {
             var sBody = {
                 dominios: [
                     {
@@ -40,7 +40,7 @@ sap.ui.define([
             return sBody;
         },
 
-        getBodyReadTable: function(){
+        getBodyReadTable: function () {
             var sBody = {
                 delimitador: "",
                 fields: [],
@@ -68,7 +68,7 @@ sap.ui.define([
             return sBody;
         },
 
-        getBodyValidaCert: function(){
+        getBodyValidaCert: function () {
             var sBody = {
                 codEmba: "",
                 codPlanta: ""
@@ -76,7 +76,7 @@ sap.ui.define([
             return sBody;
         },
 
-        getValidaMarea: function(){
+        getValidaMarea: function () {
             var sBody = {
                 p_codemb: "",
                 p_codpta: ""
@@ -84,7 +84,7 @@ sap.ui.define([
             return sBody;
         },
 
-        getBodyConHorom: function(){
+        getBodyConHorom: function () {
             var sBody = {
                 ip_cdemb: "",
                 ip_nrmar: ""
@@ -92,7 +92,7 @@ sap.ui.define([
             return sBody;
         },
 
-        getHorometro: function(){
+        getHorometro: function () {
             var sBody = {
                 centro: "",
                 evento: "",
@@ -102,7 +102,7 @@ sap.ui.define([
             return sBody;
         },
 
-        getElimPescaDesc: function(){
+        getElimPescaDesc: function () {
             var sBody = {
                 i_table: "",
                 p_user: "",
@@ -110,21 +110,21 @@ sap.ui.define([
             };
             return sBody;
         },
-        getActuaPescaDesc: function(){
+        getActuaPescaDesc: function () {
             var sBody = {
                 p_user: "",
                 str_set: []
             };
             return sBody;
         },
-        getAnularDescRFC: function(){
+        getAnularDescRFC: function () {
             var sBody = {
                 p_nrdes: ""
             };
             return sBody;
         },
 
-        getBodyConHorom: function(){
+        getBodyConHorom: function () {
             var sBody = {
                 ip_cdemb: "",
                 ip_nrmar: ""
@@ -132,7 +132,7 @@ sap.ui.define([
             return sBody;
         },
 
-        getConsultaGeneral: function(){
+        getConsultaGeneral: function () {
             var sBody = {
                 nombreConsulta: "",
                 p_user: "",
@@ -145,19 +145,19 @@ sap.ui.define([
             return sBody;
         },
 
-        getConsultaMareaBio: function(){
+        getConsultaMareaBio: function () {
             var sBody = {
                 "fieldEvento": [
-    
+
                 ],
                 "fieldFLBSP": [
-                  
+
                 ],
                 "fieldMarea": [
-                  
+
                 ],
                 "fieldPSCINC": [
-                  
+
                 ],
                 p_flag: "",
                 user: "",
@@ -167,7 +167,7 @@ sap.ui.define([
             return sBody;
         },
 
-        getBodyAyudaBusq: function(){
+        getBodyAyudaBusq: function () {
             var sBody = {
                 "nombreAyuda": "",
                 "p_user": ""
@@ -175,18 +175,18 @@ sap.ui.define([
             return sBody;
         },
 
-        getBodyBuscarEmba: function(){
+        getBodyBuscarEmba: function () {
             var sBody = {
                 option: [{
                     wa: ""
                 }],
                 options: [
                     {
-                      cantidad: "",
-                      control: "",
-                      key: "",
-                      valueHigh: "",
-                      valueLow: ""
+                        cantidad: "",
+                        control: "",
+                        key: "",
+                        valueHigh: "",
+                        valueLow: ""
                     }
                 ],
                 p_user: "",
@@ -195,7 +195,7 @@ sap.ui.define([
             return sBody;
         },
 
-        getBodyEmba: function(){
+        getBodyEmba: function () {
             var sBody = {
                 "option": [
                 ],
@@ -209,7 +209,7 @@ sap.ui.define([
             return sBody;
         },
 
-        getConsultaReserva: function(){
+        getConsultaReserva: function () {
             var sBody = {
                 flagDetalle: "",
                 marea: 0,
@@ -219,7 +219,7 @@ sap.ui.define([
             return sBody;
         },
 
-        getBodySuministro: function(){
+        getBodySuministro: function () {
             var sBody = {
                 "material": "",
                 "usuario": ""
@@ -227,8 +227,16 @@ sap.ui.define([
             return sBody;
         },
 
-        getBodyConfigRes: function(){
+        getBodyConfigRes: function () {
             var sBody = {
+                "usuario": ""
+            };
+            return sBody;
+        },
+
+        getBodyEmbaComb: function () {
+            var sBody = {
+                "embarcacion": "",
                 "usuario": ""
             };
             return sBody;

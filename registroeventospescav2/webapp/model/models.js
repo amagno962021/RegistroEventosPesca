@@ -15,6 +15,10 @@ sap.ui.define([
 
 		createInitModel: function(){
 			var initModel = {
+                Mareas:{
+                    Propios:[],
+                    Terceros:[]
+                },
 				Cabecera: {
                     INDICADOR: "",
 					NRMAR: "",
@@ -41,6 +45,7 @@ sap.ui.define([
                     FCMOD: "",
                     HRMOD: "",
                     ATMOD: "",
+                    NREVN: "",
                     CDTEV: "",
                     DESC_CDTEV: "",
                     FIEVN: "",
@@ -120,6 +125,16 @@ sap.ui.define([
                 },
                 Suministro: [],
                 ReservasCombustible: [],
+                EmbaComb: {
+                    CDTAN: "",
+                    MANDT: "",
+                    CDEMB: "",
+                    CPSDM: "",
+                    CVPMS: "",
+                    CPPMS: "",
+                    CVADM: "",
+                    STCMB: ""
+                },
                 ConfigReservas: {
                     BWART: "",
                     MATNR: "",

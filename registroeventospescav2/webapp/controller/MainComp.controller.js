@@ -401,8 +401,125 @@ sap.ui.define([
 
         },
 
-        sObtenerReservas: async function(){
-            
+        saveAll: async function(){
+            var bOk = await this.crearReserva();
+            if(bOk){
+
+            }
+            return bOk;
+        },
+
+        crearReserva: async function(){
+            var bOk = true;
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var posiciones = this.obtenerPosiciones();
+            var fechaReserva = modelo.getProperty("/Cabecera/FIEVN")
+            var bodyReserva = {
+                p_cdemb: modelo.getProperty("/Cabecera/CDEMB"),
+                p_fhrsv: fechaReserva ? Utils.strDateToSapDate(fechaReserva): "",
+                p_lgort: modelo.getProperty("/Suministro/0/CDALE"),
+                p_nrevn: modelo.getProperty("/Cabecera/NREVN"),
+                p_user: this.getCurrentUser(),
+                str_rcb: posiciones
+            };
+            var crearReserva = await TasaBackendService.crearReserva(bodyReserva);
+            if(crearReserva){
+                
+            }else{
+                bOk = false;
+            }
+            return bOk;
+        },
+
+        obtenerPosiciones: function(){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var lista = [];
+            var suministros = modelo.getProperty("/Suministro");
+            for (let index = 0; index < suministros.length; index++) {
+                const element = suministros[index];
+                var obj = {
+                    NRMAR: modelo.getProperty("/Cabecera/NRMAR"),
+                    NRPOS: element.NRPOS,
+                    CDSUM: element.CDSUM ? element.CDSUM : "",
+                    CNSUM: element.CNSUM,
+                    CDUMD: element.CDUMD ? element.CDUMD : "",
+                    CDPTA: element.CDPTA,
+                    CDALM: element.CDALE
+                };
+                lista.push(obj);
+            }
+            return lista;
+        },
+
+        obtenerReservas: async function(visibleNuevo){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var marea = modelo.getProperty("/Cabecera/NRMAR");
+            var usuario = this.getCurrentUser();
+            var eventos = modelo.getProperty("/Eventos/Lista");
+            var response = await TasaBackendService.obtenerReservas(marea, null, null, usuario);
+            if (response) {
+                var reservas = response.t_reservas;
+                if (reservas.length != 0) {
+                    modelo.setProperty("/Config/visibleReserva2", true);
+                    if (visibleNuevo) {
+                        modelo.setProperty("/Config/visibleBtnNuevaReserva", true);
+                    } else {
+                        modelo.setProperty("/Config/visibleBtnNuevaReserva", false);
+                    }
+                    for (let index = 0; index < reservas.length; index++) {
+                        const element = reservas[index];
+                        element.CHKDE = false;
+                    }
+                    modelo.setProperty("/ReservasCombustible", reservas);
+                } else {
+                    modelo.setProperty("/Config/visibleReserva1", true);
+                    var ultimoEvento = eventos.length > 0 ? eventos[eventos.length - 1] : null;
+                    var descEvento = ultimoEvento ? ultimoEvento.DESC_CDTEV : "";
+                    var fechIniEve = ultimoEvento ? ultimoEvento.FIEVN : "";
+                    var numeroEvt = ultimoEvento ? ultimoEvento.NREVN : "";
+                    modelo.setProperty("/Cabecera/NREVN", numeroEvt);
+                    modelo.setProperty("/Cabecera/DESC_CDTEV", descEvento);
+                    modelo.setProperty("/Cabecera/FIEVN", fechIniEve);
+                    var planta = ultimoEvento ? ultimoEvento.CDPTA : "";
+                    var descr = ultimoEvento ? ultimoEvento.DESCR : "";
+                    var centro = modelo.getProperty("/ConfigReservas/WERKS");
+                    var material = modelo.getProperty("/ConfigReservas/MATNR");
+                    var data = await TasaBackendService.obtenerSuministro(usuario, material);
+                    if (data) {
+                        var suministro = data.data;
+                        var dsalm = "";
+                        var cdale = "";
+                        var almacenes = modelo.getProperty("/ConfigReservas/Almacenes");
+                        for (let index = 0; index < almacenes.length; index++) {
+                            const element = almacenes[index];
+                            if (element.DSALM == descr) {
+                                dsalm = element.DSALM;
+                                cdale = element.CDALE;
+                            }
+                        }
+                        var listaSuministro = [{
+                            NRPOS: "001",
+                            CDSUM: suministro.CDSUM,
+                            CNSUM: 0,
+                            MAKTX: suministro.MAKTX,    
+                            CDUMD: suministro.CDUMD,
+                            DSUMD: suministro.DSUMD,
+                            CDPTA: planta,
+                            DESCR: descr,
+                            WERKS: centro,
+                            DSALM: dsalm,
+                            CDALE: cdale
+                        }];
+                        modelo.setProperty("/Suministro", listaSuministro);
+                    }
+                }
+            }
+        },
+
+        sResultadoGuardar: async function(val){
+            if(val){
+                await this.obtenerReservas(true);
+            }
         }
 
 

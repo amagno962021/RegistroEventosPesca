@@ -870,8 +870,24 @@ sap.ui.define([
         onReservar: async function(){
             var validar = await this.validarCabeceraSuministro();
             if(validar){
-
+                var mssg = this.oBundle.getText("CONFIRMSAVEMESSAGE");
+                var me = this;
+                MessageBox.confirm(mssg,{
+                    title: me.oBundle.getText("CONFIRMSAVETITLE"),
+                    onClose: function(evt){
+                        if(evt == "OK"){
+                            me.getNuevaMareaDialog().close();
+                            me.SaveReserva()
+                        }
+                    }
+                })
             }
+        },
+
+        SaveReserva: async function(){
+            var val = await this.saveAll();
+            await this.sResultadoGuardar(val);
+            
         },
 
         validarCabeceraSuministro: async function(){
@@ -882,11 +898,18 @@ sap.ui.define([
                 var cantSuministro = modelo.getProperty("/Suministro/0/CNSUM");
                 if(!isNaN(cantSuministro)){
                     if(Number(cantSuministro) > 0){
-                        var capTanque = modelo.getProperty("sPath");
-                        var stockComb = modelo.getProperty("sPath");
+                        var capTanque = modelo.getProperty("/EmbaComb/CDTAN");
+                        var stockComb = modelo.getProperty("/EmbaComb/STCMB");
                         var cantCombTotal = 0;
-                        if(!isNaN(stockComb)){
+                        var cantSumProp = 0;
+                        if(!isNaN(stockComb) && !isNaN(capTanque)){
                             cantCombTotal = Number(cantSuministro) + Number(stockComb);
+                            cantSumProp = Number(capTanque) - Number(stockComb);
+                        }
+                        if(cantCombTotal > capTanque){
+                            bOk = false;
+                            var mssg = this.oBundle.getText("CAPTANQUESUP", [cantSumProp]);
+                            MessageBox.error(mssg);
                         }
                     }else{
                         bOk = false;

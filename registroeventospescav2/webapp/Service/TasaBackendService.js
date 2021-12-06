@@ -875,6 +875,33 @@ sap.ui.define([
             return data;
         },
 
+        obtenerEmbaComb: async function(usuario, cdemb){
+            var uri = UtilService.getHostService() + "/api/embarcacion/ObtenerEmbaComb/";
+            var sBody = UtilService.getBodyEmbaComb();
+            sBody.embarcacion = cdemb;
+            sBody.usuario = usuario;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerEmbaComb: ", error);
+                return null;
+            });
+            return data;
+        },
+
+        crearReserva: async function(reserva){
+            var uri = UtilService.getHostService() + "/api/embarcacion/CrearReserva/";
+            var data = await this.http(uri).post(null, reserva).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.crearReserva: ", error);
+                return null;
+            });
+            return data;
+        },
+
 
         test: function () {
             var latiCalaD = "";

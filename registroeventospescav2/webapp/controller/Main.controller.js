@@ -30,7 +30,7 @@ sap.ui.define([
                     TasaBackendService.obtenerPlantas(currentUser).then(function (plantas) {
                         me.prepararDataTree(tipoEmbarcacion, plantas.data);//metodo para armar la data y setear el modelo del tree
                         TasaBackendService.cargarListaMareas(currentUser).then(function (mareas) {
-                            //console.log("Mareas: ", mareas);
+                            console.log("Mareas: ", mareas);
                             me.validarDataMareas(mareas);
                         }).catch(function (error) {
                             console.log("ERROR: Main.onInit - " + error);
@@ -101,6 +101,8 @@ sap.ui.define([
                 var iconTipoEmba = "sap-icon://sap-box";
                 var iconPlantas = "sap-icon://factory";
                 var dataTree = [];
+                console.log("TIPO EMBA: ", dataTipoEmba);
+                console.log("PLANTAS: ", dataPlantas);
                 for (let index = 0; index < dataTipoEmba.length; index++) {
                     var tmpNodes = [];
                     const element = dataTipoEmba[index];
@@ -133,9 +135,7 @@ sap.ui.define([
                 var mareaSinNumero = [];
                 for (let index = 0; index < str_di.length; index++) {
                     const element = str_di[index];
-                    if (element.NMEMB == "TASA 55") {
-                        console.log("TASA 55: ", element);
-                    }
+                   
                     //if (element.ESMAR = "" || (element.ESMAR == "A" && element.ESCMA == "") || (element.ESMAR == "C" && element.ESCMA == "P")) {
                     if (element.INPRP == "P") {
                         propios.push(element);
@@ -172,6 +172,7 @@ sap.ui.define([
                 //console.log(evt)
                 var selectedItem = evt.getParameter("item").getBindingContext().getObject();
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                console.log("SELECTED ITEM: ", selectedItem);
                 if (selectedItem.cdtem && selectedItem.cdpta) {
                     var oGlobalBusyDialog = new sap.m.BusyDialog();
                     var cdtem = selectedItem.cdtem;
@@ -187,6 +188,7 @@ sap.ui.define([
             },
 
             filtarMareas: function (cdtem, cdpta) {
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 var dataModeloPropios = this.getView().getModel("Propios").getData();
                 var dataModeloTerceros = this.getView().getModel("Terceros").getData();
                 var dataPropios = [];
@@ -194,7 +196,7 @@ sap.ui.define([
                 var num = 0;
                 var num1 = 0;
                 var totalPescaDeclarada = 0;
-                console.log("modeloPropios: ", dataModeloPropios);
+
                 //filtrar propios
                 for (let index = 0; index < dataModeloPropios.length; index++) {
                     const element = dataModeloPropios[index];
@@ -230,8 +232,10 @@ sap.ui.define([
                         dataPropios.push(tmpElement);
                     }
                 }
+                console.log("DATA PROPIOS: ", dataPropios);
                 var modeloMareaPropios = new JSONModel(dataPropios);
                 this.getView().byId("tblMareasPropios").setModel(modeloMareaPropios);
+                //modelo.setProperty("/Mareas/Propios", dataPropios);
                 this.getView().byId("itfPropios").setCount(dataPropios.length);
 
                 //filtrar terceros
@@ -265,9 +269,11 @@ sap.ui.define([
                         dataTerceros.push(tmpElement1);
                     }
                 }
+                console.log("DATA TERCEROS: ", dataTerceros);
                 var modeloMareaTerceros = new JSONModel(dataTerceros);
                 this.getView().byId("tblMareasTerceros").setModel(modeloMareaTerceros);
-                this.getView().byId("itfTerceros").setCount(dataTerceros.length);
+                //modelo.setProperty("/Mareas/Terceros", dataTerceros);
+                //this.getView().byId("itfTerceros").setCount(dataTerceros.length);
 
                 //setear header para total de pesca declarada
                 var ttPescaDecl = totalPescaDeclarada.toString();
@@ -534,7 +540,7 @@ sap.ui.define([
                 var usuario = this.getCurrentUser();
                 var response = await TasaBackendService.obtenerNroReserva(marea, usuario);
                 var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
-                var eventos = modelo.getProperty("/Eventos/Lista");
+                var embarcacion = modelo.getProperty("/Cabecera/CDEMB");
                 modelo.setProperty("/Config/visibleReserva1", false);
                 modelo.setProperty("/Config/visibleReserva2", false);
                 modelo.setProperty("/Config/visibleReserva3", false);
@@ -543,7 +549,6 @@ sap.ui.define([
                         mostrarTab = true;
                     }
                 }
-
                 if (!mareaCerrada) {
                     if (!motivoSinZarpe.includes(motivoMarea)) {
                         var listaEventos = modelo.getProperty("/Eventos/Lista");
@@ -557,77 +562,32 @@ sap.ui.define([
                         mostrarTab = true;
                     }
                 }
-
                 modelo.setProperty("/Config/visibleTabReserva", mostrarTab);
                 if (mostrarTab) {
-                    var marea = modelo.getProperty("/Cabecera/NRMAR")
-                    var response = await TasaBackendService.obtenerReservas(marea, null, null, usuario);
-                    if (response) {
-                        var reservas = response.t_reservas;
-                        modelo.setProperty("/ResCombustible", reservas);
-                        if (!mareaCerrada) {
-                            var configReservas = await TasaBackendService.obtenerConfigReservas(usuario);
-                            if(configReservas){
-                                modelo.setProperty("/ConfigReservas/BWART", configReservas.bwart);
-                                modelo.setProperty("/ConfigReservas/MATNR", configReservas.matnr);
-                                modelo.setProperty("/ConfigReservas/WERKS", configReservas.werks);
-                                modelo.setProperty("/ConfigReservas/Almacenes", configReservas.almacenes);
-                            }
-                            if(reservas.length != 0){
-                                modelo.setProperty("/Config/visibleReserva2", true);
-                                if(visibleNuevo){
-                                    modelo.setProperty("/Config/visibleBtnNuevaReserva", true);
-                                }else{
-                                    modelo.setProperty("/Config/visibleBtnNuevaReserva", false);
-                                }
-                                for (let index = 0; index < reservas.length; index++) {
-                                    const element = reservas[index];
-                                    element.CHKDE = false;
-                                }
-                                modelo.setProperty("/ReservasCombustible", reservas);
-                            }else{
-                                modelo.setProperty("/Config/visibleReserva1", true);
-                                var ultimoEvento = eventos.length > 0 ? eventos[eventos.length - 1] : null;
-                                var descEvento = ultimoEvento ? ultimoEvento.DESC_CDTEV : "";
-                                var fechIniEve = ultimoEvento ? ultimoEvento.FIEVN : "";
-                                modelo.setProperty("/Cabecera/DESC_CDTEV", descEvento);
-                                modelo.setProperty("/Cabecera/FIEVN", fechIniEve);
-                                var planta = ultimoEvento ? ultimoEvento.CDPTA : "";
-                                var descr = ultimoEvento ? ultimoEvento.DESCR : "";
-                                var centro = modelo.getProperty("/ConfigReservas/WERKS");
-                                var material = modelo.getProperty("/ConfigReservas/MATNR");
-                                var data = await TasaBackendService.obtenerSuministro(usuario, material);
-                                if(data){
-                                    var suministro = data.data;
-                                    var dsalm = "";
-                                    var cdale = "";
-                                    var almacenes = modelo.getProperty("/ConfigReservas/Almacenes");
-                                    for (let index = 0; index < almacenes.length; index++) {
-                                        const element = almacenes[index];
-                                        if(element.DSALM == descr){
-                                            dsalm = element.DSALM;
-                                            cdale = element.CDALE;
-                                        }
-                                    }
-                                    var listaSuministro = [{
-                                        NRPOS: "001",
-                                        CDSUM: suministro.CDSUM,
-                                        MAKTX: suministro.MAKTX,
-                                        CDUMD: suministro.CDUMD,
-                                        DSUMD: suministro.DSUMD,
-                                        CDPTA: planta,
-                                        DESCR: descr,
-                                        WERKS: centro,
-                                        DSALM: dsalm,
-                                        CDALE: cdale
-                                    }];
-                                    modelo.setProperty("/Suministro", listaSuministro);
+                    var configReservas = await TasaBackendService.obtenerConfigReservas(usuario);
+                    if (configReservas) {
+                        modelo.setProperty("/ConfigReservas/BWART", configReservas.bwart);
+                        modelo.setProperty("/ConfigReservas/MATNR", configReservas.matnr);
+                        modelo.setProperty("/ConfigReservas/WERKS", configReservas.werks);
+                        modelo.setProperty("/ConfigReservas/Almacenes", configReservas.almacenes);
+                    }
+                    var embaComb = await TasaBackendService.obtenerEmbaComb(usuario, embarcacion);
+                    if (embaComb) {
+                        if (embaComb.data) {
+                            var emba = embaComb.data[0];
+                            var objEmbComb = modelo.getProperty("/EmbaComb");
+                            for (var key in emba) {
+                                if (objEmbComb.hasOwnProperty(key)) {
+                                    objEmbComb[key] = emba[key];
                                 }
                             }
-                        } else {
-                            modelo.setProperty("/ReservasCombustible", reservas);
-                            modelo.setProperty("/Config/visibleReserva3", true);
                         }
+                    }
+                    if (!mareaCerrada) {
+                        await this.obtenerReservas(visibleNuevo);
+                    }else{
+                        modelo.setProperty("/ReservasCombustible", reservas);
+                        modelo.setProperty("/Config/visibleReserva3", true);
                     }
                 }
 
@@ -660,19 +620,24 @@ sap.ui.define([
             },
 
             onSelectTab: function (evt) {
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 var key = evt.getParameter("key");
                 var totalPescaDeclarada = 0;
-                var modelo = null;
+                var data = [];
+                console.log("KEY: ", key);
                 if (key.includes("itfPropios")) {
-                    modelo = this.getView().byId("tblMareasPropios").getModel();
+                    //data = this.getView().byId("tblMareasPropios").getModel();
+                    data = modelo.getProperty("/Mareas/Propios");
                 }
 
                 if (key.includes("itfTerceros")) {
-                    modelo = this.getView().byId("tblMareasTerceros").getModel();
+                    //data = this.getView().byId("tblMareasTerceros").getModel();
+                    data = modelo.getProperty("/Mareas/Terceros");
                 }
 
-                if (modelo) {
-                    var data = modelo.getData();
+                console.log("DATA: ", data);
+
+                if (data) {
                     if (data.length > 0) {
                         for (let index = 0; index < data.length; index++) {
                             const element = data[index];
