@@ -273,7 +273,7 @@ sap.ui.define([
                 var modeloMareaTerceros = new JSONModel(dataTerceros);
                 this.getView().byId("tblMareasTerceros").setModel(modeloMareaTerceros);
                 //modelo.setProperty("/Mareas/Terceros", dataTerceros);
-                //this.getView().byId("itfTerceros").setCount(dataTerceros.length);
+                this.getView().byId("itfTerceros").setCount(dataTerceros.length);
 
                 //setear header para total de pesca declarada
                 var ttPescaDecl = totalPescaDeclarada.toString();
@@ -354,7 +354,7 @@ sap.ui.define([
                 var validaBodCert = await this.validarBodegaCert(codemba, codPlanta);
                 if (validaBodCert) { //se puso la admiracion para pruebas
                     var valMareaProd = await this.ValidacionMareaProduce(codemba, codPlanta);
-                    if (!valMareaProd) {//se puso la admiracion para pruebas
+                    if (valMareaProd) {//se puso la admiracion para pruebas
                         modelo.setProperty("/Cabecera/INDICADOR", "N");
                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                         oRouter.navTo("DetalleMarea");
@@ -397,13 +397,13 @@ sap.ui.define([
                             var bOk = await this.verificarCambiosCodigo("EMB", selectedItem.CDEMB, emba[0]);
                             if (!bOk) {
                                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-                                var codemba = modelo.getProperty("/DatosGenerales/CDPTA");
-                                var codPlanta = modelo.getProperty("/DatosGenerales/CDEMB");
+                                var codemba = modelo.getProperty("/DatosGenerales/CDEMB");
+                                var codPlanta = modelo.getProperty("/DatosGenerales/CDPTA");
                                 var nmbemb = modelo.getProperty("/DatosGenerales/NMEMB");
                                 var validaBodCert = await this.validarBodegaCert(codemba, codPlanta);
                                 if (validaBodCert) { //se puso la admiracion para pruebas
                                     var valMareaProd = await this.ValidacionMareaProduce(codemba, codPlanta);
-                                    if (!valMareaProd) {//se puso la admiracion para pruebas
+                                    if (valMareaProd) {//se puso la admiracion para pruebas
                                         modelo.setProperty("/Cabecera/INDICADOR", "N");
                                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                                         oRouter.navTo("DetalleMarea");
@@ -620,24 +620,25 @@ sap.ui.define([
             },
 
             onSelectTab: function (evt) {
-                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                //var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 var key = evt.getParameter("key");
                 var totalPescaDeclarada = 0;
                 var data = [];
-                console.log("KEY: ", key);
+                var modelo = null;
                 if (key.includes("itfPropios")) {
-                    //data = this.getView().byId("tblMareasPropios").getModel();
-                    data = modelo.getProperty("/Mareas/Propios");
+                    modelo = this.getView().byId("tblMareasPropios").getModel();
+                    //data = modelo.getProperty("/Mareas/Propios");
                 }
 
                 if (key.includes("itfTerceros")) {
-                    //data = this.getView().byId("tblMareasTerceros").getModel();
-                    data = modelo.getProperty("/Mareas/Terceros");
+                    modelo = this.getView().byId("tblMareasTerceros").getModel();
+                    //data = modelo.getProperty("/Mareas/Terceros");
                 }
 
-                console.log("DATA: ", data);
+                //console.log("DATA: ", data);
 
-                if (data) {
+                if (modelo) {
+                    var data = modelo.getData();
                     if (data.length > 0) {
                         for (let index = 0; index < data.length; index++) {
                             const element = data[index];
