@@ -354,7 +354,7 @@ sap.ui.define([
                 var validaBodCert = await this.validarBodegaCert(codemba, codPlanta);
                 if (validaBodCert) { //se puso la admiracion para pruebas
                     var valMareaProd = await this.ValidacionMareaProduce(codemba, codPlanta);
-                    if (!valMareaProd) {//se puso la admiracion para pruebas
+                    if (valMareaProd) {//se puso la admiracion para pruebas
                         modelo.setProperty("/Cabecera/INDICADOR", "N");
                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                         oRouter.navTo("DetalleMarea");
@@ -403,7 +403,7 @@ sap.ui.define([
                                 var validaBodCert = await this.validarBodegaCert(codemba, codPlanta);
                                 if (validaBodCert) { //se puso la admiracion para pruebas
                                     var valMareaProd = await this.ValidacionMareaProduce(codemba, codPlanta);
-                                    if (!valMareaProd) {//se puso la admiracion para pruebas
+                                    if (valMareaProd) {//se puso la admiracion para pruebas
                                         modelo.setProperty("/Cabecera/INDICADOR", "N");
                                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                                         oRouter.navTo("DetalleMarea");

@@ -1933,19 +1933,19 @@ sap.ui.define([
             
         },
         prepararNuevoEvento :function(){
+            this._elementAct = this._eventoNuevo;
             this.obtenerDatosDistribFlota();
             this.prepararVista(true);
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let bOk = true;
             let nuevo = mod.getProperty("/Cabecera/EsNuevo");
-            let nodoForm = mod.getProperty("/Cabecera/CDMMA");
+            let nodoForm = mod.getProperty("/Cabecera");
             let nodoEventos = mod.getProperty("/Eventos/Lista");
             let tipoEvento = nodoEventos[this._eventoNuevo].CDTEV;
             let motivoMarea = mod.getProperty("/Cabecera/CDMMA");
             let indiPropiedad = mod.getProperty("/Cabecera/INPRP");
             let indiPropPlanta = nodoEventos[this._eventoNuevo].INPRP;
             let cantEventos = nodoEventos.length;
-            let elementAct = this._eventoNuevo;
             let fechaSist = new Date();
             
             //wdContext.currentEventosElement().setDescTipoEvento(manageSimpleTypes.getText(attInfoTipoPesca, tipoEvento));-- descripcion debe estar en el modelo
@@ -2047,94 +2047,86 @@ sap.ui.define([
                     }
                 }
                 
-                if (manageSimpleTypes.inArray(motivoMarea, Utilitario.motivoPescaDes)) {
-                    wdThis.wdGetFormCustController().obtenerPuntosDescarga();
-                    wdContext.currentEventosElement().currentPescaDescargadaElement().setCantPescaDeclarada(wdThis.obtenerPescaDeclDescarga());
-                    wdContext.currentEventosElement().currentPescaDescargadaElement().setEsNuevo(true);
+                if (this.buscarValorFijo(textValidaciones.MOTIVOPESCADES, motivoMarea)) {
+                    this.obtenerPuntosDescarga();
+                    nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CantPescaDeclarada = this.obtenerPescaDeclDescarga();
+                    nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].EsNuevo = true;
                     
-                    if (indiPropPlanta.equalsIgnoreCase("P")) { 	//Descarga en planta propia
+                    if (indiPropPlanta == "P") { 	//Descarga en planta propia
                         //Si es (CHI o CHD)
-                        if (motivoMarea.equalsIgnoreCase("2") || motivoMarea.equalsIgnoreCase("1")) {
-                            wdContext.currentEventosElement().setFechIni(null);
-                            wdContext.currentEventosElement().setHoraIni(null);
-                            wdContext.currentEventosElement().setFechFin(null);
-                            wdContext.currentEventosElement().setHoraFin(null);
+                        if (motivoMarea == "2" || motivoMarea == "1") {
+                            nodoEventos[this._eventoNuevo].FIEVN = null;
+                            nodoEventos[this._eventoNuevo].HIEVN = null;
+                            nodoEventos[this._eventoNuevo].FFEVN = null;
+                            nodoEventos[this._eventoNuevo].HFEVN = null;
                         }
-                    } else if (indiPropPlanta.equalsIgnoreCase("T")) {
-                        wdContext.currentEventosElement().currentPescaDescargadaElement().setPlanta(wdContext.currentEventosElement().getPlanta());
+                    } else if (indiPropPlanta == "T") {
+                        nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CDPTA = nodoEventos[this._eventoNuevo].CDPTA;
                     }
                 }	
             }
             else{
-                wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.VISIBLE);
+                this.getView().byId("FechaEnvaseIni").setVisible(true);
             }
             //Tab Equipamiento
-            if (manageSimpleTypes.inArray(tipoEvento, Utilitario.eveVisTabEquip)) {
-                wdThis.obtenerEquipamiento();
+            if (this.buscarValorFijo(textValidaciones.EVEVISTABEQUIP,  tipoEvento)) {
+                this.obtenerEquipamiento();
             }
 
             //Tab Horometro
-            if (manageSimpleTypes.inArray(tipoEvento, Utilitario.eveVisTabHorom)) {
-                wdThis.obtenerHorometros(tipoEvento);
-            }
-
-            //Tab Pesca Declarada
-            if (manageSimpleTypes.inArray(tipoEvento, Utilitario.eveVisTabPeDcl)) {
+            if (this.buscarValorFijo(textValidaciones.EVEVISTABHOROM, tipoEvento)) {
+                this.obtenerHorometros();
             }
 
             //Tab Pesca Descargada
-            if (manageSimpleTypes.inArray(tipoEvento, Utilitario.eveVisTabPeDsc)) {		
-                eventoElement.currentPescaDescargadaElement().setIndicador(constantsUtility.CARACTERNUEVO);
-                let nroDescarga = wdContext.currentFormElement().getCenEmbarcacion();
+            if (this.buscarValorFijo(textValidaciones.EVEVISTABPEDSC, tipoEvento)) {
+                nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].INDTR = "N";	
+                let nroDescarga = mod.getProperty("/DatosGenerales/WERKS");;
                 
-                if (motivoMarea.equals("1")) {
-                    eventoElement.currentPescaDescargadaElement().setTipoPesca("D");			
-                } else if (motivoMarea.equals("2")) {	
-                    eventoElement.currentPescaDescargadaElement().setTipoPesca("I");			
+                if (motivoMarea == "1") {
+                    nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CDTPC = "D";			
+                } else if (motivoMarea == "2") {	
+                    nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CDTPC = "I";					
                 }	
 
-                if (indiPropPlanta.equalsIgnoreCase("P")) {
-                        eventoElement.currentPescaDescargadaElement().setIndicador(constantsUtility.CARACTEREDITAR);
-                        eventoElement.currentPescaDescargadaElement().setIndEjecucion("C");
+                if (indiPropPlanta == "P") {
+                        nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].INDTR = "E";
+                        nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].INDEJ = "C";
                 } else {
-                    eventoElement.currentPescaDescargadaElement().setEspecie(Utilitario.codEspecieNull);
-                    eventoElement.currentPescaDescargadaElement().setNroDescarga(nroDescarga + Utilitario.indiDescPesTer);
+                    nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CDSPC = "0000000000";
+                    nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].NRDES = nroDescarga + "T";
                 }
             }
 
             //Tab Distribucion
-            if (tipoEvento.equals("3")) {
-                wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.VISIBLE);
-                wdThis.obtenerBodegas();
+            if (tipoEvento == "3") {
+                this.getView().byId("FechaEnvaseIni").setVisible(true);
+                this.obtenerBodegas();
             }
             
             //Mostrar Sistema frio
-            if (wdContext.currentFormElement().getIndPropiedad().equalsIgnoreCase("P")) {
-                let emba = wdContext.currentFormElement().getEmbarcacion();
+            if (this._indicadorProp == textValidaciones.INDIC_PROPIEDAD_PROPIOS) {
+                let emba = this._embarcacion;
                 let table = "ZFLEMB";
                 let fields = "CDTPR"; 
                 let options = {"CDEMB = '" + emba + "'", ""};
                 
                 let tipPres = utilCust.getField(table, fields, options );
-                if (eventoElement.getIndicador().equalsIgnoreCase("P")) {
-                    
-                }
                 
                 if (!manageSimpleTypes.isEmpty(tipPres) && !tipPres.equalsIgnoreCase("4")) {
-                    if(manageSimpleTypes.getInt(eventoElement.getTipoEvento()) < 6 && !eventoElement.getTipoEvento().equalsIgnoreCase("H")
-                    && !eventoElement.getTipoEvento().equalsIgnoreCase("T")) {
-                        wdContext.currentVisibleElement().setVisibleDescarga(WDVisibility.VISIBLE);
-                        wdContext.currentVisibleElement().setSistFrio(WDVisibility.VISIBLE);
-                        wdContext.currentUtilsElement().setOpSistFrio(true);
+                    if(Number( nodoEventos[this._eventoNuevo].CDTEV) < 6 && nodoEventos[this._eventoNuevo].CDTEV != "H" && nodoEventos[this._eventoNuevo].CDTEV != "T") {
+                        this.getView().byId("FechaEnvaseIni").setVisible(true);
+                        this.getView().byId("fe_sistema_frio").setVisible(true);
+                        this._opSistFrio = true;
                         
                     } else {
-                        wdContext.currentVisibleElement().setSistFrio(WDVisibility.NONE);
-                        wdContext.currentUtilsElement().setOpSistFrio(false);
+                        this.getView().byId("fe_sistema_frio").setVisible(false);
+                        this._opSistFrio = false;
                     }
                     
                 } else {
-                    wdContext.currentVisibleElement().setSistFrio(WDVisibility.NONE);
-                    wdContext.currentUtilsElement().setOpSistFrio(false);
+                    this.getView().byId("fe_sistema_frio").setVisible(false);
+                    this._opSistFrio = false;
                 }
             }
         },
