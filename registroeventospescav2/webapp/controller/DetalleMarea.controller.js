@@ -181,6 +181,8 @@ sap.ui.define([
         },
 
         onCrearEvento: function () {
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("DetalleEvento");
             this.getNuevoEvento().close();
 
         },

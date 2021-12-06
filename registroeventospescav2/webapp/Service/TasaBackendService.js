@@ -117,8 +117,8 @@ sap.ui.define([
         validarBodegaCert: async function (embarcacion, planta) {
             var uri = UtilService.getHostService() + "/api/embarcacion/ValidarBodegaCert/";
             var sBody = UtilService.getBodyValidaCert();
-            sBody.codEmba = planta;
-            sBody.codPlanta = embarcacion;
+            sBody.codEmba = embarcacion;
+            sBody.codPlanta = planta;
             var data = await this.http(uri).post(null, sBody).then(function (response) {
                 var data = JSON.parse(response);
                 return data;
