@@ -262,7 +262,11 @@ sap.ui.define([
                     TextoConfirmacion: "",
                     VisibleEstCierre: false,
                     VisibleObsvComb: false,
-                    OpSistFrio : false
+                    OpSistFrio : false,
+                    TipoEvento : "",
+                    FlagVistaBiometria : false,
+                    NroEvento_Incidental : "",
+                    NroEvento_Biometria : ""
                 },
                 InputsDescargas :{
                     CentPlanta : "",

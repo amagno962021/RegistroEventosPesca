@@ -400,6 +400,18 @@ sap.ui.define([
                 return response;
             });
         },
+
+        validarErroresDescarga: function (nro_desc, user) {
+            var uri = UtilService.getHostService() + "/api/General/ConsultaGeneral/";
+            var sBody = UtilService.getConsultaGeneral();
+            sBody.nombreConsulta = "CONSGENERRDSCG";
+            sBody.parametro1 = nro_desc;
+            sBody.p_user = user;
+            return this.http(uri).post(null, sBody).then(function (response) {
+                return response;
+            });
+        },
+
         obtenerMedidaEspecie: async function(cod_especie, user){
             var uri = UtilService.getHostService() + "/api/General/ConsultaGeneral/";
             var sBody = UtilService.getConsultaGeneral();

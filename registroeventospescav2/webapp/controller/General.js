@@ -9,7 +9,8 @@ sap.ui.define([
     "./PescaDeclarada",
     "./Siniestro",
     "../model/textValidaciones",
-    "sap/m/MessageBox"
+    "sap/m/MessageBox",
+    "./Utils"
 ], function(
 	ManagedObject,
     JSONModel,
@@ -21,7 +22,8 @@ sap.ui.define([
     PescaDeclarada,
     Siniestro,
     textValidaciones,
-    MessageBox
+    MessageBox,
+    Utils
 ) {
 	"use strict";
 
@@ -113,7 +115,7 @@ sap.ui.define([
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //nodo evento actual
             let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
             //var detalleMarea = {};//modelo detalle marea
-            var Utils = mod.getProperty("/Utils");;//modelo Utils
+            var Utils = mod.getProperty("/Utils");//modelo Utils
             var visible = this.ctr.modeloVisible;//modelo visible
             //var eventAttTabGeneral = {};//modelo con los atributos de los tab por tipo de evento
             var motivoMarea = this.ctr._motivoMarea;
@@ -213,7 +215,7 @@ sap.ui.define([
             return bOk;
         },
 
-        validarLatitudLongitud: function(){
+        validarLatitudLongitud: async function(){
             var bOk = true;
             this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
             var detalleMarea = this.ctr._FormMarea;//cargar modelo detalle marea
@@ -248,7 +250,7 @@ sap.ui.define([
                 eventoActual.Latitud = sLatitud;
                 eventoActual.Longitud = sLongitud;
                 if((sBckLatitud || sLatitud != sBckLatitud) || (sBckLongitud || sLongitud != sBckLongitud)){
-                    bOk = this.validarMillasLitoral();
+                    bOk = await this.validarMillasLitoral();
                     eventoActual.ObteEspePermitidas = true;
                 }
                 eventoActual.BackLatitud = sLatitud;
@@ -273,7 +275,7 @@ sap.ui.define([
             return newValue;
         },
 
-        validarMillasLitoral: function(){
+        validarMillasLitoral:async function(){
             var bOk = true;
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct];//modelo de evento
             var latiCalaD = eventoActual.LatitudD;
@@ -282,14 +284,39 @@ sap.ui.define([
             var longCalaD = eventoActual.LongitudD;
             var longCalaM = eventoActual.LongitudM;
             var longCala = longCalaD*100 + longCalaM;
-            TasaBackendService.obtenerMillasLitoral(latiCalaD, latiCalaM).then(function(response){
+            await TasaBackendService.obtenerMillasLitoral(latiCalaD, latiCalaM).then(function(response){
                 //no hay registro en la tabla de SAP S/4 QAS
-                if(response.data.length > 0){
+                let rep = JSON.parse(response).data;
+                if(rep.length > 0){
+                    let latiPtoCostaD = rep[0].LATGR;
+                    let latiPtoCostaM = rep[0].LATMI;
+                    let longPtoCostaD = rep[0].LONGR;
+                    let longPtoCostaM = rep[0].LONMI;
+                    let difPtos = Utils.difPtosLongOPtosLati(Number(longCalaD), Number(longCalaM * 1.0), Number(longPtoCostaD), Number(longPtoCostaM), 3);
+                    if (Utils.compPtosLongOPtosLati(difPtos) > 0) {
+                        let distCosta = Utils.distPtosLongitud(Number(difPtos), Number(latiCalaD), Number(latiCalaM * 1.0), "MN");
+                        
+                        eventoActual.MillaCosta = distCosta;
+                        eventoActual.ObseAdicional = "";
+                        this._oView.byId("fe_observacioAdic").setVisible(false);
+                        weventoActual.ValiCoordCala = true;
+                        
+                        if (distCosta <= 5) {
+                            eventoActual.ObseAdicional = this.ctr.oBundle.getText("OBSADICPTOEN5MILLAS");
+                            this._oView.byId("fe_observacioAdic").setVisible(true);
+                            let mssg2 = this.ctr.oBundle.getText("PTOCALAEN5MILLAS");
+                            MessageBox.error(mssg2);
+                        }
+                    } else {
+                        let mssg1 = this.ctr.oBundle.getText("COORDNOPTOMAR");
+                        MessageBox.error(mssg1);
+                        bOk = false;
+                    }
 
                 }else{
                     eventoActual.ValiCoordCala = false;
-                    let mssg = this.oBundle.getText("NODATACOORDCOSTA");
-                    MessageBox.error(mssg)
+                    let mssg = this.ctr.oBundle.getText("NODATACOORDCOSTA");
+                    MessageBox.error(mssg);
                 }
                 
             }).catch(function(error){
