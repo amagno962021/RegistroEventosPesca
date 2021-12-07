@@ -18,28 +18,30 @@ sap.ui.define([
     "../Service/TasaBackendService",
     "sap/m/MessageBox",
     'sap/ui/core/BusyIndicator',
-    "./Utils"
+    "./Utils",
+    "./DetalleMarea"
 ], function (
     Controller,
-    General,
-    Distribucion,
-    PescaDeclarada,
-    PescaDescarga,
-    Horometro,
-    Equipamiento,
-    Siniestro,
-    Accidente,
-    Biometria,
-    textValidaciones,
-    eventosModel,
-    JSONModel,
-    MessageToast,
-    integrationLibrary,
-    Fragment,
-    TasaBackendService,
-    MessageBox,
-    BusyIndicator,
-    Utils
+	General,
+	Distribucion,
+	PescaDeclarada,
+	PescaDescargada,
+	Horometro,
+	Equipamiento,
+	Siniestro,
+	Accidente,
+	Biometria,
+	textValidaciones,
+	eventosModel,
+	JSONModel,
+	MessageToast,
+	library,
+	Fragment,
+	TasaBackendService,
+	MessageBox,
+	BusyIndicator,
+	Utils,
+	DetalleMarea
 ) {
     "use strict";
 
@@ -99,8 +101,6 @@ sap.ui.define([
             this._EsperaMareaAnt = EsperaMareaAnt_cont;//[{ "id": "0" }, { "id": "1" }]; 
             this._listaEventos = ListaEventos_cont;
             this._FormMarea = FormEvent_cont.Cabecera;
-            //this._listaEventos = [{ "Numero": "1", "id": "0", "TipoEvento": "7", "MotiNoPesca": "no pesca", "EstaOperacion": "L", "ObseAdicional": "Prueba", "ZPLatiIni": "", "ZPLatiFin": "", "ZPLongIni": "", "ZPLongFin": "", "CantTotalPescDecla": "","CantTotalPescDeclaM":"", "ListaBodegas": [],"ListaBiometria": [], "ListaPescaDeclarada" : [], "ListaPescaDescargada" : [],"ListaHorometros" : [], "ListaEquipamiento" :[], "ListaAccidente" :[], "ListaSiniestros": [],"ListaIncidental":[],"eListaPescaDeclarada":[] }, { "Numero": "2", "id": "1", "TipoEvento": "2", "MotiNoPesca": "7", "EstaOperacion": "L", "ObseAdicional": "Prueba", "ZPLatiIni": "", "ZPLatiFin": "", "ZPLongIni": "", "ZPLongFin": "", "CantTotalPescDecla": "","CantTotalPescDeclaM":"", "ListaBodegas": [],"ListaBiometria": [], "ListaPescaDeclarada" : [], "ListaPescaDescargada" : [],"ListaHorometros" : [], "ListaEquipamiento" :[], "ListaAccidente" :[],"ListaSiniestros": [],"ListaIncidental":[],"eListaPescaDeclarada":[]  }];
-            //this._FormMarea = {"EsNuevo":true, "EstMarea": "C", "EstCierre": "A", "FecCierre": "02/24/2021", "HorCierre": "17:04:50", "ObseAdicional": "Prueba", "CenEmbarcacion": "T059" };
             this._mareaReabierta = false;
             this._zonaPesca = ListaEventos_cont[this._elementAct].CDZPC;
             this._IsRolRadOpe = true; //ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
@@ -115,7 +115,6 @@ sap.ui.define([
             /************ Listas iniciales vacias **************/
             this._ConfiguracionEvento = {};
             this._cmbPuntosDescarga = [];
-            //this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
 
             // var cardManifests = new JSONModel();
             var EventosModelo = new JSONModel();
@@ -1937,9 +1936,6 @@ sap.ui.define([
             this.obtenerDatosDistribFlota();
             this.prepararVista(true);
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
-            let bOk = true;
-            let nuevo = mod.getProperty("/Cabecera/EsNuevo");
-            let nodoForm = mod.getProperty("/Cabecera");
             let nodoEventos = mod.getProperty("/Eventos/Lista");
             let tipoEvento = nodoEventos[this._eventoNuevo].CDTEV;
             let motivoMarea = mod.getProperty("/Cabecera/CDMMA");
@@ -2106,14 +2102,8 @@ sap.ui.define([
             
             //Mostrar Sistema frio
             if (this._indicadorProp == textValidaciones.INDIC_PROPIEDAD_PROPIOS) {
-                let emba = this._embarcacion;
-                let table = "ZFLEMB";
-                let fields = "CDTPR"; 
-                let options = {"CDEMB = '" + emba + "'", ""};
                 
-                let tipPres = utilCust.getField(table, fields, options );
-                
-                if (!manageSimpleTypes.isEmpty(tipPres) && !tipPres.equalsIgnoreCase("4")) {
+                if (this._tipoPreservacion != "" && this._tipoPreservacion != "4") {
                     if(Number( nodoEventos[this._eventoNuevo].CDTEV) < 6 && nodoEventos[this._eventoNuevo].CDTEV != "H" && nodoEventos[this._eventoNuevo].CDTEV != "T") {
                         this.getView().byId("FechaEnvaseIni").setVisible(true);
                         this.getView().byId("fe_sistema_frio").setVisible(true);
@@ -2131,9 +2121,127 @@ sap.ui.define([
             }
         },
         obtenerDatosDistribFlota :function(){
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            if (!eventosElement.getTipoEvento().equals("6")) {
+                this.getView().byId("FechaEnvaseIni").setVisible(true);
+                if (this._FormMarea.EsNuevo == false ||  (this._FormMarea.EsNuevo && this._indicadorProp == "P")) {
+                    DetalleMarea.obtenerDatosDistribFlota();
+                }
+                let nodoEventos = mod.getProperty("/Eventos/Lista");
+                let distribFlotaElement = mod.getProperty("/DistribFlota");
+                nodoEventos[this._eventoNuevo].CDPTO = distribFlotaElement.CDPTO;
+                nodoEventos[this._eventoNuevo].DSPTO = distribFlotaElement.DSPTO;
+                nodoEventos[this._eventoNuevo].CDPTA = distribFlotaElement.CDPTA;
+                nodoEventos[this._eventoNuevo].WERKS = distribFlotaElement.WKSPT;
+                nodoEventos[this._eventoNuevo].DESCR = distribFlotaElement.DESCR;
+                nodoEventos[this._eventoNuevo].INPRP = distribFlotaElement.INPRP;
+                nodoEventos[this._eventoNuevo].CDEMP = distribFlotaElement.EMPLA;
+                nodoEventos[this._eventoNuevo].DSEMP = distribFlotaElement.DSEMP;
+            } else {
+                this.getView().byId("FechaEnvaseIni").setVisible(false);
+                this.getView().byId("FechaEnvaseFin").setVisible(false);
+                this.obtenerDatoPlantaAnt();
+            }
 
         },
         obtenerDatosFechaAnterior : function(){
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            let nodoEventos = mod.getProperty("/Eventos/Lista");
+            let tipoEvento = nodoEventos[this._eventoNuevo].CDTEV;
+            let cantEventos = nodoEventos.length;
+            let elementAct = this._elementAct;
+            let elementAnt = Number(this._elementAct) - 1;
+            let fechaAnt = null;
+            let horaAnt = null;
+            
+            if (cantEventos > 1) {	
+                
+                let tipoEventoAnt = nodoEventos[elementAnt].CDTEV;
+                fechaAnt = nodoEventos[elementAnt].FIEVN;
+                horaAnt = nodoEventos[elementAnt].HIEVN;	
+                
+                if (this.buscarValorFijo(textValidaciones.EVEVISFECHAFIN, tipoEventoAnt)) {
+                    fechaAnt = nodoEventos[elementAnt].FFEVN;
+                    horaAnt = nodoEventos[elementAnt].HFEVN;		
+                }
+                
+                nodoEventos[elementAct].FIEVN  = fechaAnt;
+                nodoEventos[elementAct].HIEVN = horaAnt;
+                
+                if (this.buscarValorFijo(textValidaciones.EVEVISFECHAFIN, tipoEvento)) {	
+                    nodoEventos[elementAct].FFEVN  = fechaAnt;
+                    nodoEventos[elementAct].HFEVN = horaAnt;				
+                }
+                
+                if (tipoEvento == "6") {
+                    this.getView().byId("FechaEnvaseIni").setVisible(false);
+                    this.getView().byId("FechaEnvaseFin").setVisible(false);
+                    let horaCorte = this._ConfiguracionEvento.DescHoraCorte;
+                    
+                    let fechHoraProd =new Date(fechaAnt + " " + horaCorte);
+                    let fechHoraIni = new Date(fechaAnt + " " + horaAnt);
+                    
+                    if (fechHoraIni < fechHoraProd) {
+                        fechHoraProd.setMonth(fechHoraProd.getMonth() - 1);
+                    }
+                    
+                    nodoEventos[elementAct].FechProduccion = new Date(fechHoraProd.getTime());	
+                }
+            } else if ( this._indicadorProp == textValidaciones.INDIC_PROPIEDAD_PROPIOS) {
+                let motivoMareaAnt = mod.getProperty("/MareaAnterior/CDMMA");
+
+                if (motivoMareaAnt != "") {
+
+                    if (!this.buscarValorFijo(textValidaciones.MOTIVOSINZARPE, motivoMareaAnt)) {
+                        let tipoEventoAnt = mod.getProperty("/MareaAnterior/EventoMarAnt/CDTEV");
+            
+                        if (this.buscarValorFijo(textValidaciones.EVEPERVALFECHA, tipoEventoAnt)) {
+                            fechaAnt = mod.getProperty("/MareaAnterior/EventoMarAnt/FIEVN");
+                            horaAnt  = mod.getProperty("/MareaAnterior/EventoMarAnt/HIEVN");
+                
+                            if (this.buscarValorFijo(textValidaciones.EVEVISFECHAFIN, tipoEventoAnt)) {
+                                fechaAnt = mod.getProperty("/MareaAnterior/EventoMarAnt/FFEVN");
+                                horaAnt  = mod.getProperty("/MareaAnterior/EventoMarAnt/HFEVN");
+                            }
+                        } else {
+                            var mssg2 = this.oBundle.getText("MARANTNOFINEVEVAL");
+                            MessageBox.warning(mssg2); 
+                        }
+                    } else {
+                        fechaAnt = mod.getProperty("/MareaAnterior/FFMAR");
+                        horaAnt  = mod.getProperty("/MareaAnterior/HFMAR");			
+                    }			
+                } else {
+                    var mssg2 = this.oBundle.getText("NOEXISTDATAMARANT");
+                    MessageBox.error(mssg2); 
+                }
+            }
+
+            nodoEventos[elementAct].FIEVN  = fechaAnt;
+            nodoEventos[elementAct].HIEVN = horaAnt;
+
+        },
+        obtenerDatoPlantaAnt : function(){
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            let codEventoTope ="5";
+            let nodoEventos = mod.getProperty("/Eventos/Lista");
+
+            for (let i = (Number(this._eventoNuevo) - 1); i > 0; i--) {
+                                                
+                if (nodoEventos[i].CDTEV == codEventoTope) {
+                    this.getView().byId("FechaEnvaseIni").setVisible(true);
+                    nodoEventos[this._eventoNuevo].CDPTO = nodoEventos[i].CDPTO;
+                    nodoEventos[this._eventoNuevo].DSPTO = nodoEventos[i].DSPTO;
+                    nodoEventos[this._eventoNuevo].CDPTA = nodoEventos[i].CDPTA;
+                    nodoEventos[this._eventoNuevo].WERKS = nodoEventos[i].WERKS;
+                    nodoEventos[this._eventoNuevo].DESCR = nodoEventos[i].DESCR;
+                    nodoEventos[this._eventoNuevo].INPRP = nodoEventos[i].INPRP;
+                    nodoEventos[this._eventoNuevo].CDEMP = nodoEventos[i].CDEMP;
+                    nodoEventos[this._eventoNuevo].DSEMP = nodoEventos[i].DSEMP;
+                    
+                    break;
+                }
+            }
 
         },
         posicionarEventoAnterior : function(codEvento){
