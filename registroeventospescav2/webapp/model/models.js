@@ -251,7 +251,8 @@ sap.ui.define([
                     TipoEvento : "",
                     FlagVistaBiometria : false,
                     NroEvento_Incidental : "",
-                    NroEvento_Biometria : ""
+                    NroEvento_Biometria : "",
+                    TipoConsulta:""
                 },
                 InputsDescargas :{
                     CentPlanta : "",

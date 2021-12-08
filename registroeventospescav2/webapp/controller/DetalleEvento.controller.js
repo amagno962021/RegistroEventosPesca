@@ -19,7 +19,7 @@ sap.ui.define([
     "sap/m/MessageBox",
     'sap/ui/core/BusyIndicator',
     "./Utils",
-    "./DetalleMarea"
+    "./DetalleMarea.controller"
 ], function (
     Controller,
 	General,
@@ -68,6 +68,7 @@ sap.ui.define([
         },
 
         _onPatternMatched: async function (oEvent) {
+
             //modelo de alejandro
             BusyIndicator.show(0);
             var modeloDetalleMarea = this.getOwnerComponent().getModel("DetalleMarea");
@@ -76,88 +77,148 @@ sap.ui.define([
             let MareaAnterior_cont = dataDetalleMarea.MareaAnterior;
             let EsperaMareaAnt_cont = dataDetalleMarea.EsperaMareaAnt;
             let FormEvent_cont = dataDetalleMarea;
+            let TipoCons = modeloDetalleMarea.getProperty("/Utils/TipoConsulta");
+            if(TipoCons == "E"){
 
-            console.log("FormEvent_cont: ", FormEvent_cont);
+                /********* Carga de variables globales **********/
+                this.calendarioPescaCHD = dataDetalleMarea.calendarioPescaCHD;
+                this.calendarioPescaCHI = dataDetalleMarea.calendarioPescaCHI;
+                this.calendarioPescaVED = dataDetalleMarea.calendarioPescaVED;
+                this._listaIncidental = dataDetalleMarea.Incidental;
+                this._elementAct = modeloDetalleMarea.getProperty("/Eventos/LeadSelEvento");//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
+                this._utilNroEventoBio = "001";
+                this._utilNroEventoIncid = "001";
+                this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA;
+                this._tipoEvento = ListaEventos_cont[this._elementAct].CDTEV;
+                this._nroEvento = ListaEventos_cont[this._elementAct].NREVN;//ESTE ES EL NUMERO DEL EVENTO SELECCIONADO DE LA LISTA DE DETALLE
+                this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "";//"165728";
+                this._nroDescarga = ListaEventos_cont[this._elementAct].NRDES;//"TCHI001444";
+                this._indicador = "E"//ListaEventos_cont[this._elementAct].INPRP;//"E";
+                this._indicadorPropXPlanta = ListaEventos_cont[this._elementAct].INPRP;
+                this._codPlanta = FormEvent_cont.Cabecera.CDPTA;
+                this._embarcacion = FormEvent_cont.Cabecera.CDEMB;//"0000000012";
+                this._indicadorProp = FormEvent_cont.Cabecera.INPRP;
+                this._soloLectura = FormEvent_cont.DataSession.SoloLectura;//data de session solo lectura obtenida desde el principal
+                this._EsperaMareaAnt = EsperaMareaAnt_cont;//[{ "id": "0" }, { "id": "1" }]; 
+                this._listaEventos = ListaEventos_cont;
+                this._FormMarea = FormEvent_cont.Cabecera;
+                this._mareaReabierta = false;
+                this._zonaPesca = ListaEventos_cont[this._elementAct].CDZPC;
+                this._IsRolRadOpe = true; //ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
+                this._IsRolIngComb = false;//ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
+                this._tipoPreservacion = ""; //viene de la consulta al servicio
+                this._opSistFrio = FormEvent_cont.Utils.OpSistFrio; //VALOR DE UTILITARIO DE LA VISTA GLOBAL
+                this._listasServicioCargaIni;
+                this._listaEventosBkup;
+                this._listaMareaAnterior = MareaAnterior_cont;
+                this._eventoNuevo = "5"; //VALOR DEL ID DEL EVENTO NUEVO DE LA LISTA PRINCIPAL
+                this.cargarListasEventoSelVacias();
+                /************ Listas iniciales vacias **************/
+                this._ConfiguracionEvento = {};
+                this._cmbPuntosDescarga = [];
 
-            /********* Carga de variables globales **********/
-            this.calendarioPescaCHD = dataDetalleMarea.calendarioPescaCHD;
-            this.calendarioPescaCHI = dataDetalleMarea.calendarioPescaCHI;
-            this.calendarioPescaVED = dataDetalleMarea.calendarioPescaVED;
-            this._listaIncidental = dataDetalleMarea.Incidental;
-            this._elementAct = modeloDetalleMarea.getProperty("/Eventos/LeadSelEvento");//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
-            this._utilNroEventoBio = "001";
-            this._utilNroEventoIncid = "001";
-            this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA;
-            this._tipoEvento = ListaEventos_cont[this._elementAct].CDTEV;
-            this._nroEvento = ListaEventos_cont[this._elementAct].NREVN;//ESTE ES EL NUMERO DEL EVENTO SELECCIONADO DE LA LISTA DE DETALLE
-            this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "";//"165728";
-            this._nroDescarga = ListaEventos_cont[this._elementAct].NRDES;//"TCHI001444";
-            this._indicador = "E"//ListaEventos_cont[this._elementAct].INPRP;//"E";
-            this._indicadorPropXPlanta = ListaEventos_cont[this._elementAct].INPRP;
-            this._codPlanta = FormEvent_cont.Cabecera.CDPTA;
-            this._embarcacion = FormEvent_cont.Cabecera.CDEMB;//"0000000012";
-            this._indicadorProp = FormEvent_cont.Cabecera.INPRP;
-            this._soloLectura = FormEvent_cont.DataSession.SoloLectura;//data de session solo lectura obtenida desde el principal
-            this._EsperaMareaAnt = EsperaMareaAnt_cont;//[{ "id": "0" }, { "id": "1" }]; 
-            this._listaEventos = ListaEventos_cont;
-            this._FormMarea = FormEvent_cont.Cabecera;
-            this._mareaReabierta = false;
-            this._zonaPesca = ListaEventos_cont[this._elementAct].CDZPC;
-            this._IsRolRadOpe = true; //ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
-            this._IsRolIngComb = false;//ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
-            this._tipoPreservacion = ""; //viene de la consulta al servicio
-            this._opSistFrio = FormEvent_cont.Utils.OpSistFrio; //VALOR DE UTILITARIO DE LA VISTA GLOBAL
-            this._listasServicioCargaIni;
-            this._listaEventosBkup;
-            this._listaMareaAnterior = MareaAnterior_cont;
-            this._eventoNuevo = "5"; //VALOR DEL ID DEL EVENTO NUEVO DE LA LISTA PRINCIPAL
-            this.cargarListasEventoSelVacias();
-            /************ Listas iniciales vacias **************/
-            this._ConfiguracionEvento = {};
-            this._cmbPuntosDescarga = [];
+                // var cardManifests = new JSONModel();
+                var EventosModelo = new JSONModel();
+                var oProductsModel = new JSONModel();
+                var ModeloVisible = new JSONModel();
 
-            // var cardManifests = new JSONModel();
-            var EventosModelo = new JSONModel();
-            var oProductsModel = new JSONModel();
-            var ModeloVisible = new JSONModel();
+                this.getView().setModel(ModeloVisible, "visible");
+                this.getView().setModel(oProductsModel, "products");
+                this.getView().setModel(EventosModelo, "eventos");
 
-            this.getView().setModel(ModeloVisible, "visible");
-            this.getView().setModel(oProductsModel, "products");
-            this.getView().setModel(EventosModelo, "eventos");
+                ModeloVisible.setData(textValidaciones.visible);
+                EventosModelo.setData(this._listaEventos[this._elementAct]);
+                oProductsModel.setData(eventosModel);
+                oProductsModel.setProperty("/enabledEspecie", true);
 
-            ModeloVisible.setData(textValidaciones.visible);
-            EventosModelo.setData(this._listaEventos[this._elementAct]);
-            oProductsModel.setData(eventosModel);
-            oProductsModel.setProperty("/enabledEspecie", true);
+                EventosModelo.setProperty("/enabledBodCantpesca", true);
+                EventosModelo.setProperty("/enabledCantPescDeclarada", true);
 
-            EventosModelo.setProperty("/enabledBodCantpesca", true);
-            EventosModelo.setProperty("/enabledCantPescDeclarada", true);
+                EventosModelo.setProperty("/enabledCantPescDescargada", true);
+                EventosModelo.setProperty("/enabledCantPescDeclDesc", true);
+                EventosModelo.setProperty("/enabledPuntoDescarga", true);
+                EventosModelo.setProperty("/enabledFechProdDesc", true);
+                EventosModelo.setProperty("/enabledAveriado", true);
+                EventosModelo.setProperty("/enabledCantEquipamiento", true);
 
-            EventosModelo.setProperty("/enabledCantPescDescargada", true);
-            EventosModelo.setProperty("/enabledCantPescDeclDesc", true);
-            EventosModelo.setProperty("/enabledPuntoDescarga", true);
-            EventosModelo.setProperty("/enabledFechProdDesc", true);
-            EventosModelo.setProperty("/enabledAveriado", true);
-            EventosModelo.setProperty("/enabledCantEquipamiento", true);
+                this.modeloVisibleModel = this.getView().getModel("visible");
+                this.modeloVisible = this.modeloVisibleModel.getData();
 
-            this.modeloVisibleModel = this.getView().getModel("visible");
-            this.modeloVisible = this.modeloVisibleModel.getData();
+                // this.prueba01 = "Hola"
+                // EventosModelo.setProperty("/prueba001", this.prueba01);
 
-            // this.prueba01 = "Hola"
-            // EventosModelo.setProperty("/prueba001", this.prueba01);
+                /************ Carga de fragments de los eventos **************/
+                let self = this;
+                await this.cargarServiciosPreEvento().then(r => {
 
-            /************ Carga de fragments de los eventos **************/
-            let self = this;
-            await this.cargarServiciosPreEvento().then(r => {
+                    if (r) {
+                        self.getFragment();
+                    } else {
+                        BusyIndicator.hide();
+                        alert("Error");
+                    }
 
-                if (r) {
-                    self.getFragment();
-                } else {
-                    BusyIndicator.hide();
-                    alert("Error");
-                }
+                })
+            }else{
+                /********* Carga de variables globales **********/
+                this.calendarioPescaCHD = dataDetalleMarea.calendarioPescaCHD;
+                this.calendarioPescaCHI = dataDetalleMarea.calendarioPescaCHI;
+                this.calendarioPescaVED = dataDetalleMarea.calendarioPescaVED;
+                this._listaIncidental = dataDetalleMarea.Incidental;
+                this._utilNroEventoBio = "001";
+                this._utilNroEventoIncid = "001";
+                this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA;
+                this._tipoEvento = "";
+                this._nroEvento = "";
+                this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "";//"165728";
+                this._nroDescarga = "";
+                this._indicadorPropXPlanta = "";
+                this._codPlanta = FormEvent_cont.Cabecera.CDPTA;
+                this._embarcacion = FormEvent_cont.Cabecera.CDEMB;//"0000000012";
+                this._indicadorProp = FormEvent_cont.Cabecera.INPRP;
+                this._soloLectura = FormEvent_cont.DataSession.SoloLectura;//data de session solo lectura obtenida desde el principal
+                this._EsperaMareaAnt = EsperaMareaAnt_cont;//[{ "id": "0" }, { "id": "1" }]; 
+                this._listaEventos = ListaEventos_cont;
+                this._elementAct = this._listaEventos.length;
+                this._FormMarea = FormEvent_cont.Cabecera;
+                this._mareaReabierta = false;
+                this._zonaPesca = "";
+                this._IsRolRadOpe = true; //ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
+                this._IsRolIngComb = false;//ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
+                this._tipoPreservacion = ""; //viene de la consulta al servicio
+                this._opSistFrio = FormEvent_cont.Utils.OpSistFrio; //VALOR DE UTILITARIO DE LA VISTA GLOBAL
+                this._listasServicioCargaIni;
+                this._listaEventosBkup;
+                this._listaMareaAnterior = MareaAnterior_cont;
+                this._eventoNuevo = "";
+                /************ Listas iniciales vacias **************/
+                this._ConfiguracionEvento = {};
+                this._cmbPuntosDescarga = [];
 
-            })
+                // var cardManifests = new JSONModel();
+                var EventosModelo = new JSONModel();
+                var ModeloVisible = new JSONModel();
+
+                this.getView().setModel(ModeloVisible, "visible");
+                this.getView().setModel(EventosModelo, "eventos");
+
+                ModeloVisible.setData(textValidaciones.visible);
+                EventosModelo.setData(this._listaEventos[this._elementAct]);
+
+                EventosModelo.setProperty("/enabledBodCantpesca", true);
+                EventosModelo.setProperty("/enabledCantPescDeclarada", true);
+
+                EventosModelo.setProperty("/enabledCantPescDescargada", true);
+                EventosModelo.setProperty("/enabledCantPescDeclDesc", true);
+                EventosModelo.setProperty("/enabledPuntoDescarga", true);
+                EventosModelo.setProperty("/enabledFechProdDesc", true);
+                EventosModelo.setProperty("/enabledAveriado", true);
+                EventosModelo.setProperty("/enabledCantEquipamiento", true);
+
+                this.modeloVisibleModel = this.getView().getModel("visible");
+                this.modeloVisible = this.modeloVisibleModel.getData();
+                this.cerrarCrearEvento();
+            }
 
         },
         cargarListasEventoSelVacias: function () {
@@ -277,6 +338,8 @@ sap.ui.define([
         },
 
         getFragment: async function () {
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            let TipoCons = mod.getProperty("/Utils/TipoConsulta");
             var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.session);
             let flag = oStore.get("flagFragment");
             console.log("flag : " + flag);
@@ -352,10 +415,17 @@ sap.ui.define([
             if (this._listasServicioCargaIni[9] ? true : false) {
                 this._ConfiguracionEvento = this._listasServicioCargaIni[9];
             }
-            var ss = this._listasServicioCargaIni[11].data[0].data;
-            await this.prepararRevisionEvento(false);
-            this.cargaModelos();
-            BusyIndicator.hide();
+
+            if(TipoCons == "E"){
+                await this.prepararNuevoEvento();
+                BusyIndicator.hide();
+            }else{
+                var ss = this._listasServicioCargaIni[11].data[0].data;
+                await this.prepararRevisionEvento(false);
+                this.cargaModelos();
+                BusyIndicator.hide();
+            }
+            
 
         },
 
@@ -1361,7 +1431,7 @@ sap.ui.define([
             return false;
 
         },
-        distribuirDatosDescarga: function (datos) {
+        distribuirDatosDescarga: async function (datos) {
             let data = this._listaEventos[this._elementAct].ListaPescaDescargada;
             if (data.length > 0) {
                 let limpiar = false;
@@ -1460,7 +1530,7 @@ sap.ui.define([
                                     limpiar = !this.validarFechaAnterior();
 
                                     if (!limpiar) {
-                                        let mensaje = this.validarErroresDescarga(pescaDescElement.Nro_descarga);
+                                        let mensaje = await this.validarErroresDescarga(pescaDescElement.Nro_descarga);
                                         limpiar = mensaje != "";
 
                                         if (!limpiar) {
@@ -1899,16 +1969,17 @@ sap.ui.define([
         },
 
         //----------------------------------------------------------------------  METODOS CREAR EVENTO ------------------------------------------------------------------
-        cerrarCrearEvento : function(){
+        cerrarCrearEvento : async function(){
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let tipoEvento  =  mod.getProperty("/Utils/TipoEvento");
             let LstEvento = mod.getProperty("/Eventos/Lista")
 
             let timeInMilis = new Date();
-            timeInMilis = timeInMilis.getTime();
-            var NuevoEvento = [];
+            //timeInMilis = timeInMilis.getTime();
             
             if (tipoEvento != null) {
+                this._tipoEvento = tipoEvento;
+                this._nroEvento = Number(LstEvento.length) + 1;
 
                 var obj = {
                     INDTR : "N",
@@ -1923,15 +1994,28 @@ sap.ui.define([
                 mod.setProperty("/Cabecera/MareaEditada",true);
                 mod.setProperty("/Cabecera/MareaEditada",true);
                 LstEvento.push(obj);
+                this.cargarListasEventoSelVacias();
                 this._eventoNuevo = Number(LstEvento.length) -1;
+                mod.setProperty("/Utils/FlagVistaBiometria",true);
+                mod.setProperty("/Utils/NroEvento_Incidental",Number(LstEvento.length) + 1);
                 //wdThis.wdGetFormCustController().setVisibleBtnFooter(true, false); -- la botonera de alejandro revisar
-                this.prepararNuevoEvento();
+                /************ Carga de fragments de los eventos **************/
+                let self = this;
+                await this.cargarServiciosCrearEvento().then(r => {
+
+                    if (r) {
+                        self.getFragment();
+                    } else {
+                        BusyIndicator.hide();
+                        alert("Error");
+                    }
+
+                })
+                
             }
-            mod.setProperty("/Utils/FlagVistaBiometria",true);
-            mod.setProperty("/Utils/NroEvento_Incidental",Number(LstEvento.length) + 1);
             
         },
-        prepararNuevoEvento :function(){
+        prepararNuevoEvento :async function(){
             this._elementAct = this._eventoNuevo;
             this.obtenerDatosDistribFlota();
             this.prepararVista(true);
@@ -1987,6 +2071,7 @@ sap.ui.define([
             if (tipoEvento == "3") {
                 this.getView().byId("FechaEnvaseIni").setVisible(true);
                 this.posicionarEventoAnterior("2");
+                await this.serviceNE_obtenerListaCoordZonaPesca();
                 this.obtenerCoordZonaPesca();
                 
                 let latiMin = this._listaEventos[this._elementAct].ZPLatiIni;
@@ -2255,6 +2340,48 @@ sap.ui.define([
                     break;
                 }
             }
+        },
+        cargarServiciosCrearEvento: function () {
+
+            let self = this;
+            var s1 = TasaBackendService.obtenerCodigoTipoPreservacion(this._embarcacion, this.getCurrentUser());
+            var s2 = TasaBackendService.obtenerListaEquipamiento(this._embarcacion, this.getCurrentUser());
+            var s3 = TasaBackendService.obtenerListaCoordZonaPesca("0", this.getCurrentUser()); // servicios que no deberian cargarse
+            var s4 = TasaBackendService.obtenerListaPescaDeclarada(this._nroMarea, this._nroEvento, this.getCurrentUser());
+            var s5 = TasaBackendService.obtenerListaBodegas(this._embarcacion, this.getCurrentUser());
+            var s6 = TasaBackendService.obtenerListaPescaBodegas(this._nroMarea, this._nroEvento, this.getCurrentUser());
+            var s7 = TasaBackendService.obtenerListaPuntosDescarga(this._codPlanta, this.getCurrentUser());
+            var s8 = TasaBackendService.obtenerListaPescaDescargada("0", this.getCurrentUser()); // servicios que no deberian cargarse
+            var s10 = TasaBackendService.obtenerListaHorometro(this._FormMarea.WERKS, this._tipoEvento, this._nroMarea, this._nroEvento);
+            var s11 = TasaBackendService.obtenerConfiguracionEvento();
+            var s12 = TasaBackendService.obtenerDominio("1ZONAPESCA");
+            var s13 = TasaBackendService.obtenerDominio("ZESOPE");
+            var s14 = TasaBackendService.obtenerDominio("ZCDMLM");
+            var s15 = TasaBackendService.obtenerDominio("ZCDTDS");
+            var s16 = TasaBackendService.obtenerDominio("ZCDMNP");
+            var s17 = TasaBackendService.obtenerDominio("ZCDMES");
+            var s18 = TasaBackendService.obtenerDominio("ZD_SISFRIO");
+            var s19 = TasaBackendService.obtenerDominio("ESPECIE");
+            var s20 = TasaBackendService.obtenerMareaBiometria(this._embarcacion, this._nroMarea, this.getCurrentUser());
+
+            return Promise.all([s1, s2, s3, s4, s5, s6, s7, s8, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20]).then(values => {
+                self._tipoPreservacion = JSON.parse(values[0]).data[0].CDTPR;
+                self._listasServicioCargaIni = values;
+                return true;
+            }).catch(reason => {
+                return false;
+            })
+
+        },
+        serviceNE_obtenerListaCoordZonaPesca: async function () {
+            let serv_errorDesc = TasaBackendService.obtenerListaCoordZonaPesca(this._listaEventos[this._elementAct].CDZPC, this.getCurrentUser());
+            let that = this;
+            await Promise.resolve(serv_errorDesc).then(values => {
+                that._listasServicioCargaIni[2] = values;
+            }).catch(reason => {
+
+            });
+
         }
 
     });
