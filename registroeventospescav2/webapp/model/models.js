@@ -15,10 +15,6 @@ sap.ui.define([
 
 		createInitModel: function(){
 			var initModel = {
-                Mareas:{
-                    Propios:[],
-                    Terceros:[]
-                },
 				Cabecera: {
                     INDICADOR: "",
 					NRMAR: "",
@@ -45,7 +41,6 @@ sap.ui.define([
                     FCMOD: "",
                     HRMOD: "",
                     ATMOD: "",
-                    NREVN: "",
                     CDTEV: "",
                     DESC_CDTEV: "",
                     FIEVN: "",
@@ -107,19 +102,6 @@ sap.ui.define([
                 },
                 Suministro: [],
                 ReservasCombustible: [],
-                Result: {
-                    NroReserva: ""
-                },
-                EmbaComb: {
-                    CDTAN: "",
-                    MANDT: "",
-                    CDEMB: "",
-                    CPSDM: "",
-                    CVPMS: "",
-                    CPPMS: "",
-                    CVADM: "",
-                    STCMB: ""
-                },
                 ConfigReservas: {
                     BWART: "",
                     MATNR: "",
@@ -143,7 +125,7 @@ sap.ui.define([
                     WKSPT: "",
                     CDUPT: "",
                     DSEMP: "",
-                    INPRP: "",
+                    INPRP: ""
                 },
                 MareaAnterior:{
                     NRMAR: "",
@@ -251,7 +233,8 @@ sap.ui.define([
                     TipoEvento : "1",
                     FlagVistaBiometria : false,
                     NroEvento_Incidental : "",
-                    NroEvento_Biometria : ""
+                    NroEvento_Biometria : "",
+                    TipoConsulta:""
                 },
                 InputsDescargas :{
                     CentPlanta : "",

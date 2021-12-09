@@ -181,16 +181,12 @@ sap.ui.define([
         },
 
         onCrearEvento: function () {
-            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var tipoEvento = modelo.getProperty("/Utils/TipoEvento");
-            if (tipoEvento) {
-                console.log("MODELO: ", modelo);
-                var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-                oRouter.navTo("DetalleEvento");
-                this.getNuevoEvento().close();
-            }else{
-                MessageBox.error("Seleccione Evento");
-            }
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            mod.setProperty("/Utils/TipoConsulta","C");
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("DetalleEvento");
+            this.getNuevoEvento().close();
+
         },
 
         onCerrarCrearEvento: function () {
@@ -683,7 +679,8 @@ sap.ui.define([
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var object = evt.getSource().getParent().getBindingContext("DetalleMarea").getObject();
             var indexEvento = object.NREVN - 1;
-            modelo.setProperty("/Eventos/LeadSelEvento", indexEvento)
+            modelo.setProperty("/Utils/TipoConsulta", "E");
+            modelo.setProperty("/Eventos/LeadSelEvento", indexEvento);
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("DetalleEvento");
         },

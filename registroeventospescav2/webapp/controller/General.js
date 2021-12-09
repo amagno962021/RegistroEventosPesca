@@ -53,6 +53,7 @@ sap.ui.define([
         },
 
         validateFields: function(attributeName, verMensajes){
+            let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
             this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
             var bOk = true;
             var value = null;
@@ -60,11 +61,17 @@ sap.ui.define([
             for (var key in attributeName) {
                 if (attributeName.hasOwnProperty(key)) {
                     var value = attributeName[key];
-                    if (!value) {
+                    let ListaEventos = mod.getProperty("/Eventos/Lista");
+                    let EventoSel = ListaEventos[this.ctr._elementAct];
+                    let ValorElement = EventoSel[value.id];
+
+                    if (ValorElement != null && ValorElement == "") {
+
                         bOk = false;
                         if(verMensajes){
-                            var message = this.oBundle.getText("CAMPONULL", [value]);
-                            messages.push(message);
+                            var message = this.oBundle.getText("CAMPONULL", [value.id]);
+                            MessageBox.error(message);
+                            //messages.push(message);
                         }
                         else{
                             break;
@@ -125,8 +132,8 @@ sap.ui.define([
             var eveCampGeneVal = ["1", "5", "6", "H", "T"]; //Tipos de evento con campos generales distintos a validar 
             if(indPropiedad == "P"){
                 if(Utils.OpSistFrio && parseInt(tipoEvento) < 6){
-                    if(eventoActual.ESTSF != ""){
-                        var mssg = this.oBundle.getText("MISSINGSISTFRIO");
+                    if(eventoActual.ESTSF == ""){
+                        var mssg = this.ctr.oBundle.getText("MISSINGSISTFRIO");
                         MessageBox.error(mssg);
                         bOk = false;
                     }
@@ -327,7 +334,7 @@ sap.ui.define([
             return bOk;
         },
 
-        onActionSelectTab: async function(tab_seleccionado){
+        onActionSelectTab: async function(tab_seleccionado,event){
             this.nextTab = tab_seleccionado;
             if(this.previousTab == undefined){
                 this.previousTab = "General";
@@ -419,9 +426,12 @@ sap.ui.define([
                 }
 
             }
-            this.previousTab = tab_seleccionado;
+            this.previousTab = this.nextTab;
             this.ctr.modeloVisibleModel.refresh();
-            this._oView.getModel("eventos").updateBindings(true);
+
+            let tabRedirect = this.buscarCodTab(textValidaciones.KeyTabs, this.nextTab)
+            let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
+            o_iconTabBar.setSelectedKey(tabRedirect);
             //refrescar modelos
         },
 
@@ -587,13 +597,13 @@ sap.ui.define([
                     }
                 }else{
                     bOk = false;
-                    var mssg = this.oBundle.getText("NOREGBIOMET");
+                    var mssg = this.ctr.oBundle.getText("NOREGBIOMET");
                     MessageBox.error(mssg);
                 }
             }
 
             if(!bOk){
-                var mssg = this.oBundle.getText("VALINCIDENTAL");
+                var mssg = this.ctr.oBundle.getText("VALINCIDENTAL");
                 MessageBox.error(mssg);
             }
             return bOk;
@@ -767,6 +777,13 @@ sap.ui.define([
 
             this._oView.getModel("eventos").updateBindings(true);
             //refrescar modelo
+        },
+        buscarCodTab: function (arrayRecorrido, valor_a_encontrar) {
+            let key = "";
+            let arrayValiTab = arrayRecorrido[0];
+            key = arrayValiTab[valor_a_encontrar];
+
+            return key
         }
 
 	});
