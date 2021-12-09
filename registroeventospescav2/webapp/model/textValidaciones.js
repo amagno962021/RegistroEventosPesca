@@ -82,8 +82,22 @@ sap.ui.define([], function () {
 				{id : "3"},
 				{id : "4"}
 			],
+			KeyTabs : [
+				{
+					"General" : "Gen",
+					"Distribucion" : "Dist",
+					"Biometria" : "Biom",
+					"Pesca descargada" : "PDesc",
+					"Pesca declarada" : "PDecl",
+					"Horometro" : "Horo",
+					"Equipamiento" : "Equi",
+					"Siniestro" : "Sini",
+					"Accidente" : "Acci"
+				}
+			],
 			//////////////////////////////////////////////////////////
 			eventAttTabGeneral: [
+					[],
 					[
 						{id : "FIEVN"},
 						{id : "HIEVN"},

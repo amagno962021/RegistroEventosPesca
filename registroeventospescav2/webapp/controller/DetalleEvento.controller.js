@@ -91,7 +91,7 @@ sap.ui.define([
                 this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA;
                 this._tipoEvento = ListaEventos_cont[this._elementAct].CDTEV;
                 this._nroEvento = ListaEventos_cont[this._elementAct].NREVN;//ESTE ES EL NUMERO DEL EVENTO SELECCIONADO DE LA LISTA DE DETALLE
-                this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "";//"165728";
+                this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "" == "" ? "0" : FormEvent_cont.Cabecera.NRMAR + "";//"165728";
                 this._nroDescarga = ListaEventos_cont[this._elementAct].NRDES;//"TCHI001444";
                 this._indicador = "E"//ListaEventos_cont[this._elementAct].INPRP;//"E";
                 this._indicadorPropXPlanta = ListaEventos_cont[this._elementAct].INPRP;
@@ -170,7 +170,7 @@ sap.ui.define([
                 this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA;
                 this._tipoEvento = "";
                 this._nroEvento = "";
-                this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "";//"165728";
+                this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "" == "" ? "0" : FormEvent_cont.Cabecera.NRMAR + "";//"165728";
                 this._nroDescarga = "";
                 this._indicadorPropXPlanta = "";
                 this._codPlanta = FormEvent_cont.Cabecera.CDPTA;
@@ -195,25 +195,9 @@ sap.ui.define([
                 this._ConfiguracionEvento = {};
                 this._cmbPuntosDescarga = [];
 
-                // var cardManifests = new JSONModel();
-                var EventosModelo = new JSONModel();
                 var ModeloVisible = new JSONModel();
-
                 this.getView().setModel(ModeloVisible, "visible");
-                this.getView().setModel(EventosModelo, "eventos");
-
                 ModeloVisible.setData(textValidaciones.visible);
-                EventosModelo.setData(this._listaEventos[this._elementAct]);
-
-                EventosModelo.setProperty("/enabledBodCantpesca", true);
-                EventosModelo.setProperty("/enabledCantPescDeclarada", true);
-
-                EventosModelo.setProperty("/enabledCantPescDescargada", true);
-                EventosModelo.setProperty("/enabledCantPescDeclDesc", true);
-                EventosModelo.setProperty("/enabledPuntoDescarga", true);
-                EventosModelo.setProperty("/enabledFechProdDesc", true);
-                EventosModelo.setProperty("/enabledAveriado", true);
-                EventosModelo.setProperty("/enabledCantEquipamiento", true);
 
                 this.modeloVisibleModel = this.getView().getModel("visible");
                 this.modeloVisible = this.modeloVisibleModel.getData();
@@ -222,6 +206,11 @@ sap.ui.define([
 
         },
         cargarListasEventoSelVacias: function () {
+            this._listaEventos[this._elementAct].ESOPE = this._listaEventos[this._elementAct].ESOPE ? this._listaEventos[this._elementAct].ESOPE : "";
+            this._listaEventos[this._elementAct].STCMB = this._listaEventos[this._elementAct].STCMB ? this._listaEventos[this._elementAct].STCMB : "";
+            this._listaEventos[this._elementAct].ESTSF = this._listaEventos[this._elementAct].ESTSF ? this._listaEventos[this._elementAct].ESTSF : "";
+            this._listaEventos[this._elementAct].CDMLM = this._listaEventos[this._elementAct].CDMLM ? this._listaEventos[this._elementAct].CDMLM : "";
+            this._listaEventos[this._elementAct].ESOPE = this._listaEventos[this._elementAct].ESOPE ? this._listaEventos[this._elementAct].ESOPE : "";
             this._listaEventos[this._elementAct].ListaBodegas = [];
             this._listaEventos[this._elementAct].ListaBiometria = [];
             this._listaEventos[this._elementAct].ListaPescaDeclarada = [];
@@ -240,7 +229,7 @@ sap.ui.define([
         obtenerTab: function (event) {
             let tab_evento_sel = event.getParameter("selectedItem").getProperty("text");
             console.log(event.getParameter("selectedItem").getProperty("text"));
-            this.Dat_General.onActionSelectTab(tab_evento_sel);
+            this.Dat_General.onActionSelectTab(tab_evento_sel,event);
         },
         cargaModelos: function () {
 
@@ -363,7 +352,7 @@ sap.ui.define([
 
                 var o_fragment6 = new Distribucion(this.getView(), "Distribucion");
                 var o_fragment7 = new PescaDeclarada(this.getView(), "PescaDeclarada", this);
-                var o_fragment8 = new PescaDescarga(this.getView(), "PescaDescargada", this);
+                var o_fragment8 = new PescaDescargada(this.getView(), "PescaDescargada", this);
                 var o_fragment9 = new Horometro(this.getView(), "Horometro", this);
                 var o_fragment10 = new Equipamiento(this.getView(), "Equipamiento");
                 var o_fragment11 = new Siniestro(this.getView(), "Siniestro", this);
@@ -394,7 +383,7 @@ sap.ui.define([
 
                 var o_fragment6 = new Distribucion(this.getView(), "Distribucion");
                 var o_fragment7 = new PescaDeclarada(this.getView(), "PescaDeclarada", this);
-                var o_fragment8 = new PescaDescarga(this.getView(), "PescaDescargada", this);
+                var o_fragment8 = new PescaDescargada(this.getView(), "PescaDescargada", this);
                 var o_fragment9 = new Horometro(this.getView(), "Horometro", this);
                 var o_fragment10 = new Equipamiento(this.getView(), "Equipamiento");
                 var o_fragment11 = new Siniestro(this.getView(), "Siniestro", this);
@@ -416,8 +405,23 @@ sap.ui.define([
                 this._ConfiguracionEvento = this._listasServicioCargaIni[9];
             }
 
-            if(TipoCons == "E"){
+            if(TipoCons == "C"){
+                var EventosModelo = new JSONModel();
+                this.getView().setModel(EventosModelo, "eventos");
+                EventosModelo.setData(this._listaEventos[this._elementAct]);
+
+                EventosModelo.setProperty("/enabledBodCantpesca", true);
+                EventosModelo.setProperty("/enabledCantPescDeclarada", true);
+
+                EventosModelo.setProperty("/enabledCantPescDescargada", true);
+                EventosModelo.setProperty("/enabledCantPescDeclDesc", true);
+                EventosModelo.setProperty("/enabledPuntoDescarga", true);
+                EventosModelo.setProperty("/enabledFechProdDesc", true);
+                EventosModelo.setProperty("/enabledAveriado", true);
+                EventosModelo.setProperty("/enabledCantEquipamiento", true);
+                this.cargarListasEventoSelVacias();
                 await this.prepararNuevoEvento();
+                this.cargaModelos();
                 BusyIndicator.hide();
             }else{
                 var ss = this._listasServicioCargaIni[11].data[0].data;
@@ -560,6 +564,7 @@ sap.ui.define([
         },
 
         prepararVista: function (nuevoEvento) {
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
             this.resetView();
             var exisEspMarAnt = false;
             if (this._EsperaMareaAnt != null && this._EsperaMareaAnt.length > 0) { exisEspMarAnt = true; } else { exisEspMarAnt = false; }
@@ -728,18 +733,18 @@ sap.ui.define([
                     if (this._tipoEvento != "H" && this._tipoEvento != "T") {
                         if (Number(this._tipoEvento) < 6) {
                             this.getView().byId("fe_sistema_frio").setVisible(true);
-                            this._opSistFrio = true;
+                            mod.setProperty("/Utils/OpSistFrio",true);
                         }
 
 
                     } else {
                         this.getView().byId("fe_sistema_frio").setVisible(false);
-                        this._opSistFrio = false;
+                        mod.setProperty("/Utils/OpSistFrio",false);
                     }
 
                 } else {
                     this.getView().byId("fe_sistema_frio").setVisible(false);
-                    this._opSistFrio = false;
+                    mod.setProperty("/Utils/OpSistFrio",false);
                 }
             }
 
@@ -1915,7 +1920,7 @@ sap.ui.define([
             this.getView().getModel("eventos").setProperty("/enabledPuntoDescarga", true);
             this.getView().getModel("eventos").setProperty("/enabledFechProdDesc", true);
             this.getView().getModel("eventos").setProperty("/enabledAveriado", true);
-            this.getView().getModel("eventos").setProperty("/enabledCantEquipamiento", false);
+            this.getView().getModel("eventos").setProperty("/enabledCantEquipamiento", true);
 
             this.getView().byId("FechaEnvaseIni").setVisible(false);
             this.getView().byId("FechaEnvaseFin").setVisible(false);
@@ -1994,8 +1999,9 @@ sap.ui.define([
                 mod.setProperty("/Cabecera/MareaEditada",true);
                 mod.setProperty("/Cabecera/MareaEditada",true);
                 LstEvento.push(obj);
-                this.cargarListasEventoSelVacias();
+                
                 this._eventoNuevo = Number(LstEvento.length) -1;
+                this._elementAct = this._eventoNuevo;
                 mod.setProperty("/Utils/FlagVistaBiometria",true);
                 mod.setProperty("/Utils/NroEvento_Incidental",Number(LstEvento.length) + 1);
                 //wdThis.wdGetFormCustController().setVisibleBtnFooter(true, false); -- la botonera de alejandro revisar
@@ -2192,22 +2198,23 @@ sap.ui.define([
                     if(Number( nodoEventos[this._eventoNuevo].CDTEV) < 6 && nodoEventos[this._eventoNuevo].CDTEV != "H" && nodoEventos[this._eventoNuevo].CDTEV != "T") {
                         this.getView().byId("FechaEnvaseIni").setVisible(true);
                         this.getView().byId("fe_sistema_frio").setVisible(true);
-                        this._opSistFrio = true;
+                        mod.setProperty("/Utils/OpSistFrio",true);
                         
                     } else {
                         this.getView().byId("fe_sistema_frio").setVisible(false);
-                        this._opSistFrio = false;
+                        mod.setProperty("/Utils/OpSistFrio",false);
                     }
                     
                 } else {
                     this.getView().byId("fe_sistema_frio").setVisible(false);
-                    this._opSistFrio = false;
+                    mod.setProperty("/Utils/OpSistFrio",false);
                 }
             }
+            this.getView().getModel("eventos").updateBindings(true);
         },
         obtenerDatosDistribFlota :function(){
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
-            if (!eventosElement.getTipoEvento().equals("6")) {
+            if (this._tipoEvento != "6") {
                 this.getView().byId("FechaEnvaseIni").setVisible(true);
                 if (this._FormMarea.EsNuevo == false ||  (this._FormMarea.EsNuevo && this._indicadorProp == "P")) {
                     DetalleMarea.obtenerDatosDistribFlota();

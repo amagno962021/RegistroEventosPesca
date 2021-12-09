@@ -412,21 +412,21 @@ sap.ui.define([
         onCheckBoxSelected: function (oEvent) {//EVENTO DE PRUEBA
             var oSelectedItem2 = this._oView.byId("prue").mAggregations.items;
             for (var i = 0; i < oSelectedItem2.length; i++) {
-                var prop = oSelectedItem2[i].mProperties;
-                prop.selected = false;
-                console.log(prop);
+                //var prop = oSelectedItem2[i].mProperties;
+                //prop.selected = false;
+                //console.log(prop);
             }
-            this._oView.getModel("eventos").updateBindings(true);
+            //this._oView.getModel("eventos").updateBindings(true);
 
-            var oSelectedItem = this._oView.byId("prue").getItems();
-            for (var i = 0; i < oSelectedItem.length; i++) {
-                var item1 = oSelectedItem[i].setSelected(false).setEditable(false);
-                var cells = item1.getCells();
-                console.log(cells[0].getText());
-                console.log(cells[1].getValue());
-                console.log(cells[2].getText());
+            // var oSelectedItem = this._oView.byId("prue").getItems();
+            // for (var i = 0; i < oSelectedItem.length; i++) {
+            //     var item1 = oSelectedItem[i].setSelected(false).setEditable(false);
+            //     var cells = item1.getCells();
+            //     console.log(cells[0].getText());
+            //     console.log(cells[1].getValue());
+            //     console.log(cells[2].getText());
 
-            }
+            // }
         }
 
 
