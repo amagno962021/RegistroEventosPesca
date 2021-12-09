@@ -88,14 +88,14 @@ sap.ui.define([
                 this._elementAct = modeloDetalleMarea.getProperty("/Eventos/LeadSelEvento");//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
                 this._utilNroEventoBio = "001";
                 this._utilNroEventoIncid = "001";
-                this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA;
+                this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA ? dataDetalleMarea.Cabecera.CDMMA : dataDetalleMarea.DatosGenerales.CDMMA;
                 this._tipoEvento = ListaEventos_cont[this._elementAct].CDTEV;
                 this._nroEvento = ListaEventos_cont[this._elementAct].NREVN;//ESTE ES EL NUMERO DEL EVENTO SELECCIONADO DE LA LISTA DE DETALLE
                 this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "" == "" ? "0" : FormEvent_cont.Cabecera.NRMAR + "";//"165728";
                 this._nroDescarga = ListaEventos_cont[this._elementAct].NRDES;//"TCHI001444";
                 this._indicador = "E"//ListaEventos_cont[this._elementAct].INPRP;//"E";
                 this._indicadorPropXPlanta = ListaEventos_cont[this._elementAct].INPRP;
-                this._codPlanta = FormEvent_cont.Cabecera.CDPTA;
+                this._codPlanta = FormEvent_cont.Cabecera.CDPTA ? FormEvent_cont.Cabecera.CDPTA : dataDetalleMarea.DatosGenerales.CDPTA;
                 this._embarcacion = FormEvent_cont.Cabecera.CDEMB;//"0000000012";
                 this._indicadorProp = FormEvent_cont.Cabecera.INPRP;
                 this._soloLectura = FormEvent_cont.DataSession.SoloLectura;//data de session solo lectura obtenida desde el principal
@@ -167,13 +167,13 @@ sap.ui.define([
                 this._listaIncidental = dataDetalleMarea.Incidental;
                 this._utilNroEventoBio = "001";
                 this._utilNroEventoIncid = "001";
-                this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA;
+                this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA ? dataDetalleMarea.Cabecera.CDMMA : dataDetalleMarea.DatosGenerales.CDMMA;
                 this._tipoEvento = "";
                 this._nroEvento = "";
                 this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "" == "" ? "0" : FormEvent_cont.Cabecera.NRMAR + "";//"165728";
                 this._nroDescarga = "";
                 this._indicadorPropXPlanta = "";
-                this._codPlanta = FormEvent_cont.Cabecera.CDPTA;
+                this._codPlanta = FormEvent_cont.Cabecera.CDPTA ? FormEvent_cont.Cabecera.CDPTA : FormEvent_cont.DatosGenerales.CDPTA;
                 this._embarcacion = FormEvent_cont.Cabecera.CDEMB;//"0000000012";
                 this._indicadorProp = FormEvent_cont.Cabecera.INPRP;
                 this._soloLectura = FormEvent_cont.DataSession.SoloLectura;//data de session solo lectura obtenida desde el principal
