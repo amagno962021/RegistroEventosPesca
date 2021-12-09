@@ -3,7 +3,9 @@ sap.ui.define([
     "./FormCust",
     "./Utils",
     "../Service/TasaBackendService",
-], function (Controller, FormCust, Utils, TasaBackendService) {
+    "sap/m/MessageBox",
+    "sap/ui/core/BusyIndicator"
+], function (Controller, FormCust, Utils, TasaBackendService, MessageBox, BusyIndicator) {
     "use strict";
 
     return Controller.extend("com.tasa.registroeventospescav2.controller.MainComp", {
@@ -401,14 +403,6 @@ sap.ui.define([
 
         },
 
-        saveAll: async function(){
-            var bOk = await this.crearReserva();
-            if(bOk){
-
-            }
-            return bOk;
-        },
-
         crearReserva: async function(){
             var bOk = true;
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
@@ -424,7 +418,14 @@ sap.ui.define([
             };
             var crearReserva = await TasaBackendService.crearReserva(bodyReserva);
             if(crearReserva){
-                
+                var t_mensaje = crearReserva.t_mensaje;
+                modelo.setProperty("/Result/NroReserva", crearReserva.p_reserva)
+                if(t_mensaje.length){
+                    if(t_mensaje[0].CMIN == "E"){
+                        bOk = false;
+                        MessageBox.error(t_mensaje[0].DSMIN);
+                    }
+                }
             }else{
                 bOk = false;
             }
@@ -452,11 +453,14 @@ sap.ui.define([
         },
 
         obtenerReservas: async function(visibleNuevo){
+            BusyIndicator.show(0);
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var marea = modelo.getProperty("/Cabecera/NRMAR");
             var usuario = this.getCurrentUser();
             var eventos = modelo.getProperty("/Eventos/Lista");
             var response = await TasaBackendService.obtenerReservas(marea, null, null, usuario);
+            modelo.setProperty("/Config/visibleReserva1", false);
+            modelo.setProperty("/Config/visibleReserva2", false);
             if (response) {
                 var reservas = response.t_reservas;
                 if (reservas.length != 0) {
@@ -486,7 +490,7 @@ sap.ui.define([
                     var material = modelo.getProperty("/ConfigReservas/MATNR");
                     var data = await TasaBackendService.obtenerSuministro(usuario, material);
                     if (data) {
-                        var suministro = data.data;
+                        var suministro = data.data[0];
                         var dsalm = "";
                         var cdale = "";
                         var almacenes = modelo.getProperty("/ConfigReservas/Almacenes");
@@ -514,19 +518,48 @@ sap.ui.define([
                     }
                 }
             }
+            BusyIndicator.hide();
         },
 
-        sResultadoGuardar: async function(val){
-            if(val){
-                await this.obtenerReservas(true);
+        anularReservas: async function(reservas, indices){
+            BusyIndicator.show(0);
+            var objAnular = {
+                p_user: this.getCurrentUser(),
+                str_rsc: reservas
+            };
+            var anular = await TasaBackendService.anularReservas(objAnular);
+            if(anular){
+                var me = this;
+                var mssg = this.getResourceBundle().getText("ANULARESEXITO");
+                MessageBox.success(mssg, {
+                    title: "Exito",
+                    onClose: async function(){
+                        BusyIndicator.hide();
+                        await me.obtenerReservas(true);
+                    }
+                });
             }
+        },
+
+        obtenerDetalleReserva: async function(nrmar, nrrsv){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var usuario = this.getCurrentUser();
+            var bOk = false;
+            var detalleReservas = await TasaBackendService.obtenerReservas(nrmar, nrrsv, "X", usuario);
+            if(detalleReservas){
+                var reserva = detalleReservas.t_reservas[0];
+                var objReserva = modelo.getProperty("/DetalleReserva");
+                for (var key in reserva) {
+                    if (objReserva.hasOwnProperty(key)) {
+                        objReserva[key] = reserva[key];
+                    }
+                }
+                var detalles = detalleReservas.t_detalle;
+                modelo.setProperty("/DetalleReserva/Lista", detalles);
+                bOk = true;
+            }
+            return bOk;
         }
-
-
-
-
-
-
 
     });
 

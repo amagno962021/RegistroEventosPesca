@@ -356,6 +356,7 @@ sap.ui.define([
                     var valMareaProd = await this.ValidacionMareaProduce(codemba, codPlanta);
                     if (valMareaProd) {//se puso la admiracion para pruebas
                         modelo.setProperty("/Cabecera/INDICADOR", "N");
+                        modelo.setProperty("/DatosGenerales/ESMAR", "A");
                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                         oRouter.navTo("DetalleMarea");
                     } else {
@@ -405,6 +406,7 @@ sap.ui.define([
                                     var valMareaProd = await this.ValidacionMareaProduce(codemba, codPlanta);
                                     if (valMareaProd) {//se puso la admiracion para pruebas
                                         modelo.setProperty("/Cabecera/INDICADOR", "N");
+                                        modelo.setProperty("/DatosGenerales/ESMAR", "A");
                                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                                         oRouter.navTo("DetalleMarea");
                                     } else {
@@ -426,22 +428,6 @@ sap.ui.define([
 
             },
 
-            validaBodMar: async function (cdemb, cdpta, nmemb) {
-                var bOk = false;
-                var response = await TasaBackendService.validarBodegaCert(cdemb, cdpta);
-                if (response.estado) {
-                    var response1 = await TasaBackendService.validarMareaProd(cdemb, cdpta);
-                    if (response1.p_correcto == "X") {
-                        bOk = true;
-                    } else {
-                        MessageBox.error(this.oBundle.getText("EMBANOPROD", [nmemb]));
-                    }
-                } else {
-                    MessageBox.error(this.oBundle.getText("EMBANOPER", [nmemb]));
-                }
-                return bOk;
-            },
-
             setDetalleMarea: async function (data) {
                 var me = this;
                 var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
@@ -452,7 +438,6 @@ sap.ui.define([
                 var incidental = data.str_pscinc;
                 var biometria = data.str_flbsp;
                 var motivoResCombu = ["1", "2", "4", "5", "6", "7", "8"];
-                console.log("Marea: ", marea);
                 modeloDetalleMarea.setProperty("/Cabecera/INDICADOR", "E");
                 //setear cabecera de formulario
                 //var cabecera = dataDetalleMarea.Cabecera;

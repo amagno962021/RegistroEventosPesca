@@ -94,37 +94,22 @@ sap.ui.define([
 				},
                 Incidental: [],
                 Biometria: [],
-                ReservaCombustible: {
-                    Reserva1: {
-                        CDEMB: "",
-                        NMEMB: "",
-                        NRMAR: "",
-                        DESC_CDMMA: "",
-                        DESC_CDTEV: "",
-                        FHRSV: "",
-                        Sumistro: []
-                    },
-                    Reserva2: {
-
-                    },
-                    Reserva3: {
-
-                    },
-                    Suministro:{
-                        NRRSV: "",
-                        NMEMB: "",
-                        NRMAR: "",
-                        DESC_CDMMA: "",
-                        DESC_CDTEV: "",
-                        FHRSV: "",
-                        DESC_ESRSV: "",
-                        CDEMB: "",
-                        NMEMB: "",
-                        Lista: []
-                    }
+                DetalleReserva: {
+                    NRRSV: "",
+                    DESC_ESRSV: "",
+                    CDEMB: "",
+                    NMEMB: "",
+                    NRMAR: "",
+                    DESC_CDMMA: "",
+                    DESC_CDTEV: "",
+                    FHRSV: "",
+                    Lista: []
                 },
                 Suministro: [],
                 ReservasCombustible: [],
+                Result: {
+                    NroReserva: ""
+                },
                 EmbaComb: {
                     CDTAN: "",
                     MANDT: "",
@@ -263,7 +248,7 @@ sap.ui.define([
                     VisibleEstCierre: false,
                     VisibleObsvComb: false,
                     OpSistFrio : false,
-                    TipoEvento : "",
+                    TipoEvento : "1",
                     FlagVistaBiometria : false,
                     NroEvento_Incidental : "",
                     NroEvento_Biometria : ""

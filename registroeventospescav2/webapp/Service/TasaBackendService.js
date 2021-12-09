@@ -914,6 +914,41 @@ sap.ui.define([
             return data;
         },
 
+        anularReservas: async function(sBody){
+            var uri = UtilService.getHostService() + "/api/embarcacion/AnularReserva/";
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.anularReservas: ", error);
+                return null;
+            });
+            return data;
+        },
+
+        crearVenta: async function(venta){
+            var uri = UtilService.getHostService() + "/api/embarcacion/CrearVenta/";
+            var data = await this.http(uri).post(null, venta).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.crearVenta: ", error);
+                return null;
+            });
+            return data;
+        },
+
+        anularVenta: async function(listaVentas){
+            var uri = UtilService.getHostService() + "/api/embarcacion/AnularVenta/";
+            var data = await this.http(uri).post(null, listaVentas).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.anularVenta: ", error);
+                return null;
+            });
+            return data;
+        },
 
         test: function () {
             var latiCalaD = "";

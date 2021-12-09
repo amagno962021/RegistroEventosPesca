@@ -470,7 +470,7 @@
 										<ColumnListItem type="Inactive">
 											<cells>
 												<Text text="{DetalleMarea>NRPOS}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												<Text text="{DetalleMarea>CDSUM}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit"
+												<Text text="{DetalleMarea>MAKTX}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit"
 														visible="true"/>
 												<ObjectNumber number="{DetalleMarea>CNSUM}" unit="{DetalleMarea>DSUMD}"/>
 												<Text text="{DetalleMarea>WERKS}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
@@ -498,12 +498,12 @@
 												<Button text="Nueva Reserva" type="Default" icon="sap-icon://add-product" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleBtnNuevaReserva}"
 														iconDensityAware="false" />
 												<Button text="Anular" type="Default" icon="sap-icon://add-product" iconFirst="true" width="auto" enabled="true" visible="true"
-														iconDensityAware="false" />
+														iconDensityAware="false" press="onAnularReservas"/>
 											</content>
 										</OverflowToolbar>
 									</headerToolbar>
 									<columns>
-										<Column width="8%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<Column width="5%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
 											<header>
 												<Text text="" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 											</header>
@@ -569,7 +569,7 @@
 												<Text text="{DetalleMarea>FHRSV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 												<ObjectNumber number="{DetalleMarea>CTSUM}" unit="{DetalleMarea>DSUMD}"/>
 												<Text text="{DetalleMarea>DESC_ESRSV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												<Link text="Detalle" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												<Link text="Detalle" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" press="onAbrirDetalleReserva"/>
 											</cells>
 										</ColumnListItem>
 									</items>
@@ -577,7 +577,7 @@
 							</VBox>
 							<VBox id="PanelReserva3" visible="{DetalleMarea>/Config/visibleReserva3}">
 								<Table id="tblReserva3" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true"
-										class="sapUiResponsiveMargin">
+										class="sapUiResponsiveMargin" items="">
 									<infoToolbar>
 										<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
 											<content>

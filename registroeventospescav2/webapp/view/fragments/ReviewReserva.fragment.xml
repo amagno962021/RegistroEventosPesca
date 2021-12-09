@@ -13,7 +13,7 @@
 									<Label text="Reserva" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<Text text="{DetalleMarea>/ReservaCombustible/Suministro/NRRSV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+									<Text text="{DetalleMarea>/DetalleReserva/NRRSV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement visible="true">
@@ -21,16 +21,16 @@
 									<Label text="Estado" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<Text text="{DetalleMarea>/ReservaCombustible/Suministro/DESC_ESRSV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+									<Text text="{DetalleMarea>/DetalleReserva/DESC_ESRSV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement visible="true">
+							<form:FormElement visible="true" >
 								<form:label>
 									<Label text="Embarcación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<Text text="{DetalleMarea>/ReservaCombustible/Suministro/CDEMB}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-									<Text text="{DetalleMarea>/ReservaCombustible/Suministro/NMEMB}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+									<Text text="{DetalleMarea>/DetalleReserva/CDEMB}" width="100%" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+									<Text text="{DetalleMarea>/DetalleReserva/NMEMB}" width="100%" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement visible="true">
@@ -38,8 +38,8 @@
 									<Label text="Marea" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<Text text="{DetalleMarea>/ReservaCombustible/Suministro/NRMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-									<Text text="{DetalleMarea>/ReservaCombustible/Suministro/DESC_CDMMA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+									<Text text="{DetalleMarea>/DetalleReserva/NRMAR}" width="50%" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+									<Text text="{DetalleMarea>/DetalleReserva/DESC_CDMMA}" width="50%" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement visible="true">
@@ -47,7 +47,7 @@
 									<Label text="Evento" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<Text text="{DetalleMarea>/ReservaCombustible/Suministro/DESC_CDTEV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+									<Text text="{DetalleMarea>/DetalleReserva/DESC_CDTEV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement visible="true">
@@ -55,7 +55,7 @@
 									<Label text="Fecha de Reserva" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<Text text="{DetalleMarea>/ReservaCombustible/Suministro/FHRSV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+									<Text text="{DetalleMarea>/DetalleReserva/FHRSV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:fields>
 							</form:FormElement>
 						</form:formElements>
@@ -66,7 +66,7 @@
 				</form:layout>
 			</form:Form>
 			<Table width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true"
-										class="sapUiResponsiveMargin" items="{DetalleMarea>/ReservaCombustible/Suministro/Lista}">
+										class="sapUiResponsiveMargin" items="{DetalleMarea>/DetalleReserva/Lista}">
 				<infoToolbar>
 					<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
 						<content>
@@ -117,22 +117,21 @@
 				<items>
 					<ColumnListItem type="Inactive">
 						<cells>
-							<Text text="001" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-							<Text text="PETROLEO DIESEL B5 S50 PD TASA" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit"
-														visible="true"/>
-                            <ObjectNumber number="{CNPCM}" unit="GALONES"/>
-							<Text text="TCNO" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-							<Text text="CALLAO" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+							<Text text="{DetalleMarea>NRPOS}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+							<Text text="{DetalleMarea>MAKTX}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                            <ObjectNumber number="{DetalleMarea>CNSUM}" unit="{DetalleMarea>DSUMD}"/>
+							<Text text="{DetalleMarea>CDPTA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+							<Text text="{DetalleMarea>/DSALM}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 						</cells>
 					</ColumnListItem>
 				</items>
 			</Table>
 		</content>
 		<beginButton>
-			<Button type="Emphasized" id="btnConfirmSave" text="Aceptar" press="onCloseConfirm" enabled="true"></Button>
+			<Button text="Cerar" press="onCloseReviewRes"></Button>
 		</beginButton>
 		<endButton>
-			<Button text="Cancelar" press="onCancelConfirm"></Button>
+			
 		</endButton>
 	</Dialog>
 </core:FragmentDefinition>

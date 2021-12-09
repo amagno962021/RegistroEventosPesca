@@ -181,10 +181,16 @@ sap.ui.define([
         },
 
         onCrearEvento: function () {
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("DetalleEvento");
-            this.getNuevoEvento().close();
-
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var tipoEvento = modelo.getProperty("/Utils/TipoEvento");
+            if (tipoEvento) {
+                console.log("MODELO: ", modelo);
+                var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                oRouter.navTo("DetalleEvento");
+                this.getNuevoEvento().close();
+            }else{
+                MessageBox.error("Seleccione Evento");
+            }
         },
 
         onCerrarCrearEvento: function () {
@@ -575,12 +581,19 @@ sap.ui.define([
             //modelo.setProperty("/Config/visibleTabReserva", false);
             modelo.setProperty("/Config/visibleTabVenta", false);
             modelo.setProperty("/Config/visibleTabSepComb", false);
+            var indicador = modelo.getProperty("/Cabecera/INDICADOR");
+            if(indicador == "N"){
+                modelo.setProperty("/Config/readOnlyEstaMar", false);
+            }else{
+                modelo.setProperty("/Config/readOnlyEstaMar", true);
+            }
+            
         },
 
         validarTemporadaVeda: async function(){
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var fechaIni = modelo.getProperty("/DatosGenerales/FIMAR");
-            var veda = false
+            var veda = false;
             if(fechaIni){
                 var usuario = this.getCurrentUser();
                 var strFecha = fechaIni.split("/")[2] + fechaIni.split("/")[1] + fechaIni.split("/")[0] + "";
@@ -610,7 +623,6 @@ sap.ui.define([
             var puerto = modelo.getProperty("/DistribFlota/CDPTA");
             var descPuerto = modelo.getProperty("/DistribFlota/DESCR");
             if(veda){
-
                 await this.obtenerLimiteVeda();
             } else{
                 modelo.setProperty("/DatosGenerales/CDMMA", "");
@@ -870,6 +882,7 @@ sap.ui.define([
         },
 
         onReservar: async function(){
+            BusyIndicator.show(0);
             var validar = await this.validarCabeceraSuministro();
             if(validar){
                 var mssg = this.oBundle.getText("CONFIRMSAVEMESSAGE");
@@ -878,6 +891,7 @@ sap.ui.define([
                     title: me.oBundle.getText("CONFIRMSAVETITLE"),
                     onClose: function(evt){
                         if(evt == "OK"){
+                            BusyIndicator.hide();
                             me.getNuevaMareaDialog().close();
                             me.SaveReserva()
                         }
@@ -887,9 +901,21 @@ sap.ui.define([
         },
 
         SaveReserva: async function(){
-            var val = await this.saveAll();
-            await this.sResultadoGuardar(val);
-            
+            BusyIndicator.show(0);
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var val = await this.crearReserva();
+            if(val){
+                var me = this;
+                var nroReserva = modelo.getProperty("/Result/NroReserva");
+                var mssg = this.oBundle.getText("NRORESERVAGEN", [nroReserva]);
+                MessageBox.success(mssg, {
+                    title: "Exito",
+                    onClose: async function(){
+                        BusyIndicator.hide();
+                        await me.obtenerReservas(true);
+                    }
+                });
+            }
         },
 
         validarCabeceraSuministro: async function(){
@@ -939,10 +965,71 @@ sap.ui.define([
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var descAlmacen = evt.getParameter("value");
             modelo.setProperty("/Suministro/0/DSALM", descAlmacen);
+        },
+
+        onAnularReservas: async function(){
+            BusyIndicator.show(0);
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var reservasCombustible = modelo.getProperty("/ReservasCombustible");
+            var listReservas = [];
+            var indiReservas = [];
+            for (let index = 0; index < reservasCombustible.length; index++) {
+                const element = reservasCombustible[index];
+                if(element.CHKDE){
+                    var obj = {
+                        NRRSV: element.NRRSV,
+                        NRMAR: element.NRMAR
+                    };
+                    listReservas.push(obj);
+                    indiReservas.push(index);
+                }
+            }
+            if(listReservas.length > 0){
+                var me = this;
+                var mssg = this.oBundle.getText("ANULARESERMES");
+                var title = this.oBundle.getText("ANULARESERTITLE");
+                MessageBox.confirm(mssg, {
+                    title: title,
+                    onClose: async function(evt){
+                        if(evt == "OK"){
+                            BusyIndicator.hide();
+                            await me.anularReservas(listReservas, indiReservas);
+                        }
+                    }
+                })
+            }else{
+                BusyIndicator.hide();
+                var mssg = this.oBundle.getText("NORESERVASSELEC");
+                MessageBox.error(mssg);
+            }
+        },
+
+        getReviewDialog: function(){
+            if (!this.oDialogReview) {
+                this.oDialogReview = sap.ui.xmlfragment("com.tasa.registroeventospescav2.view.fragments.ReviewReserva", this);
+                this.getView().addDependent(this.oDialogReview);
+            }
+            return this.oDialogReview;
+        },
+
+        onAbrirDetalleReserva: async function(evt){
+            var reserva = evt.getSource().getParent().getBindingContext("DetalleMarea").getObject();
+            if (reserva.NRMAR && reserva.NRRSV) {
+                var nrmar = reserva.NRMAR;
+                //var nrrsv = reserva.NRRSV;
+                var nrrsv = "0023985052";//para pruebas
+                var abrirPopup = await this.obtenerDetalleReserva(nrmar, nrrsv);
+                if(abrirPopup){
+                    this.getReviewDialog().open();
+                }
+            }else{
+                MessageBox.error("ERROR: No se obtuvo datos");
+            }
+        },
+
+        onCloseReviewRes: function(){
+            this.getReviewDialog().close();
         }
-
-
-
 
 
     });

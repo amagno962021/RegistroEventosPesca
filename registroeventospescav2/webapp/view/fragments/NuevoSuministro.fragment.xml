@@ -15,7 +15,7 @@
                                     <Label text="Cantidad" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-									<Input value="{DetalleMarea>/Suministro/0/CNSUM}" description="{DetalleMarea>/Suministro/0/CDUMD}" showValueHelp="false" width="auto" valueStateText="Invalid entry"/>
+									<Input value="{DetalleMarea>/Suministro/0/CNSUM}" description="{DetalleMarea>/Suministro/0/DSUMD}" showValueHelp="false" width="auto" valueStateText="Invalid entry"/>
                                 </form:fields>
                             </form:FormElement>
                             <form:FormElement visible="true">
