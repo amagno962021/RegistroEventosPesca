@@ -108,6 +108,16 @@ sap.ui.define([
                     WERKS: "",
                     Almacenes: []
                 },
+                EmbaComb: {
+                    CDTAN: "",
+                    MANDT: "",
+                    CDEMB: "",
+                    CPSDM: "",
+                    CVPMS: "",
+                    CPPMS: "",
+                    CVADM: "",
+                    STCMB: ""
+                },
                 VentaCombustible: {},
                 DistribFlota: {
                     Indicador: "",

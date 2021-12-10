@@ -1,4 +1,5 @@
 sap.ui.define([
+    "./MainComp.controller",
     "sap/ui/core/mvc/Controller",
     "./General",
     "./Distribucion",
@@ -21,6 +22,7 @@ sap.ui.define([
     "./Utils",
     "./DetalleMarea.controller"
 ], function (
+    MainComp,
     Controller,
 	General,
 	Distribucion,
@@ -45,7 +47,7 @@ sap.ui.define([
 ) {
     "use strict";
 
-    return Controller.extend("com.tasa.registroeventospescav2.controller.DetalleEvento", {
+    return MainComp.extend("com.tasa.registroeventospescav2.controller.DetalleEvento", {
 
         /**
          * @override
@@ -1381,6 +1383,7 @@ sap.ui.define([
 
         validarDatos: function () {
             //var DataSession = {};//modelo data session
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
             var visible = this.modeloVisible//textValidaciones.visible;//modelo visible
             var eventoActual = this._listaEventos[this._elementAct]; //nodo evento actual
             var detalleMarea = this._FormMarea;//modelo detalle marea
@@ -1401,15 +1404,19 @@ sap.ui.define([
                     } else {
                         visible.VisibleObsvComb = true;
                     }
+                    let texto = this.oBundle.getText("CONFIRMSAVEMESSAGE");
+                    mod.setProperty("/Utils/TextoConfirmacion", texto);
                     this.getDialog().open();
                 }
             }
             this.modeloVisibleModel.refresh();
         },
-
+        onCloseConfirm: async function(){
+            await this.SaveGeneral();
+        },
         getDialog: function () {
             if (!this.oDialog) {
-                this.oDialog = sap.ui.xmlfragment("com.tasa.registroeventospescav2.fragments.Confirm", this);
+                this.oDialog = sap.ui.xmlfragment("com.tasa.registroeventospescav2.view.fragments.Confirm", this);
                 this.getView().addDependent(this.oDialog);
             }
             return this.oDialog;
