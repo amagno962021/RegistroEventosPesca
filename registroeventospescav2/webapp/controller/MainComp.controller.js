@@ -69,7 +69,7 @@ sap.ui.define([
 
         guardarCambios: async function(){
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
+            var motivoMarea = modelo.getProperty("/DatosGenerales/CDMMA");
             var estadoMarea = modelo.getProperty("/DatosGenerales/ESMAR");
             var indPropiedad = modelo.getProperty("/DatosGenerales/INPRP");
             var mareaReabierta = false;
@@ -81,13 +81,13 @@ sap.ui.define([
             var motivoSinZarpe = ["3", "7", "8"];
             if(motivoSinZarpe.includes(motivoMarea)){
                 var plantaDistrFlota = modelo.getProperty("/DistribFlota/CDPTA");
-                modelo.setProperty("/Cabecera/CDPTA", plantaDistrFlota);
+                modelo.setProperty("/DatosGenerales/CDPTA", plantaDistrFlota);
             }else{
                 eventoIni = eventos[0];
                 eventoFin = eventos[eventos.length - 1];
                 tipoEventoIni = eventoIni.CDTEV;
                 tipoEventoFin = eventoFin.CDTEV;
-                modelo.setProperty("/Cabecera/CDPTA", eventoFin.CDPTA);
+                modelo.setProperty("/DatosGenerales/CDPTA", eventoFin.CDPTA);
                 modelo.setProperty("/DatosGenerales/FIMAR", eventoIni.FIEVN);
                 modelo.setProperty("/DatosGenerales/HIMAR", eventoIni.HIEVN);
             }
