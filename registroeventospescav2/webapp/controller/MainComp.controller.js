@@ -559,6 +559,17 @@ sap.ui.define([
                 bOk = true;
             }
             return bOk;
+        },
+        SaveGeneral :async function(){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var visbleObsComb = modelo.getProperty("/Utils/VisibleObsvComb");
+            var obsComb = modelo.getProperty("/Cabecera/OBSCOMB");
+            if(visbleObsComb && !obsComb){
+                var mssg = this.oBundle.getText("MISSOBSCOMB");;
+                MessageBox.error(mssg);
+            }else{
+                await this.guardarCambios();
+            }
         }
 
     });
