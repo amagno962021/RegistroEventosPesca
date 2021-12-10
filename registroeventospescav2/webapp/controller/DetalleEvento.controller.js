@@ -433,7 +433,8 @@ sap.ui.define([
 
         },
 
-        _onButtonPress1: function () {
+        SaveAll: function () {
+            this.validarDatos();
 
         },
 
@@ -1379,12 +1380,12 @@ sap.ui.define([
         },
 
         validarDatos: function () {
-            var DataSession = {};//modelo data session
+            //var DataSession = {};//modelo data session
             var visible = this.modeloVisible//textValidaciones.visible;//modelo visible
             var eventoActual = this._listaEventos[this._elementAct]; //nodo evento actual
             var detalleMarea = this._FormMarea;//modelo detalle marea
-            var isRolIngComb = DataSession.IsRolIngComb;
-            if (eventoActual.TipoEvento == "6") {
+            var isRolIngComb = this._IsRolIngComb;
+            if (eventoActual.CDTEV == "6") {
                 visible.VisibleDescarga = false;
                 visible.FechFin = false;
             } else {
