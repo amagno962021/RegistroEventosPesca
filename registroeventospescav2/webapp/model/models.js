@@ -108,6 +108,16 @@ sap.ui.define([
                     WERKS: "",
                     Almacenes: []
                 },
+                EmbaComb: {
+                    CDTAN: "",
+                    MANDT: "",
+                    CDEMB: "",
+                    CPSDM: "",
+                    CVPMS: "",
+                    CPPMS: "",
+                    CVADM: "",
+                    STCMB: ""
+                },
                 VentaCombustible: {},
                 DistribFlota: {
                     Indicador: "",
@@ -234,7 +244,8 @@ sap.ui.define([
                     FlagVistaBiometria : false,
                     NroEvento_Incidental : "",
                     NroEvento_Biometria : "",
-                    TipoConsulta:""
+                    TipoConsulta:"",
+                    MessageItems: []
                 },
                 InputsDescargas :{
                     CentPlanta : "",

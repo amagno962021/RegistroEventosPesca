@@ -8,6 +8,8 @@ sap.ui.define([
     "../Service/TasaBackendService",
     "sap/ui/core/BusyIndicator",
     "./Utils",
+    'sap/m/MessageItem',
+    'sap/m/MessagePopover'
 ], function (
     MainComp,
     Controller,
@@ -17,20 +19,22 @@ sap.ui.define([
     MessageBox,
     TasaBackendService,
     BusyIndicator,
-    Utils
+    Utils,
+    MessageItem,
+    MessagePopover
 ) {
     "use strict";
 
-    return MainComp.extend("com.tasa.registroeventospescav2.controller.DetalleMarea", {
+    var oMessagePopover;
 
-        formatter: formatter,
+    return MainComp.extend("com.tasa.registroeventospescav2.controller.DetalleMarea", {
 
         onInit: function () {
             this.router = this.getOwnerComponent().getRouter();
             this.router.getRoute("DetalleMarea").attachPatternMatched(this._onPatternMatched, this);
             this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
             //this.oControllerEvento = sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento"); 
-            
+            this.cargarMessagePopover();
         },
 
         _onPatternMatched: function (oEvent) {
@@ -61,7 +65,108 @@ sap.ui.define([
             //validaciones de objetos de vista
             this.validarVista();
 
+
+
         },
+
+        cargarMessagePopover: function(){
+            var oMessageTemplate = new MessageItem({
+				type: '{DetalleMarea>type}',
+				title: '{DetalleMarea>title}',
+				activeTitle: "{DetalleMarea>active}",
+				description: '{DetalleMarea>description}',
+				subtitle: '{DetalleMarea>subtitle}',
+				counter: '{DetalleMarea>counter}'
+			});
+
+            oMessagePopover = new MessagePopover({
+				items: {
+					path: 'DetalleMarea>/Utils/MessageItems',
+					template: oMessageTemplate
+				}
+			});
+            this.byId("messagePopoverBtn").addDependent(oMessagePopover);
+        },
+
+        buttonIconFormatter: function () {
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+			var sIcon;
+			var aMessages = modelo.getProperty("/Utils/MessageItems");
+
+			aMessages.forEach(function (sMessage) {
+				switch (sMessage.type) {
+					case "Error":
+						sIcon = "sap-icon://error";
+						break;
+					case "Warning":
+						sIcon = sIcon !== "sap-icon://error" ? "sap-icon://alert" : sIcon;
+						break;
+					case "Success":
+						sIcon = "sap-icon://error" && sIcon !== "sap-icon://alert" ? "sap-icon://sys-enter-2" : sIcon;
+						break;
+					default:
+						sIcon = !sIcon ? "sap-icon://information" : sIcon;
+						break;
+				}
+			});
+			return sIcon;
+		},
+
+        buttonTypeFormatter: function () {
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+			var sHighestSeverityIcon;
+			var aMessages = modelo.getProperty("/Utils/MessageItems");
+
+			aMessages.forEach(function (sMessage) {
+				switch (sMessage.type) {
+					case "Error":
+						sHighestSeverityIcon = "Negative";
+						break;
+					case "Warning":
+						sHighestSeverityIcon = sHighestSeverityIcon !== "Negative" ? "Critical" : sHighestSeverityIcon;
+						break;
+					case "Success":
+						sHighestSeverityIcon = sHighestSeverityIcon !== "Negative" && sHighestSeverityIcon !== "Critical" ?  "Success" : sHighestSeverityIcon;
+						break;
+					default:
+						sHighestSeverityIcon = !sHighestSeverityIcon ? "Neutral" : sHighestSeverityIcon;
+						break;
+				}
+			});
+
+			return sHighestSeverityIcon;
+		},
+
+
+        highestSeverityMessages: function () {
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+			var sHighestSeverityIconType = this.buttonTypeFormatter();
+			var sHighestSeverityMessageType;
+            var aMessages = modelo.getProperty("/Utils/MessageItems");
+
+			switch (sHighestSeverityIconType) {
+				case "Negative":
+					sHighestSeverityMessageType = "Error";
+					break;
+				case "Critical":
+					sHighestSeverityMessageType = "Warning";
+					break;
+				case "Success":
+					sHighestSeverityMessageType = "Success";
+					break;
+				default:
+					sHighestSeverityMessageType = !sHighestSeverityMessageType ? "Information" : sHighestSeverityMessageType;
+					break;
+			}
+
+			return aMessages.reduce(function(iNumberOfMessages, oMessageItem) {
+				return oMessageItem.type === sHighestSeverityMessageType ? ++iNumberOfMessages : iNumberOfMessages;
+			}, 0);
+		},
+
+        handleMessagePopoverPress: function (oEvent) {
+			oMessagePopover.toggle(oEvent.getSource());
+		},
 
         getCurrentUser: function () {
             return "fgarcia";
@@ -569,7 +674,8 @@ sap.ui.define([
             } else {
                 modelo.setProperty("/Config/visibleLinkCrearArmador", true);
             }
-
+            
+            modelo.setProperty("/Utils/MessageItems", []);
             modelo.setProperty("/Config/visibleFecHoEta", false);
             modelo.setProperty("/Config/visibleFechIni", false);
             modelo.setProperty("/Config/visibleFechFin", false);
@@ -662,7 +768,31 @@ sap.ui.define([
                 if(!motivo){
                     iconTabBar.setSelectedKey("itfDatosGenerales");
                     var mssg = this.oBundle.getText("MISSMOTMAR");
-                    MessageBox.error(mssg);
+                    //MessageBox.error(mssg);
+                    var objMessage = {
+                        type: 'Error',
+				        title: 'Mensaje de Error',
+				        activeTitle: false,
+				        description: mssg,
+				        subtitle: mssg,
+				        counter: 1
+                    };
+                    var messageIttems = modelo.getProperty("/Utils/MessageItems");
+                    messageIttems.push(objMessage);
+                    modelo.refresh();
+
+                    var oButton = this.getView().byId("messagePopoverBtn");
+                    oMessagePopover.getBinding("items").attachChange(function(oEvent){
+                        oMessagePopover.navigateBack();
+                        oButton.setType(this.buttonTypeFormatter());
+                        oButton.setIcon(this.buttonIconFormatter());
+                        oButton.setText(this.highestSeverityMessages());
+                    }.bind(this));
+
+                    setTimeout(function(){
+                        oMessagePopover.openBy(oButton);
+                    }.bind(this), 100);
+
                 }else{
                     if(motivo == "3" || motivo == "7" || motivo == "8"){
                         if(!ubicPesca){
