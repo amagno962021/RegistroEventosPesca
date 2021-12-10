@@ -71,7 +71,7 @@ sap.ui.define([
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var motivoMarea = modelo.getProperty("/DatosGenerales/CDMMA");
             var estadoMarea = modelo.getProperty("/DatosGenerales/ESMAR");
-            var indPropiedad = modelo.getProperty("/DatosGenerales/INPRP");
+            var indPropiedad = modelo.getProperty("/Cabecera/INPRP");
             var mareaReabierta = false;
             var eventos = modelo.getProperty("/Eventos/Lista");
             var eventoIni = null;
