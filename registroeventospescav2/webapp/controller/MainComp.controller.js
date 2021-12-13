@@ -604,7 +604,7 @@ sap.ui.define([
 			});
 			return sIcon;
 		},
-        highestSeverityMessages: function () {
+        highestSeverityMessages: function (vista) {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
 			var sHighestSeverityIconType = this.buttonTypeFormatter();
 			var sHighestSeverityMessageType;
@@ -629,7 +629,7 @@ sap.ui.define([
 				return oMessageItem.type === sHighestSeverityMessageType ? ++iNumberOfMessages : iNumberOfMessages;
 			}, 0);
 		},
-        buttonTypeFormatter: function () {
+        buttonTypeFormatter: function (vista) {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
 			var sHighestSeverityIcon;
 			var aMessages = modelo.getProperty("/Utils/MessageItems" + vista);
