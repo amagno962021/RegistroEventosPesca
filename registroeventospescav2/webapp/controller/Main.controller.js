@@ -579,7 +579,7 @@ sap.ui.define([
 
             },
 
-            obtenerVentasCombustible: function(){
+            obtenerVentasCombustible: async function(){
                 await this.obtenerReservas(true);
             },
 
