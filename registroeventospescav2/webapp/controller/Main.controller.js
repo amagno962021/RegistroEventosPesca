@@ -496,7 +496,7 @@ sap.ui.define([
                 }
 
                 if (inprp == "T") {
-                    await this.obtenerVentasCombustible();
+                    await this.obtenerVentasCombustible(marea);
                 }
 
                 //la pestania de reserva de combustible y venta de combustible se setean en el Detalle
@@ -579,8 +579,48 @@ sap.ui.define([
 
             },
 
-            obtenerVentasCombustible: async function(){
-                await this.obtenerReservas(true);
+            obtenerVentasCombustible: async function(marea){
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var listaEventos = modelo.getProperty("/Eventos/Lista");
+                var mareaCerrada = modelo.getProperty("/DatosGenerales/ESMAR") == "C" ? true : false;
+                var usuario = this.getCurrentUser();
+                var response = await TasaBackendService.obtenerNroReserva(marea, usuario);
+                if (response) {
+                    if (response.data ) {
+                        mostrarTab = true;
+                    }
+                }
+
+                var tipoEvento = "";
+	            var regVenta = false;
+	            var primerRegVenta = !mostrarTab;
+
+                if (!mareaCerrada) {
+                    
+                    for (let index = 0; index < listaEventos.length; index++) {
+                        const element = listaEventos[index];
+                        if(element.CDTEV == "5"){
+                            regVenta = true;
+                            break;
+                        }
+                    }
+
+                    if (regVenta) {
+                        mostrarTab = true;
+                    }else {
+                         mostrarTab = false;
+                    }
+
+                    modelo.setProperty("/Config/visibleTabVenta", mostrarTab);
+
+                    
+
+
+
+                }
+
+
+
             },
 
             preparaFormulario: function () {
