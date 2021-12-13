@@ -136,6 +136,7 @@ sap.ui.define([
                         var mssg = this.ctr.oBundle.getText("MISSINGSISTFRIO");
                         MessageBox.error(mssg);
                         bOk = false;
+                        return bOk;
                     }
                 }
             }

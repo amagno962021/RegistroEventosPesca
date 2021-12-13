@@ -288,7 +288,7 @@ sap.ui.define([
         onCrearEvento: function () {
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             mod.setProperty("/Utils/TipoConsulta","C");
-            mod.setProperty("/Utils/TipoEvento","2");
+            //mod.setProperty("/Utils/TipoEvento","2");
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("DetalleEvento");
             this.getNuevoEvento().close();

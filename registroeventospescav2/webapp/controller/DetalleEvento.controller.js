@@ -212,7 +212,7 @@ sap.ui.define([
             this._listaEventos[this._elementAct].STCMB = this._listaEventos[this._elementAct].STCMB ? this._listaEventos[this._elementAct].STCMB : "";
             this._listaEventos[this._elementAct].ESTSF = this._listaEventos[this._elementAct].ESTSF ? this._listaEventos[this._elementAct].ESTSF : "";
             this._listaEventos[this._elementAct].CDMLM = this._listaEventos[this._elementAct].CDMLM ? this._listaEventos[this._elementAct].CDMLM : "";
-            this._listaEventos[this._elementAct].ESOPE = this._listaEventos[this._elementAct].ESOPE ? this._listaEventos[this._elementAct].ESOPE : "";
+            this._listaEventos[this._elementAct].CDZPC = this._listaEventos[this._elementAct].CDZPC ? this._listaEventos[this._elementAct].CDZPC : "";
             this._listaEventos[this._elementAct].ListaBodegas = [];
             this._listaEventos[this._elementAct].ListaBiometria = [];
             this._listaEventos[this._elementAct].ListaPescaDeclarada = [];
@@ -1412,6 +1412,17 @@ sap.ui.define([
                 }
             }
             this.modeloVisibleModel.refresh();
+        },
+        getConfirmDialog: function(){
+            if (!this.oDialogConfirm) {
+                this.oDialogConfirm = sap.ui.xmlfragment("com.tasa.registroeventospescav2.view.fragments.Confirm", this);
+                this.getView().addDependent(this.oDialogConfirm);
+            }
+            return this.oDialogConfirm;
+        },
+
+        onCancelConfirm: function(){
+            this.getDialog().close();
         },
         onCloseConfirm: async function(){
             await this.SaveGeneral();

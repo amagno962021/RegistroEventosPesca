@@ -49,7 +49,7 @@
 			<Button type="Emphasized" id="btnConfirmSave" text="Aceptar" press="onCloseConfirm" enabled="true"></Button>
 		</beginButton>
 		<endButton>
-			<Button text="Cancelar" press="onCancelConfirm"></Button>
+			<Button text="Cancelar" press=".onCancelConfirm"></Button>
 		</endButton>
 	</Dialog>
 </core:FragmentDefinition>
