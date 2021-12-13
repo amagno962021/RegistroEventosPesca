@@ -9,7 +9,7 @@
 						<form:formElements>
 							<form:FormElement id="fe_estadoOperacion" visible="true">
 								<form:label>
-									<Label text="Estado de operación:" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+									<Label text="Estado de operación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
 									<ComboBox selectedKey="{eventos>/ESOPE}" id="cmb_estaOperacion" items="{combEstadoOperacion>/data}" placeholder="Estado de operación" editable="true" enabled="true" visible="true" width="50%" valueState="None" maxWidth="100%" change=".map_onActionVerMotiLimitacion">

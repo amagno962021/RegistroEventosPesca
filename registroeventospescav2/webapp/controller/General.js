@@ -128,7 +128,7 @@ sap.ui.define([
             var motivoMarea = this.ctr._motivoMarea;
             var tipoEvento = this.ctr._tipoEvento;
             var indPropiedad = this.ctr._indicadorProp;
-            var indPropPlanta = this.ctr._indicadorPropXPlanta; //
+            var indPropPlanta = this.ctr._listaEventos[this.ctr._elementAct].INPRP;
             var eveCampGeneVal = ["1", "5", "6", "H", "T"]; //Tipos de evento con campos generales distintos a validar 
             if(indPropiedad == "P"){
                 if(Utils.OpSistFrio && parseInt(tipoEvento) < 6){
