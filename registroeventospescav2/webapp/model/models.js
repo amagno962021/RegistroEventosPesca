@@ -51,7 +51,8 @@ sap.ui.define([
                     VEDAVERIF: false,
                     FECVEDMAX: "",
                     NUEVOARM: "",
-                    OBSCOMB: ""
+                    OBSCOMB: "",
+                    CantTotalPescDecla: ""
 				},
                 DatosGenerales: {
 					CDEMB: "",
@@ -199,6 +200,8 @@ sap.ui.define([
                     visibleReserva2: false,
                     visibleReserva3: false,
                     visibleBtnNuevaReserva: false,
+                    visibleCheckReserva: true,
+                    visibleAnulaReserva: true,
 					datosCombo: {
                         Departamentos: [],
                         MotivosMarea: [],

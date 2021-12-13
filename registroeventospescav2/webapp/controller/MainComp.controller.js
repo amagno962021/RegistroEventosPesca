@@ -166,7 +166,7 @@ sap.ui.define([
                 NRMAR: modelo.getProperty("/Cabecera/NRMAR"),
                 CDEMB: modelo.getProperty("/Cabecera/CDEMB"),
                 CDEMP: modelo.getProperty("/Cabecera/CDEMP"),
-                CDMMA: modelo.getProperty("/Cabecera/CDMMA"),
+                CDMMA: modelo.getProperty("/DatosGenerales/CDMMA"),
                 INUBC: modelo.getProperty("/DatosGenerales/INUBC"),
                 FEARR: Utils.strDateToDate(modelo.getProperty("/DatosGenerales/FEARR")),
                 HEARR: modelo.getProperty("/DatosGenerales/HEARR"),//Utils.strHourToSapHo(modelo.getProperty("/DatosGenerales/HEARR")),
@@ -246,7 +246,7 @@ sap.ui.define([
             marea.str_psbod = this.obtenerPescaBodega();
             marea.str_psdec = this.obtenerPescaDeclarada();
 
-            console.log(eventos);
+            console.log("GUARDAR MAREA: ", marea);
             var guardar = await TasaBackendService.crearActualizarMarea(marea);
         },
 
@@ -458,6 +458,7 @@ sap.ui.define([
             var marea = modelo.getProperty("/Cabecera/NRMAR");
             var usuario = this.getCurrentUser();
             var eventos = modelo.getProperty("/Eventos/Lista");
+            var mareaCerrada = modelo.getProperty("/DatosGenerales/ESMAR") == "C" ? true : false;
             var response = await TasaBackendService.obtenerReservas(marea, null, null, usuario);
             modelo.setProperty("/Config/visibleReserva1", false);
             modelo.setProperty("/Config/visibleReserva2", false);
@@ -475,6 +476,15 @@ sap.ui.define([
                         element.CHKDE = false;
                     }
                     modelo.setProperty("/ReservasCombustible", reservas);
+                    if(mareaCerrada){
+                        modelo.setProperty("/Config/visibleBtnNuevaReserva", false);
+                        modelo.setProperty("/Config/visibleAnulaReserva", false);
+                        modelo.setProperty("/Config/visibleCheckReserva", false);
+                    }else{
+                        modelo.setProperty("/Config/visibleBtnNuevaReserva", true);
+                        modelo.setProperty("/Config/visibleAnulaReserva", true);
+                        modelo.setProperty("/Config/visibleCheckReserva", true);
+                    }
                 } else {
                     modelo.setProperty("/Config/visibleReserva1", true);
                     var ultimoEvento = eventos.length > 0 ? eventos[eventos.length - 1] : null;
