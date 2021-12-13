@@ -496,7 +496,7 @@ sap.ui.define([
                 }
 
                 if (inprp == "T") {
-
+                    await this.obtenerVentasCombustible();
                 }
 
                 //la pestania de reserva de combustible y venta de combustible se setean en el Detalle
@@ -517,6 +517,7 @@ sap.ui.define([
 
             obtenerReservasCombustible: async function (marea, codigo) {
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var listaEventos = modelo.getProperty("/Eventos/Lista");
                 var motivoSinZarpe = ["3", "7", "8"];
                 var eveReserCombus = ["4", "5", "6"];
                 var visibleNuevo = true;
@@ -530,13 +531,12 @@ sap.ui.define([
                 modelo.setProperty("/Config/visibleReserva2", false);
                 modelo.setProperty("/Config/visibleReserva3", false);
                 if (response) {
-                    if (response.data) {
+                    if (response.data ) {
                         mostrarTab = true;
                     }
                 }
                 if (!mareaCerrada) {
                     if (!motivoSinZarpe.includes(motivoMarea)) {
-                        var listaEventos = modelo.getProperty("/Eventos/Lista");
                         var ultimoEvento = listaEventos[listaEventos.length - 1];
                         var tipoUltEvnt = ultimoEvento.CDTEV;
                         visibleNuevo = eveReserCombus.includes(tipoUltEvnt);
@@ -568,14 +568,19 @@ sap.ui.define([
                             }
                         }
                     }
-                    if (!mareaCerrada) {
+                    await this.obtenerReservas(visibleNuevo);
+                    /*if (!mareaCerrada) {
                         await this.obtenerReservas(visibleNuevo);
                     }else{
                         modelo.setProperty("/ReservasCombustible", reservas);
                         modelo.setProperty("/Config/visibleReserva3", true);
-                    }
+                    }*/
                 }
 
+            },
+
+            obtenerVentasCombustible: function(){
+                await this.obtenerReservas(true);
             },
 
             preparaFormulario: function () {
@@ -1323,6 +1328,20 @@ sap.ui.define([
                     console.log("Response: ", response);
                 }).catch(function (error) {
                     console.log("ERROR: DetalleMarea.onTest - ", error);
+                });
+            },
+
+            onCallUsuario: function(){
+                $.ajax({
+                    url: "https://tasaqas.authentication.us10.hana.ondemand.com/config?action=who&details=true&?format=json",
+                    type: 'GET',
+                    dataType: 'application/json',
+                    success: function(data){
+                        console.log("success"+data);
+                    },
+                    error: function(e){
+                        console.log("error: "+e);
+                    }
                 });
             }
 

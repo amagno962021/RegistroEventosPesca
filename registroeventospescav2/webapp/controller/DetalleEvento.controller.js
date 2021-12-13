@@ -1069,6 +1069,7 @@ sap.ui.define([
             var modelo = me.getOwnerComponent().getModel("DetalleMarea");
             let cantTotal = 0;
             var listaEventos = this._listaEventos ? this._listaEventos : modelo.getProperty("/Eventos/Lista");
+            var cabecera = modelo.getProperty("/Cabecera");
             for (var j = 0; j < listaEventos.length; j++) {
                 if (listaEventos[j].CDTEV == "6") {
                     if (!me) {
@@ -1102,7 +1103,8 @@ sap.ui.define([
                     break;
                 }
             }
-            this._FormMarea.CantTotalPescDecla = cantTotal;
+            //this._FormMarea.CantTotalPescDecla = cantTotal;
+            cabecera.CantTotalPescDecla = cantTotal;
             return cantTotal;
 
         },

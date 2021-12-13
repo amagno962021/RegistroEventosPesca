@@ -1158,6 +1158,27 @@ sap.ui.define([
 
         onCloseReviewRes: function(){
             this.getReviewDialog().close();
+        },
+
+        onCallUsuario: function(){
+
+            var sUrl = "https://current-user-qas.cfapps.us10.hana.ondemand.com/getuserinfo";
+            $.ajax({
+            	type: "GET",
+            	url: sUrl,
+            	async: true,
+            	dataType: "json",
+            	contentType: "application/json; charset=utf-8",
+            	error: function (err) {
+                    console.log("ERROR USER INFO: ", err);
+				},
+            	success: function(data, textStatus, jqXHR){
+            		console.log("USER INFO: ", data);
+            	}
+            	
+            });
+
+            
         }
 
 
