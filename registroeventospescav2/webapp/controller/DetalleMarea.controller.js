@@ -80,88 +80,12 @@ sap.ui.define([
 
             oMessagePopover = new MessagePopover({
 				items: {
-					path: 'DetalleMarea>/Utils/MessageItems',
+					path: 'DetalleMarea>/Utils/MessageItemsDM',
 					template: oMessageTemplate
 				}
 			});
             this.byId("messagePopoverBtn").addDependent(oMessagePopover);
         },
-
-        buttonIconFormatter: function () {
-            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-			var sIcon;
-			var aMessages = modelo.getProperty("/Utils/MessageItems");
-
-			aMessages.forEach(function (sMessage) {
-				switch (sMessage.type) {
-					case "Error":
-						sIcon = "sap-icon://error";
-						break;
-					case "Warning":
-						sIcon = sIcon !== "sap-icon://error" ? "sap-icon://alert" : sIcon;
-						break;
-					case "Success":
-						sIcon = "sap-icon://error" && sIcon !== "sap-icon://alert" ? "sap-icon://sys-enter-2" : sIcon;
-						break;
-					default:
-						sIcon = !sIcon ? "sap-icon://information" : sIcon;
-						break;
-				}
-			});
-			return sIcon;
-		},
-
-        buttonTypeFormatter: function () {
-            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-			var sHighestSeverityIcon;
-			var aMessages = modelo.getProperty("/Utils/MessageItems");
-
-			aMessages.forEach(function (sMessage) {
-				switch (sMessage.type) {
-					case "Error":
-						sHighestSeverityIcon = "Negative";
-						break;
-					case "Warning":
-						sHighestSeverityIcon = sHighestSeverityIcon !== "Negative" ? "Critical" : sHighestSeverityIcon;
-						break;
-					case "Success":
-						sHighestSeverityIcon = sHighestSeverityIcon !== "Negative" && sHighestSeverityIcon !== "Critical" ?  "Success" : sHighestSeverityIcon;
-						break;
-					default:
-						sHighestSeverityIcon = !sHighestSeverityIcon ? "Neutral" : sHighestSeverityIcon;
-						break;
-				}
-			});
-
-			return sHighestSeverityIcon;
-		},
-
-
-        highestSeverityMessages: function () {
-            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-			var sHighestSeverityIconType = this.buttonTypeFormatter();
-			var sHighestSeverityMessageType;
-            var aMessages = modelo.getProperty("/Utils/MessageItems");
-
-			switch (sHighestSeverityIconType) {
-				case "Negative":
-					sHighestSeverityMessageType = "Error";
-					break;
-				case "Critical":
-					sHighestSeverityMessageType = "Warning";
-					break;
-				case "Success":
-					sHighestSeverityMessageType = "Success";
-					break;
-				default:
-					sHighestSeverityMessageType = !sHighestSeverityMessageType ? "Information" : sHighestSeverityMessageType;
-					break;
-			}
-
-			return aMessages.reduce(function(iNumberOfMessages, oMessageItem) {
-				return oMessageItem.type === sHighestSeverityMessageType ? ++iNumberOfMessages : iNumberOfMessages;
-			}, 0);
-		},
 
         handleMessagePopoverPress: function (oEvent) {
 			oMessagePopover.toggle(oEvent.getSource());
@@ -287,6 +211,7 @@ sap.ui.define([
         onCrearEvento: function () {
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             mod.setProperty("/Utils/TipoConsulta","C");
+            //mod.setProperty("/Utils/TipoEvento","2");
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("DetalleEvento");
             this.getNuevoEvento().close();
@@ -674,7 +599,7 @@ sap.ui.define([
                 modelo.setProperty("/Config/visibleLinkCrearArmador", true);
             }
             
-            modelo.setProperty("/Utils/MessageItems", []);
+            modelo.setProperty("/Utils/MessageItemsDM", []);
             modelo.setProperty("/Config/visibleFecHoEta", false);
             modelo.setProperty("/Config/visibleFechIni", false);
             modelo.setProperty("/Config/visibleFechFin", false);
@@ -776,16 +701,16 @@ sap.ui.define([
 				        subtitle: mssg,
 				        counter: 1
                     };
-                    var messageIttems = modelo.getProperty("/Utils/MessageItems");
+                    var messageIttems = modelo.getProperty("/Utils/MessageItemsDM");
                     messageIttems.push(objMessage);
                     modelo.refresh();
 
                     var oButton = this.getView().byId("messagePopoverBtn");
                     oMessagePopover.getBinding("items").attachChange(function(oEvent){
                         oMessagePopover.navigateBack();
-                        oButton.setType(this.buttonTypeFormatter());
-                        oButton.setIcon(this.buttonIconFormatter());
-                        oButton.setText(this.highestSeverityMessages());
+                        oButton.setType(this.buttonTypeFormatter("DM"));
+                        oButton.setIcon(this.buttonIconFormatter("DM"));
+                        oButton.setText(this.highestSeverityMessages("DM"));
                     }.bind(this));
 
                     setTimeout(function(){

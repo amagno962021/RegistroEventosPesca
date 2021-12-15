@@ -248,7 +248,8 @@ sap.ui.define([
                     NroEvento_Incidental : "",
                     NroEvento_Biometria : "",
                     TipoConsulta:"",
-                    MessageItems: []
+                    MessageItemsDM: [],
+                    MessageItemsEP: []
                 },
                 InputsDescargas :{
                     CentPlanta : "",

@@ -212,7 +212,7 @@ sap.ui.define([
             this._listaEventos[this._elementAct].STCMB = this._listaEventos[this._elementAct].STCMB ? this._listaEventos[this._elementAct].STCMB : "";
             this._listaEventos[this._elementAct].ESTSF = this._listaEventos[this._elementAct].ESTSF ? this._listaEventos[this._elementAct].ESTSF : "";
             this._listaEventos[this._elementAct].CDMLM = this._listaEventos[this._elementAct].CDMLM ? this._listaEventos[this._elementAct].CDMLM : "";
-            this._listaEventos[this._elementAct].ESOPE = this._listaEventos[this._elementAct].ESOPE ? this._listaEventos[this._elementAct].ESOPE : "";
+            this._listaEventos[this._elementAct].CDZPC = this._listaEventos[this._elementAct].CDZPC ? this._listaEventos[this._elementAct].CDZPC : "";
             this._listaEventos[this._elementAct].ListaBodegas = [];
             this._listaEventos[this._elementAct].ListaBiometria = [];
             this._listaEventos[this._elementAct].ListaPescaDeclarada = [];
@@ -640,7 +640,7 @@ sap.ui.define([
                     this.getView().byId("FechaEnvaseIni").setVisible(false);
                     this.getView().byId("FechaEnvaseFin").setVisible(false);
                     this.getView().byId("fe_FechaProduccion").setVisible(true);
-                    if (this._indicadorPropXPlanta == textValidaciones.INDIC_PROPIEDAD_PROPIOS) {
+                    if (this._listaEventos[this._elementAct].INPRP == textValidaciones.INDIC_PROPIEDAD_PROPIOS) {
                         this.getView().byId("dtf_FechaProduccion").setEnabled(false);
                         //Sea (CHI o CHD)
                         if (this._motivoMarea == "2" || this._motivoMarea == "1") {
@@ -690,7 +690,7 @@ sap.ui.define([
                 this.getView().byId("0003").setVisible(true);
                 this.getView().byId("fe_estadoOperacion").setVisible(true);
 
-                if (this._indicadorPropXPlanta == textValidaciones.INDIC_PROPIEDAD_PROPIOS && (this._tipoEvento == textValidaciones.TIPOEVENTOLLEGADAZONA || this._tipoEvento == textValidaciones.TIPOEVENTOSALIDAZONA)) {
+                if (this._listaEventos[this._elementAct].INPRP == textValidaciones.INDIC_PROPIEDAD_PROPIOS && (this._tipoEvento == textValidaciones.TIPOEVENTOLLEGADAZONA || this._tipoEvento == textValidaciones.TIPOEVENTOSALIDAZONA)) {
 
                     this.getView().byId("fe_estadoOperacion").setVisible(false);
                 }
@@ -702,7 +702,7 @@ sap.ui.define([
                     this.getView().byId("fe_estadoOperacion").setVisible(false);//cambiar a false
                     this.getView().byId("fe_tipoDescarga").setVisible(true);
 
-                    if (this._indicadorProp == textValidaciones.INDIC_PROPIEDAD_TERCEROS || this._indicadorPropXPlanta == textValidaciones.INDIC_PROPIEDAD_PROPIOS) {
+                    if (this._indicadorProp == textValidaciones.INDIC_PROPIEDAD_TERCEROS || this._listaEventos[this._elementAct].INPRP == textValidaciones.INDIC_PROPIEDAD_PROPIOS) {
                         this.getView().byId("cb_tipoDescarga").setEnabled(false);
                     }
                 }
@@ -781,7 +781,7 @@ sap.ui.define([
 
             //Tab Pesca Biometria
             if (this.buscarValorFijo(textValidaciones.EVEVISTABBIOME, this._tipoEvento)) {
-                if (this._indicadorPropXPlanta != textValidaciones.INDIC_PROPIEDAD_TERCEROS) {
+                if (this._listaEventos[this._elementAct].INPRP != textValidaciones.INDIC_PROPIEDAD_TERCEROS) {
                     this.getView().byId("idBiometria").setVisible(true);
                 }
 
@@ -792,9 +792,9 @@ sap.ui.define([
                 this.getView().byId("idPescaDesc").setVisible(true);
                 this.getView().byId("ext_pesc_desc").setVisible(true);
 
-                if (this._indicadorPropXPlanta == textValidaciones.INDIC_PROPIEDAD_TERCEROS) { //Descarga en planta tercera
+                if (this._listaEventos[this._elementAct].INPRP == textValidaciones.INDIC_PROPIEDAD_TERCEROS) { //Descarga en planta tercera
                     this.getView().byId("table_pesc_desc_especie").setVisible(true);
-                } else if (this._indicadorPropXPlanta == textValidaciones.INDIC_PROPIEDAD_PROPIOS) { //Descarga en planta propia
+                } else if (this._listaEventos[this._elementAct].INPRP == textValidaciones.INDIC_PROPIEDAD_PROPIOS) { //Descarga en planta propia
                     if (this._motivoMarea == "1") {
                         this.getView().byId("table_pesc_desc_CHD").setVisible(true);
                     } else {
@@ -1413,6 +1413,17 @@ sap.ui.define([
             }
             this.modeloVisibleModel.refresh();
         },
+        getConfirmDialog: function(){
+            if (!this.oDialogConfirm) {
+                this.oDialogConfirm = sap.ui.xmlfragment("com.tasa.registroeventospescav2.view.fragments.Confirm", this);
+                this.getView().addDependent(this.oDialogConfirm);
+            }
+            return this.oDialogConfirm;
+        },
+
+        onCancelConfirm: function(){
+            this.getDialog().close();
+        },
         onCloseConfirm: async function(){
             await this.SaveGeneral();
         },
@@ -1702,7 +1713,7 @@ sap.ui.define([
             let indice = this._elementAct;
             let motivoMarea = this._motivoMarea;
             let tipoEvento = this._tipoEvento;
-            let indPropPlanta = this._indicadorPropXPlanta;
+            let indPropPlanta = this._listaEventos[this._elementAct].INPRP;
             let tipoEveAnt = nodoEventos[Number(indice) - 1].CDTEV;
             let fechaIniEvento = nodoEventos[indice].FIEVN;
             let horaIniEvento =  nodoEventos[indice].HIEVN;

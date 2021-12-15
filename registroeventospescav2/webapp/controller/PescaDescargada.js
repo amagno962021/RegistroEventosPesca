@@ -349,7 +349,7 @@ sap.ui.define([
             var eventoActual = this._controler._listaEventos[this._controler._elementAct];//modelo evento actual
             var PescaDescargada = eventoActual.ListaPescaDescargada[0]; //actual pesca descargada
             var tipoDescarga = eventoActual.TipoDescarga;// VALOR SE LLENA EN NUEVO EVENTO
-            var indPropPlanta = this._controler._indicadorPropXPlanta;
+            var indPropPlanta = this._controler._listaEventos[this._controler._elementAct].INPRP;
             var motMarea = this._controler._motivoMarea;
             var centEmba = DetalleMarea.CenEmbarcacion;
             var atributos = ["CantPescaDescargada", "CantPescaDeclarada"];
@@ -715,12 +715,12 @@ sap.ui.define([
 					ListaPescaDescElim[0].CDTPC = "I";
 				}
 
-                if (this._controler._indicadorPropXPlanta == "T") { //Descarga en planta tercera
+                if (this._controler._listaEventos[this._controler._elementAct].INPRP == "T") { //Descarga en planta tercera
 					ListaPescaDescElim[0].CDSPC = "0000000000";
 					ListaPescaDescElim[0].Nro_descarga = this._controler._nroDescarga + "T";
                     ListaPescaDescElim[0].FECCONMOV  = this._oView.byId("dtf_FechaProduccion").getValue(); //Obtengo el valor de fecha de contabilizacion
 					ListaPescaDescElim[0].CDPTA = this._controler._codPlanta; //Obtengo la planta del evento
-				} else if (this._controler._indicadorPropXPlanta == "P") { //Descarga en planta propia
+				} else if (this._controler._listaEventos[this._controler._elementAct].INPRP == "P") { //Descarga en planta propia
                     this._oView.byId("pdt_col_BuscarDesc").setVisible(true);
                     this._oView.byId("pdt_col_EliminarDesc").setVisible(false);
 
@@ -732,7 +732,7 @@ sap.ui.define([
 
             }else{
                 let sResponsivePaddingClasses = "sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer";
-                if (this._controler._indicadorPropXPlanta == "T") {
+                if (this._controler._listaEventos[this._controler._elementAct].INPRP == "T") {
 					MessageBox.show(
                         '�Realmente desea eliminar el registro de pesca descargada?',
                         {
@@ -748,7 +748,7 @@ sap.ui.define([
                             }
                         }
                     );
-				} else if (this._controler._indicadorPropXPlanta =="P") { //Descarga en planta propia
+				} else if (this._controler._listaEventos[this._controler._elementAct].INPRP =="P") { //Descarga en planta propia
 					if (this._controler._motivoMarea == "1") {
 						MessageBox.show(
                             '�Realmente desea eliminar el registro de pesca descargada?',
@@ -793,11 +793,11 @@ sap.ui.define([
             let bOk = true;
             let ListaPescaDescElim = [];
 
-            if (this._controler._indicadorPropXPlanta =="P" && this._controler._motivoMarea == "2") {
+            if (this._controler._listaEventos[this._controler._elementAct].INPRP =="P" && this._controler._motivoMarea == "2") {
                 bOk = await this.anularEventoDescarga(this._controler._nroDescarga, false);
             }
             if (bOk) {
-                if (this._controler._indicadorPropXPlanta =="T" || this._controler._indicadorProp == "T") {
+                if (this._controler._listaEventos[this._controler._elementAct].INPRP =="T" || this._controler._indicadorProp == "T") {
                     // precioMareaElim.setEspecie(pescaDescargadaElement.getEspecie());  --- Revisar mas a fondo si es necesario.
                     // wdContext.nodePreciosMareaEliminados().addElement(
                     //     precioMareaElim);
@@ -811,12 +811,12 @@ sap.ui.define([
 					ListaPescaDescElim[0].CDTPC = "I";
 				}
 
-                if (this._controler._indicadorPropXPlanta == "T") { //Descarga en planta tercera
+                if (this._controler._listaEventos[this._controler._elementAct].INPRP == "T") { //Descarga en planta tercera
 					ListaPescaDescElim[0].CDSPC = "0000000000";
 					ListaPescaDescElim[0].Nro_descarga = this._controler._nroDescarga + "T";
                     ListaPescaDescElim[0].FECCONMOV  = this._oView.byId("dtf_FechaProduccion").getValue(); //Obtengo el valor de fecha de contabilizacion
 					ListaPescaDescElim[0].CDPTA = this._controler._codPlanta; //Obtengo la planta del evento
-				} else if (this._controler._indicadorPropXPlanta == "P") { //Descarga en planta propia
+				} else if (this._controler._listaEventos[this._controler._elementAct].INPRP == "P") { //Descarga en planta propia
                     this._oView.byId("pdt_col_BuscarDesc").setVisible(true);
                     this._oView.byId("pdt_col_EliminarDesc").setVisible(false);
 

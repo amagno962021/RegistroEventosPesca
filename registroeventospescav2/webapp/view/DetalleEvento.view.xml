@@ -67,6 +67,7 @@
 				<footer>
 					<OverflowToolbar width="100%" height="46px" design="Auto" enabled="true" visible="true">
 						<content>
+							<Button id="messagePopoverDetalleEve" icon="{ path: '/', formatter: 'buttonIconFormatter' }" type="{ path: '/', formatter: 'buttonTypeFormatter' }" text= "{path: '/', formatter: 'highestSeverityMessages' }" press="handleMessagePopoverPress"/>
 							<ToolbarSpacer width="" />
 							<Button text="Remover evento" type="Emphasized" icon="" iconFirst="true" width="auto" enabled="true" visible="{visible>/LinkRemover}" iconDensityAware="false" press=".removerEvento_button" />
 							<Button text="Descartar cambios" type="Emphasized" icon="" iconFirst="true" width="auto" enabled="true" visible="{visible>/LinkDescartar}" iconDensityAware="false" press=".descartarCambios_button" />
