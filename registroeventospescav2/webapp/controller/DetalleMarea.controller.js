@@ -38,10 +38,9 @@ sap.ui.define([
         },
 
         _onPatternMatched: function (oEvent) {
+            console.log("PARAM ROUTER: ", oEvent);
             var modeloMarea = this.getOwnerComponent().getModel("DetalleMarea");
             var indicador = modeloMarea.getProperty("/Cabecera/INDICADOR");
-
-
 
             //validar fechas nulas en tabla de eventos
             this.validaFechaNulaEvt();

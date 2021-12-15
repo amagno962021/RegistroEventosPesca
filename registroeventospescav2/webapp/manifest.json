@@ -118,13 +118,30 @@
                     "controlId": "app"
                 },
                 {
+                    "name": "DetalleEventoExt",
+                    "pattern": "DetalleEventoExt/:nrmar:",
+                    "target": [
+						"DettalleEventoExt"
+					]
+                },
+                {
                     "name": "test",
                     "view": "test",
                     "pattern": "test",
                     "targetAggregation": "pages",
                     "controlId": "app"
                 }
-            ]
+            ],
+            "targets": {
+                "DettalleEventoExt": {
+                    "controlAggregation": "pages",
+					"viewName": "DetalleMareaExt",
+					"viewId": "DetalleMareaExt",
+					"viewLevel": 2,
+					"transition": "slide",
+                    "controlId": "app"
+                }
+            }
         }
     },
     "sap.cloud": {

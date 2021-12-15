@@ -378,7 +378,6 @@ sap.ui.define([
                             await this.setDetalleMarea(response);
                         }
                     } else {
-                        //buscar embarcacion
                         var options = [{
                             "cantidad": "20",
                             "control": "COMBOBOX",
@@ -424,6 +423,11 @@ sap.ui.define([
                 } else {
                     console.log("ERROR: Main.onEditarCrearMarea - " + this.oBundle.getText("ERRORITEMSELECCIONADO"));
                 }
+
+                /*var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                oRouter.navTo("DetalleEventoExt", {
+                    nrmar: "12345"
+                });*/
 
 
             },

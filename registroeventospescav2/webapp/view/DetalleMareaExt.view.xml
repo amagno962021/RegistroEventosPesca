@@ -1,0 +1,11 @@
+<mvc:View
+	controllerName="com.tasa.registroeventospescav2.controller.DetalleMareaExt"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+    height="100%"
+>
+    <Page title="Detalle de Marea Externa" showNavButton="true">
+        <content>
+        </content>
+    </Page>
+</mvc:View>
