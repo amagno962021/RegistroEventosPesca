@@ -49,16 +49,17 @@ sap.ui.define([
                 if(motivo == "1" || motivo == "2"){
                     if(motivo === "1"){
                         valorPesca = element.PorcPesca;
-                        mensaje = this.oBundle.getText("ALGCANTPESCACERO");
+                        mensaje = this.oBundle.getText("ALGPORCPESCACERO");
                     }else{
                         valorPesca = element.CNPCM;
-                        mensaje = this.oBundle.getText("ALGPORCPESCACERO"); 
+                        mensaje = this.oBundle.getText("ALGCANTPESCACERO"); 
                     }
 
-                    if(!valorPesca){
+                    if(valorPesca == "" || valorPesca == undefined || Number(valorPesca) <= 0){
                         bOk = false;
                         if(verMensajes){
-                            MessageBox.error(mensaje);
+                            this.ctr.agregarMensajeValid("Error",mensaje);
+                            //MessageBox.error(mensaje);
                         }   
                     }
 

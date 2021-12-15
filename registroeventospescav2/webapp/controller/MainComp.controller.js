@@ -243,8 +243,8 @@ sap.ui.define([
             marea.str_flbsp_c = this.guardarDatosBiometria();
             marea.str_flbsp_e = this.eliminarDatosBiometria();
             marea.str_pscinc = this.guardarDatosIncidental();
-            marea.str_psbod = this.obtenerPescaBodega();
-            marea.str_psdec = this.obtenerPescaDeclarada();
+            marea.str_psbod = this.obtenerPescaBodegaRFC();
+            marea.str_psdec = this.obtenerPescaDeclaradaRFC();
 
             console.log("GUARDAR MAREA: ", marea);
             var guardar = await TasaBackendService.crearActualizarMarea(marea);
@@ -284,22 +284,54 @@ sap.ui.define([
         },
 
         guardarDatosBiometria: function(){
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
+            let ListaEventos = mod.getProperty("/Eventos/Lista");
+            let motivoMarea =  mod.getProperty("/Cabecera/CDMMA");
+            let t_max = Number(mod.getProperty("/Utils/TallaMax"));
+            let t_min = Number(mod.getProperty("/Utils/TallaMin"));
             var biom_list = [];
             var ListaBiomTemp = [];//modelo de biometria Temp
-            var ListaBiom = [];//modelo de biometria
+            var ListaBiom = ListaEventos[elementSel].ListaBiometria;//modelo de biometria
             if(ListaBiom.length > 0){
                 //this.cargarRegistroBiometria();
             }
-            for (let index = 0; index < ListaBiomTemp.length; index++) {
-                const element = ListaBiomTemp[index];
-                var Biometria = {
-                    NRMAR: element.NRMAR,
-                    NREVN: element.NREVN,
-                    CDSPC: element.CDSPC,
-                    TMMED: element.TMMED,
-                    CNSPC: element.CNSPC
-                };
-                biom_list.push(Biometria);
+            for (let index = 0; index < ListaBiom.length; index++) {
+                const element = ListaBiom[index];
+                if(motivoMarea == "2"){
+                    let v_talla_bio = Number(0);
+                    for (let k = t_min; k <= t_max; k = k + Number(0.5)) {
+                        if(k == t_min){
+                            v_talla_bio = t_min;
+                        }else{
+                            v_talla_bio++;
+                        }
+
+                        var Biometria = {
+                            NRMAR: ListaEventos[elementSel].NRMAR,
+                            NREVN: ListaEventos[elementSel].NREVN,
+                            CDSPC: element.CodEspecie,
+                            TMMED: k,
+                            CNSPC: element['col_' + v_talla_bio]
+                        };
+                        biom_list.push(Biometria);
+                    }
+                    
+                }else if(motivoMarea == "1"){
+                    
+                    for (let k = t_min; k <= t_max; k++) {
+                        var Biometria = {
+                            NRMAR: ListaEventos[elementSel].NRMAR,
+                            NREVN: ListaEventos[elementSel].NREVN,
+                            CDSPC: element.CodEspecie,
+                            TMMED: k,
+                            CNSPC: element['col_' + k]
+                        };
+                        biom_list.push(Biometria);
+                    }
+
+                }
+
             }
             return biom_list;
         },
@@ -335,7 +367,7 @@ sap.ui.define([
             return pscinc_list;
         },
 
-        obtenerPescaBodega: function(){
+        obtenerPescaBodegaRFC: function(){
             var bodegas = [];//modelo de bodegas
             var lista = [];
             for (let index = 0; index < bodegas.length; index++) {
@@ -352,18 +384,21 @@ sap.ui.define([
             return lista;
         },
 
-        obtenerPescaDeclarada: function(){
-            var pescaDeclarada = [];//modelo pesca declarada
+        obtenerPescaDeclaradaRFC: function(){
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
+            let ListaEventos = mod.getProperty("/Eventos/Lista");
+            var pescaDeclarada = ListaEventos[elementSel].ListaPescaDeclarada;//modelo pesca declarada
             var lista = [];
             for (let index = 0; index < pescaDeclarada.length; index++) {
                 const element = pescaDeclarada[index];
                 var listPescaDeclarada = {
                     INDTR: element.INDTR,
-                    NRMAR: element.NRMAR,
-                    NREVN: element.NREVN,
+                    NRMAR: ListaEventos[elementSel].NRMAR,
+                    NREVN: ListaEventos[elementSel].NREVN,
                     CDSPC: element.CDSPC,
                     CNPCM: element.CNPCM,
-                    CDUMD: element.CDUMD,
+                    CDUMD: element.UnidMedida, 
                     ZMODA: element.ZMODA,
                     OBSER: element.OBSER,                   
                 };

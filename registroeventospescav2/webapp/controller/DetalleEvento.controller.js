@@ -210,6 +210,7 @@ sap.ui.define([
                 this._EsperaMareaAnt = EsperaMareaAnt_cont;//[{ "id": "0" }, { "id": "1" }]; 
                 this._listaEventos = ListaEventos_cont;
                 this._elementAct = this._listaEventos.length;
+                modeloDetalleMarea.setProperty("/Eventos/LeadSelEvento",this._elementAct);
                 this._FormMarea = FormEvent_cont.Cabecera;
                 this._mareaReabierta = false;
                 this._zonaPesca = "";
@@ -469,8 +470,8 @@ sap.ui.define([
 
         },
 
-        SaveAll: function () {
-            this.validarDatos();
+        SaveAll:async function () {
+            await this.validarDatos();
 
         },
 
@@ -1403,8 +1404,8 @@ sap.ui.define([
             return bOk;
         },
 
-        validarCambios: function () {
-            var bOk = this.Dat_PescaDescargada.validarDatosEvento();
+        validarCambios:async function () {
+            var bOk = await this.Dat_PescaDescargada.validarDatosEvento();
             var detalleMarea = this._FormMarea;//modelo detalle marea
             if (!bOk) {
                 var mensaje = this.oBundle.getText("DISCCHANEVENTMESSAGE");
@@ -1417,7 +1418,7 @@ sap.ui.define([
             //refresh model
         },
 
-        validarDatos: function () {
+        validarDatos:async function () {
             //var DataSession = {};//modelo data session
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             var visible = this.modeloVisible//textValidaciones.visible;//modelo visible
@@ -1432,7 +1433,7 @@ sap.ui.define([
             }
 
             var validarMareaEventos = this.validarMareaEventos(this);
-            var validarDatosEvento = this.Dat_PescaDescargada.validarDatosEvento();
+            var validarDatosEvento = await this.Dat_PescaDescargada.validarDatosEvento();
             if (validarMareaEventos) {
                 if (validarDatosEvento && !detalleMarea.TieneErrores) {
                     if (isRolIngComb) {

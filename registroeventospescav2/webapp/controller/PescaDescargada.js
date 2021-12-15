@@ -162,7 +162,7 @@ sap.ui.define([
             //refrescar modelo
         },
 
-        validarDatosEvento: function(){
+        validarDatosEvento:async function(){
             var DetalleMarea = this._controler._FormMarea;//modelo detalle marea
             var soloLectura = this._controler._soloLectura;//modelo data session
             var tieneErrores = DetalleMarea.TieneErrores;//modelo detalle marea
@@ -172,9 +172,9 @@ sap.ui.define([
             var motivoEnCalend = ["1", "2", "8"];//motivos de marea con registros en calendario
 
             if(!soloLectura && !tieneErrores){
-                var tipoEvento = eventoActual.TipoEvento;
+                var tipoEvento = eventoActual.CDTEV;
                 var motMarea = this._controler._motivoMarea
-                var bOk = this._controler.Dat_General.validarCamposGeneral(true);
+                var bOk = await this._controler.Dat_General.validarCamposGeneral(true);
                 var eveActual = this._controler._elementAct;
                 var cantEventos = listaEventos.length;
                 if(bOk && visible.TabHorometro){

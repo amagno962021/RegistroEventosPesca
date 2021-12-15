@@ -265,12 +265,12 @@ sap.ui.define([
                 var sBckLongitud = eventoActual.BackLongitud;
                 eventoActual.Latitud = sLatitud;
                 eventoActual.Longitud = sLongitud;
-                if((sBckLatitud || sLatitud != sBckLatitud) || (sBckLongitud || sLongitud != sBckLongitud)){
+                if((sBckLatitud == "" || sLatitud != sBckLatitud) || (sBckLongitud == "" || sLongitud != sBckLongitud)){
                     bOk = await this.validarMillasLitoral();
                     eventoActual.ObteEspePermitidas = true;
                 }
                 eventoActual.BackLatitud = sLatitud;
-                eventoActual.BckLongitud = sLongitud;
+                eventoActual.BackLongitud = sLongitud;
             }
             return bOk;
         },
@@ -719,8 +719,8 @@ sap.ui.define([
                                         INDTR: "N",
                                         CDSPC: especie.toString(),
                                         DSSPC: descEspecie,
-                                        UnidMedida: confEventosPesca.CalaUMPescaDecl,
-                                        DSUMD: confEventosPesca.CalaDescUMPescaDecl
+                                        UnidMedida: confEventosPesca.calaDescUMPescaDecl,
+                                        DSUMD: confEventosPesca.calaDescUMPescaDeclDesc
                                     };
                                     eventoActual.ListaPescaDeclarada.push(obj);
                                     
@@ -738,7 +738,7 @@ sap.ui.define([
                         this.ctr.Dat_Biometria.getTableDefault();
                         var espOk = true;
                         this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
-                        var especieDef = confEventosPesca.calaEspecieCHI; //Una sola especie para pesca CHI
+                        var especieDef = confEventosPesca.calaCodEspecieCHI; //Una sola especie para pesca CHI
 				        var obsvEspecie = "";
                         for (let index2 = 0; index2 < espePermitEmb.length; index2++) {
                             const element = espePermitEmb[index2];
@@ -778,8 +778,8 @@ sap.ui.define([
                             CDSPC: especieDef,
                             DSSPC: confEventosPesca.calaDescEspecieCHI,
                             OBSER: obsvEspecie,
-                            UnidMedida: confEventosPesca.calaUMPescaDecl,
-                            DSUMD: confEventosPesca.calaDescUMPescaDecl
+                            UnidMedida: confEventosPesca.calaDescUMPescaDecl,
+                            DSUMD: confEventosPesca.calaDescUMPescaDeclDesc
                         };
                         eventoActual.ListaPescaDeclarada.push(obj);
 

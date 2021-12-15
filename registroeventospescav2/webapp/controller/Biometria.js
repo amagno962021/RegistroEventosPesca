@@ -41,9 +41,13 @@ sap.ui.define([
 
         onButtonPress3:function(){
             //console.log(o_event);
+            let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
             console.log("TextoNav2 : " + this._navBio);
             var i_tme =  this._oView.byId("idTallaMenor").getValue();
             var i_tma =  this._oView.byId("idTallaMayor").getValue();
+            mod.setProperty("/Utils/TallaMin",i_tme);
+            mod.setProperty("/Utils/TallaMax",i_tma);
+
             let v_rest = i_tma - i_tme;
             let v_sumMen = Number('0');
             let v_tallamAyorA = Number(i_tme) + Number((2*v_rest));
@@ -167,7 +171,7 @@ sap.ui.define([
                     sumaTotal_Muestra += v_sum;
                 }
                 
-                if(talla_col <= TallaMinPorcJuvenil){
+                if(talla_col < TallaMinPorcJuvenil){
                     if(idMod == v_col.sId){
                         sumaMuestraJuvenil += Number(value);
                     }else{
