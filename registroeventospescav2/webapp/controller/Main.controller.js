@@ -613,12 +613,7 @@ sap.ui.define([
 
                     modelo.setProperty("/Config/visibleTabVenta", mostrarTab);
 
-                    
-
-
-
                 }
-
 
 
             },
