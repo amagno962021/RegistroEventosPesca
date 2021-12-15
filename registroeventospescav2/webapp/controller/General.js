@@ -10,7 +10,8 @@ sap.ui.define([
     "./Siniestro",
     "../model/textValidaciones",
     "sap/m/MessageBox",
-    "./Utils"
+    "./Utils",
+    'sap/ui/core/BusyIndicator',
 ], function(
 	ManagedObject,
     JSONModel,
@@ -23,7 +24,8 @@ sap.ui.define([
     Siniestro,
     textValidaciones,
     MessageBox,
-    Utils
+    Utils,
+    BusyIndicator
 ) {
 	"use strict";
 
@@ -70,7 +72,8 @@ sap.ui.define([
                         bOk = false;
                         if(verMensajes){
                             var message = this.oBundle.getText("CAMPONULL", [value.id]);
-                            MessageBox.error(message);
+                            this.ctr.agregarMensajeValid("Error",message);
+                            //MessageBox.error(message);
                             //messages.push(message);
                         }
                         else{
@@ -117,7 +120,7 @@ sap.ui.define([
 			this.getView().byId("messagePopoverBtn").addDependent(this.oMP);
         },
 
-        validarCamposGeneral: function(bool){
+        validarCamposGeneral:async function(bool){
             var bOk = false;
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //nodo evento actual
             let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
@@ -134,7 +137,7 @@ sap.ui.define([
                 if(Utils.OpSistFrio && parseInt(tipoEvento) < 6){
                     if(eventoActual.ESTSF == ""){
                         var mssg = this.ctr.oBundle.getText("MISSINGSISTFRIO");
-                        MessageBox.error(mssg);
+                        this.ctr.agregarMensajeValid("Error",mssg);
                         bOk = false;
                         return bOk;
                     }
@@ -144,7 +147,8 @@ sap.ui.define([
                 bOk = this.validateFields(textValidaciones.eventAttTabGeneral[Number(tipoEvento)],bool);
                 if(bOk && tipoEvento == "3"){
                     this.ctr.modeloVisible.VisibleDescarga = true;
-                    bOk =  this.validarLatitudLongitud();
+                    bOk =  await this.validarLatitudLongitud();
+                    console.log(bOk);
                 }
             } else {
                 var eventosValidar = textValidaciones.eventAttTabGeneral[Number(tipoEvento)];
@@ -232,27 +236,31 @@ sap.ui.define([
             var latitudM = eventoActual.LatitudM;
             var longitudD = eventoActual.LongitudD;
             var longitudM = eventoActual.LongitudM;
-            var indiPropiedad = detalleMarea.IndPropiedad;
+            var indiPropiedad = detalleMarea.INPRP;
             if(latitudM < 0 || latitudM > 59 || longitudM < 0 || longitudM > 59){
                 bOk = false;
                 var message = this.oBundle.getText("MINGEOGRAFINV");
-                MessageBox.error(message);
+                this.ctr.agregarMensajeValid("Error",message);
+                return false;
+                //MessageBox.error(message);
             } else {
                 var latiMin = eventoActual.ZPLatiIni;
 		        var latiMax = eventoActual.ZPLatiFin;
 		        var longMin = eventoActual.ZPLongIni;
 		        var longMax = eventoActual.ZPLongFin;
-                var latitud = latitudD * 100 + latitudM;
-		        var longitud = longitudD * 100 + longitudM;
+                var latitud = Number(latitudD) * 100 + Number(latitudM);
+		        var longitud = Number(longitudD) * 100 + Number(longitudM);
                 if(indiPropiedad == "P"){
                     if((latitud < latiMin || latitud > latiMax) || (longitud < longMin || longitud > longMax)){
                         var message = this.oBundle.getText("COORDNOZONAPESCA");
-                        MessageBox.error(message);
+                        this.ctr.agregarMensajeValid("Error",message);
+                        return false;
+                        //MessageBox.error(message);
                     }
                 }
 
-                var sLatitud = this.formatNumber(latitud, "00000");
-                var sLongitud = this.formatNumber(longitud, "00000");
+                var sLatitud = this.formatNumber(Number(latitud), "00000");
+                var sLongitud = this.formatNumber(Number(longitud), "00000");
                 var sBckLatitud = eventoActual.BackLatitud;
                 var sBckLongitud = eventoActual.BackLongitud;
                 eventoActual.Latitud = sLatitud;
@@ -285,6 +293,7 @@ sap.ui.define([
 
         validarMillasLitoral:async function(){
             var bOk = true;
+            var that = this;
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct];//modelo de evento
             var latiCalaD = eventoActual.LatitudD;
             var latiCalaM = eventoActual.LatitudM;
@@ -294,7 +303,7 @@ sap.ui.define([
             var longCala = longCalaD*100 + longCalaM;
             await TasaBackendService.obtenerMillasLitoral(latiCalaD, latiCalaM).then(function(response){
                 //no hay registro en la tabla de SAP S/4 QAS
-                let rep = JSON.parse(response).data;
+                let rep = response.data;
                 if(rep.length > 0){
                     let latiPtoCostaD = rep[0].LATGR;
                     let latiPtoCostaM = rep[0].LATMI;
@@ -306,25 +315,28 @@ sap.ui.define([
                         
                         eventoActual.MillaCosta = distCosta;
                         eventoActual.ObseAdicional = "";
-                        this._oView.byId("fe_observacioAdic").setVisible(false);
+                        that._oView.byId("fe_observacioAdic").setVisible(false);
                         weventoActual.ValiCoordCala = true;
                         
                         if (distCosta <= 5) {
-                            eventoActual.ObseAdicional = this.ctr.oBundle.getText("OBSADICPTOEN5MILLAS");
-                            this._oView.byId("fe_observacioAdic").setVisible(true);
-                            let mssg2 = this.ctr.oBundle.getText("PTOCALAEN5MILLAS");
-                            MessageBox.error(mssg2);
+                            eventoActual.ObseAdicional = that.ctr.oBundle.getText("OBSADICPTOEN5MILLAS");
+                            that._oView.byId("fe_observacioAdic").setVisible(true);
+                            let mssg2 = that.ctr.oBundle.getText("PTOCALAEN5MILLAS");
+                            that.ctr.agregarMensajeValid("Error",mssg2);
+                            //MessageBox.error(mssg2);
                         }
                     } else {
-                        let mssg1 = this.ctr.oBundle.getText("COORDNOPTOMAR");
-                        MessageBox.error(mssg1);
+                        let mssg1 = that.ctr.oBundle.getText("COORDNOPTOMAR");
+                        that.ctr.agregarMensajeValid("Error",mssg1);
+                        //MessageBox.error(mssg1);
                         bOk = false;
                     }
 
                 }else{
                     eventoActual.ValiCoordCala = false;
-                    let mssg = this.ctr.oBundle.getText("NODATACOORDCOSTA");
-                    MessageBox.error(mssg);
+                    let mssg = that.ctr.oBundle.getText("NODATACOORDCOSTA");
+                    that.ctr.agregarMensajeValid("Error",mssg);
+                    //MessageBox.error(mssg);
                 }
                 
             }).catch(function(error){
@@ -336,6 +348,7 @@ sap.ui.define([
         },
 
         onActionSelectTab: async function(tab_seleccionado,event){
+            BusyIndicator.show(0);
             this.nextTab = tab_seleccionado;
             if(this.previousTab == undefined){
                 this.previousTab = "General";
@@ -352,7 +365,8 @@ sap.ui.define([
                 var fechEvento = new Date(eventoActual.FIEVN);
                 if(this.previousTab == "General"){
                     var validarStockCombustible = this.validarStockCombustible();
-                    if(!this.validarCamposGeneral(true)){
+                    let val = await this.validarCamposGeneral(true);
+                    if(!val){
                         this.nextTab = this.previousTab;   
                     } else if(tipoEvento == "6" && motivoEnCalend.includes(motivoMarea)){
                         visible.visibleDescarga = false;
@@ -397,7 +411,7 @@ sap.ui.define([
                         (this.nextTab == "Biometria" && eventoActual.ObteEspePermitidas)){
                             await this.obtenerTemporadas(motivoMarea, eventoActual.FIEVN);
                             await this.obtenerTemporadas("8", eventoActual.FIEVN);
-                            await this.consultarPermisoPesca(eventoActual.Embarcacion, motivoMarea);
+                            await this.consultarPermisoPesca(this.ctr._embarcacion, motivoMarea);
                             this.obtenerEspeciesPermitidas();//obtenerEspeciesPermitidas - falta metodo
                     }
                 }
@@ -433,6 +447,7 @@ sap.ui.define([
             let tabRedirect = this.buscarCodTab(textValidaciones.KeyTabs, this.nextTab)
             let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
             o_iconTabBar.setSelectedKey(tabRedirect);
+            BusyIndicator.hide();
             //refrescar modelos
         },
 
@@ -524,7 +539,7 @@ sap.ui.define([
 
             await TasaBackendService.obtenerEspeciesPermitidas(cdemb, codTemp).then(function(response){
                 //obtener repsonse
-                detalleMarea.EspPermitida = response.data;
+                detalleMarea.EspPermitida = JSON.parse(response).data;
             }).catch(function(error){
                 console.log("ERROR: General.consultarPermisoPesca - ", error );
             });
@@ -544,7 +559,7 @@ sap.ui.define([
                 }
             }
 
-            await TasaBackendService.obtenerTemporadas(codTemp, fecha).then(function(response){
+            await TasaBackendService.obtenerTemporadas(codTemp, fecha).then(function(response){//14.12.2021
                 //obtener repsonse
                 var data = response.data;
                 for (let index = 0; index < data.length; index++) {
@@ -567,10 +582,13 @@ sap.ui.define([
             });
 
             if (motivo == "1") {
+                this.ctr.calendarioPescaCHD = calendarioPesca;
                 mod.setProperty("/calendarioPescaCHD",calendarioPesca);
             } else if (motivo == "2") {
+                this.ctr.calendarioPescaCHI = calendarioPesca;
                 mod.setProperty("/calendarioPescaCHI",calendarioPesca);
             } else {
+                this.ctr.calendarioPescaVED = calendarioPesca;
                 mod.setProperty("/calendarioPescaVED",calendarioPesca);
             }
 
@@ -620,7 +638,7 @@ sap.ui.define([
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //nodo evento actual
             var DetalleMarea =  this.ctr._FormMarea;// modelo detalle marea
             var confEventosPesca = this.ctr._ConfiguracionEvento;//modelo conf eventos pesca 
-            var listaBiometria = this.ctr._listaEventos[this.ctr._elementAct].ListaBiometria;//modelo lista biometria
+            var listaBiometria = []//this.ctr._listaEventos[this.ctr._elementAct].ListaBiometria;//modelo lista biometria
             var latiIniZonaPesca = eventoActual.ZPLatiIni;
 	        var latiFinZonaPesca = eventoActual.ZPLatiFin;
 	        var longIniZonaPesca = eventoActual.ZPLongIni;
@@ -633,7 +651,7 @@ sap.ui.define([
 	        var longCala = longCalaD*100 + longCalaM; 
             //var indPropiedad = DetalleMarea.IndPropiedad;
 	        var motivoMarea = DetalleMarea.CDMMA;
-	        var indEvento = eventoActual.Indicador;
+	        var indEvento = eventoActual.INDTR;
 	        var espePermitEmb = DetalleMarea.EspPermitida;
             var valiCoordCala = eventoActual.ValiCoordCala;
             var millaCosta = eventoActual.MillaCosta;
@@ -686,8 +704,10 @@ sap.ui.define([
                 }
 
                 if(indEvento == "N"){
-                    eventoActual.PescaDeclarada = [];
+                    eventoActual.ListaPescaDeclarada = [];
                     if(motivoMarea == "1" && espePermitEmb != null){
+                        this._oView.byId("table_biometria").destroyColumns();
+                        this.ctr.Dat_Biometria.getTableDefault();
                         for (let index = 0; index < espePermitEmb.length; index++) {
                             const element = espePermitEmb[index];
                             var especie = element.CDSPC;
@@ -702,7 +722,7 @@ sap.ui.define([
                                         UnidMedida: confEventosPesca.CalaUMPescaDecl,
                                         DSUMD: confEventosPesca.CalaDescUMPescaDecl
                                     };
-                                    eventoActual.PescaDeclarada.push(obj);
+                                    eventoActual.ListaPescaDeclarada.push(obj);
                                     
                                     var objBiometria = {
                                         CodEspecie: especie.toString(),
@@ -714,9 +734,11 @@ sap.ui.define([
                             
                         }
                     } else if(motivoMarea == "2"){
+                        this._oView.byId("table_biometria").destroyColumns();
+                        this.ctr.Dat_Biometria.getTableDefault();
                         var espOk = true;
-                        this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
-                        var especieDef = confEventosPesca.CalaEspecieCHI; //Una sola especie para pesca CHI
+                        this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
+                        var especieDef = confEventosPesca.calaEspecieCHI; //Una sola especie para pesca CHI
 				        var obsvEspecie = "";
                         for (let index2 = 0; index2 < espePermitEmb.length; index2++) {
                             const element = espePermitEmb[index2];
@@ -753,17 +775,17 @@ sap.ui.define([
 
                         var obj = {
                             INDTR: "N",
-                            CDSPC: especieDef.toString(),
-                            DSSPC: confEventosPesca.CalaDescEspecieCHI,
+                            CDSPC: especieDef,
+                            DSSPC: confEventosPesca.calaDescEspecieCHI,
                             OBSER: obsvEspecie,
-                            UnidMedida: confEventosPesca.CalaUMPescaDecl,
-                            DSUMD: confEventosPesca.CalaDescUMPescaDecl
+                            UnidMedida: confEventosPesca.calaUMPescaDecl,
+                            DSUMD: confEventosPesca.calaDescUMPescaDecl
                         };
-                        eventoActual.PescaDeclarada.push(obj);
+                        eventoActual.ListaPescaDeclarada.push(obj);
 
                         var objBiometria = {
-                            CodEspecie: especieDef.toString(),
-                            Especie: confEventosPesca.CalaDescEspecieCHI
+                            CodEspecie: especieDef,
+                            Especie: confEventosPesca.calaDescEspecieCHI
                         };
                         listaBiometria.push(objBiometria);
 
@@ -774,6 +796,7 @@ sap.ui.define([
             eventoActual.ObteEspePermitidas = false;
             eventoActual.EspePermitida = espePermitida;
             eventoActual.EspeZonaPesca = espeZonaPesca;
+            eventoActual.ListaBiometria = listaBiometria;
             eventoActual.EspeVeda = espeVeda;
 
             this._oView.getModel("eventos").updateBindings(true);

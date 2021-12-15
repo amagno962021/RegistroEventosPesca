@@ -39,8 +39,8 @@ sap.ui.define([
 
         },
 
-        onButtonPress3:function(o_event){
-            console.log(o_event);
+        onButtonPress3:function(){
+            //console.log(o_event);
             console.log("TextoNav2 : " + this._navBio);
             var i_tme =  this._oView.byId("idTallaMenor").getValue();
             var i_tma =  this._oView.byId("idTallaMayor").getValue();

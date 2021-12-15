@@ -154,7 +154,7 @@ sap.ui.define([
                 var dia = dateSplit[0];
                 var mes = dateSplit[1];
                 var anio = dateSplit[2];
-                newDate = dia + mes + anio + "";
+                newDate = anio + mes + dia + "";
             }
             return newDate;
         },
@@ -165,7 +165,8 @@ sap.ui.define([
                 var dateSplit = hour.split(":");
                 var hora = dateSplit[0];
                 var minuto = dateSplit[1];
-                newHour = hora + minuto + "";
+                var sec = dateSplit[2] ? dateSplit[2] : "00";
+                newHour = hora + minuto + sec + "";
             }
             return newHour;
         },

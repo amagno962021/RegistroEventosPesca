@@ -195,7 +195,7 @@ sap.ui.define([
             for (let index = 0; index < eventos.length; index++) {
                 var element = eventos[index];
                 var evt = {
-                    INDTR: "E",
+                    INDTR: element.INDTR,
                     NRMAR: element.NRMAR,
                     NREVN: element.NREVN,
                     CDTEV: element.CDTEV,
@@ -606,7 +606,7 @@ sap.ui.define([
 		},
         highestSeverityMessages: function (vista) {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-			var sHighestSeverityIconType = this.buttonTypeFormatter();
+			var sHighestSeverityIconType = this.buttonTypeFormatter(vista);
 			var sHighestSeverityMessageType;
             var aMessages = modelo.getProperty("/Utils/MessageItems" + vista);
 

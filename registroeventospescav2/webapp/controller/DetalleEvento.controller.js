@@ -20,7 +20,9 @@ sap.ui.define([
     "sap/m/MessageBox",
     'sap/ui/core/BusyIndicator',
     "./Utils",
-    "./DetalleMarea.controller"
+    "./DetalleMarea.controller",
+    'sap/m/MessageItem',
+    'sap/m/MessagePopover'
 ], function (
     MainComp,
     Controller,
@@ -43,9 +45,12 @@ sap.ui.define([
 	MessageBox,
 	BusyIndicator,
 	Utils,
-	DetalleMarea
+	DetalleMarea,
+    MessageItem,
+    MessagePopover
 ) {
     "use strict";
+    var oMessageEP;
 
     return MainComp.extend("com.tasa.registroeventospescav2.controller.DetalleEvento", {
 
@@ -61,7 +66,29 @@ sap.ui.define([
             oStore.put("flagFragment", true);
             this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
             console.log(this.getOwnerComponent().getModel("DetalleMarea"));
+            this.cargarMessagePopover();
         },
+        cargarMessagePopover: function(){
+            let oMessageTemplate = new MessageItem({
+				type: '{DetalleMarea>type}',
+				title: '{DetalleMarea>title}',
+				activeTitle: "{DetalleMarea>active}",
+				description: '{DetalleMarea>description}',
+				subtitle: '{DetalleMarea>subtitle}',
+				counter: '{DetalleMarea>counter}'
+			});
+
+            oMessageEP = new MessagePopover({
+				items: {
+					path: 'DetalleMarea>/Utils/MessageItemsEP',
+					template: oMessageTemplate
+				}
+			});
+            this.byId("messagePopoverDetalleEve").addDependent(oMessageEP);
+        },
+        handleMessagePopoverPress: function (oEvent) {
+			oMessageEP.toggle(oEvent.getSource());
+		},
 
         onBackDetalleMarea: function () {
             let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
@@ -80,6 +107,7 @@ sap.ui.define([
             let EsperaMareaAnt_cont = dataDetalleMarea.EsperaMareaAnt;
             let FormEvent_cont = dataDetalleMarea;
             let TipoCons = modeloDetalleMarea.getProperty("/Utils/TipoConsulta");
+            modeloDetalleMarea.setProperty("/Utils/MessageItemsEP", []);
             if(TipoCons == "E"){
 
                 /********* Carga de variables globales **********/
@@ -213,6 +241,12 @@ sap.ui.define([
             this._listaEventos[this._elementAct].ESTSF = this._listaEventos[this._elementAct].ESTSF ? this._listaEventos[this._elementAct].ESTSF : "";
             this._listaEventos[this._elementAct].CDMLM = this._listaEventos[this._elementAct].CDMLM ? this._listaEventos[this._elementAct].CDMLM : "";
             this._listaEventos[this._elementAct].CDZPC = this._listaEventos[this._elementAct].CDZPC ? this._listaEventos[this._elementAct].CDZPC : "";
+            this._listaEventos[this._elementAct].INDTR = this._listaEventos[this._elementAct].INDTR ? this._listaEventos[this._elementAct].INDTR : "E";
+            this._listaEventos[this._elementAct].NRMAR = this._nroMarea;
+            this._listaEventos[this._elementAct].LatitudD = this._listaEventos[this._elementAct].LatitudD ? this._listaEventos[this._elementAct].LatitudD : "000";
+            this._listaEventos[this._elementAct].LatitudM = this._listaEventos[this._elementAct].LatitudM ? this._listaEventos[this._elementAct].LatitudM : "00";
+            this._listaEventos[this._elementAct].LongitudD = this._listaEventos[this._elementAct].LongitudD ? this._listaEventos[this._elementAct].LongitudD : "000";
+            this._listaEventos[this._elementAct].LongitudM = this._listaEventos[this._elementAct].LongitudM ? this._listaEventos[this._elementAct].LongitudM : "00";
             this._listaEventos[this._elementAct].ListaBodegas = [];
             this._listaEventos[this._elementAct].ListaBiometria = [];
             this._listaEventos[this._elementAct].ListaPescaDeclarada = [];
@@ -2013,8 +2047,8 @@ sap.ui.define([
                     NREVN : Number(LstEvento.length) + 1,
                     ESEVN : "S",
                     ACEVN : this.getCurrentUser(),
-                    FCEVN : Utils.dateToStrDate(timeInMilis),
-                    HCEVN : Utils.dateToStrHours(timeInMilis)
+                    FCEVN : Utils.strDateToSapDate(Utils.dateToStrDate(timeInMilis)),
+                    HCEVN : Utils.strHourToSapHo(Utils.dateToStrHours(timeInMilis))
                 }
                 mod.setProperty("/Cabecera/FormEditado",true);
                 mod.setProperty("/Cabecera/MareaEditada",true);
@@ -2056,18 +2090,18 @@ sap.ui.define([
             let fechaSist = new Date();
             
             //wdContext.currentEventosElement().setDescTipoEvento(manageSimpleTypes.getText(attInfoTipoPesca, tipoEvento));-- descripcion debe estar en el modelo
-            nodoEventos[this._eventoNuevo].FCEVN = Utils.dateToStrDate(fechaSist);
-            nodoEventos[this._eventoNuevo].HCEVN = Utils.dateToStrHours(fechaSist);
+            nodoEventos[this._eventoNuevo].FCEVN = Utils.strDateToSapDate(Utils.dateToStrDate(fechaSist));
+            nodoEventos[this._eventoNuevo].HCEVN = Utils.strHourToSapHo(Utils.dateToStrHours(fechaSist));
             nodoEventos[this._eventoNuevo].AMEVN = this.getCurrentUser();
 
             this.obtenerDatosFechaAnterior();	
 
             if (tipoEvento != "7") {
-                nodoEventos[this._eventoNuevo].FIEVN = Utils.dateToStrDate(fechaSist);
-                nodoEventos[this._eventoNuevo].HIEVN = Utils.dateToStrHours(fechaSist);
+                nodoEventos[this._eventoNuevo].FIEVN = Utils.strDateToSapDate(Utils.dateToStrDate(fechaSist));
+                nodoEventos[this._eventoNuevo].HIEVN = Utils.strHourToSapHo(Utils.dateToStrHours(fechaSist));
                 //BIOMETRIA
-                nodoEventos[this._eventoNuevo].FICAL = Utils.dateToStrDate(fechaSist);
-                nodoEventos[this._eventoNuevo].HICAL = Utils.dateToStrHours(fechaSist);
+                nodoEventos[this._eventoNuevo].FICAL = Utils.strDateToSapDate(Utils.dateToStrDate(fechaSist));
+                nodoEventos[this._eventoNuevo].HICAL = Utils.strHourToSapHo(Utils.dateToStrHours(fechaSist));
             }
             //Cambiar etiqueta a ENVASE sólo cuando se vea calas.
             if (tipoEvento == "3") {
@@ -2088,11 +2122,11 @@ sap.ui.define([
             }
             
             if (this.buscarValorFijo(textValidaciones.EVEVISFECHAFIN, tipoEvento)) {
-                nodoEventos[this._eventoNuevo].FFEVN = Utils.dateToStrDate(fechaSist);
-                nodoEventos[this._eventoNuevo].HFEVN = Utils.dateToStrHours(fechaSist);
+                nodoEventos[this._eventoNuevo].FFEVN = Utils.strDateToSapDate(Utils.dateToStrDate(fechaSist));
+                nodoEventos[this._eventoNuevo].HFEVN = Utils.strHourToSapHo(Utils.dateToStrHours(fechaSist));
                 //BIOMETRIA
-                nodoEventos[this._eventoNuevo].FFCAL = Utils.dateToStrDate(fechaSist);
-                nodoEventos[this._eventoNuevo].HFCAL = Utils.dateToStrHours(fechaSist);
+                nodoEventos[this._eventoNuevo].FFCAL = Utils.strDateToSapDate(Utils.dateToStrDate(fechaSist));
+                nodoEventos[this._eventoNuevo].HFCAL = Utils.strHourToSapHo(Utils.dateToStrHours(fechaSist));
             }
                 
             if (tipoEvento == "3") {
@@ -2410,7 +2444,41 @@ sap.ui.define([
 
             });
 
-        }
+        },
+        /*-----------------------------------------------------------------------------------------------------------------------*/
+        agregarMensajeValid :function(tipoMens,mssg){
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            let objMessage = {};
+            if(tipoMens == "Error"){
+                objMessage = {
+                    type: 'Error',
+                    title: 'Mensaje de Error',
+                    activeTitle: false,
+                    description: mssg,
+                    subtitle: mssg,
+                    counter: 1
+                };
+            }
+            var messageIttems = mod.getProperty("/Utils/MessageItemsEP");
+            messageIttems.push(objMessage);
+            mod.refresh();
+
+            let oButtonVEP = this.getView().byId("messagePopoverDetalleEve");
+            oMessageEP.getBinding("items").attachChange(function(oEvent){
+                oMessageEP.navigateBack();
+                oButtonVEP.setType(this.buttonTypeFormatter("EP"));
+                oButtonVEP.setIcon(this.buttonIconFormatter("EP"));
+                oButtonVEP.setText(this.highestSeverityMessages("EP"));
+            }.bind(this));
+
+            setTimeout(function(){
+                oButtonVEP.setType(this.buttonTypeFormatter("EP"));
+                oButtonVEP.setIcon(this.buttonIconFormatter("EP"));
+                oButtonVEP.setText(this.highestSeverityMessages("EP"));
+                oMessageEP.openBy(oButtonVEP);
+            }.bind(this), 100);
+
+        }   
 
     });
 });
