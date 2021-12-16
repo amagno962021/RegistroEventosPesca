@@ -195,7 +195,7 @@ sap.ui.define([
             for (let index = 0; index < eventos.length; index++) {
                 var element = eventos[index];
                 var evt = {
-                    INDTR: element.INDTR,
+                    INDTR: element.INDTR  == "N" ? "N" : "E",
                     NRMAR: element.NRMAR,
                     NREVN: element.NREVN,
                     CDTEV: element.CDTEV,
@@ -216,8 +216,8 @@ sap.ui.define([
                     ESTSF: element.ESTSF,
                     CDMLM: element.CDMLM,
                     STCMB: element.STCMB,
-                    LTGEO: element.LTGEO,
-                    LNGEO: element.LNGEO,
+                    LTGEO: element.Latitud,
+                    LNGEO: element.Longitud,
                     TEMAR: element.TEMAR,
                     CDTDS: element.CDTDS,
                     TMESP: element.TMESP,
@@ -351,15 +351,18 @@ sap.ui.define([
         },
 
         guardarDatosIncidental: function(){
-            var IncidenReg = [];//modelo de lista de pesca incidental
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
+            let ListaEventos = mod.getProperty("/Eventos/Lista");
+            var IncidenReg =  ListaEventos[elementSel].ListaIncidental;//modelo de lista de pesca incidental
             var pscinc_list = [];
             for (let index = 0; index < IncidenReg.length; index++) {
                 const element = IncidenReg[index];
                 var incidental = {
                     CDSPC: element.CDSPC,
                     DSSPC: element.DSSPC,
-                    NREVN: element.NREVN,
-                    NRMAR: element.NRMAR,
+                    NREVN: ListaEventos[elementSel].NREVN,
+                    NRMAR: ListaEventos[elementSel].NRMAR,
                     PCSPC: element.PCSPC
                 };
                 pscinc_list.push(incidental);
