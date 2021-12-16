@@ -2048,7 +2048,7 @@ sap.ui.define([
                     NREVN : Number(LstEvento.length) + 1,
                     ESEVN : "S",
                     ACEVN : this.getCurrentUser(),
-                    FCEVN : Utils.strDateToSapDate(Utils.dateToStrDate(timeInMilis)),
+                    FCEVN : Utils.dateToStrDate(timeInMilis),
                     HCEVN : Utils.strHourToSapHo(Utils.dateToStrHours(timeInMilis))
                 }
                 mod.setProperty("/Cabecera/FormEditado",true);
@@ -2091,17 +2091,17 @@ sap.ui.define([
             let fechaSist = new Date();
             
             //wdContext.currentEventosElement().setDescTipoEvento(manageSimpleTypes.getText(attInfoTipoPesca, tipoEvento));-- descripcion debe estar en el modelo
-            nodoEventos[this._eventoNuevo].FCEVN = Utils.strDateToSapDate(Utils.dateToStrDate(fechaSist));
+            nodoEventos[this._eventoNuevo].FCEVN = Utils.dateToStrDate(fechaSist);
             nodoEventos[this._eventoNuevo].HCEVN = Utils.strHourToSapHo(Utils.dateToStrHours(fechaSist));
             nodoEventos[this._eventoNuevo].AMEVN = this.getCurrentUser();
 
             this.obtenerDatosFechaAnterior();	
 
             if (tipoEvento != "7") {
-                nodoEventos[this._eventoNuevo].FIEVN = Utils.strDateToSapDate(Utils.dateToStrDate(fechaSist));
+                nodoEventos[this._eventoNuevo].FIEVN = Utils.dateToStrDate(fechaSist);
                 nodoEventos[this._eventoNuevo].HIEVN = Utils.strHourToSapHo(Utils.dateToStrHours(fechaSist));
                 //BIOMETRIA
-                nodoEventos[this._eventoNuevo].FICAL = Utils.strDateToSapDate(Utils.dateToStrDate(fechaSist));
+                nodoEventos[this._eventoNuevo].FICAL = Utils.dateToStrDate(fechaSist);
                 nodoEventos[this._eventoNuevo].HICAL = Utils.strHourToSapHo(Utils.dateToStrHours(fechaSist));
             }
             //Cambiar etiqueta a ENVASE sólo cuando se vea calas.
@@ -2123,10 +2123,10 @@ sap.ui.define([
             }
             
             if (this.buscarValorFijo(textValidaciones.EVEVISFECHAFIN, tipoEvento)) {
-                nodoEventos[this._eventoNuevo].FFEVN = Utils.strDateToSapDate(Utils.dateToStrDate(fechaSist));
+                nodoEventos[this._eventoNuevo].FFEVN = Utils.dateToStrDate(fechaSist);
                 nodoEventos[this._eventoNuevo].HFEVN = Utils.strHourToSapHo(Utils.dateToStrHours(fechaSist));
                 //BIOMETRIA
-                nodoEventos[this._eventoNuevo].FFCAL = Utils.strDateToSapDate(Utils.dateToStrDate(fechaSist));
+                nodoEventos[this._eventoNuevo].FFCAL = Utils.dateToStrDate(fechaSist);
                 nodoEventos[this._eventoNuevo].HFCAL = Utils.strHourToSapHo(Utils.dateToStrHours(fechaSist));
             }
                 
