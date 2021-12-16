@@ -9,28 +9,36 @@ sap.ui.define([
 
     var TasaBackend = CoreService.extend("com.tasa.registroeventospescav2.Service.TasaBackendService", {
 
-        obtenerTipoEmbarcacion: function (sUsuario) {
+        obtenerTipoEmbarcacion: async function (sUsuario) {
             var uri = UtilService.getHostService() + "/api/embarcacion/listaTipoEmbarcacion";
             var arg = {
                 usuario: sUsuario
             };
-            return this.http(uri).get(null, arg).then(function (response) {
+            var data = await this.http(uri).get(null, arg).then(function (response) {
                 var data = JSON.parse(response);
                 var sData = JSON.parse(data);
                 return sData;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerTipoEmbarcacion: ", error);
+                return null;
             });
+            return data;
         },
 
-        obtenerPlantas: function (sUsuario) {
+        obtenerPlantas: async function (sUsuario) {
             var uri = UtilService.getHostService() + "/api/embarcacion/listaPlantas";
             var arg = {
                 usuario: sUsuario
             };
-            return this.http(uri).get(null, arg).then(function (response) {
+            var data = await this.http(uri).get(null, arg).then(function (response) {
                 var data = JSON.parse(response);
                 var sData = JSON.parse(data);
                 return sData;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerPlantas: ", error);
+                return null;
             });
+            return data;
         },
 
         cargarListaMareas: function (sUsuario) {
@@ -38,36 +46,15 @@ sap.ui.define([
             var arg = {
                 usuario: sUsuario
             };
-            var me = this;
-            return this.http(uri).get(null, arg).then(function (response) {
+            var data = this.http(uri).get(null, arg).then(function (response) {
                 var data = JSON.parse(response);
                 var sData = JSON.parse(data);
-                var str_di = sData.str_di;
-                var uri1 = UtilService.getHostService() + "/api/dominios/Listar";
-                var sBody = UtilService.getBodyDominio();
-                sBody.dominios[0].domname = "ZDO_ZCDMMA";
-                return me.http(uri1).post(null, sBody).then(function (sResponse) {
-                    var sData1 = JSON.parse(sResponse);
-                    var sData2 = sData1.data[0].data;
-                    console.log("Dominios: ", sData1);
-                    for (let index = 0; index < str_di.length; index++) {
-                        const element = str_di[index];
-                        var descMotMar = "";
-
-                        //validar descripcion motivo marea
-                        for (let index1 = 0; index1 < sData2.length; index1++) {
-                            const element1 = sData2[index1];
-                            if (element1.id == element.CDMMA) {
-                                descMotMar = element1.descripcion;
-                                break;
-                            }
-                        }
-
-                        element.DESCMOTMAR = descMotMar;
-                    }
-                    return sData;
-                });
+                return sData;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.cargarListaMareas: ", error);
+                return null;
             });
+            return data;
         },
 
         obtenerDetalleMarea: async function (marea, sUsuario) {

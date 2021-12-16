@@ -21,26 +21,32 @@ sap.ui.define([
             formatter: formatter,
             //FormCust: FormCust,
 
-            onInit: function () {
+            onInit: async function () {
+                BusyIndicator.show(0);
                 var currentUser = this.getCurrentUser();
                 this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
                 //this.formCust = sap.ui.controller("com.tasa.registroeventospescav2.controller.FormCust")
-                var me = this;
-                TasaBackendService.obtenerTipoEmbarcacion(currentUser).then(function (tipoEmbarcacion) {
-                    TasaBackendService.obtenerPlantas(currentUser).then(function (plantas) {
-                        me.prepararDataTree(tipoEmbarcacion, plantas.data);//metodo para armar la data y setear el modelo del tree
-                        TasaBackendService.cargarListaMareas(currentUser).then(function (mareas) {
-                            console.log("Mareas: ", mareas);
-                            me.validarDataMareas(mareas);
-                        }).catch(function (error) {
-                            console.log("ERROR: Main.onInit - " + error);
-                        });
-                    }).catch(function (error) {
-                        console.log("ERROR: Main.onInit - " + error);
-                    });
-                }).catch(function (error) {
-                    console.log("ERROR: Main.onInit - " + error);
-                });
+                var tipoEmba = await TasaBackendService.obtenerTipoEmbarcacion(currentUser);
+                if(tipoEmba){
+                    var plantas = await TasaBackendService.obtenerPlantas(currentUser);
+                    if (plantas) {
+                        this.prepararDataTree(tipoEmba, plantas.data);
+                        var listaMareas = await TasaBackendService.cargarListaMareas(currentUser);
+                        if(listaMareas){
+                            this.validarDataMareas(listaMareas);
+                        }
+                    }
+                }
+
+                var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+                var cdpta = oStore.get("CDPTA");
+                var cdtem = oStore.get("CDTEM");
+                if(cdpta && cdtem){
+                    this.filtarMareas(cdtem, cdpta);
+                }
+
+                this.loadInitData();
+
                 this.CDTEM = "";
                 this.CDPTA = "";
                 this.primerOption = [];
@@ -49,9 +55,9 @@ sap.ui.define([
                 this.lastPage = "";
                 this.bckEmbarcacion = null;
                 this.bckArmador = null;
+
                 //this.filtarMareas("001","0012");//por defecto muestra la primera opcion
 
-                this.loadInitData();
             },
 
             _onPatternMatched: function () {
@@ -172,7 +178,7 @@ sap.ui.define([
                 //console.log(evt)
                 var selectedItem = evt.getParameter("item").getBindingContext().getObject();
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-                console.log("SELECTED ITEM: ", selectedItem);
+                var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 if (selectedItem.cdtem && selectedItem.cdpta) {
                     var oGlobalBusyDialog = new sap.m.BusyDialog();
                     var cdtem = selectedItem.cdtem;
@@ -182,6 +188,8 @@ sap.ui.define([
                     modelo.setProperty("/DatosGenerales/CDPTA", cdpta)
                     this.CDTEM = cdtem;
                     this.CDPTA = cdpta;
+                    oStore.put("CDTEM", cdtem);
+                    oStore.put("CDPTA", cdpta);
                     this.filtarMareas(cdtem, cdpta);
                     oGlobalBusyDialog.close();
                 }
@@ -357,8 +365,9 @@ sap.ui.define([
                     if (valMareaProd) {//se puso la admiracion para pruebas
                         modelo.setProperty("/Cabecera/INDICADOR", "N");
                         modelo.setProperty("/DatosGenerales/ESMAR", "A");
-                        var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-                        oRouter.navTo("DetalleMarea");
+                        /*var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                        oRouter.navTo("DetalleMarea");*/
+                        this.navToExternalComp();
                     } else {
                         MessageBox.error(this.oBundle.getText("EMBANOPROD", [nmbemb]));
                     }
@@ -406,8 +415,9 @@ sap.ui.define([
                                     if (valMareaProd) {//se puso la admiracion para pruebas
                                         modelo.setProperty("/Cabecera/INDICADOR", "N");
                                         modelo.setProperty("/DatosGenerales/ESMAR", "A");
-                                        var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-                                        oRouter.navTo("DetalleMarea");
+                                        /*var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                                        oRouter.navTo("DetalleMarea");*/
+                                        this.navToExternalComp();
                                     } else {
                                         MessageBox.error(this.oBundle.getText("EMBANOPROD", [nmbemb]));
                                     }
@@ -517,6 +527,7 @@ sap.ui.define([
                 //refrescar modelo y navegar al detalle
                 modeloDetalleMarea.refresh();
                 oRouter.navTo("DetalleMarea");
+                me.navToExternalComp();
             },
 
             obtenerReservasCombustible: async function (marea, codigo) {
@@ -1359,6 +1370,7 @@ sap.ui.define([
                         modelo.setProperty("/DataSession/IsRollngComb", true);
                     }
                 }
+                BusyIndicator.hide();
                 //modelo.setProperty("/DataSession/RolFlota", true);
             },
 
@@ -1371,17 +1383,18 @@ sap.ui.define([
             },
 
             onCallUsuario: function(){
-                $.ajax({
-                    url: "https://tasaqas.authentication.us10.hana.ondemand.com/config?action=who&details=true&?format=json",
-                    type: 'GET',
-                    dataType: 'application/json',
-                    success: function(data){
-                        console.log("success"+data);
-                    },
-                    error: function(e){
-                        console.log("error: "+e);
-                    }
-                });
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var dataModelo = modelo.getData();
+                var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+                oStore.put("DataModelo", dataModelo);
+                var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation");
+                oCrossAppNav.toExternal({
+					target: {
+						semanticObject: "mareaevento",
+						action: "display"
+					}
+				});
+                //abrir componente externo
             }
 
         });

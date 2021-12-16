@@ -90,7 +90,7 @@
                                        <Text text="{NRO}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                                        <Text text="{NRMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                                        <Text text="{NMEMB}" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{DESCMOTMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{DESC_CDMMA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                                        <Text text="{DSEEC}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                                        <ObjectNumber number="{CNPCM}" unit="Tn" />
                                        <Text text="{FEHOARR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />

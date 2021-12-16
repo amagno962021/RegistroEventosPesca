@@ -191,7 +191,14 @@ sap.ui.define([
             marea.str_marea.push(objMarea);
             var equipamientos = [];
             var horometros = [];
+            var pescaDeclarada = [];
+            var pescaBodega = [];
+            var pescaDescargada = [];
+            var siniestros = [];
             var eventos = modelo.getProperty("/Eventos/Lista");
+            var motivoMarea = modelo.getProperty("/DatosGenerales/CDMMA");
+            var eveVisTabEquip = ["1", "5"];
+            var eveVisTabHorom = ["1", "5", "6", "H", "T"];
             for (let index = 0; index < eventos.length; index++) {
                 var element = eventos[index];
                 var evt = {
@@ -233,9 +240,29 @@ sap.ui.define([
                     NRDES: element.NRDES,
                     ESTSF: element.ESTSF,
                 };
+                
+                if(eveVisTabEquip.includes(element.CDTEV)){
+                    equipamientos = this.obtenerEquipamientos(element)
+                }
 
-                equipamientos = this.obtenerEquipamientos(element);
-                horometros = this.obtenerHorometros(element);
+                if(eveVisTabHorom.includes(element.CDTEV)){
+                    horometros = this.obtenerHorometros(element);
+                }
+
+                if(element.CDTEV == "3"){
+                    pescaDeclarada = this.obtenerPescaDeclaradaRFC(element);
+                    if(motivoMarea == "1"){
+                        pescaBodega = this.obtenerPescaBodegaRFC(element);
+                    }
+                }
+
+                if(element.CDTEV == "6"){
+                    pescaDescargada = this.obtenerPescaDescargadaRFC(element);
+                }
+
+                if(element.CDTEV == "8"){
+                    siniestros = this.obtenerSiniestros(element);
+                }
 
                 marea.str_evento.push(evt);
             }
@@ -243,11 +270,23 @@ sap.ui.define([
             marea.str_flbsp_c = this.guardarDatosBiometria();
             marea.str_flbsp_e = this.eliminarDatosBiometria();
             marea.str_pscinc = this.guardarDatosIncidental();
-            marea.str_psbod = this.obtenerPescaBodegaRFC();
-            marea.str_psdec = this.obtenerPescaDeclaradaRFC();
+
+            marea.str_simar = siniestros;
+            marea.str_desca = pescaDescargada;
+            marea.str_psbod = pescaBodega;
+            marea.str_psdec = pescaDeclarada;
+            marea.str_equip = equipamientos;
+            marea.str_horom = horometros;
 
             console.log("GUARDAR MAREA: ", marea);
             var guardar = await TasaBackendService.crearActualizarMarea(marea);
+        },
+
+        obtenerSiniestros: function(element){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var listaSiniestros = [];//modelo sinistros
+            var siniestros = [];
+            return siniestros;
         },
 
         obtenerEquipamientos: function(element){
@@ -367,15 +406,15 @@ sap.ui.define([
             return pscinc_list;
         },
 
-        obtenerPescaBodegaRFC: function(){
+        obtenerPescaBodegaRFC: function(elementParam){
             var bodegas = [];//modelo de bodegas
             var lista = [];
             for (let index = 0; index < bodegas.length; index++) {
                 const element = bodegas[index];
                 var listBodegas = {
                     INDTR: element.INDTR,
-                    NRMAR: element.NRMAR,
-                    NREVN: element.NREVN,
+                    NRMAR: elementParam.NRMAR,
+                    NREVN: elementParam.NREVN,
                     CDBOD: element.CDBOD,
                     CNPCM: element.CNPCM
                 };
@@ -384,7 +423,7 @@ sap.ui.define([
             return lista;
         },
 
-        obtenerPescaDeclaradaRFC: function(){
+        obtenerPescaDeclaradaRFC: function(elementParam){
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
             let ListaEventos = mod.getProperty("/Eventos/Lista");
@@ -394,8 +433,10 @@ sap.ui.define([
                 const element = pescaDeclarada[index];
                 var listPescaDeclarada = {
                     INDTR: element.INDTR,
-                    NRMAR: ListaEventos[elementSel].NRMAR,
-                    NREVN: ListaEventos[elementSel].NREVN,
+                    //NRMAR: ListaEventos[elementSel].NRMAR,
+                    NRMAR: elementParam.NRMAR,
+                    //NREVN: ListaEventos[elementSel].NREVN,
+                    NREVN: elementParam.NREVN,
                     CDSPC: element.CDSPC,
                     CNPCM: element.CNPCM,
                     CDUMD: element.UnidMedida, 
@@ -407,7 +448,7 @@ sap.ui.define([
             return lista;
         },
 
-        obtenerPescaDescargada: function(element){
+        obtenerPescaDescargadaRFC: function(element){
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var pescaDescargada = {};//modelo pesca descargada
             var ePescaDescargada = {};//modelo pesca descargada eliminada
@@ -422,7 +463,7 @@ sap.ui.define([
             var listPescaDescargada = {
                 INDTR: pescaDescargada.INDTR,
                 INDEJ: pescaDescargada.INDEJ,
-                NRMAR: pescaDescargada.NRMAR,
+                NRMAR: element.NRMAR,
                 NREVN: element.NREVN,
                 NRDES: pescaDescargada.NRDES,
                 TICKE: pescaDescargada.TICKET,
@@ -430,8 +471,20 @@ sap.ui.define([
                 CDPTA: pescaDescargada.CDPTA,
                 INPRP: element.INPRP,
                 CDSPC: pescaDescargada.CDSPC,
-                
-            }
+                CDPDG: pescaDescargada.CDPDG, 
+                CNPCM: pescaDescargada.CNPCM,
+                CNPDS: pescaDescargada.CNPDS,
+                PESACUMOD: pescaDescargada.PESACUMOD,
+                FECONMOV: pescaDescargada.FECONMOV,
+                FIDES: element.FIEVN,
+                HIDES: element.HIEVN,
+                FFDES: element.FFEVN,
+                HFDES: element.HFDES,
+                CDTPC: pescaDescargada.CDTPC,
+                TPDES: pescaDescargada.TPDES
+            };
+
+            lista.push(listPescaDescargada);
         },
 
         MainObtenerReservasCombustible: async function(){
@@ -687,7 +740,22 @@ sap.ui.define([
 			});
 
 			return sHighestSeverityIcon;
-		}
+		},
+
+        navToExternalComp: function(){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var dataModelo = modelo.getData();
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+            oStore.put("DataModelo", dataModelo);
+            oStore.put("AppOrigin", "registroeventospescav2");
+            var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation");
+            oCrossAppNav.toExternal({
+				target: {
+					semanticObject: "mareaevento",
+					action: "display"
+				}
+			});
+        }
 
     });
 
