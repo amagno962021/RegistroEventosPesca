@@ -202,17 +202,17 @@ sap.ui.define([
             for (let index = 0; index < eventos.length; index++) {
                 var element = eventos[index];
                 var evt = {
-                    INDTR: element.INDTR,
+                    INDTR: element.INDTR  == "N" ? "N" : "E",
                     NRMAR: element.NRMAR,
                     NREVN: element.NREVN,
                     CDTEV: element.CDTEV,
-                    FIEVN: Utils.strDateToDate(element.FIEVN),
+                    FIEVN: Utils.strDateToSapDate(element.FIEVN), //yyyyMMdd
                     HIEVN: element.HIEVN,
-                    FFEVN: Utils.strDateToDate(element.FFEVN),
+                    FFEVN: Utils.strDateToSapDate(element.FFEVN),
                     HFEVN: element.HFEVN,
-                    FICAL: Utils.strDateToDate(element.FICAL),
+                    FICAL: Utils.strDateToSapDate(element.FICAL),
                     HICAL: element.HICAL,
-                    FFCAL: Utils.strDateToDate(element.FFCAL),
+                    FFCAL: Utils.strDateToSapDate(element.FFCAL),
                     HFCAL: element.HFCAL,
                     CDZPC: element.CDZPC,
                     CDPTO: element.CDPTO,
@@ -223,18 +223,18 @@ sap.ui.define([
                     ESTSF: element.ESTSF,
                     CDMLM: element.CDMLM,
                     STCMB: element.STCMB,
-                    LTGEO: element.LTGEO,
-                    LNGEO: element.LNGEO,
+                    LTGEO: element.Latitud,
+                    LNGEO: element.Longitud,
                     TEMAR: element.TEMAR,
                     CDTDS: element.CDTDS,
                     TMESP: element.TMESP,
                     CDMES: element.CDMES,
                     MUEST: element.MUEST,
                     ESEVN: element.ESEVN,
-                    FCEVN: Utils.strDateToDate(element.FCEVN),
+                    FCEVN: Utils.strDateToSapDate(element.FCEVN),
                     HCEVN: element.HCEVN,
                     ACEVN: element.ACEVN,
-                    FMEVN: Utils.strDateToDate(element.FMEVN),
+                    FMEVN: Utils.strDateToSapDate(element.FMEVN),
                     HMEVN: element.HMEVN,
                     AMEVN: element.AMEVN,
                     NRDES: element.NRDES,
@@ -390,15 +390,18 @@ sap.ui.define([
         },
 
         guardarDatosIncidental: function(){
-            var IncidenReg = [];//modelo de lista de pesca incidental
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
+            let ListaEventos = mod.getProperty("/Eventos/Lista");
+            var IncidenReg =  ListaEventos[elementSel].ListaIncidental;//modelo de lista de pesca incidental
             var pscinc_list = [];
             for (let index = 0; index < IncidenReg.length; index++) {
                 const element = IncidenReg[index];
                 var incidental = {
                     CDSPC: element.CDSPC,
                     DSSPC: element.DSSPC,
-                    NREVN: element.NREVN,
-                    NRMAR: element.NRMAR,
+                    NREVN: ListaEventos[elementSel].NREVN,
+                    NRMAR: ListaEventos[elementSel].NRMAR,
                     PCSPC: element.PCSPC
                 };
                 pscinc_list.push(incidental);
