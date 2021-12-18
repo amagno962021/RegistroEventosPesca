@@ -203,6 +203,7 @@ sap.ui.define([
                 this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "" == "" ? "0" : FormEvent_cont.Cabecera.NRMAR + "";//"165728";
                 this._nroDescarga = "";
                 this._indicadorPropXPlanta = "";
+                this._indicador = "E"
                 this._codPlanta = FormEvent_cont.Cabecera.CDPTA ? FormEvent_cont.Cabecera.CDPTA : FormEvent_cont.DatosGenerales.CDPTA;
                 this._embarcacion = FormEvent_cont.Cabecera.CDEMB;//"0000000012";
                 this._indicadorProp = FormEvent_cont.Cabecera.INPRP;
@@ -248,6 +249,7 @@ sap.ui.define([
             this._listaEventos[this._elementAct].LatitudM = this._listaEventos[this._elementAct].LatitudM ? this._listaEventos[this._elementAct].LatitudM : "00";
             this._listaEventos[this._elementAct].LongitudD = this._listaEventos[this._elementAct].LongitudD ? this._listaEventos[this._elementAct].LongitudD : "000";
             this._listaEventos[this._elementAct].LongitudM = this._listaEventos[this._elementAct].LongitudM ? this._listaEventos[this._elementAct].LongitudM : "00";
+            this._listaEventos[this._elementAct].CDMNP = this._listaEventos[this._elementAct].CDMNP ? this._listaEventos[this._elementAct].CDMNP : "";
             this._listaEventos[this._elementAct].ListaBodegas = [];
             this._listaEventos[this._elementAct].ListaBiometria = [];
             this._listaEventos[this._elementAct].ListaPescaDeclarada = [];
@@ -522,14 +524,14 @@ sap.ui.define([
 
             return encontroValor
         },
-        obtenerDetalleEvento: function () {
+        obtenerDetalleEvento:async function () {
             var datCons = false// wdThis.getEventoConsultado(nroEvento);
 
             if (this._indicador == "E" && !datCons) {
                 //wdThis.setEventoConsultado(nroEvento, true);
 
                 if (this.buscarValorFijo(textValidaciones.EVEVISTABHOROM, this._tipoEvento)) {
-                    this.obtenerHorometros();
+                    await this.obtenerHorometros();
                 }
 
                 if (this.buscarValorFijo(textValidaciones.EVEVISTABEQUIP, this._tipoEvento)) {
@@ -618,11 +620,13 @@ sap.ui.define([
                     if (this._listaEventos[elementoAnt].TipoEvento == textValidaciones.TIPOEVENTOESPERA) {
                         var dtf_fechaIniEnv = this.getView().byId("dtf_fechaIniEnv");
                         dtf_fechaIniEnv.setEnabled(false);
+                        this.getView().byId("dtf_horaIniEnv").setEnabled(false);
                     }
 
                 } else if (exisEspMarAnt) {
                     var dtf_fechaIniEnv = this.getView().byId("dtf_fechaIniEnv");
                     dtf_fechaIniEnv.setEnabled(false);
+                    this.getView().byId("dtf_horaIniEnv").setEnabled(false);
                 }
             }
 
@@ -680,7 +684,9 @@ sap.ui.define([
                         //Sea (CHI o CHD)
                         if (this._motivoMarea == "2" || this._motivoMarea == "1") {
                             this.getView().byId("dtf_fechaIniEnv").setEnabled(false);
+                            this.getView().byId("dtf_horaIniEnv").setEnabled(false);
                             this.getView().byId("dtf_fechaFinEnv").setEnabled(false);
+                            this.getView().byId("dtf_horaFinEnv").setEnabled(false);
                         }
                     }
                 }
@@ -718,6 +724,7 @@ sap.ui.define([
                 this.getView().byId("FechaEnvaseIni").setVisible(true);
                 this.getView().byId("0004").setVisible(true);
                 this.getView().byId("dtf_fechaIniEnv").setEnabled(false);
+                this.getView().byId("dtf_horaIniEnv").setEnabled(false);
             }
 
             //Datos de operacion
@@ -1061,9 +1068,10 @@ sap.ui.define([
             }
 
         },
-        obtenerHorometros: function () {
+        obtenerHorometros: async function () {
+            await this.service_obtenerListaHorometro();
             if (this._listasServicioCargaIni[8] ? true : false) {
-                this._listaEventos[this._elementAct].ListaHorometros = this._listasServicioCargaIni[8].lista;
+                this._listaEventos[this._elementAct].ListaHorometros = this._listasServicioCargaIni[8];
             }
 
         },
@@ -1347,10 +1355,14 @@ sap.ui.define([
         prepararVistaRevision: function () {
             this.getView().byId("cb_ZonaPesca").setEnabled(false);
             this.getView().byId("dtp_fechaIniCala").setEnabled(false);
+            this.getView().byId("dtp_horaIniCala").setEnabled(false);
             this.getView().byId("dtf_fechaIniEnv").setEnabled(false);
+            this.getView().byId("dtf_horaIniEnv").setEnabled(false);
             this.getView().byId("dtf_FechaProduccion").setEnabled(false);
             this.getView().byId("dtp_fechaFinCala").setEnabled(false);
+            this.getView().byId("dtp_horaFinCala").setEnabled(false);
             this.getView().byId("dtf_fechaFinEnv").setEnabled(false);
+            this.getView().byId("dtf_horaFinEnv").setEnabled(false);
             this.getView().byId("cmb_estaOperacion").setEnabled(false);//cambiar a false
             this.getView().byId("cb_tipoDescarga").setEnabled(false);
             this.getView().byId("i_temperaturaMar").setEnabled(false);
@@ -1951,10 +1963,14 @@ sap.ui.define([
         resetView: function () {
             this.getView().byId("cb_ZonaPesca").setEnabled(true);
             this.getView().byId("dtp_fechaIniCala").setEnabled(true);
+            this.getView().byId("dtp_horaIniCala").setEnabled(true);
             this.getView().byId("dtf_fechaIniEnv").setEnabled(true);
+            this.getView().byId("dtf_horaIniEnv").setEnabled(true);
             this.getView().byId("dtf_FechaProduccion").setEnabled(true);
             this.getView().byId("dtp_fechaFinCala").setEnabled(true);
+            this.getView().byId("dtp_horaFinCala").setEnabled(true);
             this.getView().byId("dtf_fechaFinEnv").setEnabled(true);
+            this.getView().byId("dtf_horaFinEnv").setEnabled(true);
             this.getView().byId("cmb_estaOperacion").setEnabled(true);//cambiar a false
             this.getView().byId("cb_tipoDescarga").setEnabled(true);
             this.getView().byId("i_temperaturaMar").setEnabled(true);
@@ -2218,7 +2234,7 @@ sap.ui.define([
 
             //Tab Horometro
             if (this.buscarValorFijo(textValidaciones.EVEVISTABHOROM, tipoEvento)) {
-                this.obtenerHorometros();
+                await this.obtenerHorometros();
             }
 
             //Tab Pesca Descargada
@@ -2446,6 +2462,16 @@ sap.ui.define([
             });
 
         },
+        service_obtenerListaHorometro: async function () {
+            let serv_errorDesc = TasaBackendService.obtenerListaHorometro(this._FormMarea.WERKS, this._listaEventos[this._elementAct].CDTEV, this._nroMarea, this._listaEventos[this._elementAct].NREVN);
+            let that = this;
+            await Promise.resolve(serv_errorDesc).then(values => {
+                that._listasServicioCargaIni[8] = values.lista;
+            }).catch(reason => {
+
+            });
+
+        },
         /*-----------------------------------------------------------------------------------------------------------------------*/
         agregarMensajeValid :function(tipoMens,mssg){
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
@@ -2454,6 +2480,16 @@ sap.ui.define([
                 objMessage = {
                     type: 'Error',
                     title: 'Mensaje de Error',
+                    activeTitle: false,
+                    description: mssg,
+                    subtitle: mssg,
+                    counter: 1
+                };
+            }
+            else if(tipoMens == "Warning"){
+                objMessage = {
+                    type: 'Warning',
+                    title: 'Mensaje de advertencia',
                     activeTitle: false,
                     description: mssg,
                     subtitle: mssg,

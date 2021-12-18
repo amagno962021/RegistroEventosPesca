@@ -180,7 +180,7 @@ sap.ui.define([
                 if(bOk && visible.TabHorometro){
                     bOk = this._controler.Dat_Horometro.validarLecturaHorometros();
                     if(bOk){
-                        bOk = this._controler.Dat_Horometro.validarHorometrosEvento();
+                        bOk = await this._controler.Dat_Horometro.validarHorometrosEvento();
                     }
                 }
 

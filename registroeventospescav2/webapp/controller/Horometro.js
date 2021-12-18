@@ -187,6 +187,7 @@ sap.ui.define([
         validarHorometrosEvento: async function () {
             this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
             let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
+            let indicadorSel = this.ctr._elementAct;
             var bOk = true;
             var listaEventos = this.ctr._listaEventos; //modelo de lista de eventos
             var detalleMarea = this.ctr._FormMarea;//cargar modelo detalle marea
@@ -208,7 +209,9 @@ sap.ui.define([
                     eventoCompar = listaEventos[index];
                     if (evenLimites.includes(eventoCompar.CDTEV)) {
                         indCompar = index;
-                        this.ctr.obtenerDetalleEvento();
+                        this.ctr._elementAct = index;
+                        await this.ctr.obtenerDetalleEvento();
+                        this.ctr._elementAct = indicadorSel;
                         break;
                     }
                 }

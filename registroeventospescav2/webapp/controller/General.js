@@ -335,7 +335,7 @@ sap.ui.define([
                 }else{
                     eventoActual.ValiCoordCala = false;
                     let mssg = that.ctr.oBundle.getText("NODATACOORDCOSTA");
-                    that.ctr.agregarMensajeValid("Error",mssg);
+                    that.ctr.agregarMensajeValid("Warning",mssg);
                     //MessageBox.error(mssg);
                 }
                 
@@ -558,8 +558,8 @@ sap.ui.define([
                     codTemp = "V"; 
                 }
             }
-
-            await TasaBackendService.obtenerTemporadas(codTemp, fecha).then(function(response){//14.12.2021
+            let fechConv = Utils.strDateToSapDate(fecha);
+            await TasaBackendService.obtenerTemporadas(codTemp, fechConv).then(function(response){//14.12.2021
                 //obtener repsonse
                 var data = response.data;
                 for (let index = 0; index < data.length; index++) {
@@ -790,13 +790,13 @@ sap.ui.define([
                         listaBiometria.push(objBiometria);
 
                     }
+                    eventoActual.ListaBiometria = listaBiometria;
                 }
             }
 
             eventoActual.ObteEspePermitidas = false;
             eventoActual.EspePermitida = espePermitida;
             eventoActual.EspeZonaPesca = espeZonaPesca;
-            eventoActual.ListaBiometria = listaBiometria;
             eventoActual.EspeVeda = espeVeda;
 
             this._oView.getModel("eventos").updateBindings(true);
@@ -808,6 +808,10 @@ sap.ui.define([
             key = arrayValiTab[valor_a_encontrar];
 
             return key
+        },
+        prueba : function(){
+            let valor = sap.ui.getCore().byId("dtp_fechaIniCala").getValue();
+            console.log("Holaaaaaaaaaaaa : " + valor);
         }
 
 	});
