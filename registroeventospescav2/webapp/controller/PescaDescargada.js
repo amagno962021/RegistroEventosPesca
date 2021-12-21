@@ -180,7 +180,7 @@ sap.ui.define([
                 if(bOk && visible.TabHorometro){
                     bOk = this._controler.Dat_Horometro.validarLecturaHorometros();
                     if(bOk){
-                        bOk = this._controler.Dat_Horometro.validarHorometrosEvento();
+                        bOk = await this._controler.Dat_Horometro.validarHorometrosEvento();
                     }
                 }
 
@@ -722,7 +722,10 @@ sap.ui.define([
 					ListaPescaDescElim[0].CDPTA = this._controler._codPlanta; //Obtengo la planta del evento
 				} else if (this._controler._listaEventos[this._controler._elementAct].INPRP == "P") { //Descarga en planta propia
                     this._oView.byId("pdt_col_BuscarDesc").setVisible(true);
+                    this._oView.byId("pdCHD_col_BuscarDesc").setVisible(true);
                     this._oView.byId("pdt_col_EliminarDesc").setVisible(false);
+                    this._oView.byId("pde_col_EliminarDesc").setVisible(false);
+                    this._oView.byId("pdCHD_col_EliminarDesc").setVisible(false);
 
                         ListaPescaDescElim[0].INDTR = "E";
 						ListaPescaDescElim[0].INDEJ = "C";

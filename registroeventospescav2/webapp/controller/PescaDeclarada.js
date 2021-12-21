@@ -140,11 +140,12 @@ sap.ui.define([
             var cantTotal = 0;
             for (let index = 0; index < pescaDeclarada.length; index++) {
                 const element = pescaDeclarada[index];
-                var cantPesca = element.CantPesca;
+                var cantPesca = element.CNPCM;
                 cantPesca = cantPesca != null ? cantPesca : 0;
                 cantTotal += cantPesca;
             }
             eventoActual.CantTotalPescDecla = cantTotal;
+            this._oView.getModel("eventos").updateBindings(true);
             //refrescar modelo
         },
 

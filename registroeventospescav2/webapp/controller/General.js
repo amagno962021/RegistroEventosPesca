@@ -419,7 +419,7 @@ sap.ui.define([
                 if (tipoEvento == "6" && this.nextTab == "Horometro" && eventoActual.NroDescarga) {
                     visible.visibleDescarga = false;
                     visible.fechFin = false;
-                    this.nextTab = "PescaDescargada";
+                    this.nextTab = "Pesca descargada";
                 }
 
                 var validarLecturaHorometros = this.ctr.Dat_Horometro.validarLecturaHorometros();
@@ -841,13 +841,13 @@ sap.ui.define([
                         listaBiometria.push(objBiometria);
 
                     }
+                    eventoActual.ListaBiometria = listaBiometria;
                 }
             }
 
             eventoActual.ObteEspePermitidas = false;
             eventoActual.EspePermitida = espePermitida;
             eventoActual.EspeZonaPesca = espeZonaPesca;
-            eventoActual.ListaBiometria = listaBiometria;
             eventoActual.EspeVeda = espeVeda;
 
             this._oView.getModel("eventos").updateBindings(true);
@@ -859,6 +859,10 @@ sap.ui.define([
             key = arrayValiTab[valor_a_encontrar];
 
             return key
+        },
+        prueba : function(){
+            let valor = sap.ui.getCore().byId("dtp_fechaIniCala").getValue();
+            console.log("Holaaaaaaaaaaaa : " + valor);
         }
 
     });
