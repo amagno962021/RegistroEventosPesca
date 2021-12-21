@@ -364,7 +364,7 @@ sap.ui.define([
                 var motivoMarea = detalleMarea.CDMMA;
                 var fechEvento = new Date(eventoActual.FIEVN);
                 if(this.previousTab == "General"){
-                    var validarStockCombustible = this.validarStockCombustible();
+                    var validarStockCombustible =  true; //this.validarStockCombustible();
                     let val = await this.validarCamposGeneral(true);
                     if(!val){
                         this.nextTab = this.previousTab;   
@@ -419,7 +419,7 @@ sap.ui.define([
                 if(tipoEvento == "6" && this.nextTab == "Horometro" && eventoActual.NroDescarga){
                     visible.visibleDescarga = false;
                     visible.fechFin = false;
-                    this.nextTab = "PescaDescargada";
+                    this.nextTab = "Pesca descargada";
                 }
 
                 var validarLecturaHorometros = this.ctr.Dat_Horometro.validarLecturaHorometros();
@@ -428,11 +428,11 @@ sap.ui.define([
                     this.nextTab = this.previousTab;
                 }
 
-                if(this.nextTab == "PescaDescargada"){
+                if(this.nextTab == "Pesca descargada"){
                     this.prepararInputsDescargas();
                 }
 
-                if(this.previousTab == "PescaDescargada" && !this.ctr.Dat_PescaDescargada.validarPescaDescargada()){
+                if(this.previousTab == "Pesca descargada" && !this.ctr.Dat_PescaDescargada.validarPescaDescargada()){
                     this.nextTab = this.previousTab;
                 }
 

@@ -246,7 +246,7 @@ sap.ui.define([
                 }
 
                 if(eveVisTabHorom.includes(element.CDTEV)){
-                    horometros = this.obtenerHorometros(element);
+                    horometros = this.obtenerHorometrosRFC(element);
                 }
 
                 if(element.CDTEV == "3"){
@@ -291,7 +291,9 @@ sap.ui.define([
 
         obtenerEquipamientos: function(element){
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var listaEquipamientos = [];//modelo equipamientos del evento (element)
+            let elementSel = modelo.getProperty("/Eventos/LeadSelEvento");
+            let ListaEventos = modelo.getProperty("/Eventos/Lista");
+            var listaEquipamientos = ListaEventos[elementSel].ListaEquipamiento;//modelo equipamientos del evento (element)
             var equipamientos = [];
             for (let index = 0; index < listaEquipamientos.length; index++) {
                 const element = listaEquipamientos[index];
@@ -305,18 +307,21 @@ sap.ui.define([
             return equipamientos;
         },
 
-        obtenerHorometros: function(element){
-            var horometros = []; //modelo de horometros de la lista de eventos (element)
+        obtenerHorometrosRFC: function(element){
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
+            let ListaEventos = mod.getProperty("/Eventos/Lista");
+            var horometros = ListaEventos[elementSel].ListaHorometros; //modelo de horometros de la lista de eventos (element)
             var lista = [];
             for (let index = 0; index < horometros.length; index++) {
                 const element = horometros[index];
                 var listHorometros = {
-                    INDTR: element.INDTR,
-                    NRMAR: element.NRMAR,
-                    NREVN: element.NREVN,
-                    CDTHR: element.CDTHR,
-                    LCHOR: element.LCHOR,
-                    NORAV: element.NORAV
+                    INDTR: "N",
+                    NRMAR: ListaEventos[elementSel].NRMAR,
+                    NREVN: ListaEventos[elementSel].NREVN,
+                    CDTHR: element.tipoHorometro,
+                    LCHOR: element.lectura,
+                    NORAV: element.averiado == null ? '' : element.averiado
                 };
                 lista.push(listHorometros);
             }

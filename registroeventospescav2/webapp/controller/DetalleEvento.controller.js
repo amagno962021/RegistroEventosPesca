@@ -575,7 +575,7 @@ sap.ui.define([
             fechaIniEnvase.setVisible(false);
             var fechaFinEnvase = this.getView().byId("FechaEnvaseFin");
             fechaFinEnvase.setVisible(false);
-            let nroEventoTope = this._listaEventos[this._elementAct].Numero;
+            let nroEventoTope = this._listaEventos[this._elementAct].NREVN;
 
             let cantTotalDecl = Number('0');
             let cantTotalDeclDesc = Number('0');
@@ -583,7 +583,7 @@ sap.ui.define([
             let primerRecorrido = Number(this._elementAct) + Number(1);
 
             for (var j = primerRecorrido; j < this._listaEventos.length; j++) {
-                nroEventoTope = this._listaEventos[j].Numero;
+                nroEventoTope = this._listaEventos[j].NREVN;
 
                 if (this._listaEventos[j].TipoEvento == "1") {
                     break;
@@ -593,12 +593,14 @@ sap.ui.define([
             cantTotalDecl = this.obtenerCantTotalPescaDecla(nroEventoTope, this);
             cantTotalDeclDesc = this.obtenerCantTotalPescaDeclDesc(nroEventoTope, this);
             cantTotalDeclRest = cantTotalDecl - cantTotalDeclDesc;
-
-            if (this._listaEventos[this._elementAct].ListaPescaDescargada[0].CantPescaDeclarada ? true : false) {
-                cantTotalDeclRest = cantTotalDeclRest + Number(this._listaEventos[this._elementAct].ListaPescaDescargada[0].CantPescaDeclarada);
+            if(this._listaEventos[this._elementAct].ListaPescaDescargada.length > 0){
+                if (this._listaEventos[this._elementAct].ListaPescaDescargada[0].CantPescaDeclarada ? true : false) {
+                    cantTotalDeclRest = cantTotalDeclRest + Number(this._listaEventos[this._elementAct].ListaPescaDescargada[0].CantPescaDeclarada);
+                }
             }
 
             textValidaciones.CantPescaDeclaRestante = cantTotalDeclRest;
+            return cantTotalDeclRest;
 
 
         },
@@ -1064,7 +1066,9 @@ sap.ui.define([
         obtenerPescaDescargada: function () {
             if (this._listasServicioCargaIni[7] ? true : false) {
                 this._listaEventos[this._elementAct].ListaPescaDescargada = JSON.parse(this._listasServicioCargaIni[7]).data;
-                this._listaEventos[this._elementAct].FechProduccion = this._listaEventos[this._elementAct].ListaPescaDescargada[0].FECCONMOV;
+                if(this._listaEventos[this._elementAct].ListaPescaDescargada.length > 0){
+                    this._listaEventos[this._elementAct].FechProduccion = this._listaEventos[this._elementAct].ListaPescaDescargada[0].FECCONMOV;
+                }
             }
 
         },
@@ -2208,8 +2212,9 @@ sap.ui.define([
                 
                 if (this.buscarValorFijo(textValidaciones.MOTIVOPESCADES, motivoMarea)) {
                     this.obtenerPuntosDescarga();
-                    nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CantPescaDeclarada = this.obtenerPescaDeclDescarga();
+                    nodoEventos[this._eventoNuevo].ListaPescaDescargada[0] = {}
                     nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].EsNuevo = true;
+                    nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CantPescaDeclarada = await this.obtenerPescaDeclDescarga();
                     
                     if (indiPropPlanta == "P") { 	//Descarga en planta propia
                         //Si es (CHI o CHD)
@@ -2340,16 +2345,16 @@ sap.ui.define([
                 if (tipoEvento == "6") {
                     this.getView().byId("FechaEnvaseIni").setVisible(false);
                     this.getView().byId("FechaEnvaseFin").setVisible(false);
-                    let horaCorte = this._ConfiguracionEvento.DescHoraCorte;
+                    let horaCorte = this._ConfiguracionEvento.descHoraCorte;
                     
-                    let fechHoraProd =new Date(fechaAnt + " " + horaCorte);
-                    let fechHoraIni = new Date(fechaAnt + " " + horaAnt);
+                    let fechHoraProd = Utils.strDateHourToDate(fechaAnt, horaCorte);
+                    let fechHoraIni = Utils.strDateHourToDate(fechaAnt, horaAnt); //fechaAnt
                     
                     if (fechHoraIni < fechHoraProd) {
                         fechHoraProd.setMonth(fechHoraProd.getMonth() - 1);
                     }
                     
-                    nodoEventos[elementAct].FechProduccion = new Date(fechHoraProd.getTime());	
+                    nodoEventos[elementAct].FechProduccion = fechaAnt;	
                 }
             } else if ( this._indicadorProp == textValidaciones.INDIC_PROPIEDAD_PROPIOS) {
                 let motivoMareaAnt = mod.getProperty("/MareaAnterior/CDMMA");

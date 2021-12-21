@@ -60,7 +60,7 @@
 					<Column id="price2" width="9rem" filterProperty="Price">
 						<m:Label text="Cant. declarada" />
 						<template>
-							<m:Input value="{eventos>CNPCM}" type="Number" showValueHelp="false" enabled="{eventos>/enabledCantPescDeclDesc}" visible="true" />
+							<m:Input value="{eventos>CantPescaDeclarada}" type="Number" showValueHelp="false" enabled="{eventos>/enabledCantPescDeclDesc}" visible="true" />
 						</template>
 					</Column>
 					<Column width="12rem" hAlign="End" filterProperty="Quantity">
@@ -105,7 +105,7 @@
 					<Column id="pde_col_EliminarDesc" width="4rem">
 						<m:Label text="" />
 						<template>
-							<m:Text text="{Name}" wrapping="false" />
+							<m:Button icon="sap-icon://sys-cancel-2" tooltip="Eliminar descarga" press=".eliminarDesacarga"/>
 						</template>
 					</Column>
 					<Column width="4rem">
@@ -141,7 +141,7 @@
 					<Column id="price4" width="9rem" filterProperty="Price">
 						<m:Label text="Cant. declarada" />
 						<template>
-							<m:Input value="{eventos>CNPCM}" type="Number" showValueHelp="false" enabled="{eventos>/enabledCantPescDeclDesc}" visible="true" />
+							<m:Input value="{eventos>CantPescaDeclarada}" type="Number" showValueHelp="false" enabled="{eventos>/enabledCantPescDeclDesc}" visible="true" />
 						</template>
 					</Column>
 				</columns>
@@ -152,13 +152,13 @@
 					<Column id="pdCHD_col_BuscarDesc" width="4rem">
 						<m:Label text="" />
 						<template>
-							<m:Text text="{Name}" wrapping="false" />
+							<m:Button icon="sap-icon://inspection" tooltip="Buscar descarga" press=".buscarDescarga"/>
 						</template>
 					</Column>
 					<Column id="pdCHD_col_EliminarDesc" width="4rem">
 						<m:Label text="" />
 						<template>
-							<m:Text text="{Name}" wrapping="false" />
+							<m:Button icon="sap-icon://sys-cancel-2" tooltip="Eliminar descarga" press=".eliminarDesacarga"/>
 						</template>
 					</Column>
 					<Column width="11rem">
@@ -200,7 +200,7 @@
 					<Column width="10rem" hAlign="End" filterProperty="Quantity">
 						<m:Label text="Cant. declarada" />
 						<template>
-							<m:Input value="{eventos>CNPCM}" type="Number" showValueHelp="false" enabled="{eventos>/enabledCantPescDeclDesc}" visible="true" />
+							<m:Input value="{eventos>CantPescaDeclarada}" type="Number" showValueHelp="false" enabled="{eventos>/enabledCantPescDeclDesc}" visible="true" />
 						</template>
 					</Column>
 					<Column width="10rem" hAlign="End" filterProperty="Quantity">
