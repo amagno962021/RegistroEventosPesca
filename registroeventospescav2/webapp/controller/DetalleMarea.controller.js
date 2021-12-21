@@ -494,18 +494,24 @@ sap.ui.define([
 
         onValidaMotivo: async function (evt) {
             var oValidatedComboBox = evt.getSource();
-            var sSelectedKey = oValidatedComboBox.getSelectedKey();
+            var motivo = oValidatedComboBox.getSelectedKey();
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var listaMotivos = modelo.getProperty("/Config/datosCombo/MotivosMarea");
-            var motivo = listaMotivos.find(obj => obj.id == sSelectedKey);
-            modelo.setProperty("/Cabecera/DESC_CDMMA", motivo.descripcion);
-            if(sSelectedKey == "1" || sSelectedKey == "2"){
+            var objMotivo = listaMotivos.find(obj => obj.id == motivo);
+            modelo.setProperty("/Cabecera/DESC_CDMMA", objMotivo.descripcion);
+            this.validarMotivo(motivo);
+            this.validarComboEventos();
+        },
+
+        validarMotivo: async function(motivo){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            if(motivo == "1" || motivo == "2"){
                 modelo.setProperty("/Config/visibleFecHoEta", true);
                 modelo.setProperty("/Config/visibleUbiPesca", false);
                 modelo.setProperty("/Config/visibleFechIni", false);
                 modelo.setProperty("/Cabecera/TXTNOTIF", "");
                 modelo.setProperty("/Cabecera/TXTNOTIF1", "");
-            }else if(sSelectedKey == "3" || sSelectedKey == "7" || sSelectedKey == "8"){
+            }else if(motivo == "3" || motivo == "7" || motivo == "8"){
                 modelo.setProperty("/Config/visibleFecHoEta", false);
                 modelo.setProperty("/Config/visibleUbiPesca", true);
                 modelo.setProperty("/Config/visibleFechIni", true);
@@ -521,12 +527,12 @@ sap.ui.define([
                 modelo.setProperty("/DatosGenerales/FIMAR", MareAntFech);
                 modelo.setProperty("/DatosGenerales/HIMAR", MareAntHora);
                 modelo.setProperty("/Cabecera/TXTNOTIF1", "");
-                if(sSelectedKey == "8"){
+                if(motivo == "8"){
                     BusyIndicator.show(0);
                     await this.validarFechaVeda();
                     BusyIndicator.hide();
                 }
-            }else if(sSelectedKey == "4" || sSelectedKey == "5"){
+            }else if(motivo == "4" || motivo == "5"){
                 modelo.setProperty("/Config/visibleUbiPesca", true);
                 modelo.setProperty("/Config/visibleFecHoEta", true);
                 modelo.setProperty("/Config/visibleEstMarea", true);
@@ -537,7 +543,6 @@ sap.ui.define([
                 modelo.setProperty("/Cabecera/TXTNOTIF", "");
                 modelo.setProperty("/Cabecera/TXTNOTIF1", "");
             }
-            this.validarComboEventos();
         },
 
         validarComboEventos: async function(){
@@ -548,7 +553,7 @@ sap.ui.define([
             if(response){
                 var eventos = response.data[0].data;
                 if(eventos){
-                    console.log("Eventos: ", eventos);
+                    //console.log("Eventos: ", eventos);
                     if(motivo == "1" || motivo == "2" || motivo == "4" || motivo == "5" || motivo == "6"){
                         for (let index = 0; index < eventos.length; index++) {
                             const element = eventos[index];
@@ -613,6 +618,9 @@ sap.ui.define([
             }else{
                 modelo.setProperty("/Config/readOnlyEstaMar", true);
             }
+
+            var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
+            this.validarMotivo(motivoMarea);
             
         },
 

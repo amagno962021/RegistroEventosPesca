@@ -763,6 +763,14 @@ sap.ui.define([
 					action: "display"
 				}
 			});
+        },
+
+        clearAllData: function(){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            modelo.setProperty("/DatosGenerales/ESMAR", "A");
+            modelo.setProperty("/Cabecera/FCCRE", Utils.strDateToSapDate(Utils.dateToStrDate(new Date())));
+            modelo.setProperty("/Cabecera/HRCRE", Utils.strHourToSapHo(Utils.dateToStrHours(new Date())));
+            modelo.setProperty("/Cabecera/ATCRE", this.getCurrentUser());
         }
 
     });

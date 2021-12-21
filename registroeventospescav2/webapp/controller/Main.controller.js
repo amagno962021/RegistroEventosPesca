@@ -497,6 +497,7 @@ sap.ui.define([
                 var incidental = data.str_pscinc;
                 var biometria = data.str_flbsp;
                 var motivoResCombu = ["1", "2", "4", "5", "6", "7", "8"];
+                this.clearAllData();//inicalizar valores
                 modeloDetalleMarea.setProperty("/Cabecera/INDICADOR", "E");
                 //setear cabecera de formulario
                 //var cabecera = dataDetalleMarea.Cabecera;
