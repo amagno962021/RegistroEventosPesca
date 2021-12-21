@@ -36,30 +36,6 @@
 						<content>
 							<form:Form width="100%" editable="true" visible="true">
 								<form:title>
-									<core:Title text="Observación" level="Auto"/>
-								</form:title>
-								<form:formContainers>
-									<form:FormContainer visible="true">
-										<form:formElements>
-											<form:FormElement visible="true">
-												<form:label>
-													<Label text="Observación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												</form:label>
-												<form:fields>
-													<Input value="{DetalleMarea>/Cabecera/OBMAR}"  enabled="true"  width="27.5%"
-																valueStateText="Invalid entry"/>
-												</form:fields>
-											</form:FormElement>
-										</form:formElements>
-										<form:title/>
-									</form:FormContainer>
-								</form:formContainers>
-								<form:layout>
-									<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
-								</form:layout>
-							</form:Form>
-							<form:Form width="100%" editable="true" visible="true">
-								<form:title>
 									<core:Title text="Pertenencia" level="Auto"/>
 								</form:title>
 								<form:formContainers>
@@ -238,6 +214,30 @@
 															<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
 														</items>
 													</ComboBox>
+												</form:fields>
+											</form:FormElement>
+										</form:formElements>
+										<form:title/>
+									</form:FormContainer>
+								</form:formContainers>
+								<form:layout>
+									<form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="1" labelSpanM="2" labelSpanS="12"/>
+								</form:layout>
+							</form:Form>
+							<form:Form width="100%" editable="true" visible="true">
+								<form:title>
+									<core:Title text="Observación" level="Auto"/>
+								</form:title>
+								<form:formContainers>
+									<form:FormContainer visible="true">
+										<form:formElements>
+											<form:FormElement visible="true">
+												<form:label>
+													<Label text="Observación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												</form:label>
+												<form:fields>
+													<Input value="{DetalleMarea>/Cabecera/OBMAR}"  enabled="true"  width="27.5%"
+																valueStateText="Invalid entry"/>
 												</form:fields>
 											</form:FormElement>
 										</form:formElements>

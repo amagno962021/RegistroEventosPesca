@@ -92,7 +92,7 @@ sap.ui.define([
 		},
 
         getCurrentUser: function () {
-            return "fgarcia";
+            return "FGARCIA";
         },
 
         onBackListMarea: function () {

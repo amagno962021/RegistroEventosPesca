@@ -33,18 +33,20 @@ sap.ui.define([
                         this.prepararDataTree(tipoEmba, plantas.data);
                         var listaMareas = await TasaBackendService.cargarListaMareas(currentUser);
                         if(listaMareas){
+                            console.log("MAREAS: ", listaMareas);
                             this.validarDataMareas(listaMareas);
                         }
                     }
                 }
 
+                /*
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 var cdpta = oStore.get("CDPTA");
                 var cdtem = oStore.get("CDTEM");
                 if(cdpta && cdtem){
                     this.filtarMareas(cdtem, cdpta);
                 }
-
+                */
                 this.loadInitData();
 
                 this.CDTEM = "";
@@ -143,31 +145,37 @@ sap.ui.define([
                     const element = str_di[index];
                    
                     //if (element.ESMAR = "" || (element.ESMAR == "A" && element.ESCMA == "") || (element.ESMAR == "C" && element.ESCMA == "P")) {
-                    if (element.INPRP == "P") {
-                        propios.push(element);
-                    } else if (element.INPRP == "T") {
-                        terceros.push(element);
+
+                    if(!element.ESMAR || (element.ESMAR == "A" && !element.ESCMA) || (element.ESMAR == "C" && element.ESCMA && element.ESCMA == "P")){
+                        if (element.INPRP == "P") {
+                            propios.push(element);
+                        } else if (element.INPRP == "T") {
+                            terceros.push(element);
+                        }
                     }
 
+                    /*
                     if (element.NRMAR == 0) {
                         mareaSinNumero.push(element);
                     }
-
+                    */
                     //}
                 }
 
+                /*
                 var tmpPropios = Utils.removeDuplicateArray(propios, it => it.NRMAR);
                 var tmpTerceros = Utils.removeDuplicateArray(terceros, it => it.NRMAR);
+                */
 
                 //agregamos las mareas sin numero
-                for (let index1 = 0; index1 < mareaSinNumero.length; index1++) {
+                /*for (let index1 = 0; index1 < mareaSinNumero.length; index1++) {
                     const element1 = mareaSinNumero[index1];
                     tmpPropios.push(element1);
-                }
+                }*/
 
-                var jsonModelPropios = new JSONModel(tmpPropios);
-                var jsonModelTerceros = new JSONModel(tmpTerceros);
-                console.log("Modelo Propios: ", jsonModelPropios);
+                var jsonModelPropios = new JSONModel(propios);
+                var jsonModelTerceros = new JSONModel(terceros);
+                //console.log("Modelo Propios: ", jsonModelPropios);
                 this.getView().setModel(jsonModelPropios, "Propios");
                 this.getView().setModel(jsonModelTerceros, "Terceros");
                 this.getView().getModel("Propios").refresh();
@@ -208,9 +216,9 @@ sap.ui.define([
                 //filtrar propios
                 for (let index = 0; index < dataModeloPropios.length; index++) {
                     const element = dataModeloPropios[index];
-                    if (element.NMEMB == "TASA 55") {
+                    /*if (element.NMEMB == "TASA 55") {
                         console.log("TASA 55 Filter: ", element);
-                    }
+                    }*/
 
                     if (element.CDTEM == cdtem && element.CDPTA == cdpta) {
                         num++;
@@ -224,17 +232,35 @@ sap.ui.define([
                         }
                         tmpElement.FEHOARR = fehoarr;
 
+                        if(tmpElement.ESMAR == 'C' || tmpElement.CDEED == "010" || (tmpElement.ESMAR == "A" && tmpElement.ESCMA)){
+
+                            if(tmpElement.CDEED == "010"){
+
+                            }else{
+
+                            }
+                            tmpElement.visibleAnularMarea = false; 
+                            tmpElement.DESCLINK = "Crear";
+
+                        }else{
+                            tmpElement.visibleAnularMarea = true;
+                            tmpElement.DESCLINK = "Editar";
+
+                        }
+
+                        /*
                         tmpElement.DESCESMAR = "";
                         if (tmpElement.ESMAR == "A" || tmpElement.ESMAR == 'C') {
                             tmpElement.DESCESMAR = tmpElement.ESMAR == "A" ? "Abierto" : "Cerrado"
                         }
-
+                        */
                         //validar descripcion link
-                        if (tmpElement.ESMAR == "C" || tmpElement.CDEED == "010" || (tmpElement.ESMAR == "A" && tmpElement.ESCMA != "")) {
+                        /*if (tmpElement.ESMAR == "C" || tmpElement.CDEED == "010" || (tmpElement.ESMAR == "A" && tmpElement.ESCMA != "")) {
                             tmpElement.DESCLINK = "Crear"
                         } else {
                             tmpElement.DESCLINK = "Editar"
-                        }
+                        }*/
+
                         totalPescaDeclarada += tmpElement.CNPCM;
 
                         dataPropios.push(tmpElement);
@@ -262,6 +288,25 @@ sap.ui.define([
                         }
                         tmpElement1.FEHOARR = fehoarr;
 
+
+                        if(tmpElement1.ESMAR == 'C' || tmpElement1.CDEED == "010" || (tmpElement1.ESMAR == "A" && tmpElement1.ESCMA)){
+
+                            if(tmpElement1.CDEED == "010"){
+
+                            }else{
+
+                            }
+                            tmpElement1.visibleAnularMarea = false; 
+                            tmpElement1.DESCLINK = "Crear";
+
+                        }else{
+                            tmpElement1.visibleAnularMarea = true;
+                            tmpElement1.DESCLINK = "Editar";
+
+                        }
+
+
+                        /*
                         tmpElement1.DESCESMAR = "";
                         if (tmpElement1.ESMAR == "A" || tmpElement1.ESMAR == 'C') {
                             tmpElement1.DESCESMAR = tmpElement1.ESMAR == "A" ? "Abierto" : "Cerrado"
@@ -272,7 +317,7 @@ sap.ui.define([
                             tmpElement1.DESCLINK = "Crear"
                         } else {
                             tmpElement1.DESCLINK = "Editar"
-                        }
+                        }*/
 
                         dataTerceros.push(tmpElement1);
                     }
@@ -365,9 +410,9 @@ sap.ui.define([
                     if (valMareaProd) {//se puso la admiracion para pruebas
                         modelo.setProperty("/Cabecera/INDICADOR", "N");
                         modelo.setProperty("/DatosGenerales/ESMAR", "A");
-                        /*var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-                        oRouter.navTo("DetalleMarea");*/
-                        this.navToExternalComp();
+                        var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                        oRouter.navTo("DetalleMarea");
+                        //this.navToExternalComp();
                     } else {
                         MessageBox.error(this.oBundle.getText("EMBANOPROD", [nmbemb]));
                     }
@@ -415,9 +460,9 @@ sap.ui.define([
                                     if (valMareaProd) {//se puso la admiracion para pruebas
                                         modelo.setProperty("/Cabecera/INDICADOR", "N");
                                         modelo.setProperty("/DatosGenerales/ESMAR", "A");
-                                        /*var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-                                        oRouter.navTo("DetalleMarea");*/
-                                        this.navToExternalComp();
+                                        var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                                        oRouter.navTo("DetalleMarea");
+                                        //this.navToExternalComp();
                                     } else {
                                         MessageBox.error(this.oBundle.getText("EMBANOPROD", [nmbemb]));
                                     }
@@ -527,7 +572,7 @@ sap.ui.define([
                 //refrescar modelo y navegar al detalle
                 modeloDetalleMarea.refresh();
                 oRouter.navTo("DetalleMarea");
-                me.navToExternalComp();
+                //me.navToExternalComp();
             },
 
             obtenerReservasCombustible: async function (marea, codigo) {
@@ -644,7 +689,7 @@ sap.ui.define([
             },
 
             getCurrentUser: function () {
-                return "fgarcia";
+                return "FGARCIA";
             },
 
             getRolUser: function(){
@@ -1373,6 +1418,15 @@ sap.ui.define([
                 BusyIndicator.hide();
                 //modelo.setProperty("/DataSession/RolFlota", true);
             },
+            
+            onSelectItemList: function(evt){
+                //console.log(evt);
+                var listItem = evt.getSource();
+                var expanded = listItem.getExpanded();
+                listItem.setExpanded(!expanded);
+                //console.log(listItem);
+            },
+
 
             onTest: function () {
                 TasaBackendService.test().then(function (response) {
@@ -1383,7 +1437,7 @@ sap.ui.define([
             },
 
             onCallUsuario: function(){
-                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                /*var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 var dataModelo = modelo.getData();
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 oStore.put("DataModelo", dataModelo);
@@ -1393,7 +1447,19 @@ sap.ui.define([
 						semanticObject: "mareaevento",
 						action: "display"
 					}
-				});
+				});*/
+
+                $.ajax({
+                    url: 'https://current-user-qas.cfapps.us10.hana.ondemand.com/getuserinfo',
+                    type: 'GET',
+                    contentType: 'application/x-www-form-urlencoded',
+                    success: function(data){
+                        console.log("success"+data);
+                    },
+                    error: function(e){
+                        console.log("error: "+e);
+                    }
+                  });
                 //abrir componente externo
             }
 

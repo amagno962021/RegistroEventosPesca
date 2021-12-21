@@ -3,7 +3,7 @@
       <masterPages>
          <Page title="Plantas">
             <tnt:NavigationList id="navigationList" width="auto" items="{path: '/'}" itemSelect="onSearchMarea">
-               <tnt:NavigationListItem text="{text}" icon="{ref}" items="{path: 'nodes', templateShareable:false}" expanded="false">
+               <tnt:NavigationListItem text="{text}" icon="{ref}" items="{path: 'nodes', templateShareable:false}" expanded="false" select="onSelectItemList">
                   <tnt:NavigationListItem text="{text}" icon="sap-icon://factory" />
                </tnt:NavigationListItem>
             </tnt:NavigationList>
@@ -94,9 +94,9 @@
                                        <Text text="{DSEEC}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                                        <ObjectNumber number="{CNPCM}" unit="Tn" />
                                        <Text text="{FEHOARR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{DESCESMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{DESC_ESMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                                        <Link text="{DESCLINK}" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" press="onEditarCrearMarea" />
-                                       <Link text="Anular" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Link text="Anular" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="{visibleAnularMarea}" />
                                     </cells>
                                  </ColumnListItem>
                               </items>

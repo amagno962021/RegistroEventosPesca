@@ -937,6 +937,28 @@ sap.ui.define([
             return data;
         },
 
+        obtenerCodZonaArea: async function(cdpta){
+
+        },
+
+        obtenerconsTeorico: async function(embarcacion, motMarea, puerto, usuario){
+            var uri = UtilService.getHostService() + "/api/General/ConsultaGeneral/";
+            var sBody = UtilService.getConsultaGeneral();
+            sBody.nombreConsulta = "CONSGENTEORICO";
+            sBody.p_user = usuario;
+            sBody.parametro1 = embarcacion;
+            sBody.parametro2 = motMarea;
+            sBody.parametro3 = puerto;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerDepartamentos: ", error);
+                return null
+            });
+            return data;
+        },
+
         test: function () {
             var latiCalaD = "";
             var latiCalaM = "";
