@@ -1086,7 +1086,7 @@ sap.ui.define([
             for (var j = 0; j < listaEventos.length; j++) {
                 //if (this._tipoEvento == textValidaciones.TIPOEVENTOCALA)
                 if (listaEventos[j].CDTEV == "3") {
-                    var pescDecla = listaEventos[j].CantTotalPescDecla;
+                    var pescDecla = listaEventos[j].CantTotalPescDecla ? listaEventos[j].CantTotalPescDecla : listaEventos[j].CNPDC;
                     if (pescDecla && !isNaN(pescDecla)) {
                         cantTotal += pescDecla;
                     } else {

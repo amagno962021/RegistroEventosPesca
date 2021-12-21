@@ -471,7 +471,7 @@ sap.ui.define([
             });
         },
 
-        obtenerListaDescargaPopUp: function (matricula, nom_embarcacion, cod_planta, nom_planta, fecha_inicio, user) {
+        obtenerListaDescargaPopUp: function (matricula, nom_embarcacion, cod_planta, nom_planta, fecha_inicio, user, nro_descarga) {
             var uri = UtilService.getHostService() + "/api/General/ConsultaGeneral/";
             var sBody = UtilService.getConsultaGeneral();
             sBody.nombreConsulta = "CONSGENLISTDESCPP";
@@ -480,6 +480,7 @@ sap.ui.define([
             sBody.parametro3 = cod_planta;
             sBody.parametro4 = nom_planta;
             sBody.parametro5 = fecha_inicio;
+            sBody.parametro6 = nro_descarga;
             sBody.p_user = user;
             return this.http(uri).post(null, sBody).then(function (response) {
                 return response;
