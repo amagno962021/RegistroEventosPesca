@@ -1092,7 +1092,8 @@ sap.ui.define([
                 //var emba = await TasaBackendService.buscarEmbarcacion(codigo, usuario);
                 if (embarcacion) {
                     await this.obtenerDatosMareaAnt(0, codigo);
-                    //var mareaAnterior = this.getModel("MareaAnterior");
+                    var mareaAnterior = modelo.getProperty("/MareaAnterior");
+                    console.log("Marea Anterior: ", mareaAnterior);
                     //var estMarAnt = mareaAnterior.getProperty("/EstMarea");
                     var estMarAnt = modelo.getProperty("/MareaAnterior/ESMAR");
                     //var cieMarAnt = mareaAnterior.getProperty("/EstCierre");
