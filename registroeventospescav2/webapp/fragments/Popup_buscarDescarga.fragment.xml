@@ -20,10 +20,9 @@
                                     <Label text="Tipo de pesca" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <ComboBox id="pbd_tipo_pesca" editable="true" enabled="true"  visible="true" width="50%" valueState="None" maxWidth="100%">
+                                    <ComboBox id="pbd_tipo_pesca" selectedKey="{popup_descarga>/TipoPescaSel}" items="{popup_descarga>/TipoPesca}" editable="true" enabled="true"  visible="true" width="50%" valueState="None" maxWidth="100%">
                                         <items>
-                                            <core:Item text="Propia" enabled="true" key="Item"/>
-                                            <core:Item text="Tercera" enabled="true" key="Item"/>
+                                            <core:Item key="{popup_descarga>id}" text="{popup_descarga>descripcion}" />
                                         </items>
                                     </ComboBox>
                                 </form:fields>
@@ -33,7 +32,7 @@
                                     <Label text="Cod. Embarcación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <Input id="pbd_cod_embarcacion" type="Text" showValueHelp="false" value="{modelReqPesca>/SearchPlanta/STCD1}" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                    <Input id="pbd_cod_embarcacion" type="Text" showValueHelp="false" value="{popup_descarga>/CodEmb}" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
                                 </form:fields>
                             </form:FormElement>
                             <form:FormElement visible="true">
@@ -41,7 +40,7 @@
                                     <Label text="Matrícula" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <Input id="pbd_matricula" type="Text" showValueHelp="false" value="{modelReqPesca>/SearchPlanta/CDPTO}" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                    <Input id="pbd_matricula" type="Text" showValueHelp="false" value="{popup_descarga>/Matricula}" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
                                 </form:fields>
                             </form:FormElement>
                             <form:FormElement visible="true">
@@ -49,7 +48,7 @@
                                     <Label text="Nom. embarcacion" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <Input id="pbd_nom_embarcacion" type="Text" showValueHelp="false" value="{modelReqPesca>/SearchPlanta/CDPTO}" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                    <Input id="pbd_nom_embarcacion" type="Text" showValueHelp="false" value="{popup_descarga>/NomEmb}" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
                                 </form:fields>
                             </form:FormElement>
                         </form:formElements>
@@ -63,7 +62,7 @@
                                     <Label text="Cod. planta" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <Input id="pbd_cod_planta" type="Text" showValueHelp="false" value="{modelReqPesca>/SearchPlanta/WERKS}" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                    <Input id="pbd_cod_planta" type="Text" showValueHelp="false" value="{popup_descarga>/CodPlanta}" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
                                 </form:fields>
                             </form:FormElement>
                             <form:FormElement visible="true">
@@ -71,7 +70,7 @@
                                     <Label text="Nomb. planta" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <Input id="pbd_nom_planta" type="Text" showValueHelp="false" value="{modelReqPesca>/SearchPlanta/WERKS}" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+                                    <Input id="pbd_nom_planta" type="Text" showValueHelp="false" value="{popup_descarga>/NomPlanta}" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
                                 </form:fields>
                             </form:FormElement>
                             <form:FormElement visible="true">
@@ -79,7 +78,7 @@
                                     <Label text="Fecha y hora inicio" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <DateTimePicker id="pbd_fecha_inicio" value="" enabled="true" width="50%" displayFormat="medium" required="false" valueStateText="Invalid entry" visible="true" valueFormat="yyyyMMdd" />
+                                    <DatePicker id="pbd_fecha_inicio" value="{popup_descarga>/FechaInicio}" enabled="true" width="50%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" visible="true" valueFormat="dd/MM/yyyy" />
                                 </form:fields>
                             </form:FormElement>
                             <form:FormElement visible="true">
@@ -87,10 +86,9 @@
                                     <Label text="Estado" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <ComboBox id="pbd_estado" editable="true" enabled="true" selectedKey="{modelReqPesca>/SearchPlanta/INPRP}" visible="true" width="50%" valueState="None" maxWidth="100%">
+                                    <ComboBox id="pbd_estado" editable="true" enabled="true" selectedKey="{popup_descarga>/Estado}" items="{popup_descarga>/ListaEstado}" visible="true" width="50%" valueState="None" maxWidth="100%">
                                         <items>
-                                            <core:Item text="Propia" enabled="true" key="Item"/>
-                                            <core:Item text="Tercera" enabled="true" key="Item"/>
+                                            <core:Item key="{popup_descarga>id}" text="{popup_descarga>descripcion}" />
                                         </items>
                                     </ComboBox>
                                 </form:fields>
@@ -262,7 +260,7 @@
                                 <Link text="{popup_descarga>NRDES}" press=".obtenerItem" ></Link>
                                 <Text text="{popup_descarga>TICKE}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 <Text text="{popup_descarga>CDTPC}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                                <Text text="{popup_descarga>CDPTA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                <Text text="{popup_descarga>WEPTA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 <Text text="{popup_descarga>DSPTA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 <Text text="{popup_descarga>CDEMB}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 <Text text="{popup_descarga>NMEMB}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
@@ -273,7 +271,7 @@
                                 <Text text="{popup_descarga>FIDES}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>  
                                 <Text text="{popup_descarga>HFDES}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>  
                                 <Text text="{popup_descarga>ESDES}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/> 
-                                <Text text="{popup_descarga>WEPTA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>           
+                                <Text text="{popup_descarga>CDPTA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>           
                             </cells>
                         </ColumnListItem>
                     

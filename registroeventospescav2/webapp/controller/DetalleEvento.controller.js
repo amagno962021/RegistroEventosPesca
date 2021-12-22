@@ -1611,14 +1611,14 @@ sap.ui.define([
                                         limpiar = mensaje != "";
 
                                         if (!limpiar) {
-                                            let fechHoraCont = new Date(pescaDescElement.FIDES + " " + this._ConfiguracionEvento.DescHoraCorte);
+                                            let fechHoraCont = new Date(pescaDescElement.FIDES + " " + this._ConfiguracionEvento.descHoraCorte);
                                             let fechHoraComp = new Date(pescaDescElement.FFDES + " " + pescaDescElement.HFDES);
 
                                             if (fechHoraComp < fechHoraCont) {
                                                 //fechHoraCont.add(Calendar.DATE, -1);
                                             }
 
-                                            pescaDescElement.FECCONMOV = new Date(fechHoraCont.getTime());
+                                            pescaDescElement.FECCONMOV = Utils.dateToStrDate(fechHoraCont);
                                             eventosNode[this._elementAct].FechProduccion = pescaDescElement.FECCONMOV;
                                         } else {
                                             let mssg3 = mensaje;

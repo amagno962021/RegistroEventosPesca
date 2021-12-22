@@ -364,7 +364,7 @@ sap.ui.define([
                 var motivoMarea = detalleMarea.CDMMA;
                 var fechEvento = new Date(eventoActual.FIEVN);
                 if (this.previousTab == "General") {
-                    var validarStockCombustible = await this.validarStockCombustible();
+                    //var validarStockCombustible = await this.validarStockCombustible();
                     let val = await this.validarCamposGeneral(true);
                     if (!val) {
                         this.nextTab = this.previousTab;
@@ -375,7 +375,7 @@ sap.ui.define([
                         if (fechEvento && !verificarTemporada) {
                             this.nextTab = this.previousTab;
                         }
-                    } else if (tipoEvento == "5" && visible.TabHorometro && !validarStockCombustible) {
+                    } else if (tipoEvento == "5" && visible.TabHorometro && !(await this.validarStockCombustible())) {
                         visible.visibleDescarga = true;
                         this.nextTab = this.previousTab;
                     }
@@ -428,11 +428,11 @@ sap.ui.define([
                     this.nextTab = this.previousTab;
                 }
 
-                if (this.nextTab == "PescaDescargada") {
+                if (this.nextTab == "Pesca descargada") {
                     this.prepararInputsDescargas();
                 }
 
-                if (this.previousTab == "PescaDescargada" && !this.ctr.Dat_PescaDescargada.validarPescaDescargada()) {
+                if (this.previousTab == "Pesca descargada" && !this.ctr.Dat_PescaDescargada.validarPescaDescargada()) {
                     this.nextTab = this.previousTab;
                 }
 
@@ -605,7 +605,9 @@ sap.ui.define([
                 eventoCompar = this.ctr._listaEventos[index];
                 if (eventoCompar.CDTEV == "1") {
                     indCompar = index;
+                    this.ctr._elementAct = indCompar;
                     this.ctr.obtenerDetalleEvento();
+                    this.ctr._elementAct = indActual;
                     break;
                 }
             }

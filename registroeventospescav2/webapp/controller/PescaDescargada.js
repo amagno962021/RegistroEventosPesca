@@ -13,7 +13,8 @@ sap.ui.define([
     "./General",
     "./Horometro",
     "./PescaDeclarada",
-    "./Siniestro"
+    "./Siniestro",
+    "./Utils"
 ], function (
     TasaBackendService,
     FilterOperator,
@@ -29,7 +30,8 @@ sap.ui.define([
     General,
     Horometro,
     PescaDeclarada,
-    Siniestro
+    Siniestro,
+    Utils
 ) {
     "use strict";
 
@@ -46,7 +48,9 @@ sap.ui.define([
             this._bInit = false;
             this._DataPopup;
             this._controler = o_this;
-            this._modelosPescaDescargada = {"ListaDescargas":[]}
+            this._TipoPesca = [];
+            this._Estado = [];
+            this._modelosPescaDescargada = {"Estado":"","NomPlanta":"","CodPlanta":"","NomEmb":"","Matricula":"","CodEmb":"","TipoPescaSel":"","FechaInicio" : "","ListaDescargas":[], "TipoPesca" : [], "ListaEstado":[]}
 
             var Popup_Descarga_Modelo = new JSONModel();
             this._oView.setModel(Popup_Descarga_Modelo, "popup_descarga");
@@ -440,9 +444,28 @@ sap.ui.define([
             return bOk;
         },
 
-        buscarDescarga: function (oEvent) {
-            
+        buscarDescarga: async function (oEvent) {
+            await this.obtenerTipoPesca();
+            await this.obtenerEstadoDesc();
+            this._oView.getModel("popup_descarga").setProperty("/TipoPesca", this._TipoPesca.data);
+            this._oView.getModel("popup_descarga").setProperty("/ListaEstado", this._Estado.data);
+            if(this._controler._motivoMarea == "1"){
+                this._oView.getModel("popup_descarga").setProperty("/TipoPescaSel", "D");
+
+            }else if(this._controler._motivoMarea == "2"){
+                this._oView.getModel("popup_descarga").setProperty("/TipoPescaSel", "I");
+                this._oView.getModel("popup_descarga").setProperty("/FechaInicio", this._controler._listaEventos[this._controler._elementAct].FechProduccion);
+                this._oView.getModel("popup_descarga").setProperty("/CodEmb", this._controler._FormMarea.CDEMB);
+                this._oView.getModel("popup_descarga").setProperty("/Matricula", this._controler._FormMarea.MREMB);
+                this._oView.getModel("popup_descarga").setProperty("/NomEmb", this._controler._FormMarea.NMEMB);
+                this._oView.getModel("popup_descarga").setProperty("/CodPlanta", "");
+                this._oView.getModel("popup_descarga").setProperty("/NomPlanta", "");
+                this._oView.getModel("popup_descarga").setProperty("/Estado", "N");
+                
+
+            }
             this.getDialogConsultaDescarga().open();
+            this.consultarDescarga();
         },
         getDialogConsultaDescarga: function () {
 
@@ -463,7 +486,7 @@ sap.ui.define([
             this.getDialogConsultaDescarga().close();
         },
 
-        consultarDescarga: async function (oEvent) {
+        consultarDescarga: async function () {
             let options = [];
             let comandos = [];
             let option = [];
@@ -473,7 +496,7 @@ sap.ui.define([
             let nom_embarcacion = sap.ui.getCore().byId("pbd_nom_embarcacion").getValue();
             let cod_planta = sap.ui.getCore().byId("pbd_cod_planta").getValue();
             let nom_planta = sap.ui.getCore().byId("pbd_nom_planta").getValue();
-            let fecha_inicio = sap.ui.getCore().byId("pbd_fecha_inicio").getValue();
+            let fecha_inicio = Utils.strDateToSapDate(sap.ui.getCore().byId("pbd_fecha_inicio").getValue());
             let tipo_Pesca = sap.ui.getCore().byId("pbd_tipo_pesca").getSelectedKey();
             let estado = sap.ui.getCore().byId("pbd_estado").getSelectedKey();
 
@@ -575,6 +598,26 @@ sap.ui.define([
             this._oView.getModel("popup_descarga").setProperty("/ListaDescargas", JSON.parse(this._DataPopup[0]).data);
             this._oView.getModel("popup_descarga").updateBindings(true);
 
+
+        },
+        obtenerTipoPesca: async function () {
+            let serv_tipopesca = TasaBackendService.obtenerDominio("ZCDTPC");
+            let that = this;
+            await Promise.resolve(serv_tipopesca).then(values => {
+                that._TipoPesca = values.data[0];
+            }).catch(reason => {
+
+            });
+
+        },
+        obtenerEstadoDesc: async function () {
+            let serv_estado = TasaBackendService.obtenerDominio("ZESDES");
+            let that = this;
+            await Promise.resolve(serv_estado).then(values => {
+                that._Estado = values.data[0];
+            }).catch(reason => {
+
+            });
 
         },
         consultarDescargaCHD: async function (oEvent) {
@@ -682,9 +725,11 @@ sap.ui.define([
             ListaPescDesc.CNPDS = data.CNPDS;
             this._oView.getModel("eventos").updateBindings(true);
             if(this._controler._motivoMarea == "1"){
-                this._controler.distribuirDatosDescarga(data);
-            }else if(this._controler._motivoMarea == "2"){
+                //this._controler.distribuirDatosDescarga(data);
                 this._controler.distribuirDatosDescargaCHD(data);
+            }else if(this._controler._motivoMarea == "2"){
+                //this._controler.distribuirDatosDescargaCHD(data);
+                this._controler.distribuirDatosDescarga(data);
             }
 
             this.getDialogConsultaDescarga().close();
