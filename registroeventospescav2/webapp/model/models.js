@@ -85,6 +85,7 @@ sap.ui.define([
 				},
                 Eventos: {
 					TituloEventos: "",
+                    CantPescaDescDeclText : "",
                     Lista: [],
                     LeadSelEvento: 0
 				},

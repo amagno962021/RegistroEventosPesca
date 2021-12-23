@@ -207,9 +207,9 @@ sap.ui.define([
                     NREVN: element.NREVN,
                     CDTEV: element.CDTEV,
                     FIEVN: Utils.strDateToSapDate(element.FIEVN), //yyyyMMdd
-                    HIEVN: element.HIEVN,
+                    HIEVN: Utils.strHourToSapHo(element.HIEVN),
                     FFEVN: Utils.strDateToSapDate(element.FFEVN),
-                    HFEVN: element.HFEVN,
+                    HFEVN: Utils.strHourToSapHo(element.HFEVN),
                     FICAL: Utils.strDateToSapDate(element.FICAL),
                     HICAL: element.HICAL,
                     FFCAL: Utils.strDateToSapDate(element.FFCAL),
@@ -458,23 +458,26 @@ sap.ui.define([
 
         obtenerPescaDescargadaRFC: function(element){
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var pescaDescargada = {};//modelo pesca descargada
-            var ePescaDescargada = {};//modelo pesca descargada eliminada
+            var pescaDescargada = element.ListaPescaDescargada[0];//modelo pesca descargada
+            var ePescaDescargada = element.ListaPescaDescargadaElim ? element.ListaPescaDescargadaElim : [];//modelo pesca descargada eliminada
             var lista = [];
-            var EListPescaDescargada = {
-                INDTR: ePescaDescargada.INDTR,
-                INDEJ: ePescaDescargada.INDEJ,
-                NRDES: ePescaDescargada.NRDES
-            };
-            lista.push(EListPescaDescargada);
+            if(ePescaDescargada.length >0){
+                var EListPescaDescargada = {
+                    INDTR: ePescaDescargada.INDTR,
+                    INDEJ: ePescaDescargada.INDEJ,
+                    NRDES: ePescaDescargada.NRDES
+                };
+                lista.push(EListPescaDescargada);
+            }
+            
 
             var listPescaDescargada = {
                 INDTR: pescaDescargada.INDTR,
                 INDEJ: pescaDescargada.INDEJ,
                 NRMAR: element.NRMAR,
                 NREVN: element.NREVN,
-                NRDES: pescaDescargada.NRDES,
-                TICKE: pescaDescargada.TICKET,
+                NRDES: pescaDescargada.NRDES ? pescaDescargada.NRDES : pescaDescargada.Nro_descarga,
+                TICKE: pescaDescargada.TICKE,
                 CDEMB: modelo.getProperty("/DatosGenerales/CDEMB"),
                 CDPTA: pescaDescargada.CDPTA,
                 INPRP: element.INPRP,
@@ -483,16 +486,17 @@ sap.ui.define([
                 CNPCM: pescaDescargada.CNPCM,
                 CNPDS: pescaDescargada.CNPDS,
                 PESACUMOD: pescaDescargada.PESACUMOD,
-                FECONMOV: pescaDescargada.FECONMOV,
-                FIDES: element.FIEVN,
-                HIDES: element.HIEVN,
-                FFDES: element.FFEVN,
-                HFDES: element.HFDES,
+                FECCONMOV: Utils.strDateToSapDate(pescaDescargada.FECCONMOV),
+                FIDES: Utils.strDateToSapDate(element.FIEVN),
+                HIDES: Utils.strHourToSapHo(element.HIEVN),
+                FFDES: Utils.strDateToSapDate(element.FFEVN),
+                HFDES: Utils.strHourToSapHo(element.HFEVN),
                 CDTPC: pescaDescargada.CDTPC,
-                TPDES: pescaDescargada.TPDES
+                TPDES: pescaDescargada.TPDES ? pescaDescargada.TPDES : pescaDescargada.TipoDesc
             };
 
             lista.push(listPescaDescargada);
+            return lista;
         },
 
         MainObtenerReservasCombustible: async function(){
