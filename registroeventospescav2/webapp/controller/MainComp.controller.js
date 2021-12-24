@@ -325,6 +325,7 @@ sap.ui.define([
                 };
                 lista.push(listHorometros);
             }
+            return lista;
         },
 
         guardarDatosBiometria: function(){

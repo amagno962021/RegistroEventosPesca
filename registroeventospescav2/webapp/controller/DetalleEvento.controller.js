@@ -2528,28 +2528,64 @@ sap.ui.define([
 
         },
         obtenerMensajesCamposValid : function (campo){
-            let NmbCampo = ""
+            let NmbCampo = "";
             switch (campo) {
-                case 'Naranjas':
-                    NmbCampo = "";
+                case 'CantPescaDescargada':
+                    NmbCampo = "Cantidad de pesca descargada";
                     break;
-                case 'Manzanas':
-                    NmbCampo = "";
+                case 'CantPescaDeclarada':
+                    NmbCampo = "Cantidad de pesca declarada";
                     break;
-                case 'Platanos':
-                    NmbCampo = "";
+                case 'CDPDG':
+                    NmbCampo = "Punto de descarga";
                     break;
-                case 'Cerezas':
-                    NmbCampo = "";
+                case 'FECCONMOV':
+                    NmbCampo = "Fecha de Produccion";
                     break;
-                case 'Mangos':
-                    NmbCampo = "";
+                case 'Especie':
+                    NmbCampo = "Especie";
                     break;
-                case 'Papayas':
-                    NmbCampo = "";
+                case 'FIEVN':
+                    NmbCampo = "Fecha inicio de evento";
+                    break;
+                case 'HIEVN':
+                    NmbCampo = "Hora inicio de evento";
+                    break;
+                case 'ESOPE':
+                    NmbCampo = "Estado de operación";
+                    break;
+                case 'STCMB':
+                    NmbCampo = "Stock de combustible";
+                    break;
+                case 'CDZPC':
+                    NmbCampo = "Zona de pesca";
+                    break;
+                case 'FFEVN':
+                    NmbCampo = "Fecha fin de evento";
+                    break;
+                case 'HFEVN':
+                    NmbCampo = "Hora fin de evento";
+                    break;
+                case 'CDPTO':
+                    NmbCampo = "Puerto";
+                    break;
+                case 'CDPTA':
+                    NmbCampo = "Planta";
+                    break;
+                case 'CDEMP':
+                    NmbCampo = "Empresa";
+                    break;
+                case 'FechProduccion':
+                    NmbCampo = "Fecha produccion";
+                    break;
+                case 'CDMLM':
+                    NmbCampo = "Motivo de limitación";
+                    break;
+                case 'CDMNP':
+                    NmbCampo = "Motivo de no pesca";
                     break;
                 default:
-                    NmbCampo = "";
+                    NmbCampo = campo;
             }
             return NmbCampo;
         }   

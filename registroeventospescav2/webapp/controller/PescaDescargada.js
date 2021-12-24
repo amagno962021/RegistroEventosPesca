@@ -398,7 +398,8 @@ sap.ui.define([
                         var valor = actualPescaDescargada[element];
                         if(!valor){
                             bOk = false;
-                            mensaje = this.oBundle.getText("MISSINGFIELD", [element]);
+                            let nomCampo = this._controler.obtenerMensajesCamposValid(element);
+                            mensaje = this.oBundle.getText("MISSINGFIELD", [nomCampo]);
                             this._controler.agregarMensajeValid("Error", mensaje);
                         }
                         
