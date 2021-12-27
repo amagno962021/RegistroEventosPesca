@@ -71,7 +71,8 @@ sap.ui.define([
 
                         bOk = false;
                         if (verMensajes) {
-                            var message = this.oBundle.getText("CAMPONULL", [value.id]);
+                            let nomCampo = this.ctr.obtenerMensajesCamposValid(value.id);
+                            var message = this.oBundle.getText("CAMPONULL", [nomCampo]);
                             this.ctr.agregarMensajeValid("Error", message);
                             //MessageBox.error(message);
                             //messages.push(message);

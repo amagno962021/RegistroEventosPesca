@@ -270,14 +270,15 @@ sap.ui.define([
             let Pesca= {};
             
             if(especie == ""){
-                let mensaje = this.ctr.oBundle.getText("MISSINGFIELD", "Especie");
-                MessageBox.error(mensaje);
+                let nomCampo = this.ctr.obtenerMensajesCamposValid("Especie");
+                let mensaje = this.ctr.oBundle.getText("MISSINGFIELD", nomCampo);
+                this.ctr.agregarMensajeValid("Error", mensaje);
             }else{
                 for (let i = 0; i < nodoPescaDeclarada.length; i++) {			
                     if (nodoPescaDeclarada[i].CDSPC == especie ) {
                         bOk = false;
                         let mensaje = this.ctr.oBundle.getText("EXISTEESPDECLARADA");
-                        MessageBox.error(mensaje);
+                        this.ctr.agregarMensajeValid("Error", mensaje);
                         break;
                     }
                                              
@@ -527,13 +528,13 @@ sap.ui.define([
             
             if(especie == ""){
                 let mensaje = this.ctr.oBundle.getText("MISSINGFIELD", "Especie");
-                MessageBox.error(mensaje);
+                this.ctr.agregarMensajeValid("Error", mensaje);
             }else{
                 for (let i = 0; i < listaInc.length; i++) {			
                     if (listaInc[i].CDSPC == especie ) {
                         key = false;
                         let mensaje = this.ctr.oBundle.getText("EXISTEESPDECLARADA");
-                        MessageBox.error(mensaje);
+                        this.ctr.agregarMensajeValid("Error", mensaje);
                         break;
                     }
                                              

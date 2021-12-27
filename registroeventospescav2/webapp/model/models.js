@@ -85,6 +85,7 @@ sap.ui.define([
 				},
                 Eventos: {
 					TituloEventos: "",
+                    CantPescaDescDeclText : "",
                     Lista: [],
                     LeadSelEvento: 0
 				},
@@ -254,6 +255,7 @@ sap.ui.define([
                     NroEvento_Incidental : "",
                     NroEvento_Biometria : "",
                     TipoConsulta:"",
+                    MensajeGrabacion : "",
                     MessageItemsDM: [],
                     MessageItemsEP: [],
                     MessageItemsMA: [],

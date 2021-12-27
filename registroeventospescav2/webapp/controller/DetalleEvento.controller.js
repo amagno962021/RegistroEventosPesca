@@ -1067,6 +1067,7 @@ sap.ui.define([
             if (this._listasServicioCargaIni[7] ? true : false) {
                 this._listaEventos[this._elementAct].ListaPescaDescargada = JSON.parse(this._listasServicioCargaIni[7]).data;
                 if(this._listaEventos[this._elementAct].ListaPescaDescargada.length > 0){
+                    this._listaEventos[this._elementAct].ListaPescaDescargada[0].CantPescaDeclarada = this._listaEventos[this._elementAct].ListaPescaDescargada[0].CNPCM;
                     this._listaEventos[this._elementAct].FechProduccion = this._listaEventos[this._elementAct].ListaPescaDescargada[0].FECCONMOV;
                 }
             }
@@ -1410,7 +1411,7 @@ sap.ui.define([
             }
             cantTotalDecl = this.obtenerCantTotalPescaDecla(nroEventoTope, this);
             cantTotalDeclDesc = this.obtenerCantTotalPescaDeclDesc(nroEventoTope, this);
-            if (cantTotalDecl > cantTotalDeclDesc) {
+            if (cantTotalDeclDesc > cantTotalDecl) {
                 var mensaje = this.oBundle.getText("PESCDECDESCMAYPESCDEC");
                 MessageBox.error(mensaje);
                 bOk = false;
@@ -1568,13 +1569,13 @@ sap.ui.define([
                                     }
                                 }
                                 if (!limpiar) {
-
+                                    
                                     pescaDescElement.EsNuevo = true;
                                     pescaDescElement.Nro_descarga = datos.NRDES;
                                     pescaDescElement.NroDescMostrar = datos.NRDES;
                                     pescaDescElement.TICKE = datos.TICKE;
                                     pescaDescElement.CDTPC = datos.CDTPC;
-                                    //pescaDescElement.setDescTipoPesca(manageSimpleTypes.getText(attInfoTipoPesca, datos[2]));
+                                    pescaDescElement.DESC_CDTPC = datos.DESC_CDTPC;
 
                                     if (datos.CDTPC != "D") {
                                         pescaDescElement.CDPTA = datos.CDPTA;
@@ -1585,7 +1586,7 @@ sap.ui.define([
                                     pescaDescElement.CDSPC = datos.CDSPC;
                                     pescaDescElement.DSSPC = datos.DSSPC;
                                     pescaDescElement.CDLDS = datos.CDLDS;
-                                    //pescaDescElement.setDescLadoDescarga(manageSimpleTypes.getText(attInfoLadoDescarga, datos[9]));
+                                    pescaDescElement.DESC_CDLDS = datos.DESC_CDLDS;
                                     pescaDescElement.CNPDS = datos.CNPDS;
                                     pescaDescElement.PESACUMOD = datos.PESACUMOD;
                                     pescaDescElement.BckCantPescaModificada = pescaDescElement.PESACUMOD;
@@ -1611,11 +1612,11 @@ sap.ui.define([
                                         limpiar = mensaje != "";
 
                                         if (!limpiar) {
-                                            let fechHoraCont = new Date(pescaDescElement.FIDES + " " + this._ConfiguracionEvento.descHoraCorte);
-                                            let fechHoraComp = new Date(pescaDescElement.FFDES + " " + pescaDescElement.HFDES);
+                                            let fechHoraCont = Utils.strDateHourToDate(pescaDescElement.FIDES , this._ConfiguracionEvento.descHoraCorte);
+                                            let fechHoraComp = Utils.strDateHourToDate(pescaDescElement.FFDES , pescaDescElement.HFDES);
 
                                             if (fechHoraComp < fechHoraCont) {
-                                                //fechHoraCont.add(Calendar.DATE, -1);
+                                                fechHoraCont.setMonth(fechHoraCont.getMonth() - 1);
                                             }
 
                                             pescaDescElement.FECCONMOV = Utils.dateToStrDate(fechHoraCont);
@@ -1653,6 +1654,11 @@ sap.ui.define([
                     eventosNode[this._elementAct].FechProduccion = "";
                     data = [];
                 }
+
+                //Datos Validacion
+                pescaDescElement.CantPescaDescargada = pescaDescElement.CNPDS;
+                //----------------------------------------------
+
                 this.getView().getModel("eventos").updateBindings(true);
             }
         },
@@ -1696,7 +1702,7 @@ sap.ui.define([
                         pescaDescElement.NroDescMostrar = datos.NRDES;
                         pescaDescElement.TICKE = datos.TICKE;
                         pescaDescElement.CDTPC = datos.CDTPC;
-                        //pescaDescElement.setDescTipoPesca(manageSimpleTypes.getText(attInfoTipoPesca, datos[2]));
+                        pescaDescElement.DESC_CDTPC = datos.DESC_CDTPC;
                         pescaDescElement.CDPTA = datos.CDPTA;
                         pescaDescElement.DSPTA = datos.DSPTA;
                         pescaDescElement.CDSPC = datos.CDSPC;
@@ -1770,8 +1776,8 @@ sap.ui.define([
             let horaIniEvento =  nodoEventos[indice].HIEVN;
             let fechaFinEvento = nodoEventos[indice].FFEVN;
             let horaFinEvento = nodoEventos[indice].HFEVN;
-            let fechHorIniEvento =  new Date(fechaIniEvento + " " + horaIniEvento);
-            let fechHorFinEvento =  new Date(fechaFinEvento + " " + horaFinEvento);
+            let fechHorIniEvento =  Utils.strDateHourToDate(fechaIniEvento , horaIniEvento);
+            let fechHorFinEvento =  Utils.strDateHourToDate(fechaFinEvento , horaFinEvento);
             let bckFechHorIniEvento =  null;
             let bckFechHorFinEvento = null;
             if(nodoEventos[indice].BckFechIni ? true : false){
@@ -2215,7 +2221,7 @@ sap.ui.define([
                     nodoEventos[this._eventoNuevo].ListaPescaDescargada[0] = {}
                     nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].EsNuevo = true;
                     nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CantPescaDeclarada = await this.obtenerPescaDeclDescarga();
-                    
+                    mod.setProperty("/Eventos/CantPescaDescDeclText",nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CantPescaDeclarada);
                     if (indiPropPlanta == "P") { 	//Descarga en planta propia
                         //Si es (CHI o CHD)
                         if (motivoMarea == "2" || motivoMarea == "1") {
@@ -2520,6 +2526,68 @@ sap.ui.define([
                 oMessageEP.openBy(oButtonVEP);
             }.bind(this), 100);
 
+        },
+        obtenerMensajesCamposValid : function (campo){
+            let NmbCampo = "";
+            switch (campo) {
+                case 'CantPescaDescargada':
+                    NmbCampo = "Cantidad de pesca descargada";
+                    break;
+                case 'CantPescaDeclarada':
+                    NmbCampo = "Cantidad de pesca declarada";
+                    break;
+                case 'CDPDG':
+                    NmbCampo = "Punto de descarga";
+                    break;
+                case 'FECCONMOV':
+                    NmbCampo = "Fecha de Produccion";
+                    break;
+                case 'Especie':
+                    NmbCampo = "Especie";
+                    break;
+                case 'FIEVN':
+                    NmbCampo = "Fecha inicio de evento";
+                    break;
+                case 'HIEVN':
+                    NmbCampo = "Hora inicio de evento";
+                    break;
+                case 'ESOPE':
+                    NmbCampo = "Estado de operación";
+                    break;
+                case 'STCMB':
+                    NmbCampo = "Stock de combustible";
+                    break;
+                case 'CDZPC':
+                    NmbCampo = "Zona de pesca";
+                    break;
+                case 'FFEVN':
+                    NmbCampo = "Fecha fin de evento";
+                    break;
+                case 'HFEVN':
+                    NmbCampo = "Hora fin de evento";
+                    break;
+                case 'CDPTO':
+                    NmbCampo = "Puerto";
+                    break;
+                case 'CDPTA':
+                    NmbCampo = "Planta";
+                    break;
+                case 'CDEMP':
+                    NmbCampo = "Empresa";
+                    break;
+                case 'FechProduccion':
+                    NmbCampo = "Fecha produccion";
+                    break;
+                case 'CDMLM':
+                    NmbCampo = "Motivo de limitación";
+                    break;
+                case 'CDMNP':
+                    NmbCampo = "Motivo de no pesca";
+                    break;
+                default:
+                    NmbCampo = campo;
+            }
+            return NmbCampo;
         }   
 
     });

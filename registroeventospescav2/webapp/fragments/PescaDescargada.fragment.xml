@@ -8,7 +8,7 @@
 				<extension>
 					<m:OverflowToolbar id="ext_pesc_desc" style="Clear">
 						<m:Title id="title2" text="Cantidad de pesca en declarada: " />
-						<m:Text text="50 " />
+						<m:Text text="{DetalleMarea>/Eventos/CantPescaDescDeclText} " />
 						<m:Text text="TM" />
 						<m:ToolbarSpacer />
 
@@ -76,7 +76,7 @@
 					<Column width="10rem" hAlign="End" filterProperty="Quantity">
 						<m:Label text="Lado descarga" />
 						<template>
-							<m:Text text="{eventos>CDLDS}" href="{ProductPicUrl}" target="_blank" />
+							<m:Text text="{eventos>DESC_CDLDS}" href="{ProductPicUrl}" target="_blank" />
 						</template>
 					</Column>
 					<Column width="15rem" hAlign="End" filterProperty="Quantity">
@@ -94,7 +94,7 @@
 					<Column width="15rem" hAlign="End" filterProperty="Quantity" filterType="sap.ui.model.type.Integer">
 						<m:Label text="Fecha de producción" />
 						<template>
-							<m:DateTimePicker value="{eventos>FECCONMOV}" enabled="{eventos>/enabledFechProdDesc}" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" visible="true" valueFormat="yyyyMMdd" />
+							<m:DatePicker value="{eventos>FECCONMOV}" enabled="{eventos>/enabledFechProdDesc}" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" visible="true" valueFormat="yyyyMMdd" />
 						</template>
 					</Column>
 				</columns>

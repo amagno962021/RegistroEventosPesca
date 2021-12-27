@@ -80,7 +80,7 @@ sap.ui.define([
                     if (cantPesca > capaMaxim) {
                         bOk = false;
                         mensaje = this.oBundle.getText("CAPABODEGASUPER");
-                        MessageBox.error(mensaje);
+                        this._controler.agregarMensajeValid("Error", mensaje);
                         break;
                     }
                 }
@@ -90,7 +90,7 @@ sap.ui.define([
                 if (cantTotal == 0) {
                     bOk = false;
                     mensaje = this.oBundle.getText("CANTTOTBODNOCERO");
-                    MessageBox.error(mensaje);
+                    this._controler.agregarMensajeValid("Error", mensaje);
                 }
             }
 
@@ -140,7 +140,7 @@ sap.ui.define([
                     // }
                 } else {
                     mensaje = this.oBundle.getText("BODDECPESCANODEC");
-                    MessageBox.error(mensaje);
+                    this._controler.agregarMensajeValid("Error", mensaje);
                 }
                 bOk = false;
             }
@@ -243,7 +243,7 @@ sap.ui.define([
                                         element.Editado = true;
                                         // falta mensaje
                                         mensaje = this.oBundle.getText("EVEARRCAMBMOTNOPES");
-                                        MessageBox.error(mensaje);
+                                        this._controler.agregarMensajeValid("Error", mensaje);
                                     }
                                 } else {
                                     element.CDMNP = null;
@@ -256,7 +256,7 @@ sap.ui.define([
                                     bOk = false;
                                     //falta mesaje
                                     mensaje = this.oBundle.getText("EXIEVEDESCPESDECNOVAL");
-                                    MessageBox.error(mensaje);
+                                    this._controler.agregarMensajeValid("Error", mensaje);
                                     break;
                                 } else {
                                     if(element.ListaPescaDescargada[0].CantPescaDeclarada){
@@ -268,7 +268,7 @@ sap.ui.define([
                                 if(cantTotalDec > 0 && cantTotalDecDesc == 0){
                                     //falta mensaje
                                     mensaje = this.oBundle.getText("EXIPESDECNOEXIPESDES");
-                                    MessageBox.error(mensaje);
+                                    this._controler.agregarMensajeValid("Error", mensaje);
                                 }
 
                             }
@@ -352,18 +352,19 @@ sap.ui.define([
             var DetalleMarea = this._controler._FormMarea;//modelo detalle de marea
             var eventoActual = this._controler._listaEventos[this._controler._elementAct];//modelo evento actual
             var PescaDescargada = eventoActual.ListaPescaDescargada[0]; //actual pesca descargada
-            var tipoDescarga = eventoActual.TipoDescarga;// VALOR SE LLENA EN NUEVO EVENTO
+            var tipoDescarga = eventoActual.CDTDS;// VALOR SE LLENA EN NUEVO EVENTO
             var indPropPlanta = this._controler._listaEventos[this._controler._elementAct].INPRP;
             var motMarea = this._controler._motivoMarea;
-            var centEmba = DetalleMarea.CenEmbarcacion;
+            var centEmba = DetalleMarea.WERKS;
             var atributos = ["CantPescaDescargada", "CantPescaDeclarada"];
             var mensaje = "";
             if(eventoActual.ListaPescaDescargada.length > 0){
                 if(indPropPlanta == "T"){
                     if(PescaDescargada.CDSPC == "0000000000"){
                         mensaje = this.oBundle.getText("SELECCESPECIE");
-                        MessageBox.error(mensaje);
+                        this._controler.agregarMensajeValid("Error", mensaje);
                         bOk = false;
+                        return false;
                     }
                     if(PescaDescargada.INDTR == "N"){
                         PescaDescargada.Nro_descarga = tipoDescarga + centEmba;
@@ -376,16 +377,17 @@ sap.ui.define([
                     if(motMarea == "1"){
                         atributos = ["CantPescaDeclarada"];
                     }else{
-                        atributos = ["CantPescaDeclarada", "PuntDescarga", "FechContabilizacion"];
+                        atributos = ["CantPescaDeclarada", "CDPDG", "FECCONMOV"];
                     }
                     eventoActual.FechProduccion = PescaDescargada.FECCONMOV;
                     eventoActual.CantTotalPescDecla = PescaDescargada.CNPCM;
                     //refrescar modelo
                     this._oView.getModel("eventos").updateBindings(true);
-                    if (PescaDescargada.Nro_descarga) {
+                    if (PescaDescargada.Nro_descarga == "") {
                         mensaje = this.oBundle.getText("SELECCDESCARGA");
-                        MessageBox.error(mensaje);
+                        this._controler.agregarMensajeValid("Error", mensaje);
                         bOk = false;
+                        return false;
                     }
                 }
 
@@ -396,8 +398,9 @@ sap.ui.define([
                         var valor = actualPescaDescargada[element];
                         if(!valor){
                             bOk = false;
-                            mensaje = this.oBundle.getText("MISSINGFIELD", [element]);
-                            MessageBox.error(mensaje);
+                            let nomCampo = this._controler.obtenerMensajesCamposValid(element);
+                            mensaje = this.oBundle.getText("MISSINGFIELD", [nomCampo]);
+                            this._controler.agregarMensajeValid("Error", mensaje);
                         }
                         
                     }
@@ -412,14 +415,14 @@ sap.ui.define([
                     if(PescaDescargada.PESACUMOD < 0){
                         bOk = false;
                         mensaje = this.oBundle.getText("CANTDESCARGANOCERO");
-                        MessageBox.error(mensaje);
+                        this._controler.agregarMensajeValid("Error", mensaje);
                     }
 
                     if(bOk){
                         if(PescaDescargada.CNPCM < 0){
                             bOk = false;
                             mensaje = this.oBundle.getText("CANTDECLDESCNOCERO");// no se encontro en el pool de mensajes CANTDECLDESCNOCERO
-                            MessageBox.error(mensaje);
+                            this._controler.agregarMensajeValid("Error", mensaje);
                         }
 
                         if(bOk){
@@ -431,7 +434,7 @@ sap.ui.define([
                                     }else{
                                         bOk = false;
                                         mensaje = this.oBundle.getText("ERRORCANTREINT");
-                                        MessageBox.error(mensaje);
+                                        this._controler.agregarMensajeValid("Error", mensaje);
                                     }
                                 }
                             }
@@ -458,8 +461,8 @@ sap.ui.define([
                 this._oView.getModel("popup_descarga").setProperty("/CodEmb", this._controler._FormMarea.CDEMB);
                 this._oView.getModel("popup_descarga").setProperty("/Matricula", this._controler._FormMarea.MREMB);
                 this._oView.getModel("popup_descarga").setProperty("/NomEmb", this._controler._FormMarea.NMEMB);
-                this._oView.getModel("popup_descarga").setProperty("/CodPlanta", "");
-                this._oView.getModel("popup_descarga").setProperty("/NomPlanta", "");
+                this._oView.getModel("popup_descarga").setProperty("/CodPlanta", this._controler._listaEventos[this._controler._elementAct].WERKS);
+                this._oView.getModel("popup_descarga").setProperty("/NomPlanta", this._controler._listaEventos[this._controler._elementAct].DESCR);
                 this._oView.getModel("popup_descarga").setProperty("/Estado", "N");
                 
 
@@ -736,9 +739,8 @@ sap.ui.define([
             //console.log("Holaaaaaaaaaaaaaa");
         },
         eliminarDesacarga: function(event){
-            let mod = event.getSource().getBindingContext("eventos");
-            let data  =mod.getObject();
-            let desc = data.Nro_descarga;
+            let pescaDesc = this._oView.getModel("eventos").getData().ListaPescaDescargada;
+            let desc = pescaDesc[0].Nro_descarga;
             let self = this;
 
             let ListaPescaDescElim = this._oView.getModel("eventos").getData().ListaPescaDescargada;
@@ -751,9 +753,11 @@ sap.ui.define([
                     }
                         
                 }
+                ListaPescaDescElim[0] = {};
                 ListaPescaDescElim[0].EsNuevo = true;
                 ListaPescaDescElim[0].INDTR = "N";
                 ListaPescaDescElim[0].CNPCM = textValidaciones.CantPescaDeclaRestante;
+                ListaPescaDescElim[0].CantPescaDeclarada = textValidaciones.CantPescaDeclaRestante;
                 if (this._controler._motivoMarea == "1") {
 					ListaPescaDescElim[0].CDTPC = "D";
 				} else if (this._controler._motivoMarea =="2") {
@@ -872,7 +876,7 @@ sap.ui.define([
 						ListaPescaDescElim[0].INDEJ = "C";
 				}
 
-                this._oView.getModel("eventos").setProperty("/ListaPescaDescargada",ListaPescaDescElim);
+                this._oView.getModel("eventos").setProperty("/ListaPescaDescargadaElim",ListaPescaDescElim);
             }
 
             //MessageToast.show("hOLA METODO");
