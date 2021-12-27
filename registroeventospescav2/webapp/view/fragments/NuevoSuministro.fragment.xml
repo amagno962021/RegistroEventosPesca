@@ -40,7 +40,7 @@
             </form:Form>
         </content>
       <beginButton>
-        <Button type="Emphasized" id="btnAceptarCrearMarea" text="Reservar" press="onReservar" enabled="true"></Button>
+        <Button type="Emphasized" id="btnAceptarCrearMarea" text="{DetalleMarea>/Utils/TxtBtnSuministro}" press="onProcesarSum" enabled="true"></Button>
       </beginButton>
       <endButton>
         <Button text="Cancelar" press="onCancelNuevaMarea"></Button>

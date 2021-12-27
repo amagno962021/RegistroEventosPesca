@@ -90,7 +90,7 @@ sap.ui.define([
 				},
                 Incidental: [],
                 Biometria: [],
-                DetalleReserva: {
+                DetalleSuministro: {
                     NRRSV: "",
                     DESC_ESRSV: "",
                     CDEMB: "",
@@ -103,6 +103,7 @@ sap.ui.define([
                 },
                 Suministro: [],
                 ReservasCombustible: [],
+                VentasCombustible: [],
                 ConfigReservas: {
                     BWART: "",
                     MATNR: "",
@@ -202,6 +203,11 @@ sap.ui.define([
                     visibleBtnNuevaReserva: false,
                     visibleCheckReserva: true,
                     visibleAnulaReserva: true,
+                    visibleBtnNuevaVenta: true,
+                    visibleAnulaVenta: true,
+                    visibleCheckVenta: true,
+                    visibleVenta1: true,
+                    visibleVenta2: true,
 					datosCombo: {
                         Departamentos: [],
                         MotivosMarea: [],
@@ -249,7 +255,9 @@ sap.ui.define([
                     NroEvento_Biometria : "",
                     TipoConsulta:"",
                     MessageItemsDM: [],
-                    MessageItemsEP: []
+                    MessageItemsEP: [],
+                    MessageItemsMA: [],
+                    TxtBtnSuministro: ""
                 },
                 InputsDescargas :{
                     CentPlanta : "",

@@ -9,10 +9,14 @@ sap.ui.define([
     "./Utils",
     "../model/models",
     "sap/ui/core/BusyIndicator",
+    'sap/m/MessagePopover',
+    'sap/m/MessageItem'
 ],
 
-    function (MainComp, FormCust, Controller, JSONModel, MessageBox, TasaBackendService, formatter, Utils, models, BusyIndicator) {
+    function (MainComp, FormCust, Controller, JSONModel, MessageBox, TasaBackendService, formatter, Utils, models, BusyIndicator, MessagePopover, MessageItem) {
         "use strict";
+
+        var oMessagePopover;
 
         const mainUrlServices = 'https://cf-nodejs-qas.cfapps.us10.hana.ondemand.com/api/';
 
@@ -58,12 +62,37 @@ sap.ui.define([
                 this.bckEmbarcacion = null;
                 this.bckArmador = null;
 
+                this.cargarMessagePopover();
+
                 //this.filtarMareas("001","0012");//por defecto muestra la primera opcion
 
             },
 
             _onPatternMatched: function () {
 
+            },
+
+            cargarMessagePopover: function(){
+                var oMessageTemplate = new MessageItem({
+                    type: '{DetalleMarea>type}',
+                    title: '{DetalleMarea>title}',
+                    activeTitle: "{DetalleMarea>active}",
+                    description: '{DetalleMarea>description}',
+                    subtitle: '{DetalleMarea>subtitle}',
+                    counter: '{DetalleMarea>counter}'
+                });
+    
+                oMessagePopover = new MessagePopover({
+                    items: {
+                        path: 'DetalleMarea>/Utils/MessageItemsDM',
+                        template: oMessageTemplate
+                    }
+                });
+                this.byId("messagePopoverBtnMain").addDependent(oMessagePopover);
+            },
+
+            handleMessagePopoverPress: function (oEvent) {
+                oMessagePopover.toggle(oEvent.getSource());
             },
 
             loadInitData: function () {
@@ -643,40 +672,58 @@ sap.ui.define([
             obtenerVentasCombustible: async function(marea){
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 var listaEventos = modelo.getProperty("/Eventos/Lista");
+                console.log("EVENTOS: ", listaEventos);
+                var mostrarTab = false;
                 var mareaCerrada = modelo.getProperty("/DatosGenerales/ESMAR") == "C" ? true : false;
                 var usuario = this.getCurrentUser();
-                var response = await TasaBackendService.obtenerNroReserva(marea, usuario);
-                if (response) {
-                    if (response.data ) {
-                        mostrarTab = true;
-                    }
+                var embarcacion = modelo.getProperty("/Cabecera/CDEMB");
+                var nroVenta = await TasaBackendService.obtenerNroReserva(marea, usuario);
+                if(nroVenta){
+                    mostrarTab = true;
                 }
-
+                var primerRegVenta = !mostrarTab;
+                var regVenta = false;
                 var tipoEvento = "";
-	            var regVenta = false;
-	            var primerRegVenta = !mostrarTab;
-
-                if (!mareaCerrada) {
-                    
+                if(!mareaCerrada){
                     for (let index = 0; index < listaEventos.length; index++) {
                         const element = listaEventos[index];
-                        if(element.CDTEV == "5"){
+                        tipoEvento = element.CDTEV;
+                        if (tipoEvento == "5") {
+                            //setear centro de planta de suministro
                             regVenta = true;
                             break;
                         }
                     }
-
                     if (regVenta) {
                         mostrarTab = true;
                     }else {
                          mostrarTab = false;
                     }
-
-                    modelo.setProperty("/Config/visibleTabVenta", mostrarTab);
-
                 }
-
-
+                console.log("MOST5RAR TAB: ", mostrarTab);
+                modelo.setProperty("/Config/visibleTabVenta", mostrarTab);
+                if(mostrarTab){
+                    var configReservas = await TasaBackendService.obtenerConfigReservas(usuario);
+                    if (configReservas) {
+                        modelo.setProperty("/ConfigReservas/BWART", configReservas.bwart);
+                        modelo.setProperty("/ConfigReservas/MATNR", configReservas.matnr);
+                        modelo.setProperty("/ConfigReservas/WERKS", configReservas.werks);
+                        modelo.setProperty("/ConfigReservas/Almacenes", configReservas.almacenes);
+                    }
+                    var embaComb = await TasaBackendService.obtenerEmbaComb(usuario, embarcacion);
+                    if (embaComb) {
+                        if (embaComb.data) {
+                            var emba = embaComb.data[0];
+                            var objEmbComb = modelo.getProperty("/EmbaComb");
+                            for (var key in emba) {
+                                if (objEmbComb.hasOwnProperty(key)) {
+                                    objEmbComb[key] = emba[key];
+                                }
+                            }
+                        }
+                    }
+                    await this.obtenerVentas(primerRegVenta);
+                }
             },
 
             preparaFormulario: function () {
@@ -1395,6 +1442,36 @@ sap.ui.define([
                         bOk = true;
                     } else {
                         bOk = false;
+                        var mensajes = response1.t_mensajes;
+                        for (let index = 0; index < mensajes.length; index++) {
+                            const element = mensajes[index];
+                            var mssg = element.DSMIN;
+                            var objMessage = {
+                                type: 'Error',
+                                title: 'Mensaje de Validación',
+                                activeTitle: false,
+                                description: mssg,
+                                subtitle: mssg,
+                                counter: index
+                            };
+                            var messageItems = modelo.getProperty("/Utils/MessageItemsMA");
+                            messageItems.push(objMessage);
+                        }
+
+                        var oButton = this.getView().byId("messagePopoverBtnMain");
+                        oMessagePopover.getBinding("items").attachChange(function (oEvent) {
+                            oMessagePopover.navigateBack();
+                            oButton.setType(this.buttonTypeFormatter("MA"));
+                            oButton.setIcon(this.buttonIconFormatter("MA"));
+                            oButton.setText(this.highestSeverityMessages("MA"));
+                        }.bind(this));
+
+                        setTimeout(function () {
+                            oMessagePopover.openBy(oButton);
+                            oButton.setType(this.buttonTypeFormatter("MA"));
+                            oButton.setIcon(this.buttonIconFormatter("MA"));
+                            oButton.setText(this.highestSeverityMessages("MA"));
+                        }.bind(this), 100);
                     }
                 } else {
                     bOk = null;
