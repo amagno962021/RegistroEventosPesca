@@ -35,7 +35,8 @@ sap.ui.define([
             }
             this.ctr = oThis;
             this._navBio = idBiometria;
-            console.log("TextoNav : " + idBiometria)
+            console.log("TextoNav : " + idBiometria);
+            this.getTableDefault();
 
         },
 
@@ -287,24 +288,24 @@ sap.ui.define([
 			
 			
 			if (bOk) {
-				if (this._containsKey(especiePermitida,especie)) {
+				if (!this._containsKey(especiePermitida,especie)) {
 					let permisoEspecies = this.ctr._FormMarea.EspPermitida; //falta cargar data consultarPermisoPesca
 					let especieZonaPesca = this.ctr._listaEventos[this.ctr._elementAct].EspeZonaPesca;
 					let especieVeda = this.ctr._listaEventos[this.ctr._elementAct].EspeVeda;
 					let obsvEspecie = "";
 					let espOk = true;
 								
-					if (permisoEspecies == null || (permisoEspecies != null && this._containsKey(permisoEspecies,especie))) {
+					if (permisoEspecies == null || permisoEspecies.length == 0 || (permisoEspecies != null && this._containsKey(permisoEspecies,especie))) {
 						espOk = false;
 						obsvEspecie += this.ctr.oBundle.getText("EMBNOPERMISOESP") + " ";
 					}
 					
-					if (especieZonaPesca == null || (especieZonaPesca != null && this._containsKey(especieZonaPesca,especie))) {
+					if (especieZonaPesca == null || especieZonaPesca.length == 0 || (especieZonaPesca != null && this._containsKey(especieZonaPesca,especie))) {
 						espOk = false;
 						obsvEspecie += this.ctr.oBundle.getText("ESPNOPERMITZONA") + " ";
 					}
 					
-					if (especieVeda != null && this._containsKey(especieVeda,especie)) {
+					if ((especieVeda != null || especieVeda.length == 0) && this._containsKey(especieVeda,especie)) {
 						espOk = false;
 						obsvEspecie += this.ctr.oBundle.getText("ESPECIEENVEDA") + " ";
 					}
@@ -322,8 +323,8 @@ sap.ui.define([
                     DSSPC: sap.ui.getCore().byId("cb_especies_espec").getSelectedItem().getText(),
                     PorcPesca: "",
                     CNPCM: "",
-                    DSUMD: this.ctr._ConfiguracionEvento.CalaDescUMPescaDecl,
-                    UnidMedida: this.ctr._ConfiguracionEvento.CalaUMPescaDecl,
+                    DSUMD: this.ctr._ConfiguracionEvento.calaDescUMPescaDeclDesc,
+                    UnidMedida: this.ctr._ConfiguracionEvento.calaDescUMPescaDecl,
                     ZMODA: "",
                     OBSER: Pesca.Observacion,
                     Indicador:"N"

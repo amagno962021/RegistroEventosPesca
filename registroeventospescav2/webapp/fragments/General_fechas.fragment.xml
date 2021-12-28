@@ -12,7 +12,7 @@
 									<Label text="Fecha/Hora Inic. Cala" design="Standard" width="100%" required="false" textAlign="Left" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<DateTimePicker value="{eventos>/FICAL}" id="dtp_fechaIniCala" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy"  />
+									<DatePicker value="{eventos>/FICAL}" id="dtp_fechaIniCala" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy"  />
 									<TimePicker id="dtp_horaIniCala" value="{eventos>/HICAL}" valueFormat="HH:mm:ss" displayFormat="HH:mm:ss" width="90%"/>
 								</form:fields>
 							</form:FormElement>
@@ -21,7 +21,7 @@
 									<Label id="labelTextFechIniEnv" text="Fech/hora Inic. envase" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<DateTimePicker value="{eventos>/FIEVN}" id="dtf_fechaIniEnv" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy" />
+									<DatePicker value="{eventos>/FIEVN}" id="dtf_fechaIniEnv" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy" />
 									<TimePicker id="dtf_horaIniEnv" value="{eventos>/HIEVN}" valueFormat="HH:mm:ss" displayFormat="HH:mm:ss" width="90%"/>
 								</form:fields>
 							</form:FormElement>
@@ -30,7 +30,7 @@
 									<Label text="Fecha de producción" design="Standard" width="100%" required="false" textAlign="Left" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<DateTimePicker value="{eventos>/FechProduccion}" id="dtf_FechaProduccion" width="50%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd" />
+									<DatePicker value="{eventos>/FechProduccion}" id="dtf_FechaProduccion" width="50%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd" />
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement id="fe_fechaArribo" visible="true">
@@ -38,7 +38,7 @@
 									<Label text="Fecha/hora ETA" design="Standard" width="100%" required="false" textAlign="Left" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<DateTimePicker value="{DetalleMarea>/DatosGenerales/FEARR}" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd" />
+									<DatePicker value="{DetalleMarea>/DatosGenerales/FEARR}" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd" />
 									<TimePicker value="{DetalleMarea>/DatosGenerales/HEARR}" valueFormat="HH:mm:ss" displayFormat="HH:mm:ss" width="90%"/>
 								</form:fields>
 							</form:FormElement>
@@ -51,7 +51,7 @@
 									<Label text="Fech/hora fin Cala" design="Standard" width="100%" required="false" textAlign="Left" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<DateTimePicker value="{eventos>/FFCAL}" id="dtp_fechaFinCala" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy" />
+									<DatePicker value="{eventos>/FFCAL}" id="dtp_fechaFinCala" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy" />
 									<TimePicker id="dtp_horaFinCala" value="{eventos>/HFCAL}" valueFormat="HH:mm:ss" displayFormat="HH:mm:ss" width="90%"/>
 								</form:fields>
 							</form:FormElement>
@@ -60,7 +60,7 @@
 									<Label text="Fech/hora fin envase" design="Standard" width="100%" required="false" textAlign="Left" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<DateTimePicker value="{eventos>/FFEVN}" id="dtf_fechaFinEnv" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd" />
+									<DatePicker value="{eventos>/FFEVN}" id="dtf_fechaFinEnv" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd" />
 									<TimePicker id="dtf_horaFinEnv" value="{eventos>/HFEVN}" valueFormat="HH:mm:ss" displayFormat="HH:mm:ss" width="90%"/>
 								</form:fields>
 							</form:FormElement>

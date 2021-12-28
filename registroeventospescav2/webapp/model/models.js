@@ -250,6 +250,7 @@ sap.ui.define([
                     NroEvento_Biometria : "",
                     TipoConsulta:"",
                     MensajeGrabacion : "",
+                    NumeroMarea : "",
                     MessageItemsDM: [],
                     MessageItemsEP: []
                 },

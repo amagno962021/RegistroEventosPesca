@@ -160,13 +160,18 @@ sap.ui.define([
         },
 
         strHourToSapHo: function(hour){
+            let p_hora = hour + ""
             var newHour = "";
-            if(hour){
-                var dateSplit = hour.split(":");
-                var hora = dateSplit[0];
-                var minuto = dateSplit[1];
-                var sec = dateSplit[2] ? dateSplit[2] : "00";
-                newHour = hora + minuto + sec + "";
+            if(p_hora.length > 6){
+                if(hour){
+                    var dateSplit = hour.split(":");
+                    var hora = dateSplit[0];
+                    var minuto = dateSplit[1];
+                    var sec = dateSplit[2] ? dateSplit[2] : "00";
+                    newHour = hora + minuto + sec + "";
+                }
+            }else{
+                newHour = p_hora;
             }
             return newHour;
         },
