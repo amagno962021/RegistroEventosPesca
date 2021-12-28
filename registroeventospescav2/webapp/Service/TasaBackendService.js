@@ -394,9 +394,13 @@ sap.ui.define([
             sBody.nombreConsulta = "CONSGENERRDSCG";
             sBody.parametro1 = nro_desc;
             sBody.p_user = user;
-            return this.http(uri).post(null, sBody).then(function (response) {
-                return response;
+            var data = this.http(uri).post(null, sBody).then(function (response) {
+                return JSON.parse(response);
+            }).catch(function (error){
+                console.log("ERROR : TasaBackendService.validarErroresDescarga - ", error);
+                return null;
             });
+            return data;
         },
 
         obtenerMedidaEspecie: async function(cod_especie, user){

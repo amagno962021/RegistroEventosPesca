@@ -198,6 +198,7 @@
             <footer>
                <OverflowToolbar width="auto" height="auto" design="Auto" enabled="true" visible="true">
                   <content>
+                     <Button id="messagePopoverBtnMain" icon="{ path: '/', formatter: 'buttonIconFormatter' }" type="{ path: '/', formatter: 'buttonTypeFormatter' }" text= "{path: '/', formatter: 'highestSeverityMessages' }" press="handleMessagePopoverPress"/>
                      <ToolbarSpacer width="" />
                      <Button text="Nueva Marea" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onActionCrearMarea" />
                      <Button text="Actualizar" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onActualizaMareas" />

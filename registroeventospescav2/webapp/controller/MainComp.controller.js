@@ -552,6 +552,37 @@ sap.ui.define([
             return bOk;
         },
 
+        crearVentaComb: async function(){
+            var bOk = true;
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var posiciones = this.obtenerPosiciones();
+            var fechaReserva = modelo.getProperty("/Cabecera/FIEVN")
+            var bodyReserva = {
+                p_cdemb: modelo.getProperty("/Cabecera/CDEMB"),
+                p_fhrsv: fechaReserva ? Utils.strDateToSapDate(fechaReserva): "",
+                p_lgort: modelo.getProperty("/Suministro/0/CDALE"),
+                p_nrevn: modelo.getProperty("/Cabecera/NREVN"),
+                p_nrmar: modelo.getProperty("/Cabecera/NRMAR"),
+                p_user: this.getCurrentUser(),
+                p_werks: modelo.getProperty("/Suministro/0/WERKS"),
+                str_rcb: posiciones
+            };
+            var crearVenta = await TasaBackendService.crearVenta(bodyReserva);
+            if(crearVenta){
+                var t_mensaje = crearVenta.t_mensaje;
+                modelo.setProperty("/Result/NroPedido", crearVenta.p_pedido)
+                if(t_mensaje.length){
+                    if(t_mensaje[0].CMIN == "E"){
+                        bOk = false;
+                        MessageBox.error(t_mensaje[0].DSMIN);
+                    }
+                }
+            }else{
+                bOk = false;
+            }
+            return bOk;
+        },
+
         obtenerPosiciones: function(){
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var lista = [];
@@ -582,6 +613,7 @@ sap.ui.define([
             var response = await TasaBackendService.obtenerReservas(marea, null, null, usuario);
             modelo.setProperty("/Config/visibleReserva1", false);
             modelo.setProperty("/Config/visibleReserva2", false);
+            modelo.setProperty("/Utils/TxtBtnSuministro", "Reservar");
             if (response) {
                 var reservas = response.t_reservas;
                 if (reservas.length != 0) {
@@ -671,25 +703,150 @@ sap.ui.define([
             }
         },
 
-        obtenerDetalleReserva: async function(nrmar, nrrsv){
+        anularVentas: async function(ventas, indices){
+            BusyIndicator.show(0);
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var obj = {
+                p_ventas: ventas
+            };
+            var anular = await TasaBackendService.anularVenta(obj);
+            if(anular){
+                var me = this;
+                var mensajes = anular.t_mensaje;
+                var messageItems = modelo.getProperty("/Utils/MessageItemsDM");
+                for (let index = 0; index < mensajes.length; index++) {
+                    const element = mensajes[index];
+                    var objMessage = {
+                        type: element.CMIN == 'S' ? 'Success' : 'Error',
+				        title: element.CMIN == 'S' ? 'Mensaje de Éxito' : 'Mensaje de Error',
+				        activeTitle: false,
+				        description: element.DSMIN,
+				        subtitle: element.DSMIN,
+				        counter: index
+                    };
+                    messageItems.push(objMessage);
+                }
+                var oButton = this.getView().byId("messagePopoverBtn");
+                    oMessagePopover.getBinding("items").attachChange(function(oEvent){
+                        oMessagePopover.navigateBack();
+                        oButton.setType(this.buttonTypeFormatter("DM"));
+                        oButton.setIcon(this.buttonIconFormatter("DM"));
+                        oButton.setText(this.highestSeverityMessages("DM"));
+                    }.bind(this));
+
+                    setTimeout(function(){
+                        oMessagePopover.openBy(oButton);
+                    }.bind(this), 100);
+                
+                    BusyIndicator.hide();
+                    await me.obtenerVentas(true);
+            }else{
+                BusyIndicator.hide();
+            }
+            
+        },
+
+        obtenerDetalleSuministro: async function(nrmar, nrrsv){
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var usuario = this.getCurrentUser();
             var bOk = false;
-            var detalleReservas = await TasaBackendService.obtenerReservas(nrmar, nrrsv, "X", usuario);
-            if(detalleReservas){
-                var reserva = detalleReservas.t_reservas[0];
-                var objReserva = modelo.getProperty("/DetalleReserva");
+            var detalleSuministro = await TasaBackendService.obtenerReservas(nrmar, nrrsv, "X", usuario);
+            if(detalleSuministro){
+                var reserva = detalleSuministro.t_reservas[0];
+                var objReserva = modelo.getProperty("DetalleSuministro");
                 for (var key in reserva) {
                     if (objReserva.hasOwnProperty(key)) {
                         objReserva[key] = reserva[key];
                     }
                 }
-                var detalles = detalleReservas.t_detalle;
-                modelo.setProperty("/DetalleReserva/Lista", detalles);
+                var detalles = detalleSuministro.t_detalle;
+                modelo.setProperty("DetalleSuministro/Lista", detalles);
                 bOk = true;
             }
             return bOk;
         },
+
+        obtenerVentas: async function(primerRegVenta){
+            BusyIndicator.show(0);
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var marea = modelo.getProperty("/Cabecera/NRMAR");
+            var usuario = this.getCurrentUser();
+            var eventos = modelo.getProperty("/Eventos/Lista");
+            var mareaCerrada = modelo.getProperty("/DatosGenerales/ESMAR") == "C" ? true : false;
+            modelo.setProperty("/Config/visibleVenta1", false);
+            modelo.setProperty("/Config/visibleVenta2", false);
+            modelo.setProperty("/Utils/TxtBtnSuministro", "Vender");
+            var response = await TasaBackendService.obtenerReservas(marea, null, null, usuario);
+            if(response){
+                var ventas = response.t_reservas;
+                if(ventas.length != 0){
+                    modelo.setProperty("/Config/visibleVenta1", true);
+                    if (primerRegVenta) {
+                        modelo.setProperty("/Config/visibleBtnNuevaVenta", true);
+                    } else {
+                        modelo.setProperty("/Config/visibleBtnNuevaVenta", false);
+                    }
+                    for (let index = 0; index < ventas.length; index++) {
+                        const element = ventas[index];
+                        element.CHKDE = false;
+                    }
+                    modelo.setProperty("/VentasCombustible", ventas);
+                    if(mareaCerrada){
+                        modelo.setProperty("/Config/visibleBtnNuevaVenta", false);
+                        modelo.setProperty("/Config/visibleAnulaVenta", false);
+                        modelo.setProperty("/Config/visibleCheckVenta", false);
+                    }else{
+                        modelo.setProperty("/Config/visibleBtnNuevaVenta", true);
+                        modelo.setProperty("/Config/visibleAnulaVenta", true);
+                        modelo.setProperty("/Config/visibleCheckVenta", true);
+                    }
+                }else{
+                    modelo.setProperty("/Config/visibleVenta2", true);
+                    var ultimoEvento = eventos.length > 0 ? eventos[eventos.length - 1] : null;
+                    var descEvento = ultimoEvento ? ultimoEvento.DESC_CDTEV : "";
+                    var fechIniEve = ultimoEvento ? ultimoEvento.FIEVN : "";
+                    var numeroEvt = ultimoEvento ? ultimoEvento.NREVN : "";
+                    modelo.setProperty("/Cabecera/NREVN", numeroEvt);
+                    modelo.setProperty("/Cabecera/DESC_CDTEV", descEvento);
+                    modelo.setProperty("/Cabecera/FIEVN", fechIniEve);
+                    var planta = ultimoEvento ? ultimoEvento.CDPTA : "";
+                    var descr = ultimoEvento ? ultimoEvento.DESCR : "";
+                    var centro = modelo.getProperty("/ConfigReservas/WERKS");
+                    var material = modelo.getProperty("/ConfigReservas/MATNR");
+                    var data = await TasaBackendService.obtenerSuministro(usuario, material);
+                    if (data) {
+                        var suministro = data.data[0];
+                        var dsalm = "";
+                        var cdale = "";
+                        var almacenes = modelo.getProperty("/ConfigReservas/Almacenes");
+                        for (let index = 0; index < almacenes.length; index++) {
+                            const element = almacenes[index];
+                            if (element.DSALM == descr) {
+                                dsalm = element.DSALM;
+                                cdale = element.CDALE;
+                            }
+                        }
+                        var listaSuministro = [{
+                            NRPOS: "001",
+                            CDSUM: suministro.CDSUM,
+                            CNSUM: 0,
+                            MAKTX: suministro.MAKTX,    
+                            CDUMD: suministro.CDUMD,
+                            DSUMD: suministro.DSUMD,
+                            CDPTA: planta,
+                            DESCR: descr,
+                            WERKS: centro,
+                            DSALM: dsalm,
+                            CDALE: cdale
+                        }];
+                        modelo.setProperty("/Suministro", listaSuministro);
+                    }
+                }
+            }
+
+            BusyIndicator.hide();
+        },
+
         SaveGeneral :async function(){
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var visbleObsComb = modelo.getProperty("/Utils/VisibleObsvComb");
@@ -795,6 +952,35 @@ sap.ui.define([
             modelo.setProperty("/Cabecera/FCCRE", Utils.strDateToSapDate(Utils.dateToStrDate(new Date())));
             modelo.setProperty("/Cabecera/HRCRE", Utils.strHourToSapHo(Utils.dateToStrHours(new Date())));
             modelo.setProperty("/Cabecera/ATCRE", this.getCurrentUser());
+        },
+
+        validarErroresDescargaMarea: async function(nroDescarga){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var messageItems = modelo.getProperty("/Utils/MessageItemsDM");
+            var usuario = this.getCurrentUser();
+            var erroresDescarga = await TasaBackendService.validarErroresDescarga(nroDescarga, usuario);
+            if(erroresDescarga){
+                var mensajes = erroresDescarga.data;
+                for (let index = 0; index < mensajes.length; index++) {
+                    const element = mensajes[index];
+                    if(element.CMIN == "E"){
+                        var title = this.getResourceBundle().getText("PROGGENERAR");
+                        if(element.TPROG == "A"){
+                            title = this.getResourceBundle().getText("PROGANULAR");
+                        }
+                        //mssg += ": " + element.DSMEN;
+                        var objMessage = {
+                            type: 'Error',
+                            title: title,  
+                            activeTitle: false,
+                            description: element.DSMEN,
+                            subtitle: element.DSMEN,
+                            counter: index
+                        };
+                        messageItems.push(objMessage);
+                    } 
+                }
+            }
         }
 
     });
