@@ -73,8 +73,8 @@ sap.ui.define([
             var mensaje = "";
             for (let index = 0; index < bodegas.length; index++) {
                 const element = bodegas[index];
-                var cantPesca = element.CantPesca;
-                var capaMaxim = element.CAPES;
+                var cantPesca = element.CantPesca ? Number(element.CantPesca) : Number(0);
+                var capaMaxim = Number(element.CAPES);
                 if (cantPesca) {
                     cantTotal += cantPesca;
                     if (cantPesca > capaMaxim) {
@@ -202,7 +202,7 @@ sap.ui.define([
                         this._controler.Dat_Horometro.calcularCantTotalBodegaEve();
                         bOk = this.validarBodegas();
                         if(bOk){
-                            bOk = this.validarBodegaPesca(true)();
+                            bOk = this.validarBodegaPesca(true);
                         }
                         if(bOk){
                             bOk = this._controler.Dat_PescaDeclarada.validarPorcPesca();

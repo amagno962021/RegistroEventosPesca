@@ -27,7 +27,7 @@
 					</form:FormContainer>
 				</form:formContainers>
 				<form:layout>
-					<form:ResponsiveGridLayout singleContainerFullSize="false" adjustLabelSpan="false" columnsL="1" labelSpanL="3" columnsM="2" labelSpanM="2" labelSpanS="8" />
+					<form:ResponsiveGridLayout singleContainerFullSize="false" adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="2" labelSpanM="2" labelSpanS="8" />
 				</form:layout>
 			</form:Form>
 		</content>

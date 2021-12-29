@@ -349,6 +349,9 @@ sap.ui.define([
         },
 
         onActionSelectTab: async function (tab_seleccionado, event) {
+            console.log("27/12/2021 Erick");
+            let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
+            mod.setProperty("/Utils/MessageItemsEP", []);
             BusyIndicator.show(0);
             this.nextTab = tab_seleccionado;
             if (this.previousTab == undefined) {
@@ -759,9 +762,9 @@ sap.ui.define([
 
                 if (indEvento == "N") {
                     eventoActual.ListaPescaDeclarada = [];
+                    this._oView.byId("table_biometria").destroyColumns();
+                    this.ctr.Dat_Biometria.getTableDefault();
                     if (motivoMarea == "1" && espePermitEmb != null) {
-                        this._oView.byId("table_biometria").destroyColumns();
-                        this.ctr.Dat_Biometria.getTableDefault();
                         for (let index = 0; index < espePermitEmb.length; index++) {
                             const element = espePermitEmb[index];
                             var especie = element.CDSPC;
@@ -788,8 +791,6 @@ sap.ui.define([
 
                         }
                     } else if (motivoMarea == "2") {
-                        this._oView.byId("table_biometria").destroyColumns();
-                        this.ctr.Dat_Biometria.getTableDefault();
                         var espOk = true;
                         this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
                         var especieDef = confEventosPesca.calaCodEspecieCHI; //Una sola especie para pesca CHI

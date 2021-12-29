@@ -55,8 +55,8 @@ sap.ui.define([
         /**
          * Metodo para inicializar variables
          */
-        wdDoInit: function () {
-
+        wdDoInit: function(){
+            this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
         },
 
         getCurrentUser: function () {
@@ -279,8 +279,22 @@ sap.ui.define([
             marea.str_horom = horometros;
 
             console.log("GUARDAR MAREA: ", marea);
-            var guardar = await TasaBackendService.crearActualizarMarea(marea);
-            console.log("GUARDAR: ", guardar);
+            try {
+                var guardar = await TasaBackendService.crearActualizarMarea(marea);
+            } catch (error) {
+                bOk = false;
+                let msg = this.oBundle.getText("ERRORRFCSAVE");
+                let msg2 = msg + " " + modelo.getProperty("/Utils/NumeroMarea") + ": " + error;
+                MessageBox.error(msg);
+            }
+
+            if(bOk){
+                this.informarHorometroAveriado();
+            }
+            
+
+        },
+        informarHorometroAveriado : function (){
 
         },
 
@@ -417,8 +431,11 @@ sap.ui.define([
             return pscinc_list;
         },
 
-        obtenerPescaBodegaRFC: function (elementParam) {
-            var bodegas = [];//modelo de bodegas
+        obtenerPescaBodegaRFC: function(elementParam){
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
+            let ListaEventos = mod.getProperty("/Eventos/Lista");
+            var bodegas = ListaEventos[elementSel].ListaBodegas;//modelo de bodegas
             var lista = [];
             for (let index = 0; index < bodegas.length; index++) {
                 const element = bodegas[index];
