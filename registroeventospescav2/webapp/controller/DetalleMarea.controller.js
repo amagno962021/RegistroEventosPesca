@@ -35,6 +35,7 @@ sap.ui.define([
             this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
             //this.oControllerEvento = sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento"); 
             this.cargarMessagePopover();
+
         },
 
         _onPatternMatched: async function (oEvent) {
@@ -97,7 +98,10 @@ sap.ui.define([
 
         onBackListMarea: function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            modelo.setProperty("/Utils/MessageItemsDM", []);
+            //modelo.setProperty("/Utils/MessageItemsDM", []);
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+            var initData = oStore.get('InitData');
+            modelo.setData(initData);
             history.go(-1);
         },
 
@@ -511,6 +515,9 @@ sap.ui.define([
                 modelo.setProperty("/Config/visibleFecHoEta", true);
                 modelo.setProperty("/Config/visibleUbiPesca", false);
                 modelo.setProperty("/Config/visibleFechIni", false);
+                modelo.setProperty("/Config/readOnlyEstaMar", false); //si es nueva marea
+                modelo.setProperty("/Config/visibleBtnGuardar", false); //si es nueva marea
+                modelo.setProperty("/Config/visibleBtnSiguiente", true); //si es nueva marea
                 modelo.setProperty("/Cabecera/TXTNOTIF", "");
                 modelo.setProperty("/Cabecera/TXTNOTIF1", "");
             } else if (motivo == "3" || motivo == "7" || motivo == "8") {
@@ -519,6 +526,8 @@ sap.ui.define([
                 modelo.setProperty("/Config/visibleFechIni", true);
                 modelo.setProperty("/Config/readOnlyFechIni", false);
                 modelo.setProperty("/Config/readOnlyEstaMar", true);
+                modelo.setProperty("/Config/visibleBtnGuardar", true); //si es nueva marea
+                modelo.setProperty("/Config/visibleBtnSiguiente", false); //si es nueva marea
                 var MareAntNrmar = modelo.getProperty("/MareaAnterior/NRMAR");
                 var MareAntDesc = modelo.getProperty("/MareaAnterior/DESC_CDMMA");
                 var MareAntEvt = modelo.getProperty("/MareaAnterior/EventoMarAnt/DESC_CDTEV");
@@ -544,6 +553,8 @@ sap.ui.define([
                 modelo.setProperty("/DatosGenerales/ESMAR", "A");//Seteamos marea abierta
                 modelo.setProperty("/Cabecera/TXTNOTIF", "");
                 modelo.setProperty("/Cabecera/TXTNOTIF1", "");
+                modelo.setProperty("/Config/visibleBtnGuardar", false); //si es nueva marea
+                modelo.setProperty("/Config/visibleBtnSiguiente", true); //si es nueva marea
             }
         },
 
@@ -614,17 +625,24 @@ sap.ui.define([
             //modelo.setProperty("/Config/visibleTabReserva", false);
             //modelo.setProperty("/Config/visibleTabVenta", false);
             modelo.setProperty("/Config/visibleTabSepComb", false);
+            modelo.setProperty("/Config/visibleBtnGuardar", false);
+            modelo.setProperty("/Config/visibleBtnSiguiente", false);
             var indicador = modelo.getProperty("/Cabecera/INDICADOR");
             if (indicador == "N") {
-                modelo.setProperty("/Config/readOnlyEstaMar", false);
-            } else {
                 modelo.setProperty("/Config/readOnlyEstaMar", true);
+                modelo.setProperty("/Config/readOnlyMotMarea", true);
+                modelo.setProperty("/Config/visibleTabReserva", false);
+                modelo.setProperty("/Config/visibleTabSepComb", false);
+                modelo.setProperty("/Config/visibleTabVenta", false);
+                modelo.setProperty("/Config/visibleBtnGuardar", true);
+                modelo.setProperty("/Config/visibleBtnSiguiente", true);
+            } else {
+                modelo.setProperty("/Config/visibleBtnGuardar", true);
+                var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
+                this.validarMotivo(motivoMarea);
+                modelo.setProperty("/Config/readOnlyMotMarea", false);
+                await this.validaDescargas();
             }
-
-            var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
-            this.validarMotivo(motivoMarea);
-
-            await this.validaDescargas();
 
         },
 
@@ -1233,7 +1251,37 @@ sap.ui.define([
                     oButton.setIcon(this.buttonIconFormatter("DM"));
                     oButton.setText(this.highestSeverityMessages("DM"));
                 }.bind(this), 100);
+                modelo.setProperty("/Config/visibleDetalleEvento", false);
+            }else{
+                modelo.setProperty("/Config/visibleDetalleEvento", true);
             }
+        },
+
+        onNuevaReserva: async function(){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var inprp = modelo.getProperty("/Cabecera/INPRP");
+            if(inprp == "P"){
+                modelo.setProperty("/Config/TxtNuevaVentaRes", "Nueva Reserva");
+            }
+            if(inprp == "T"){
+                modelo.setProperty("/Config/TxtNuevaVentaRes", "Nueva Venta");
+            }
+
+            await this.obtenerNuevoSuministro(false);
+            this.getNuevaResVenDialog().open();
+        },
+
+
+        getNuevaResVenDialog: function(){
+            if (!this.oDialogNuevaResVent) {
+                this.oDialogNuevaResVent = sap.ui.xmlfragment("com.tasa.registroeventospescav2.view.fragments.NuevaReservaVenta", this);
+                this.getView().addDependent(this.oDialogNuevaResVent);
+            }
+            return this.oDialogNuevaResVent;
+        },
+
+        onCancelNuevaResVent: function(){
+            this.getNuevaResVenDialog().close();
         },
 
 

@@ -153,7 +153,7 @@
 													<Label text="Motivo de Marea" width="100%" />
 												</form:label>
 												<form:fields>
-													<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/CDMMA}" items="{DetalleMarea>/Config/datosCombo/MotivosMarea}" width="27.5%" change="onValidaMotivo" >
+													<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/CDMMA}" enabled="{DetalleMarea>/Config/readOnlyMotMarea}" items="{DetalleMarea>/Config/datosCombo/MotivosMarea}" width="27.5%" change="onValidaMotivo" >
 														<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
 													</ComboBox>
 												</form:fields>
@@ -330,9 +330,9 @@
 										</header>
 										<footer/>
 									</Column>
-									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false" visible="{DetalleMarea>/Config/visibleDetalleEvento}">
 										<header>
-											<Text text="" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="D" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 										</header>
 										<footer/>
 									</Column>
@@ -356,7 +356,7 @@
 														wrapping="false"
 														textAlign="Begin"
 														textDirection="Inherit"
-														visible="true"
+														visible="{DetalleMarea>/Config/visibleDetalleEvento}"
 													/>
 										</cells>
 									</ColumnListItem>
@@ -496,7 +496,7 @@
 												<Title text="Reservas" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
 												<ToolbarSpacer width=""/>
 												<Button text="Nueva Reserva" type="Default" icon="sap-icon://add-product" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleBtnNuevaReserva}"
-														iconDensityAware="false" />
+														iconDensityAware="false" press="onNuevaReserva"/>
 												<Button text="Anular" type="Default" icon="sap-icon://add-product" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleAnulaReserva}"
 														iconDensityAware="false" press="onAnularReservas"/>
 											</content>
@@ -857,15 +857,15 @@
 		<footer>
 			<OverflowToolbar width="100%" height="46px" design="Auto" enabled="true" visible="true">
 				<content>
-					<Button id="messagePopoverBtn" icon="{ path: '/', formatter: 'buttonIconFormatter' }" type="{ path: '/', formatter: 'buttonTypeFormatter' }" text= "{path: '/', formatter: 'highestSeverityMessages' }" press="handleMessagePopoverPress"/>
+					<Button id="messagePopoverBtn" icon="{ path: '/', formatter: 'buttonIconFormatter' }" type="{ path: '/', formatwter: 'buttonTypeFormatter' }" text= "{path: '/', formatter: 'highestSeverityMessages' }" press="handleMessagePopoverPress"/>
 					<ToolbarSpacer width=""/>
-					<Button text="Guardar" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true"
+					<Button text="Guardar" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleBtnGuardar}"
 								iconDensityAware="false" press="onSave"/>
-					<Button text="Siguiente" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true"
+					<Button text="Siguiente" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleBtnSiguiente}"
 								iconDensityAware="false"/>
-					<Button text="Crear" type="Accept" icon="sap-icon://create" iconFirst="true" width="auto" enabled="true" visible="true"
+					<Button text="Crear" type="Accept" icon="sap-icon://create" iconFirst="true" width="auto" enabled="true" visible="false"
 								iconDensityAware="false"/>
-					<Button text="BOTON DE PRUEBAS" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true"
+					<Button text="BOTON DE PRUEBAS" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="false"
 								iconDensityAware="false" press="onCallUsuario"/>
 				</content>
 			</OverflowToolbar>

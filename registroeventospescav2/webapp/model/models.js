@@ -198,6 +198,7 @@ sap.ui.define([
                     visibleTabSepComb: true,
                     readOnlyFechIni: true,
                     readOnlyEstaMar: true,
+                    readOnlyMotMarea: true,
                     visibleReserva1: false,
                     visibleReserva2: false,
                     visibleReserva3: false,
@@ -209,6 +210,11 @@ sap.ui.define([
                     visibleCheckVenta: true,
                     visibleVenta1: true,
                     visibleVenta2: true,
+                    visibleDetalleEvento: true,
+                    visibleBtnGuardar: true,
+                    visibleBtnSiguiente: true,
+                    visibleBtnCrear: true,
+                    visibleBtnReabrir: true,
 					datosCombo: {
                         Departamentos: [],
                         MotivosMarea: [],
@@ -259,7 +265,8 @@ sap.ui.define([
                     MessageItemsDM: [],
                     MessageItemsEP: [],
                     MessageItemsMA: [],
-                    TxtBtnSuministro: ""
+                    TxtBtnSuministro: "",
+                    TxtNuevaVentaRes: ""
                 },
                 InputsDescargas :{
                     CentPlanta : "",
