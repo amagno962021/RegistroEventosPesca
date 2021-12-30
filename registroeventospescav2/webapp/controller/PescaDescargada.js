@@ -454,6 +454,13 @@ sap.ui.define([
             this._oView.getModel("popup_descarga").setProperty("/ListaEstado", this._Estado.data);
             if(this._controler._motivoMarea == "1"){
                 this._oView.getModel("popup_descarga").setProperty("/TipoPescaSel", "D");
+                this._oView.getModel("popup_descarga").setProperty("/FechaInicio", this._controler._listaEventos[this._controler._elementAct].FechProduccion);
+                this._oView.getModel("popup_descarga").setProperty("/CodEmb", this._controler._FormMarea.CDEMB);
+                this._oView.getModel("popup_descarga").setProperty("/Matricula", this._controler._FormMarea.MREMB);
+                this._oView.getModel("popup_descarga").setProperty("/NomEmb", this._controler._FormMarea.NMEMB);
+                this._oView.getModel("popup_descarga").setProperty("/CodPlanta", this._controler._listaEventos[this._controler._elementAct].WERKS);
+                this._oView.getModel("popup_descarga").setProperty("/NomPlanta", this._controler._listaEventos[this._controler._elementAct].DESCR);
+                this._oView.getModel("popup_descarga").setProperty("/Estado", "N");
 
             }else if(this._controler._motivoMarea == "2"){
                 this._oView.getModel("popup_descarga").setProperty("/TipoPescaSel", "I");

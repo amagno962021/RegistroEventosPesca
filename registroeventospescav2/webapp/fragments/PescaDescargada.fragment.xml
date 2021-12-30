@@ -42,13 +42,13 @@
 					<Column width="9rem">
 						<m:Label text="Especie" />
 						<template>
-							<m:Text text="{eventos>CDSPC}" href="{ProductPicUrl}" target="_blank" />
+							<m:Text text="{eventos>CDSPC}" />
 						</template>
 					</Column>
 					<Column width="9rem">
 						<m:Label text="Desc. especie" />
 						<template>
-							<m:Text text="{eventos>DSSPC}" href="{ProductPicUrl}" target="_blank" />
+							<m:Text text="{eventos>DSSPC}" />
 						</template>
 					</Column>
 					<Column width="9rem" filterProperty="Available">
@@ -76,13 +76,13 @@
 					<Column width="10rem" hAlign="End" filterProperty="Quantity">
 						<m:Label text="Lado descarga" />
 						<template>
-							<m:Text text="{eventos>DESC_CDLDS}" href="{ProductPicUrl}" target="_blank" />
+							<m:Text text="{eventos>DESC_CDLDS}" />
 						</template>
 					</Column>
 					<Column width="15rem" hAlign="End" filterProperty="Quantity">
 						<m:Label text="Fecha/hora inicio" />
 						<template>
-							<m:DateTimePicker design="Bold" value="{eventos>FIDES} {eventos>HIDES}" displayFormat="dd/MM/yyyy HH:mm:ss" required="false" valueStateText="Invalid entry" enabled="false" visible="true" valueFormat="yyyyMMddHHmmss" />
+							<m:DateTimePicker value="{eventos>FIDES} {eventos>HIDES}" displayFormat="dd/MM/yyyy HH:mm:ss" required="false" valueStateText="Invalid entry" enabled="false" visible="true" valueFormat="yyyyMMddHHmmss" />
 						</template>
 					</Column>
 					<Column width="15rem" hAlign="End" filterProperty="Quantity">
@@ -129,7 +129,7 @@
 					<Column width="9rem">
 						<m:Label text="Desc. especie" />
 						<template>
-							<m:Text text="{eventos>DSSPC}" href="{ProductPicUrl}" target="_blank" />
+							<m:Text text="{eventos>DSSPC}" />
 						</template>
 					</Column>
 					<Column width="9rem" filterProperty="Available">
@@ -148,6 +148,15 @@
 
 			</Table>
 			<Table id="table_pesc_desc_CHD" selectionMode="MultiToggle" rows="{eventos>/ListaPescaDescargada}" visibleRowCount="3" enableCellFilter="{ui>/cellFilterOn}" ariaLabelledBy="title">
+			<extension>
+					<m:OverflowToolbar id="ext_pesc_desc_chd" style="Clear">
+						<m:Title id="title3" text="Cantidad de pesca en declarada: " />
+						<m:Text text="{DetalleMarea>/Eventos/CantPescaDescDeclText} " />
+						<m:Text text="TM" />
+						<m:ToolbarSpacer />
+
+					</m:OverflowToolbar>
+				</extension>
 				<columns>
 					<Column id="pdCHD_col_BuscarDesc" width="4rem">
 						<m:Label text="" />
@@ -176,13 +185,13 @@
 					<Column width="9rem">
 						<m:Label text="Especie" />
 						<template>
-							<m:Text text="{eventos>CDSPC}" href="{ProductPicUrl}" target="_blank" />
+							<m:Text text="{eventos>CDSPC}" />
 						</template>
 					</Column>
 					<Column width="9rem">
 						<m:Label text="Desc. especie" />
 						<template>
-							<m:Text text="{eventos>DSSPC}" href="{ProductPicUrl}" target="_blank" />
+							<m:Text text="{eventos>DSSPC}" />
 						</template>
 					</Column>
 					<Column  width="9rem" filterProperty="Available">
@@ -194,7 +203,7 @@
 					<Column id="price3" width="9rem" filterProperty="Price" visible="false">
 						<m:Label text="Cant. pesca" />
 						<template>
-							<m:Text text="{eventos>PESACUMOD}" target="_blank" />
+							<m:Text text="{eventos>PESACUMOD}"/>
 						</template>
 					</Column>
 					<Column width="10rem" hAlign="End" filterProperty="Quantity">
@@ -206,13 +215,13 @@
 					<Column width="10rem" hAlign="End" filterProperty="Quantity">
 						<m:Label text="Lado descarga" />
 						<template>
-							<m:Text text="{eventos>CDLDS}" href="{ProductPicUrl}" target="_blank" />
+							<m:Text text="{eventos>CDLDS}"/>
 						</template>
 					</Column>
 					<Column width="15rem" hAlign="End" filterProperty="Quantity">
 						<m:Label text="Fecha/hora inicio" />
 						<template>
-							<m:DateTimePicker design="Bold" value="{eventos>FIDES} {eventos>HIDES}" displayFormat="dd/MM/yyyy HH:mm:ss" required="false" valueStateText="Invalid entry" enabled="false" visible="true" valueFormat="yyyyMMddHHmmss" />
+							<m:DateTimePicker value="{eventos>FIDES} {eventos>HIDES}" displayFormat="dd/MM/yyyy HH:mm:ss" required="false" valueStateText="Invalid entry" enabled="false" visible="true" valueFormat="yyyyMMddHHmmss" />
 						</template>
 					</Column>
 					<Column width="15rem" hAlign="End" filterProperty="Quantity">
@@ -224,7 +233,7 @@
 					<Column width="10rem" hAlign="End" filterProperty="Quantity">
 						<m:Label text="Fecha de producción" />
 						<template>
-							<m:DateTimePicker value="{eventos>FECCONMOV}" enabled="{eventos>/enabledFechProdDesc}" displayFormat="medium" required="false" valueStateText="Invalid entry" visible="true" valueFormat="yyyyMMdd" />
+							<m:DatePicker value="{eventos>FECCONMOV}" enabled="{eventos>/enabledFechProdDesc}" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" visible="true" valueFormat="yyyyMMdd" />
 						</template>
 					</Column>
 				</columns>
