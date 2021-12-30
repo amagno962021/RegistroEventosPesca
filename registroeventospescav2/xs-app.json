@@ -26,6 +26,11 @@
       "target": "$1",
       "service": "html5-apps-repo-rt",
       "authenticationType": "xsuaa"
+    },
+    {
+      "source": "^/GetUserInfo/(.*)",
+      "target": "/$1",
+      "destination": "GetUserInfo"
     }
   ]
 }

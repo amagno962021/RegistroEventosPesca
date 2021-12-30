@@ -89,6 +89,7 @@ resources:
     service: html5-apps-repo
     service-name: com-tasa-registroeventospescav2-html5-srv
     service-plan: app-host
+
 parameters:
   deploy_mode: html5-repo
   enable-parallel-deployments: true

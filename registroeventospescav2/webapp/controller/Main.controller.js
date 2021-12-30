@@ -65,7 +65,11 @@ sap.ui.define([
                 this.cargarMessagePopover();
 
                 //this.filtarMareas("001","0012");//por defecto muestra la primera opcion
-
+                //console.log("FECHA HOY: ", new Date());
+                var modelo = this.getOwnerComponent().getModel('DetalleMarea');
+                var dataModelo = modelo.getData();
+                var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+                oStore.put('InitData', dataModelo);
             },
 
             _onPatternMatched: function () {
@@ -84,7 +88,7 @@ sap.ui.define([
     
                 oMessagePopover = new MessagePopover({
                     items: {
-                        path: 'DetalleMarea>/Utils/MessageItemsDM',
+                        path: 'DetalleMarea>/Utils/MessageItemsMA',
                         template: oMessageTemplate
                     }
                 });
@@ -451,6 +455,7 @@ sap.ui.define([
             },
 
             onEditarCrearMarea: async function (evt) {
+                BusyIndicator.show(0);
                 var selectedItem = evt.getSource().getParent().getBindingContext().getObject();
                 var me = this;
                 if (selectedItem) {
@@ -458,6 +463,7 @@ sap.ui.define([
                     if (selectedItem.ESMAR == "A") {
                         var response = await TasaBackendService.obtenerDetalleMarea(selectedItem.NRMAR, currentUser);
                         if (response) {
+                            BusyIndicator.hide();
                             await this.setDetalleMarea(response);
                         }
                     } else {
@@ -489,22 +495,27 @@ sap.ui.define([
                                     if (valMareaProd) {//se puso la admiracion para pruebas
                                         modelo.setProperty("/Cabecera/INDICADOR", "N");
                                         modelo.setProperty("/DatosGenerales/ESMAR", "A");
+                                        BusyIndicator.hide();
                                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                                         oRouter.navTo("DetalleMarea");
                                         //this.navToExternalComp();
                                     } else {
+                                        BusyIndicator.hide();
                                         MessageBox.error(this.oBundle.getText("EMBANOPROD", [nmbemb]));
                                     }
                                 } else {
+                                    BusyIndicator.hide();
                                     MessageBox.error(this.oBundle.getText("EMBANOPER", [nmbemb]));
                                 }
                             }
                         } else {
+                            BusyIndicator.hide();
                             MessageBox.error(this.oBundle.getText("NORESULTADOEMB"));
                         }
                     }
 
                 } else {
+                    BusyIndicator.hide();
                     console.log("ERROR: Main.onEditarCrearMarea - " + this.oBundle.getText("ERRORITEMSELECCIONADO"));
                 }
 
@@ -517,6 +528,7 @@ sap.ui.define([
             },
 
             setDetalleMarea: async function (data) {
+                BusyIndicator.show(0);
                 var me = this;
                 var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
@@ -601,6 +613,7 @@ sap.ui.define([
 
                 //refrescar modelo y navegar al detalle
                 modeloDetalleMarea.refresh();
+                BusyIndicator.hide();
                 oRouter.navTo("DetalleMarea");
                 //me.navToExternalComp();
             },
@@ -1436,13 +1449,14 @@ sap.ui.define([
 
             ValidacionMareaProduce: async function (codEmba, codPlanta) {
                 var bOk = false;
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 var response1 = await TasaBackendService.validarMareaProd(codEmba, codPlanta);
                 if (response1) {
                     if (response1.p_correcto == "X") {
                         bOk = true;
                     } else {
                         bOk = false;
-                        var mensajes = response1.t_mensajes;
+                        var mensajes = response1.t_mensaje;
                         for (let index = 0; index < mensajes.length; index++) {
                             const element = mensajes[index];
                             var mssg = element.DSMIN;
@@ -1452,12 +1466,13 @@ sap.ui.define([
                                 activeTitle: false,
                                 description: mssg,
                                 subtitle: mssg,
-                                counter: index
+                                counter: (index + 1)
                             };
                             var messageItems = modelo.getProperty("/Utils/MessageItemsMA");
                             messageItems.push(objMessage);
                         }
 
+                        modelo.refresh();
                         var oButton = this.getView().byId("messagePopoverBtnMain");
                         oMessagePopover.getBinding("items").attachChange(function (oEvent) {
                             oMessagePopover.navigateBack();
@@ -1515,7 +1530,7 @@ sap.ui.define([
                 });
             },
 
-            onCallUsuario: function(){
+            onCallUsuario: async function(){
                 /*var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 var dataModelo = modelo.getData();
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
@@ -1528,7 +1543,7 @@ sap.ui.define([
 					}
 				});*/
 
-                $.ajax({
+                /*$.ajax({
                     url: 'https://current-user-qas.cfapps.us10.hana.ondemand.com/getuserinfo',
                     type: 'GET',
                     contentType: 'application/x-www-form-urlencoded',
@@ -1538,8 +1553,81 @@ sap.ui.define([
                     error: function(e){
                         console.log("error: "+e);
                     }
-                  });
+                  });*/
+
+                  //var appPath = appId.replaceAll(".", "");
+                /*var appPath = "03ca268b-52db-4b05-8855-e05a82e96d53.com-tasa-registroeventospescav2.comtasaregistroeventospescav2-1.0.0";
+                var url_data = "/" + appPath + "/GetUserInfo/getuserinfo";*/
+               
+                /*
+                var aData = jQuery.ajax({
+                    method: 'GET',
+                    cache: false,
+                    headers: {
+                        "X-CSRF-Token": "Fetch"
+                    },
+                    async: false,
+                    url: url_data 
+
+                }).then(function successCallback(result, xhr, data) {
+                    var token = data.getResponseHeader("X-CSRF-Token");
+                    var ddd = '';
+
+                }, function errorCallback(xhr, readyState) {
+                    var ddd2 = '';
+                });
+                var gg = 'dfd';*/
+
+                /*
+                const oUserInfo = await this.getUserInfoService();
+                const sUserId = oUserInfo.getId();
+                const sUserEmail = oUserInfo.getEmail();
+                const sUserFirstName = oUserInfo.getFirstName();
+                const sUserLastName = oUserInfo.getLastName();
+                const sUserFullName = oUserInfo.getFullName();
+                const sUser = oUserInfo.getUser();
+
+
+                console.log("oUserInfo: ", oUserInfo);
+                console.log("sUserId: ", sUserId);
+                console.log("sUserEmail: ", sUserEmail);
+                console.log("sUserFirstName: ", sUserFirstName);
+                console.log("sUserLastName: ", sUserLastName);
+                console.log("sUserFullName: ", sUserFullName);
+                console.log("sUser: ", sUser);*/
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'https://current-user-qas.cfapps.us10.hana.ondemand.com/getuserinfo',
+                    dataType: 'json',
+                    beforeSend: function(jqXHR, settings) {
+                       // setting a timeout
+                       console.log("jqXHR: ", jqXHR);
+                       console.log("settings: ", settings);
+                    },
+                    success: function(data) {
+                       console.log(data);
+                    },
+                    error: function(xhr) { // if error occured
+                       
+                    },
+                    complete: function() {
+                       
+                    }
+                 });
+
+                
                 //abrir componente externo
+            },
+
+            getUserInfoService: function() {
+                return new Promise(resolve => sap.ui.require([
+                  "sap/ushell/library"
+                ], oSapUshellLib => {
+                  const oContainer = oSapUshellLib.Container;
+                  const pService = oContainer.getServiceAsync("UserInfo"); // .getService is deprecated!
+                  resolve(pService);
+                }));
             }
 
         });
