@@ -379,9 +379,12 @@ sap.ui.define([
                         if (fechEvento && !verificarTemporada) {
                             this.nextTab = this.previousTab;
                         }
-                    } else if (tipoEvento == "5" && visible.TabHorometro && !(await this.validarStockCombustible())) {
-                        visible.visibleDescarga = true;
-                        this.nextTab = this.previousTab;
+                    } else if (tipoEvento == "5" && visible.TabHorometro) {
+                        let validarStockCombustible = await this.validarStockCombustible();
+                        if(!validarStockCombustible){
+                            visible.visibleDescarga = true;
+                            this.nextTab = this.previousTab;
+                        }
                     }
                 }
 
@@ -610,7 +613,7 @@ sap.ui.define([
                 if (eventoCompar.CDTEV == "1") {
                     indCompar = index;
                     this.ctr._elementAct = indCompar;
-                    this.ctr.obtenerDetalleEvento();
+                    await this.ctr.obtenerDetalleEvento();
                     this.ctr._elementAct = indActual;
                     break;
                 }
@@ -641,13 +644,13 @@ sap.ui.define([
 
                         if (stockCombActual > stockCombMax || stockCombActual < stockCombMin) {
                             var message = this.oBundle.getText("MSSNSINRATIO");
-                            this.ctr.agregarMensajeValid("Error", message);
+                            this.ctr.agregarMensajeValid("Warning", message);
                             return false;
                         }
                     }
                 } else {
                     var message = this.oBundle.getText("MSSNSINRATIO");
-                    this.ctr.agregarMensajeValid("Error", message);
+                    this.ctr.agregarMensajeValid("Warning", message);
                     return true;//deberia devovler false
                 }
 

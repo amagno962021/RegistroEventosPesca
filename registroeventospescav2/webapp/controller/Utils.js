@@ -73,12 +73,17 @@ sap.ui.define([
         },
 
         strDateToDate: function(strDate){
+            let p_fech = strDate + "";
             var date = null;
-            if(strDate){ // dd/MM/yyyy
-                var anio = parseInt(strDate.split("/")[2]);
-                var mes = parseInt(strDate.split("/")[1]) - 1;
-                var dia = parseInt(strDate.split("/")[0]);
-                date = new Date(anio, mes, dia);
+            if(p_fech.length == 8){
+                date = p_fech;
+            }else{
+                if(strDate){ // dd/MM/yyyy
+                    var anio = parseInt(strDate.split("/")[2]);
+                    var mes = parseInt(strDate.split("/")[1]) - 1;
+                    var dia = parseInt(strDate.split("/")[0]);
+                    date = new Date(anio, mes, dia);
+                }
             }
             return date;
         },
@@ -89,8 +94,15 @@ sap.ui.define([
                 var anio = parseInt(strDate.split("/")[2]);
                 var mes = parseInt(strDate.split("/")[1]) - 1;
                 var dia = parseInt(strDate.split("/")[0]);
-                var hour = parseInt(strHour.split(":")[0]);
-                var minute = parseInt(strHour.split(":")[1]);
+                if(strHour.length > 6){
+                    var hour = parseInt(strHour.split(":")[0]);
+                    var minute = parseInt(strHour.split(":")[1]);
+                }else{
+                    let c_hora = strHour + "";
+                    var hour = c_hora.substr(0,2);
+                    var minute = c_hora.substr(2,2);
+                }
+                
                 date = new Date(anio, mes, dia, hour, minute);
             }
             return date;
@@ -148,15 +160,21 @@ sap.ui.define([
         },
 
         strDateToSapDate: function(date){
+            let p_fecha = date + "";
             var newDate = "";
-            if(date){
-                var dateSplit = date.split("/");
-                var dia = dateSplit[0];
-                var mes = dateSplit[1];
-                var anio = dateSplit[2];
-                newDate = anio + mes + dia + "";
+            if(p_fecha.length > 8){
+                if(date){
+                    var dateSplit = date.split("/");
+                    var dia = dateSplit[0];
+                    var mes = dateSplit[1];
+                    var anio = dateSplit[2];
+                    newDate = anio + mes + dia + "";
+                }
+            }else{
+                newDate = p_fecha;
             }
             return newDate;
+            
         },
 
         strHourToSapHo: function(hour){

@@ -835,6 +835,7 @@ sap.ui.define([
             if (this.buscarValorFijo(textValidaciones.EVEVISTABPEDSC, this._tipoEvento)) {
                 this.getView().byId("idPescaDesc").setVisible(true);
                 this.getView().byId("ext_pesc_desc").setVisible(true);
+                this.getView().byId("ext_pesc_desc_chd").setVisible(true);
 
                 if (this._listaEventos[this._elementAct].INPRP == textValidaciones.INDIC_PROPIEDAD_TERCEROS) { //Descarga en planta tercera
                     this.getView().byId("table_pesc_desc_especie").setVisible(true);
@@ -2026,6 +2027,7 @@ sap.ui.define([
             this.getView().byId("fe_observacioAdic").setVisible(false);
             this.getView().byId("clm_moda_pescDecl").setVisible(false);
             this.getView().byId("ext_pesc_desc").setVisible(false);
+            this.getView().byId("ext_pesc_desc_chd").setVisible(false);
             this.getView().byId("table_pesc_desc_especie").setVisible(false);
             this.getView().byId("table_pesc_desc_CHD").setVisible(false);
             this.getView().byId("table_pesc_desc_ticket").setVisible(false);

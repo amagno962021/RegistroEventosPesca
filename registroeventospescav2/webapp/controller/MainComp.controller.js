@@ -440,11 +440,11 @@ sap.ui.define([
             for (let index = 0; index < bodegas.length; index++) {
                 const element = bodegas[index];
                 var listBodegas = {
-                    INDTR: element.INDTR,
+                    INDTR: element.INDTR ? element.INDTR : "N",
                     NRMAR: elementParam.NRMAR,
                     NREVN: elementParam.NREVN,
                     CDBOD: element.CDBOD,
-                    CNPCM: element.CNPCM
+                    CNPCM: element.CantPesca
                 };
                 lista.push(listBodegas);
             }
@@ -460,7 +460,7 @@ sap.ui.define([
             for (let index = 0; index < pescaDeclarada.length; index++) {
                 const element = pescaDeclarada[index];
                 var listPescaDeclarada = {
-                    INDTR: element.INDTR,
+                    INDTR: element.INDTR ? element.INDTR : "N",
                     //NRMAR: ListaEventos[elementSel].NRMAR,
                     NRMAR: elementParam.NRMAR,
                     //NREVN: ListaEventos[elementSel].NREVN,
