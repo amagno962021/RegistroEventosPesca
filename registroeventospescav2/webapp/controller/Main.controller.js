@@ -434,8 +434,8 @@ sap.ui.define([
                     MessageBox.information(this.oBundle.getText("NEWMAREAMISSFIELD"));
                 }*/
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-                var codemba = modelo.getProperty("/DatosGenerales/CDPTA");
-                var codPlanta = modelo.getProperty("/DatosGenerales/CDEMB");
+                var codemba = modelo.getProperty("/DatosGenerales/CDEMB");
+                var codPlanta = modelo.getProperty("/DatosGenerales/CDPTA");
                 var nmbemb = modelo.getProperty("/DatosGenerales/NMEMB");
                 var validaBodCert = await this.validarBodegaCert(codemba, codPlanta);
                 if (validaBodCert) { //se puso la admiracion para pruebas
@@ -1438,7 +1438,8 @@ sap.ui.define([
 
             validarBodegaCert: async function (codEmba, codPlanta) {
                 var bOk = false;
-                var response = await TasaBackendService.validarBodegaCert(codEmba, codPlanta);
+                var usuario = this.getCurrentUser();
+                var response = await TasaBackendService.validarBodegaCert(codEmba, codPlanta, usuario);
                 if (response) {
                     bOk = response.estado;
                 } else {
@@ -1556,10 +1557,10 @@ sap.ui.define([
                   });*/
 
                   //var appPath = appId.replaceAll(".", "");
-                /*var appPath = "03ca268b-52db-4b05-8855-e05a82e96d53.com-tasa-registroeventospescav2.comtasaregistroeventospescav2-1.0.0";
-                var url_data = "/" + appPath + "/GetUserInfo/getuserinfo";*/
-               
-                /*
+                var appPath = "03ca268b-52db-4b05-8855-e05a82e96d53.com-tasa-registroeventospescav2.comtasaregistroeventospescav2-1.0.0";
+                //var url_data = "./GetUserInfo/getuserinfo";
+                var url_data = "./userinfodetails/getuserinfo";
+                
                 var aData = jQuery.ajax({
                     method: 'GET',
                     cache: false,
@@ -1576,7 +1577,7 @@ sap.ui.define([
                 }, function errorCallback(xhr, readyState) {
                     var ddd2 = '';
                 });
-                var gg = 'dfd';*/
+                var gg = 'dfd';
 
                 /*
                 const oUserInfo = await this.getUserInfoService();
@@ -1596,6 +1597,7 @@ sap.ui.define([
                 console.log("sUserFullName: ", sUserFullName);
                 console.log("sUser: ", sUser);*/
 
+                /*
                 $.ajax({
                     type: 'GET',
                     url: 'https://current-user-qas.cfapps.us10.hana.ondemand.com/getuserinfo',
@@ -1614,7 +1616,7 @@ sap.ui.define([
                     complete: function() {
                        
                     }
-                 });
+                 });*/
 
                 
                 //abrir componente externo

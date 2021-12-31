@@ -28,9 +28,10 @@
       "authenticationType": "xsuaa"
     },
     {
-      "source": "^/GetUserInfo/(.*)",
+      "source": "^/userinfodetails/(.*)",
       "target": "/$1",
-      "destination": "GetUserInfo"
+      "destination": "userinfodetails",
+      "authenticationType": "xsuaa"
     }
   ]
 }
