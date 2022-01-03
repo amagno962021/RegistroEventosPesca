@@ -317,18 +317,41 @@ sap.ui.define([
 				
 					Pesca.Observacion =obsvEspecie;
 				}
+                if(motivoMarea == "2"){
+                    this.ctr._listaEventos[this.ctr._elementAct].ListaPescaDeclarada.push({
+                        CDSPC: especie,
+                        DSSPC: sap.ui.getCore().byId("cb_especies_espec").getSelectedItem().getText(),
+                        PorcPesca: "",
+                        CNPCM: cantPesca,
+                        DSUMD: this.ctr._ConfiguracionEvento.calaDescUMPescaDeclDesc,
+                        UnidMedida: this.ctr._ConfiguracionEvento.calaDescUMPescaDecl,
+                        ZMODA: "",
+                        OBSER: Pesca.Observacion,
+                        Indicador:"N"
+                     });
 
-				this.ctr._listaEventos[this.ctr._elementAct].ListaPescaDeclarada.push({
-                    CDSPC: especie,
-                    DSSPC: sap.ui.getCore().byId("cb_especies_espec").getSelectedItem().getText(),
-                    PorcPesca: "",
-                    CNPCM: "",
-                    DSUMD: this.ctr._ConfiguracionEvento.calaDescUMPescaDeclDesc,
-                    UnidMedida: this.ctr._ConfiguracionEvento.calaDescUMPescaDecl,
-                    ZMODA: "",
-                    OBSER: Pesca.Observacion,
-                    Indicador:"N"
-                 });
+                     let lista_PescaDecl = this.ctr._listaEventos[this.ctr._elementAct].ListaPescaDeclarada;
+                     let cantTotPescDcl = Number(0);
+                     for (let index = 0; index < lista_PescaDecl.length; index++) {
+                         const element = lista_PescaDecl[index];
+                         cantTotPescDcl = cantTotPescDcl + Number(element.CNPCM);
+                     }
+                     this.ctr._listaEventos[this.ctr._elementAct].CantTotalPescDecla = cantTotPescDcl;
+
+                }else{
+                    this.ctr._listaEventos[this.ctr._elementAct].ListaPescaDeclarada.push({
+                        CDSPC: especie,
+                        DSSPC: sap.ui.getCore().byId("cb_especies_espec").getSelectedItem().getText(),
+                        PorcPesca: "",
+                        CNPCM: "",
+                        DSUMD: this.ctr._ConfiguracionEvento.calaDescUMPescaDeclDesc,
+                        UnidMedida: this.ctr._ConfiguracionEvento.calaDescUMPescaDecl,
+                        ZMODA: "",
+                        OBSER: Pesca.Observacion,
+                        Indicador:"N"
+                     });
+                }
+				
                  
 
                  this.ctr._listaEventos[this.ctr._elementAct].ListaBiometria.push({
@@ -345,7 +368,8 @@ sap.ui.define([
         _containsKey :function(Lista_Busq,cod_especie){
             let especieEncontrada = false;
             for (let index = 0; index < Lista_Busq.length; index++) {
-                if(especiePermitida[index].CodEspecie == cod_especie){
+                let codEspe = Lista_Busq[index].CodEspecie ? Lista_Busq[index].CodEspecie : Lista_Busq[index].CDSPC;
+                if(codEspe == cod_especie){
                     especieEncontrada = true;
                 }
             }

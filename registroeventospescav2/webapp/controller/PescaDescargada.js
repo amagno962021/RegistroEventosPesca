@@ -50,7 +50,7 @@ sap.ui.define([
             this._controler = o_this;
             this._TipoPesca = [];
             this._Estado = [];
-            this._modelosPescaDescargada = {"Estado":"","NomPlanta":"","CodPlanta":"","NomEmb":"","Matricula":"","CodEmb":"","TipoPescaSel":"","FechaInicio" : "","ListaDescargas":[], "TipoPesca" : [], "ListaEstado":[]}
+            this._modelosPescaDescargada = {"Estado":"","NomPlanta":"","CodPlanta":"","NomEmb":"","Matricula":"","CodEmb":"","TipoPescaSel":"","FechaInicio" : "", "HoraInicio" : "","ListaDescargas":[], "TipoPesca" : [], "ListaEstado":[]}
 
             var Popup_Descarga_Modelo = new JSONModel();
             this._oView.setModel(Popup_Descarga_Modelo, "popup_descarga");
@@ -458,9 +458,10 @@ sap.ui.define([
                 this._oView.getModel("popup_descarga").setProperty("/CodEmb", this._controler._FormMarea.CDEMB);
                 this._oView.getModel("popup_descarga").setProperty("/Matricula", this._controler._FormMarea.MREMB);
                 this._oView.getModel("popup_descarga").setProperty("/NomEmb", this._controler._FormMarea.NMEMB);
-                this._oView.getModel("popup_descarga").setProperty("/CodPlanta", this._controler._listaEventos[this._controler._elementAct].WERKS);
-                this._oView.getModel("popup_descarga").setProperty("/NomPlanta", this._controler._listaEventos[this._controler._elementAct].DESCR);
+                this._oView.getModel("popup_descarga").setProperty("/CodPlanta", "FP12");
+                this._oView.getModel("popup_descarga").setProperty("/NomPlanta", "TASA CHD");
                 this._oView.getModel("popup_descarga").setProperty("/Estado", "N");
+                this._oView.getModel("popup_descarga").setProperty("/HoraInicio", this._controler._listaEventos[this._controler._elementAct].HIEVN);
 
             }else if(this._controler._motivoMarea == "2"){
                 this._oView.getModel("popup_descarga").setProperty("/TipoPescaSel", "I");
@@ -470,6 +471,7 @@ sap.ui.define([
                 this._oView.getModel("popup_descarga").setProperty("/NomEmb", this._controler._FormMarea.NMEMB);
                 this._oView.getModel("popup_descarga").setProperty("/CodPlanta", this._controler._listaEventos[this._controler._elementAct].WERKS);
                 this._oView.getModel("popup_descarga").setProperty("/NomPlanta", this._controler._listaEventos[this._controler._elementAct].DESCR);
+                this._oView.getModel("popup_descarga").setProperty("/HoraInicio", this._controler._listaEventos[this._controler._elementAct].HIEVN);
                 this._oView.getModel("popup_descarga").setProperty("/Estado", "N");
                 
 
@@ -507,6 +509,7 @@ sap.ui.define([
             let cod_planta = sap.ui.getCore().byId("pbd_cod_planta").getValue();
             let nom_planta = sap.ui.getCore().byId("pbd_nom_planta").getValue();
             let fecha_inicio = Utils.strDateToSapDate(sap.ui.getCore().byId("pbd_fecha_inicio").getValue());
+            let hora_inicio = Utils.strHourToSapHo(sap.ui.getCore().byId("pbd_hora_inicio").getValue());
             let tipo_Pesca = sap.ui.getCore().byId("pbd_tipo_pesca").getSelectedKey();
             let estado = sap.ui.getCore().byId("pbd_estado").getSelectedKey();
 
@@ -605,7 +608,19 @@ sap.ui.define([
             }
             console.log(this._controler._nroEvento);
             let s = await this.cargar_servicios_pescaDesc(matricula, nom_embarcacion, cod_planta, nom_planta, fecha_inicio, this._controler.getCurrentUser(),nro_descarga);
-            this._oView.getModel("popup_descarga").setProperty("/ListaDescargas", JSON.parse(this._DataPopup[0]).data);
+            let listaDes_RFC = JSON.parse(this._DataPopup[0]).data;
+            let lista_popup = []
+            for (let index = 0; index < listaDes_RFC.length; index++) {
+                const element = listaDes_RFC[index];
+                let p_fecha_inicio = sap.ui.getCore().byId("pbd_fecha_inicio").getValue();
+                let p_hora_inicio = sap.ui.getCore().byId("pbd_hora_inicio").getValue();
+                let p_fecha_hora = Utils.strDateHourToDate(p_fecha_inicio,p_hora_inicio);
+                let s_fecha_hora = Utils.strDateHourToDate(element.FIDES,element.HIDES);
+                if(s_fecha_hora>p_fecha_hora){
+                    lista_popup.push(element);
+                }
+            }
+            this._oView.getModel("popup_descarga").setProperty("/ListaDescargas", lista_popup);
             this._oView.getModel("popup_descarga").updateBindings(true);
 
 

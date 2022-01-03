@@ -1663,7 +1663,7 @@ sap.ui.define([
                 this.getView().getModel("eventos").updateBindings(true);
             }
         },
-        distribuirDatosDescargaCHD: function () {
+        distribuirDatosDescargaCHD: function (datos) {
             let data = this._listaEventos[this._elementAct].ListaPescaDescargada;
             if (data.length > 0) {
                 let limpiar = false;
@@ -1673,6 +1673,7 @@ sap.ui.define([
                 let eventosNode = this._listaEventos;
                 let fechaIniDescarga = datos.FIDES;
                 let indActual = this._elementAct;
+                let pescaDescElement = data[0];
 
                 limpiar = !this.Dat_General.verificarTemporada(motivoMarea, fechaIniDescarga);
 
@@ -1711,7 +1712,7 @@ sap.ui.define([
                         pescaDescElement.CDLDS = datos.CDLDS;
                         //pescaDescElement.setDescLadoDescarga(manageSimpleTypes.getText(attInfoLadoDescarga, datos[9]));
                         pescaDescElement.CNPDS = datos.CNPDS;
-                        pescaDescElement.PESACUMOD = datos.PESACUMOD;
+                        pescaDescElement.PESACUMOD = pescaDescElement.CNPDS;
                         pescaDescElement.BckCantPescaModificada = pescaDescElement.PESACUMOD;
                         pescaDescElement.FIDES = fechaIniDescarga;	//posicion 15				
                         pescaDescElement.HIDES = datos.HIDES;
@@ -1747,7 +1748,12 @@ sap.ui.define([
                     eventosNode[this._elementAct].CDSPC = "";
                     data = [];
                 }
+
+                //Datos Validacion
+                pescaDescElement.CantPescaDescargada = pescaDescElement.CNPDS;
+                //----------------------------------------------
             }
+
             this.getView().getModel("eventos").updateBindings(true);
         },
         validarErroresDescarga: async function (nro_desc) {

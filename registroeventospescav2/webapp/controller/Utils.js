@@ -94,13 +94,14 @@ sap.ui.define([
                 var anio = parseInt(strDate.split("/")[2]);
                 var mes = parseInt(strDate.split("/")[1]) - 1;
                 var dia = parseInt(strDate.split("/")[0]);
-                if(strHour.length > 6){
-                    var hour = parseInt(strHour.split(":")[0]);
-                    var minute = parseInt(strHour.split(":")[1]);
-                }else{
+                if(strHour.length == 6){ 
                     let c_hora = strHour + "";
                     var hour = c_hora.substr(0,2);
                     var minute = c_hora.substr(2,2);
+                    
+                }else{
+                    var hour = parseInt(strHour.split(":")[0]);
+                    var minute = parseInt(strHour.split(":")[1]);
                 }
                 
                 date = new Date(anio, mes, dia, hour, minute);
@@ -180,7 +181,10 @@ sap.ui.define([
         strHourToSapHo: function(hour){
             let p_hora = hour + ""
             var newHour = "";
-            if(p_hora.length > 6){
+            if(p_hora.length == 6){
+                newHour = p_hora;
+                
+            }else{
                 if(hour){
                     var dateSplit = hour.split(":");
                     var hora = dateSplit[0];
@@ -188,8 +192,6 @@ sap.ui.define([
                     var sec = dateSplit[2] ? dateSplit[2] : "00";
                     newHour = hora + minuto + sec + "";
                 }
-            }else{
-                newHour = p_hora;
             }
             return newHour;
         },

@@ -157,9 +157,9 @@ sap.ui.define([
             var cantTotal = 0;
             cantTotal = this.obtenerCantTotalDeclMarea(0);
 
-            if(indProp == "T" && (cantTotal == null || (cantTotal != null))){
+            if(indProp == "T" && (cantTotal == null || cantTotal == 0)){
                 var mssg = this.oBundle.getText("CANTPESCANOCERO");
-                MessageBox.error(mssg);
+                this.ctr.agregarMensajeValid("Error", mssg);
                 bOk = false;
             }
 
