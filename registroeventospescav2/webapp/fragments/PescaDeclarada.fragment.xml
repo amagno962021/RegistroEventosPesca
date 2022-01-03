@@ -47,7 +47,7 @@
 						filterProperty="Available">
 						<m:Label text="Pesca declarada" />
 						<template>
-							<m:Input id="prueba" value="{eventos>CNPCM}" type="text" showValueHelp="false" enabled="{eventos>/enabledCantPescDeclarada}" visible="true"/>
+							<m:Input id="prueba" value="{eventos>CNPCM}" type="Number" showValueHelp="false" enabled="{eventos>/enabledCantPescDeclarada}" visible="true"/>
 						</template>
 					</Column>
 					<Column
