@@ -133,8 +133,96 @@ sap.ui.define([
             var guardarDatosMarea = await this.guardarDatosMarea();
             if (guardarDatosMarea) {
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-                var mensajes = modelo.getProperty("/Utils/Mensajes");
-                
+                var nodMensajes = modelo.getProperty("/Utils/Mensajes");
+                var messageItems = modelo.getProperty("/Utils/MessageItemsDM");
+                var nuevo = true;
+                var mareaReabierta = true;
+                var mensaje = this.getResourceBundle().getText("SUCCESSSAVE");
+                var marea = modelo.getProperty("/Cabecera/NRMAR");
+                var success = false;
+                var warning = false;
+                var error = false;
+
+                for (let index = 0; index < nodMensajes.length; index++) {
+                    const element = nodMensajes[index];
+                    var type = element.CMIN;
+                    var desc = element.DSMIN;
+
+                    if (type == "E"){
+                        error = true;
+                        var objMessage = {
+                            type: 'Error',
+                            title: 'Mensaje de Error',
+                            activeTitle: false,
+                            description: desc,
+                            subtitle: desc,
+                            counter: index
+                        };
+                        messageItems.push(objMessage);
+                    }else if (type == "W"){
+                        warning = true;
+                        var objMessage = {
+                            type: 'Warning',
+                            title: 'Mensaje de Advertencia',
+                            activeTitle: false,
+                            description: desc,
+                            subtitle: desc,
+                            counter: index
+                        };
+                        messageItems.push(objMessage);
+                    }else if(type == "S"){
+                        success = true;
+                    }else if(nuevo && type == "C"){
+                        success = true;
+                        marea = desc;
+                    }
+                }
+
+                if(nuevo){
+                    modelo.setProperty("/Cabecera/NRMAR", marea);
+                    mensaje += " " + this.getResourceBundle().getText("NROMAREAGEN") + " " + modelo.getProperty("/Cabecera/NRMAR");
+                }
+
+                if(success){
+                    var objMessage = {
+                        type: 'Success',
+                        title: 'Mensaje de Exito',
+                        activeTitle: false,
+                        description: mensaje,
+                        subtitle: mensaje,
+                        counter: 1
+                    };
+                    messageItems.push(objMessage);
+                }else{
+                    var objMessage = {
+                        type: 'Warning',
+                        title: 'Mensaje de Advertencia',
+                        activeTitle: false,
+                        description: mensaje,
+                        subtitle: mensaje,
+                        counter: 1
+                    };
+                    messageItems.push(objMessage);
+                }
+
+                var oButton = this.getView().byId("messagePopoverBtn");
+                oMessagePopover.getBinding("items").attachChange(function (oEvent) {
+                    oMessagePopover.navigateBack();
+                    oButton.setType(this.buttonTypeFormatter("DM"));
+                    oButton.setIcon(this.buttonIconFormatter("DM"));
+                    oButton.setText(this.highestSeverityMessages("DM"));
+                }.bind(this));
+
+                setTimeout(function () {
+                    oMessagePopover.openBy(oButton);
+                    oMessagePopover.navigateBack();
+                    oButton.setType(this.buttonTypeFormatter("DM"));
+                    oButton.setIcon(this.buttonIconFormatter("DM"));
+                    oButton.setText(this.highestSeverityMessages("DM"));
+                }.bind(this), 100);
+
+                await this.enviarCorreosSiniestro();
+
             }
         },
 
@@ -301,6 +389,9 @@ sap.ui.define([
         },
         informarHorometroAveriado : function (){
 
+        },
+        enviarCorreosSiniestro: function(){
+            
         },
 
         obtenerSiniestros: function (element) {
@@ -748,6 +839,10 @@ sap.ui.define([
 
                 setTimeout(function () {
                     oMessagePopover.openBy(oButton);
+                    oMessagePopover.navigateBack();
+                    oButton.setType(this.buttonTypeFormatter("DM"));
+                    oButton.setIcon(this.buttonIconFormatter("DM"));
+                    oButton.setText(this.highestSeverityMessages("DM"));
                 }.bind(this), 100);
 
                 BusyIndicator.hide();
