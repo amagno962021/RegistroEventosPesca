@@ -132,7 +132,9 @@ sap.ui.define([
         guardarMarea: async function () {
             var guardarDatosMarea = await this.guardarDatosMarea();
             if (guardarDatosMarea) {
-
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var mensajes = modelo.getProperty("/Utils/Mensajes");
+                
             }
         },
 
@@ -281,6 +283,10 @@ sap.ui.define([
             console.log("GUARDAR MAREA: ", marea);
             try {
                 var guardar = await TasaBackendService.crearActualizarMarea(marea);
+                if(guardar.length > 0){
+                    modelo.setProperty("/Utils/CrearMarea", guardar);
+                    bOk = true;
+                }
             } catch (error) {
                 bOk = false;
                 let msg = this.oBundle.getText("ERRORRFCSAVE");
@@ -292,7 +298,6 @@ sap.ui.define([
                 this.informarHorometroAveriado();
             }
             
-
         },
         informarHorometroAveriado : function (){
 

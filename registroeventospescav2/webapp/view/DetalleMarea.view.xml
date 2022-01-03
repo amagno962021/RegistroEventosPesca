@@ -55,7 +55,7 @@
 													<Label text="Armador Comercial" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 												</form:label>
 												<form:fields>
-													<Input value="{DetalleMarea>/DatosGenerales/CDEMP}" description="{DetalleMarea>/DatosGenerales/NAME1}" enabled="false" 
+													<Input value="{DetalleMarea>/DatosGenerales/CDEMP}" description="{DetalleMarea>/DatosGenerales/NAME1}" enabled="true" 
 																width="60%" valueStateText="Invalid entry"/>
 												</form:fields>
 											</form:FormElement>

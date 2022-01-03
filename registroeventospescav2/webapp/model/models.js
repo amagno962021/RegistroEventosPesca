@@ -267,7 +267,8 @@ sap.ui.define([
                     MessageItemsEP: [],
                     MessageItemsMA: [],
                     TxtBtnSuministro: "",
-                    TxtNuevaVentaRes: ""
+                    TxtNuevaVentaRes: "",
+                    CrearMarea: []
                 },
                 InputsDescargas :{
                     CentPlanta : "",
