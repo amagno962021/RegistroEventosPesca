@@ -629,7 +629,6 @@ sap.ui.define([
             modelo.setProperty("/Config/visibleBtnSiguiente", false);
             var indicador = modelo.getProperty("/Cabecera/INDICADOR");
             if (indicador == "N") {
-                modelo.setProperty("/Config/readOnlyEstaMar", true);
                 modelo.setProperty("/Config/readOnlyMotMarea", true);
                 modelo.setProperty("/Config/visibleTabReserva", false);
                 modelo.setProperty("/Config/visibleTabSepComb", false);
@@ -638,11 +637,12 @@ sap.ui.define([
                 modelo.setProperty("/Config/visibleBtnSiguiente", true);
             } else {
                 modelo.setProperty("/Config/visibleBtnGuardar", true);
-                var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
-                this.validarMotivo(motivoMarea);
                 modelo.setProperty("/Config/readOnlyMotMarea", false);
                 await this.validaDescargas();
             }
+
+            var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
+            this.validarMotivo(motivoMarea);
 
         },
 
@@ -1284,7 +1284,13 @@ sap.ui.define([
             this.getNuevaResVenDialog().close();
         },
 
-
+        onNext: function(){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            modelo.setProperty("/Utils/TipoEvento", "1");
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("DetalleEvento");
+            this.getNuevoEvento().close();
+        },
 
         onCallUsuario: function () {
 

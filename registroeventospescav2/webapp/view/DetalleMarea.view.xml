@@ -175,7 +175,7 @@
 												<form:fields>
 													<HBox>
 														<DatePicker value="{DetalleMarea>/DatosGenerales/FEARR}" width="90%"  valueStateText="Invalid entry" 
-																 	valueFormat="dd/MM/yyyy HH:mm" displayFormat="dd/MM/yyyy HH:mm"/>
+																 	valueFormat="dd/MM/yyyy" displayFormat="dd/MM/yyyy"/>
 														<TimePicker id="TP2" value="{DetalleMarea>/DatosGenerales/HEARR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%"/>
 													</HBox>
 												</form:fields>
@@ -862,7 +862,7 @@
 					<Button text="Guardar" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleBtnGuardar}"
 								iconDensityAware="false" press="onSave"/>
 					<Button text="Siguiente" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleBtnSiguiente}"
-								iconDensityAware="false"/>
+								iconDensityAware="false" press="onNext"/>
 					<Button text="Crear" type="Accept" icon="sap-icon://create" iconFirst="true" width="auto" enabled="true" visible="false"
 								iconDensityAware="false"/>
 					<Button text="BOTON DE PRUEBAS" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="false"
