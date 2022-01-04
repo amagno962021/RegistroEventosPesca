@@ -222,8 +222,6 @@ sap.ui.define([
                 bOk = false;
             }
 
-            var capaTanBarca = this.getCapaTanEmba(detalleMarea.CDEMB);
-            var LectUltHoro = await this.obtenerLectUltHoro();
             if (indCompar > -1 && eventoActual.FIEVN != null && eventoCompar.FIEVN != null) {
                 var nodoHoroActual = eventoActual.ListaHorometros;
                 var nodoHoroCompar = eventoCompar.ListaHorometros;
@@ -288,7 +286,8 @@ sap.ui.define([
                         }
                     }
                 }
-            } else if (LectUltHoro) {
+            } else if ( (await this.obtenerLectUltHoro())) {
+                var capaTanBarca = this.getCapaTanEmba(detalleMarea.CDEMB);
                 var eventoCLH = mod.getProperty("/MareaCLH/EventoCLH");
                 var nodoHoroActual = eventoActual.ListaHorometros;
                 var nodoHoroCompar = eventoCLH.HorometrosCLH;

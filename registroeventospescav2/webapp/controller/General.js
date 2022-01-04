@@ -430,9 +430,7 @@ sap.ui.define([
                     this.nextTab = "Pesca descargada";
                 }
 
-                var validarLecturaHorometros = this.ctr.Dat_Horometro.validarLecturaHorometros();
-                var validarHorometrosEvento = await this.ctr.Dat_Horometro.validarHorometrosEvento();
-                if (this.previousTab == "Horometro" && (!validarLecturaHorometros || !validarHorometrosEvento)) {
+                if (this.previousTab == "Horometro" && (!(this.ctr.Dat_Horometro.validarLecturaHorometros()) || !(await this.ctr.Dat_Horometro.validarHorometrosEvento()))) {
                     this.nextTab = this.previousTab;
                 }
 
