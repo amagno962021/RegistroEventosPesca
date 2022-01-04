@@ -965,6 +965,20 @@ sap.ui.define([
             return data;
         },
 
+        anularMarea: async function(marea){
+            var uri = UtilService.getHostService() + "/api/embarcacion/anularMarea/";
+            var sBody = UtilService.getConsultaGeneral();
+            sBody.p_mare = marea;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.anularMarea: ", error);
+                return null
+            });
+            return data;
+        },
+
         test: function () {
             var latiCalaD = "";
             var latiCalaM = "";
