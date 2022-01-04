@@ -473,6 +473,9 @@ sap.ui.define([
         },
 
         SaveAll:async function () {
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            mod.setProperty("/Utils/MessageItemsEP", []);
+            this.resetearValidaciones();
             await this.validarDatos();
 
         },
@@ -1829,7 +1832,7 @@ sap.ui.define([
                             horaEventoAnt = nodoEventos[indiceAnt].HIEVN;
                         }
 
-                        fechHorEventoAnt = new Date(fechaEventoAnt + " " + horaEventoAnt);			
+                        fechHorEventoAnt = Utils.strDateHourToDate(fechaEventoAnt,horaEventoAnt);	
 
 				        let sFechHorEventoAnt = Utils.strDateHourToDate(fechaEventoAnt, horaEventoAnt);
 
@@ -2060,7 +2063,22 @@ sap.ui.define([
         },
 
         getCurrentUser: function () {
+            // const oUserInfo = await this.getUserInfoService();
+            // const sUserEmail = oUserInfo.getEmail(); //fgarcia@tasa.com.pe
+            // var usuario = sUserEmail.split("@")[0].toUpperCase();
+            // return usuario;
+
             return "FGARCIA";
+        },
+
+        getUserInfoService: function() {
+            return new Promise(resolve => sap.ui.require([
+              "sap/ushell/library"
+            ], oSapUshellLib => {
+              const oContainer = oSapUshellLib.Container;
+              const pService = oContainer.getServiceAsync("UserInfo"); // .getService is deprecated!
+              resolve(pService);
+            }));
         },
 
         //----------------------------------------------------------------------  METODOS CREAR EVENTO ------------------------------------------------------------------
@@ -2546,33 +2564,43 @@ sap.ui.define([
                     break;
                 case 'CDPDG':
                     NmbCampo = "Punto de descarga";
+                    this.byId("pd_puntodesc").setValueState( sap.ui.core.ValueState.Error);
                     break;
                 case 'FECCONMOV':
                     NmbCampo = "Fecha de Produccion";
+                    this.byId("pd_chi_fechProd").setValueState( sap.ui.core.ValueState.Error);
+                    this.byId("pd_chd_fechProd").setValueState( sap.ui.core.ValueState.Error);
                     break;
                 case 'Especie':
                     NmbCampo = "Especie";
                     break;
                 case 'FIEVN':
                     NmbCampo = "Fecha inicio de evento";
+                    this.byId("dtf_fechaIniEnv").setValueState( sap.ui.core.ValueState.Error);
                     break;
                 case 'HIEVN':
                     NmbCampo = "Hora inicio de evento";
+                    this.byId("dtf_horaIniEnv").setValueState( sap.ui.core.ValueState.Error);
                     break;
                 case 'ESOPE':
+                    this.byId("cmb_estaOperacion").setValueState( sap.ui.core.ValueState.Error);
                     NmbCampo = "Estado de operación";
                     break;
                 case 'STCMB':
                     NmbCampo = "Stock de combustible";
+                    this.byId("i_stockCombustible").setValueState( sap.ui.core.ValueState.Error);
                     break;
                 case 'CDZPC':
                     NmbCampo = "Zona de pesca";
+                    this.byId("cb_ZonaPesca").setValueState( sap.ui.core.ValueState.Error);
                     break;
                 case 'FFEVN':
                     NmbCampo = "Fecha fin de evento";
+                    this.byId("dtf_fechaFinEnv").setValueState( sap.ui.core.ValueState.Error);
                     break;
                 case 'HFEVN':
                     NmbCampo = "Hora fin de evento";
+                    this.byId("dtf_horaFinEnv").setValueState( sap.ui.core.ValueState.Error);
                     break;
                 case 'CDPTO':
                     NmbCampo = "Puerto";
@@ -2585,17 +2613,36 @@ sap.ui.define([
                     break;
                 case 'FechProduccion':
                     NmbCampo = "Fecha produccion";
+                    this.byId("dtf_FechaProduccion").setValueState( sap.ui.core.ValueState.Error);
                     break;
                 case 'CDMLM':
                     NmbCampo = "Motivo de limitación";
+                    this.byId("cmb_motivoLim").setValueState( sap.ui.core.ValueState.Error);
                     break;
                 case 'CDMNP':
                     NmbCampo = "Motivo de no pesca";
+                    this.byId("cb_motNoPesca").setValueState( sap.ui.core.ValueState.Error);
                     break;
                 default:
                     NmbCampo = campo;
             }
             return NmbCampo;
+        },
+        resetearValidaciones : function (){
+            this.byId("cmb_estaOperacion").setValueState( sap.ui.core.ValueState.None);
+            this.byId("i_stockCombustible").setValueState( sap.ui.core.ValueState.None);
+            this.byId("ip_sistema_frio").setValueState( sap.ui.core.ValueState.None);
+            this.byId("pd_puntodesc").setValueState( sap.ui.core.ValueState.None);
+            this.byId("pd_chi_fechProd").setValueState( sap.ui.core.ValueState.None);
+            this.byId("pd_chd_fechProd").setValueState( sap.ui.core.ValueState.None);
+            this.byId("dtf_fechaIniEnv").setValueState( sap.ui.core.ValueState.None);
+            this.byId("dtf_horaIniEnv").setValueState( sap.ui.core.ValueState.None);
+            this.byId("cb_ZonaPesca").setValueState( sap.ui.core.ValueState.None);
+            this.byId("dtf_fechaFinEnv").setValueState( sap.ui.core.ValueState.None);
+            this.byId("dtf_horaFinEnv").setValueState( sap.ui.core.ValueState.None);
+            this.byId("dtf_FechaProduccion").setValueState( sap.ui.core.ValueState.None);
+            this.byId("cmb_motivoLim").setValueState( sap.ui.core.ValueState.None);
+            this.byId("cb_motNoPesca").setValueState( sap.ui.core.ValueState.None);
         }   
 
     });
