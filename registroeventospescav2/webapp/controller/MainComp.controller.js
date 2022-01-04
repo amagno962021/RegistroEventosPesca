@@ -156,6 +156,7 @@ sap.ui.define([
                 var warning = false;
                 var error = false;
 
+                modelo.setProperty("/Utils/MessageItemsEP", []);
                 for (let index = 0; index < nodMensajes.length; index++) {
                     const element = nodMensajes[index];
                     var type = element.CMIN;
@@ -218,6 +219,8 @@ sap.ui.define([
                     messageItems.push(objMessage);
                 }
 
+
+
                 var oButton = this.getView().byId("messagePopoverBtn");
                 oMessagePopover.getBinding("items").attachChange(function (oEvent) {
                     oMessagePopover.navigateBack();
@@ -233,6 +236,9 @@ sap.ui.define([
                     oButton.setIcon(this.buttonIconFormatter("DM"));
                     oButton.setText(this.highestSeverityMessages("DM"));
                 }.bind(this), 100);
+                
+
+
 
                 if(!mareaReabierta){
                     

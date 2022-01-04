@@ -203,7 +203,7 @@
                      <Button text="Nueva Marea" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onActionCrearMarea" />
                      <Button text="Actualizar" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onActualizaMareas" />
                      <Button text="Pesca Declarada" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onTest" />
-                     <Button text="BOTON DE PRUEBAS" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="false"
+                     <Button text="BOTON DE PRUEBAS" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true"
 								iconDensityAware="false" press="onCallUsuario"/>
                   </content>
                </OverflowToolbar>

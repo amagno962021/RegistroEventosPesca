@@ -521,6 +521,8 @@ sap.ui.define([
                 modelo.setProperty("/Config/visibleBtnSiguiente", true); //si es nueva marea
                 modelo.setProperty("/Cabecera/TXTNOTIF", "");
                 modelo.setProperty("/Cabecera/TXTNOTIF1", "");
+                modelo.setProperty("/DatosGenerales/FEARR", "");
+                modelo.setProperty("/DatosGenerales/HEARR", "");
             } else if (motivo == "3" || motivo == "7" || motivo == "8") {
                 modelo.setProperty("/Config/visibleFecHoEta", false);
                 modelo.setProperty("/Config/visibleUbiPesca", true);
@@ -529,6 +531,7 @@ sap.ui.define([
                 modelo.setProperty("/Config/readOnlyEstaMar", true);
                 modelo.setProperty("/Config/visibleBtnGuardar", true); //si es nueva marea
                 modelo.setProperty("/Config/visibleBtnSiguiente", false); //si es nueva marea
+                modelo.setProperty("/DatosGenerales/INUBC", "1");
                 var MareAntNrmar = modelo.getProperty("/MareaAnterior/NRMAR");
                 var MareAntDesc = modelo.getProperty("/MareaAnterior/DESC_CDMMA");
                 var MareAntEvt = modelo.getProperty("/MareaAnterior/EventoMarAnt/DESC_CDTEV");
@@ -1297,7 +1300,7 @@ sap.ui.define([
 
         onCallUsuario: function () {
 
-            var sUrl = "https://current-user-qas.cfapps.us10.hana.ondemand.com/getuserinfo";
+            /*var sUrl = "https://current-user-qas.cfapps.us10.hana.ondemand.com/getuserinfo";
             $.ajax({
                 type: "GET",
                 url: sUrl,
@@ -1311,9 +1314,9 @@ sap.ui.define([
                     console.log("USER INFO: ", data);
                 }
 
-            });
+            });*/
 
-
+            
         }
 
 
