@@ -70,8 +70,8 @@
 									<Label text="Latitud" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<Input id="ip_latitud1" value="{eventos>/LatitudD}" description="º" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0" />
-									<Input id="ip_latitud2" value="{eventos>/LatitudM}" description="'" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0"/>
+									<Input id="ip_latitud1" value="{eventos>/LatitudD}" textAlign="Right" description="º" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0" />
+									<Input id="ip_latitud2" value="{eventos>/LatitudM}" textAlign="Right" description="'" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0"/>
 								</form:fields>
 							</form:FormElement>
 						</form:formElements>
@@ -83,8 +83,8 @@
 									<Label text="Longitud" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<Input id="ip_longitud1" value="{eventos>/LongitudD}" description="º" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0"/>
-									<Input id="ip_longitud2" value="{eventos>/LongitudM}" description="'" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0"/>
+									<Input id="ip_longitud1" value="{eventos>/LongitudD}" description="º" textAlign="Right" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0"/>
+									<Input id="ip_longitud2" value="{eventos>/LongitudM}" description="'" textAlign="Right" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0"/>
 								</form:fields>
 							</form:FormElement>
 						</form:formElements>

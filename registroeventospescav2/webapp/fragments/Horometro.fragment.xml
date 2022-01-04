@@ -2,7 +2,7 @@
 
 	<Panel id="0010" expandable="false">
 		<content>
-			<Table id= "prue" width="auto" noDataText="No data" mode="MultiSelect"
+			<Table id= "prue" width="60rem" noDataText="No data" mode="MultiSelect"
 			 showSeparators="All" growing="true" 
 			 items="{path:'eventos>/ListaHorometros',templateShareable:true}"
 			 growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
@@ -16,19 +16,19 @@
 				<headerToolbar />
 				
 				<columns>
-					<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+					<Column width="20rem" hAlign="Left" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
 						<header>
 							<Text text="Tipo de Horometro" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 						</header>
 						<footer />
 					</Column>
-					<Column width="auto" hAlign="Right" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+					<Column width="20rem" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
 						<header>
 							<Text text="Lectura" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 						</header>
 						<footer />
 					</Column>
-					<Column width="auto" hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+					<Column width="20rem" hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
 						<header>
 							<Text text="Averiado" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 						</header>
@@ -39,7 +39,7 @@
 					<ColumnListItem type="Inactive">
 						<cells>
 							<Text text="{eventos>descTipoHorom}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-							<Input value="{eventos>lectura}" type="Number" showValueHelp="false" enabled="{eventos>readOnly}" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" />
+							<Input value="{eventos>lectura}" textAlign="Right" type="Number" showValueHelp="false" enabled="{eventos>readOnly}" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" />
 							<CheckBox text="" select="onCheckBoxSelected" editable="true" enabled="{eventos>/enabledAveriado}" selected="{=${eventos>lectura} === 'A' ? true : false }" />
 						</cells>
 					</ColumnListItem>

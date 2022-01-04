@@ -53,7 +53,7 @@
 							<Text text="{eventos>CDBOD}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 							<Text text="{eventos>DSBOD}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 							<Text text="{eventos>CAPES}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-							<Input value="{eventos>CantPesca}" type="Text" showValueHelp="false" enabled="{eventos>/enabledBodCantpesca}" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" />
+							<Input value="{eventos>CantPesca}" textAlign="Right" type="Number" showValueHelp="false" enabled="{eventos>/enabledBodCantpesca}" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" />
 							<Text text="TM" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 						</cells>
 					</ColumnListItem>

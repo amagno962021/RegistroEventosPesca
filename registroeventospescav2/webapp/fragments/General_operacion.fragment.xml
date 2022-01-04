@@ -48,7 +48,7 @@
 									<Label text="Temperatura del mar" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<Input id="i_temperaturaMar" value="{eventos>/TEMAR}" submit=".prueba" description="ºC" type="Number" showValueHelp="false" enabled="true" visible="true" width="30%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+									<Input id="i_temperaturaMar" value="{eventos>/TEMAR}" textAlign="Right" submit=".prueba" description="ºC" type="Number" showValueHelp="false" enabled="true" visible="true" width="30%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement id="fe_stockCombustible" visible="true">
@@ -56,7 +56,7 @@
 									<Label text="Stock de combustible" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<Input id="i_stockCombustible" value="{eventos>/STCMB}" submit=".prueba" type="Number" showValueHelp="false" enabled="true" visible="true" width="30%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+									<Input id="i_stockCombustible" value="{eventos>/STCMB}" textAlign="Right" submit=".prueba" type="Number" showValueHelp="false" enabled="true" visible="true" width="30%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement id="fe_muestra" visible="true">
@@ -64,7 +64,7 @@
 									<Label text="Muestra" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<Input id="ip_muestra" value="{eventos>/MUEST}" type="Number" showValueHelp="false" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+									<Input id="ip_muestra" value="{eventos>/MUEST}" type="Number" textAlign="Right" showValueHelp="false" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement id="fe_sistema_frio" visible="true">

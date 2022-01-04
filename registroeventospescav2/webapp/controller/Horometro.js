@@ -390,10 +390,14 @@ sap.ui.define([
                 var nodoLecHorRFC = response.t_lechor;
                 if(nodoMareaRFC.length > 0){
                     modelo.setProperty("/MareaCLH/NRMAR", nodoMareaRFC[0].NRMAR);
-                    modelo.setProperty("/MareaCLH/EventoCLH/HIEVN", nodoEnventoRFC[0].HIEVN);
-                    modelo.setProperty("/MareaCLH/EventoCLH/FIEVN", nodoEnventoRFC[0].FIEVN);
-                    modelo.setProperty("/MareaCLH/EventoCLH/NREVN", nodoEnventoRFC[0].NREVN);
-                    modelo.setProperty("/MareaCLH/EventoCLH/CDTEV", nodoEnventoRFC[0].CDTEV);
+                    if(nodoEnventoRFC.length > 0)
+                    {
+                        modelo.setProperty("/MareaCLH/EventoCLH/HIEVN", nodoEnventoRFC[0].HIEVN);
+                        modelo.setProperty("/MareaCLH/EventoCLH/FIEVN", nodoEnventoRFC[0].FIEVN);
+                        modelo.setProperty("/MareaCLH/EventoCLH/NREVN", nodoEnventoRFC[0].NREVN);
+                        modelo.setProperty("/MareaCLH/EventoCLH/CDTEV", nodoEnventoRFC[0].CDTEV);
+                    }
+                    
                     var horometros = [];
                     for (let index = 0; index < nodoLecHorRFC.length; index++) {
                         const element = nodoLecHorRFC[index];

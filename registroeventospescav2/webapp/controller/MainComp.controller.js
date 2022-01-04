@@ -310,7 +310,18 @@ sap.ui.define([
             var eveVisTabEquip = ["1", "5"];
             var eveVisTabHorom = ["1", "5", "6", "H", "T"];
             for (let index = 0; index < eventos.length; index++) {
+                let obs = "";
                 var element = eventos[index];
+
+
+                if ((element.KMEVN != "") && (element.ObseAdicional != "")) {
+                    obs = element.KMEVN  + " " + element.ObseAdicional;
+                } else if (element.KMEVN != "") {
+                    obs = element.KMEVN;
+                } else {
+                    obs = element.ObseAdicional ? element.ObseAdicional : "";
+                }
+
                 var evt = {
                     INDTR: element.INDTR == "N" ? "N" : "E",
                     NRMAR: element.NRMAR,
@@ -349,6 +360,7 @@ sap.ui.define([
                     AMEVN: element.AMEVN,
                     NRDES: element.NRDES,
                     ESTSF: element.ESTSF,
+                    KMEVN: obs
                 };
 
                 if (eveVisTabEquip.includes(element.CDTEV)) {
