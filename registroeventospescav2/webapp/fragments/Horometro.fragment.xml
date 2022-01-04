@@ -2,7 +2,7 @@
 
 	<Panel id="0010" expandable="false">
 		<content>
-			<Table id= "prue" width="60rem" noDataText="No data" mode="MultiSelect"
+			<Table id= "prue" width="45rem" noDataText="No data"
 			 showSeparators="All" growing="true" 
 			 items="{path:'eventos>/ListaHorometros',templateShareable:true}"
 			 growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin">
@@ -28,7 +28,7 @@
 						</header>
 						<footer />
 					</Column>
-					<Column width="20rem" hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+					<Column width="5rem" hAlign="Center" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
 						<header>
 							<Text text="Averiado" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 						</header>
