@@ -138,6 +138,7 @@ sap.ui.define([
                 if (Utils.OpSistFrio && parseInt(tipoEvento) < 6) {
                     if (eventoActual.ESTSF == "") {
                         var mssg = this.ctr.oBundle.getText("MISSINGSISTFRIO");
+                        this.ctr.byId("ip_sistema_frio").setValueState( sap.ui.core.ValueState.Error);
                         this.ctr.agregarMensajeValid("Error", mssg);
                         bOk = false;
                         return bOk;
@@ -349,9 +350,9 @@ sap.ui.define([
         },
 
         onActionSelectTab: async function (tab_seleccionado, event) {
-            console.log("27/12/2021 Erick");
             let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
             mod.setProperty("/Utils/MessageItemsEP", []);
+            this.ctr.resetearValidaciones();
             BusyIndicator.show(0);
             this.nextTab = tab_seleccionado;
             if (this.previousTab == undefined) {
@@ -502,6 +503,7 @@ sap.ui.define([
         verificarTemporada: async function (motivo, fecha) {
             //desarrollar servicio verificar temporada
             let bok = false;
+            let that = this;
             var codTemp = "";
             if (motivo == "1") {
                 codTemp = "D";
@@ -512,20 +514,25 @@ sap.ui.define([
                     codTemp = "V";
                 }
             }
-
-            await TasaBackendService.verificarTemporada(codTemp, fecha).then(function (response) {
-                //ob
-                console.log(response.data);
-                if (response.data != null && response.data.length > 0) {
-                    bok = true;
-                } else {
-                    let mssg = this.ctr.oBundle.getText("NOTEMPCH" + codTemp);
-                    MessageBox.error(mssg);
-                    bok = false;
+            if(fecha != undefined){
+                let fecha_v  = fecha;
+                if(fecha_v.length == 8 || fecha_v.length == 10 ){
+                    fecha_v = Utils.strDateToSapDate(fecha);
                 }
-            }).catch(function (error) {
-                console.log("ERROR: General.verificarTemporada - ", error);
-            });
+                await TasaBackendService.verificarTemporada(codTemp, fecha_v).then(function (response) {
+                    //ob
+                    console.log(response.data);
+                    if (response.data != null && response.data.length > 0) {
+                        bok = true;
+                    } else {
+                        let mssg = that.ctr.oBundle.getText("NOTEMPCH" + codTemp);
+                        MessageBox.error(mssg);
+                        bok = false;
+                    }
+                }).catch(function (error) {
+                    console.log("ERROR: General.verificarTemporada - ", error);
+                });
+            }   
 
             return bok;
 

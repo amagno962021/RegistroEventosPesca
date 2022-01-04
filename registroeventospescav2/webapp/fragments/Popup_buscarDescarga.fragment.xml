@@ -86,7 +86,7 @@
                                     <Label text="Hora inicio" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <TimePicker id="pbd_hora_inicio" value="{popup_descarga>/HoraInicio}" valueFormat="HH:mm:ss" displayFormat="HH:mm:ss" width="50%"/>
+                                    <TimePicker id="pbd_hora_inicio" value="{popup_descarga>/HoraInicio}" valueFormat="HH:mm" displayFormat="HH:mm" width="50%"/>
                                 </form:fields>
                             </form:FormElement>
                             <form:FormElement visible="true">

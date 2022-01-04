@@ -36,7 +36,7 @@
 									<Label text="Motivo de no pesca" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<ComboBox selectedKey="{eventos>/CDMNP}" placeholder="Motivo de no pesca" items="{combMotivoNoPesca>/data}" editable="true" enabled="true" visible="true" width="50%" valueState="None" maxWidth="100%">
+									<ComboBox id= "cb_motNoPesca" selectedKey="{eventos>/CDMNP}" placeholder="Motivo de no pesca" items="{combMotivoNoPesca>/data}" editable="true" enabled="true" visible="true" width="50%" valueState="None" maxWidth="100%">
 										<items>
 											<core:Item key="{combMotivoNoPesca>id}" text="{combMotivoNoPesca>descripcion}" />
 										</items>

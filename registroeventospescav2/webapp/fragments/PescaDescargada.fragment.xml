@@ -66,7 +66,7 @@
 					<Column width="12rem" hAlign="End" filterProperty="Quantity">
 						<m:Label text="Pto. Descarga" />
 						<template>
-							<m:ComboBox placeholder="Zona de pesca" items="{path:'combPuntoDescarga>/data', templateShareable:false}" selectedKey="{eventos>CDPDG}" editable="true" enabled="true" visible="true" width="100%" valueState="None" maxWidth="100%">
+							<m:ComboBox id= "pd_puntodesc" placeholder="Zona de pesca" items="{path:'combPuntoDescarga>/data', templateShareable:false}" selectedKey="{eventos>CDPDG}" editable="true" enabled="true" visible="true" width="100%" valueState="None" maxWidth="100%">
 								<m:items>
 									<core:Item key="{combPuntoDescarga>CDPDG}" text="{combPuntoDescarga>DSPDG}" />
 								</m:items>
@@ -94,7 +94,7 @@
 					<Column width="15rem" hAlign="End" filterProperty="Quantity" filterType="sap.ui.model.type.Integer">
 						<m:Label text="Fecha de producción" />
 						<template>
-							<m:DatePicker value="{eventos>FECCONMOV}" enabled="{eventos>/enabledFechProdDesc}" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" visible="true" valueFormat="yyyyMMdd" />
+							<m:DatePicker id= "pd_chi_fechProd" value="{eventos>FECCONMOV}" enabled="{eventos>/enabledFechProdDesc}" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" visible="true" valueFormat="yyyyMMdd" />
 						</template>
 					</Column>
 				</columns>
@@ -233,7 +233,7 @@
 					<Column width="10rem" hAlign="End" filterProperty="Quantity">
 						<m:Label text="Fecha de producción" />
 						<template>
-							<m:DatePicker value="{eventos>FECCONMOV}" enabled="{eventos>/enabledFechProdDesc}" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" visible="true" valueFormat="yyyyMMdd" />
+							<m:DatePicker id= "pd_chd_fechProd" value="{eventos>FECCONMOV}" enabled="{eventos>/enabledFechProdDesc}" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" visible="true" valueFormat="yyyyMMdd" />
 						</template>
 					</Column>
 				</columns>
