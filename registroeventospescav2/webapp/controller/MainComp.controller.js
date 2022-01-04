@@ -1,11 +1,10 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "./FormCust",
     "./Utils",
     "../Service/TasaBackendService",
     "sap/m/MessageBox",
     "sap/ui/core/BusyIndicator"
-], function (Controller, FormCust, Utils, TasaBackendService, MessageBox, BusyIndicator) {
+], function (Controller, Utils, TasaBackendService, MessageBox, BusyIndicator) {
     "use strict";
 
     return Controller.extend("com.tasa.registroeventospescav2.controller.MainComp", {
@@ -74,10 +73,6 @@ sap.ui.define([
               const pService = oContainer.getServiceAsync("UserInfo"); // .getService is deprecated!
               resolve(pService);
             }));
-        },
-
-        FormCust: function () {
-            return new FormCust;
         },
 
         guardarCambios: async function () {

@@ -967,8 +967,8 @@ sap.ui.define([
 
         anularMarea: async function(marea){
             var uri = UtilService.getHostService() + "/api/embarcacion/anularMarea/";
-            var sBody = UtilService.getConsultaGeneral();
-            sBody.p_mare = marea;
+            var sBody = UtilService.getBodyAnularMar();
+            sBody.p_marea = marea;
             var data = await this.http(uri).post(null, sBody).then(function (response) {
                 var data = JSON.parse(response);
                 return data;

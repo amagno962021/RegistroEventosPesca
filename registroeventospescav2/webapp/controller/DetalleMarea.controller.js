@@ -3,7 +3,6 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
     "sap/ui/core/routing/History",
-    "../Formatter/formatter",
     "sap/m/MessageBox",
     "../Service/TasaBackendService",
     "sap/ui/core/BusyIndicator",
@@ -15,7 +14,6 @@ sap.ui.define([
     Controller,
     JSONModel,
     History,
-    formatter,
     MessageBox,
     TasaBackendService,
     BusyIndicator,
@@ -512,17 +510,20 @@ sap.ui.define([
 
         validarMotivo: async function (motivo) {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var indicador = modelo.getProperty("/Cabecera/INDICADOR");
             if (motivo == "1" || motivo == "2") {
                 modelo.setProperty("/Config/visibleFecHoEta", true);
                 modelo.setProperty("/Config/visibleUbiPesca", false);
                 modelo.setProperty("/Config/visibleFechIni", false);
-                modelo.setProperty("/Config/readOnlyEstaMar", false); //si es nueva marea
-                modelo.setProperty("/Config/visibleBtnGuardar", false); //si es nueva marea
-                modelo.setProperty("/Config/visibleBtnSiguiente", true); //si es nueva marea
                 modelo.setProperty("/Cabecera/TXTNOTIF", "");
                 modelo.setProperty("/Cabecera/TXTNOTIF1", "");
-                modelo.setProperty("/DatosGenerales/FEARR", "");
-                modelo.setProperty("/DatosGenerales/HEARR", "");
+                if (indicador == "N") {
+                    modelo.setProperty("/Config/readOnlyEstaMar", false); //si es nueva marea
+                    modelo.setProperty("/Config/visibleBtnGuardar", false); //si es nueva marea
+                    modelo.setProperty("/Config/visibleBtnSiguiente", true); //si es nueva marea
+                    modelo.setProperty("/DatosGenerales/FEARR", "");
+                    modelo.setProperty("/DatosGenerales/HEARR", "");
+                }
             } else if (motivo == "3" || motivo == "7" || motivo == "8") {
                 modelo.setProperty("/Config/visibleFecHoEta", false);
                 modelo.setProperty("/Config/visibleUbiPesca", true);
@@ -640,13 +641,12 @@ sap.ui.define([
                 modelo.setProperty("/Config/visibleBtnGuardar", true);
                 modelo.setProperty("/Config/visibleBtnSiguiente", true);
             } else {
+                var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
+                this.validarMotivo(motivoMarea);
                 modelo.setProperty("/Config/visibleBtnGuardar", true);
                 modelo.setProperty("/Config/readOnlyMotMarea", false);
                 await this.validaDescargas();
             }
-
-            var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
-            this.validarMotivo(motivoMarea);
 
         },
 
