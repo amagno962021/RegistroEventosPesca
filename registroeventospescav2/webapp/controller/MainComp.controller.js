@@ -449,47 +449,54 @@ sap.ui.define([
             let t_min = Number(mod.getProperty("/Utils/TallaMin"));
             var biom_list = [];
             var ListaBiomTemp = [];//modelo de biometria Temp
-            var ListaBiom = ListaEventos[elementSel].ListaBiometria;//modelo de biometria
-            if (ListaBiom.length > 0) {
-                //this.cargarRegistroBiometria();
-            }
-            for (let index = 0; index < ListaBiom.length; index++) {
-                const element = ListaBiom[index];
-                if (motivoMarea == "2") {
-                    let v_talla_bio = Number(0);
-                    for (let k = t_min; k <= t_max; k = k + Number(0.5)) {
-                        if (k == t_min) {
-                            v_talla_bio = t_min;
-                        } else {
-                            v_talla_bio++;
+            // if (ListaBiom.length > 0) {
+            //     //this.cargarRegistroBiometria();
+            // }
+            for (let index1 = 0; index1 < ListaEventos.length; index1++) {
+                const element1 = ListaEventos[index1];
+                if(element1.CDTEV == "3"){
+                    let ListaBiom = element1.ListaBiometria;
+                    for (let index = 0; index < ListaBiom.length; index++) {
+                        const element = ListaBiom[index];
+                        if (motivoMarea == "2") {
+                            let v_talla_bio = Number(0);
+                            for (let k = t_min; k <= t_max; k = k + Number(0.5)) {
+                                if (k == t_min) {
+                                    v_talla_bio = t_min;
+                                } else {
+                                    v_talla_bio++;
+                                }
+        
+                                var Biometria = {
+                                    NRMAR: ListaEventos[elementSel].NRMAR,
+                                    NREVN: ListaEventos[elementSel].NREVN,
+                                    CDSPC: element.CodEspecie,
+                                    TMMED: k,
+                                    CNSPC: element['col_' + v_talla_bio]
+                                };
+                                biom_list.push(Biometria);
+                            }
+        
+                        } else if (motivoMarea == "1") {
+        
+                            for (let k = t_min; k <= t_max; k++) {
+                                var Biometria = {
+                                    NRMAR: ListaEventos[elementSel].NRMAR,
+                                    NREVN: ListaEventos[elementSel].NREVN,
+                                    CDSPC: element.CodEspecie,
+                                    TMMED: k,
+                                    CNSPC: element['col_' + k]
+                                };
+                                biom_list.push(Biometria);
+                            }
+        
                         }
-
-                        var Biometria = {
-                            NRMAR: ListaEventos[elementSel].NRMAR,
-                            NREVN: ListaEventos[elementSel].NREVN,
-                            CDSPC: element.CodEspecie,
-                            TMMED: k,
-                            CNSPC: element['col_' + v_talla_bio]
-                        };
-                        biom_list.push(Biometria);
+        
                     }
-
-                } else if (motivoMarea == "1") {
-
-                    for (let k = t_min; k <= t_max; k++) {
-                        var Biometria = {
-                            NRMAR: ListaEventos[elementSel].NRMAR,
-                            NREVN: ListaEventos[elementSel].NREVN,
-                            CDSPC: element.CodEspecie,
-                            TMMED: k,
-                            CNSPC: element['col_' + k]
-                        };
-                        biom_list.push(Biometria);
-                    }
-
                 }
-
+                
             }
+            
             return biom_list;
         },
 
