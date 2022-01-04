@@ -96,7 +96,7 @@
                                        <Text text="{FEHOARR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                                        <Text text="{DESC_ESMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                                        <Link text="{DESCLINK}" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" press="onEditarCrearMarea" />
-                                       <Link text="Anular" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="{visibleAnularMarea}" />
+                                       <Link text="Anular" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="{visibleAnularMarea}" press="onAnularMarea"/>
                                     </cells>
                                  </ColumnListItem>
                               </items>
@@ -185,7 +185,7 @@
                                        <Text text="{FEHOARR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                                        <Text text="{DESCESMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                                        <Link text="{DESCLINK}" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" press="onEditarCrearMarea" />
-                                       <Link text="Anular" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Link text="Anular" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" press="onAnularMarea"/>
                                     </cells>
                                  </ColumnListItem>
                               </items>
@@ -203,7 +203,7 @@
                      <Button text="Nueva Marea" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onActionCrearMarea" />
                      <Button text="Actualizar" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onActualizaMareas" />
                      <Button text="Pesca Declarada" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onTest" />
-                     <Button text="BOTON DE PRUEBAS" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true"
+                     <Button text="BOTON DE PRUEBAS" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="false"
 								iconDensityAware="false" press="onCallUsuario"/>
                   </content>
                </OverflowToolbar>

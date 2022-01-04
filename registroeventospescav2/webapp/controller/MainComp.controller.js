@@ -59,8 +59,21 @@ sap.ui.define([
             this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
         },
 
-        getCurrentUser: function () {
-            return "FGARCIA"
+        getCurrentUser: async function () {
+            const oUserInfo = await this.getUserInfoService();
+            const sUserEmail = oUserInfo.getEmail(); //fgarcia@tasa.com.pe
+            var usuario = sUserEmail.split("@")[0].toUpperCase();
+            return usuario;
+        },
+
+        getUserInfoService: function() {
+            return new Promise(resolve => sap.ui.require([
+              "sap/ushell/library"
+            ], oSapUshellLib => {
+              const oContainer = oSapUshellLib.Container;
+              const pService = oContainer.getServiceAsync("UserInfo"); // .getService is deprecated!
+              resolve(pService);
+            }));
         },
 
         FormCust: function () {
@@ -221,7 +234,13 @@ sap.ui.define([
                     oButton.setText(this.highestSeverityMessages("DM"));
                 }.bind(this), 100);
 
-                await this.enviarCorreosSiniestro();
+                if(!mareaReabierta){
+                    
+                }else{
+
+                }
+
+                //await this.enviarCorreosSiniestro();
 
             }
         },
@@ -259,7 +278,8 @@ sap.ui.define([
                 CDMMA: modelo.getProperty("/DatosGenerales/CDMMA"),
                 INUBC: modelo.getProperty("/DatosGenerales/INUBC"),
                 FEARR: Utils.strDateToDate(modelo.getProperty("/DatosGenerales/FEARR")),
-                HEARR: modelo.getProperty("/DatosGenerales/HEARR"),//Utils.strHourToSapHo(modelo.getProperty("/DatosGenerales/HEARR")),
+                //HEARR: modelo.getProperty("/DatosGenerales/HEARR"),
+                HEARR: Utils.strHourToSapHo(modelo.getProperty("/DatosGenerales/HEARR")),
                 OBMAR: modelo.getProperty("/Cabecera/OBMAR"),
                 ESMAR: modelo.getProperty("/DatosGenerales/ESMAR"),
                 FEMAR: Utils.strDateToDate(modelo.getProperty("/DatosGenerales/FEMAR")),
@@ -1048,6 +1068,46 @@ sap.ui.define([
                     }
                 }
             }
+        },
+
+        setVisibleBtnSave: function(btnSave, btnNext){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            if(btnSave){
+                modelo.setProperty("/Config/visibleBtnGuardar", true)
+            }else{
+                modelo.setProperty("/Config/visibleBtnGuardar", false)
+            }
+
+            if(btnNext){
+                modelo.setProperty("/Config/visibleBtnSiguiente", true);
+            }else{
+                modelo.setProperty("/Config/visibleBtnSiguiente", false);
+            }
+
+        },
+
+        anularMarea: async function(marea){
+            BusyIndicator.show(0);
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var anularMarea = await TasaBackendService.anularMarea(marea);
+            if(anularMarea){
+                var mensajes = anularMarea.t_mensaje;
+                var messageItems = modelo.getProperty("/Utils/MessageItemsDM");
+                modelo.setProperty("/Utils/MessageItemsDM", []);
+                for (let index = 0; index < mensajes.length; index++) {
+                    const element = mensajes[index];
+                    var objMessage = {
+                        type: element.CMIN == 'S' ? 'Success' : 'Error',
+                        title: element.CMIN == 'S' ? 'Mensaje de Éxito' : 'Mensaje de Error',
+                        activeTitle: false,
+                        description: element.DSMIN,
+                        subtitle: element.DSMIN,
+                        counter: index
+                    };
+                    messageItems.push(objMessage);
+                }
+            }
+            BusyIndicator.hide();
         }
 
     });

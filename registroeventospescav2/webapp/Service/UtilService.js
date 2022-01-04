@@ -7,7 +7,16 @@ sap.ui.define([
     return {
 
         getHostService: function () {
+			/*var urlIntance = window.location.origin;
+			var servicioNode = 'cheerful-bat-js';
+			if (urlIntance.indexOf('tasaqas') !== -1) {
+				servicioNode = 'qas';
+			} else if (urlIntance.indexOf('tasaprd') !== -1) {
+				servicioNode = 'prd';
+			}
+            var urlServicio = "https://cf-nodejs-" + servicioNode + ".cfapps.us10.hana.ondemand.com";*/
             return "https://cf-nodejs-qas.cfapps.us10.hana.ondemand.com";
+            //return urlServicio;
         },
 
         getBodyDetalleMarea: function () {
@@ -239,6 +248,13 @@ sap.ui.define([
             var sBody = {
                 "embarcacion": "",
                 "usuario": ""
+            };
+            return sBody;
+        },
+
+        getBodyAnularMar: function(){
+            var sBody = {
+                "p_marea": ""
             };
             return sBody;
         }

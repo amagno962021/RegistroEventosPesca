@@ -344,9 +344,9 @@
 											<ObjectIdentifier title="{DetalleMarea>DESC_CDTEV}" text="" titleActive="false" visible="true"/>
 											<Text text="{DetalleMarea>FECHOINI}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 											<Text text="{DetalleMarea>FECHOFIN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-											<ObjectIdentifier title="{DetalleMarea>DSZPC}" text="{DetalleMarea>CDZPC}" titleActive="false" visible="true"/>
-											<ObjectIdentifier title="{DetalleMarea>DSPTO}" text="{DetalleMarea>CDPTO}" titleActive="false" visible="true"/>
-											<ObjectIdentifier title="{DetalleMarea>DESCR}" text="{DetalleMarea>CDPTA}" titleActive="false" visible="true"/>
+											<ObjectIdentifier title="{DetalleMarea>DSZPC}" text="" titleActive="false" visible="true"/>
+											<ObjectIdentifier title="{DetalleMarea>DSPTO}" text="" titleActive="false" visible="true"/>
+											<ObjectIdentifier title="{DetalleMarea>DESCR}" text="" titleActive="false" visible="true"/>
 											<ObjectNumber number="{DetalleMarea>CNPDC}" unit="Tn." emphasized="true" state="None"/>
 											<ObjectNumber number="{DetalleMarea>CNPDS}" unit="Tn." emphasized="true" state="None"/>
 											<Link

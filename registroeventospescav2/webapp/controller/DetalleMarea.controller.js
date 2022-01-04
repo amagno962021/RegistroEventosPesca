@@ -146,7 +146,6 @@ sap.ui.define([
 
         abrirCrearEvento: function () {
             this.getNuevoEvento().open();
-
         },
 
         onEliminarEvento: function (evt) {
@@ -324,6 +323,8 @@ sap.ui.define([
                     }
                 }
             }
+            var primerItem = oVal[0];
+            modeloDetalleMarea.setProperty("/Utils/TipoEvento", primerItem.id);
             dataDetalleMarea.Config.datosCombo.TipoEventos = oVal;
             modeloDetalleMarea.refresh();
         },
@@ -447,12 +448,12 @@ sap.ui.define([
             if (eventos) {
                 for (let index = 0; index < eventos.length; index++) {
                     const element = eventos[index];
-                    if (element.FIEVN != "null") {
+                    if (element.FIEVN) {
                         element.FECHOINI = element.FIEVN + " " + element.HIEVN;
                     } else {
                         element.FECHOINI = "";
                     }
-                    if (element.FFEVN != "null") {
+                    if (element.FFEVN) {
                         element.FECHOFIN = element.FFEVN + " " + element.HFEVN;
                     } else {
                         element.FECHOFIN = "";
@@ -720,6 +721,7 @@ sap.ui.define([
             var iconTabBar = this.getView().byId("itbDetalleMarea");
             if (key == "itfEventos" && previousKey == "itfDatosGenerales") {
                 if (!motivo) {
+                    modelo.setProperty("/Utils/MessageItemsDM", []);
                     iconTabBar.setSelectedKey("itfDatosGenerales");
                     var mssg = this.oBundle.getText("MISSMOTMAR");
                     //MessageBox.error(mssg);
@@ -1286,6 +1288,7 @@ sap.ui.define([
 
         onNext: function(){
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            modelo.setProperty("/Utils/TipoConsulta", "C");
             modelo.setProperty("/Utils/TipoEvento", "1");
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("DetalleEvento");

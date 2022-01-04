@@ -31,12 +31,12 @@ sap.ui.define([
                 this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
                 //this.formCust = sap.ui.controller("com.tasa.registroeventospescav2.controller.FormCust")
                 var tipoEmba = await TasaBackendService.obtenerTipoEmbarcacion(currentUser);
-                if(tipoEmba){
+                if (tipoEmba) {
                     var plantas = await TasaBackendService.obtenerPlantas(currentUser);
                     if (plantas) {
                         this.prepararDataTree(tipoEmba, plantas.data);
                         var listaMareas = await TasaBackendService.cargarListaMareas(currentUser);
-                        if(listaMareas){
+                        if (listaMareas) {
                             console.log("MAREAS: ", listaMareas);
                             this.validarDataMareas(listaMareas);
                         }
@@ -76,7 +76,7 @@ sap.ui.define([
 
             },
 
-            cargarMessagePopover: function(){
+            cargarMessagePopover: function () {
                 var oMessageTemplate = new MessageItem({
                     type: '{DetalleMarea>type}',
                     title: '{DetalleMarea>title}',
@@ -85,7 +85,7 @@ sap.ui.define([
                     subtitle: '{DetalleMarea>subtitle}',
                     counter: '{DetalleMarea>counter}'
                 });
-    
+
                 oMessagePopover = new MessagePopover({
                     items: {
                         path: 'DetalleMarea>/Utils/MessageItemsMA',
@@ -134,7 +134,7 @@ sap.ui.define([
                         plantas = data.data;
                         this.getOwnerComponent().getModel("ComboModel").setProperty("/Plantas", plantas);
                     }).catch(error => console.log(error));
-                
+
                 this.validarRoles();
             },
 
@@ -176,10 +176,10 @@ sap.ui.define([
                 var mareaSinNumero = [];
                 for (let index = 0; index < str_di.length; index++) {
                     const element = str_di[index];
-                   
+
                     //if (element.ESMAR = "" || (element.ESMAR == "A" && element.ESCMA == "") || (element.ESMAR == "C" && element.ESCMA == "P")) {
 
-                    if(!element.ESMAR || (element.ESMAR == "A" && !element.ESCMA) || (element.ESMAR == "C" && element.ESCMA && element.ESCMA == "P")){
+                    if (!element.ESMAR || (element.ESMAR == "A" && !element.ESCMA) || (element.ESMAR == "C" && element.ESCMA && element.ESCMA == "P")) {
                         if (element.INPRP == "P") {
                             propios.push(element);
                         } else if (element.INPRP == "T") {
@@ -265,17 +265,17 @@ sap.ui.define([
                         }
                         tmpElement.FEHOARR = fehoarr;
 
-                        if(tmpElement.ESMAR == 'C' || tmpElement.CDEED == "010" || (tmpElement.ESMAR == "A" && tmpElement.ESCMA)){
+                        if (tmpElement.ESMAR == 'C' || tmpElement.CDEED == "010" || (tmpElement.ESMAR == "A" && tmpElement.ESCMA)) {
 
-                            if(tmpElement.CDEED == "010"){
+                            if (tmpElement.CDEED == "010") {
 
-                            }else{
+                            } else {
 
                             }
-                            tmpElement.visibleAnularMarea = false; 
+                            tmpElement.visibleAnularMarea = false;
                             tmpElement.DESCLINK = "Crear";
 
-                        }else{
+                        } else {
                             tmpElement.visibleAnularMarea = true;
                             tmpElement.DESCLINK = "Editar";
 
@@ -322,17 +322,17 @@ sap.ui.define([
                         tmpElement1.FEHOARR = fehoarr;
 
 
-                        if(tmpElement1.ESMAR == 'C' || tmpElement1.CDEED == "010" || (tmpElement1.ESMAR == "A" && tmpElement1.ESCMA)){
+                        if (tmpElement1.ESMAR == 'C' || tmpElement1.CDEED == "010" || (tmpElement1.ESMAR == "A" && tmpElement1.ESCMA)) {
 
-                            if(tmpElement1.CDEED == "010"){
+                            if (tmpElement1.CDEED == "010") {
 
-                            }else{
+                            } else {
 
                             }
-                            tmpElement1.visibleAnularMarea = false; 
+                            tmpElement1.visibleAnularMarea = false;
                             tmpElement1.DESCLINK = "Crear";
 
-                        }else{
+                        } else {
                             tmpElement1.visibleAnularMarea = true;
                             tmpElement1.DESCLINK = "Editar";
 
@@ -634,7 +634,7 @@ sap.ui.define([
                 modelo.setProperty("/Config/visibleReserva2", false);
                 modelo.setProperty("/Config/visibleReserva3", false);
                 if (response) {
-                    if (response.data ) {
+                    if (response.data) {
                         mostrarTab = true;
                     }
                 }
@@ -682,7 +682,7 @@ sap.ui.define([
 
             },
 
-            obtenerVentasCombustible: async function(marea){
+            obtenerVentasCombustible: async function (marea) {
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 var listaEventos = modelo.getProperty("/Eventos/Lista");
                 console.log("EVENTOS: ", listaEventos);
@@ -691,13 +691,13 @@ sap.ui.define([
                 var usuario = this.getCurrentUser();
                 var embarcacion = modelo.getProperty("/Cabecera/CDEMB");
                 var nroVenta = await TasaBackendService.obtenerNroReserva(marea, usuario);
-                if(nroVenta){
+                if (nroVenta) {
                     mostrarTab = true;
                 }
                 var primerRegVenta = !mostrarTab;
                 var regVenta = false;
                 var tipoEvento = "";
-                if(!mareaCerrada){
+                if (!mareaCerrada) {
                     for (let index = 0; index < listaEventos.length; index++) {
                         const element = listaEventos[index];
                         tipoEvento = element.CDTEV;
@@ -709,13 +709,13 @@ sap.ui.define([
                     }
                     if (regVenta) {
                         mostrarTab = true;
-                    }else {
-                         mostrarTab = false;
+                    } else {
+                        mostrarTab = false;
                     }
                 }
                 console.log("MOST5RAR TAB: ", mostrarTab);
                 modelo.setProperty("/Config/visibleTabVenta", mostrarTab);
-                if(mostrarTab){
+                if (mostrarTab) {
                     var configReservas = await TasaBackendService.obtenerConfigReservas(usuario);
                     if (configReservas) {
                         modelo.setProperty("/ConfigReservas/BWART", configReservas.bwart);
@@ -753,7 +753,7 @@ sap.ui.define([
                 return "FGARCIA";
             },
 
-            getRolUser: function(){
+            getRolUser: function () {
                 return [];//este metodo debe devolver la lista de roles asignado. Ejem. ["Administrador", "Operador"]
             },
 
@@ -1495,31 +1495,64 @@ sap.ui.define([
                 return bOk;
             },
 
-            validarRoles: function(){
+            validarRoles: function () {
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 var rolesRadOpe = modelo.getProperty("/RolesFlota/RolRadOpe");
                 var rolIngCOmb = modelo.getProperty("/RolesFlota/RolIngCom");
                 var rolesUsuario = this.getRolUser();
                 for (let index = 0; index < rolesUsuario.length; index++) {
                     const rol = rolesUsuario[index];
-                    if(rolesRadOpe.includes(rol)){
+                    if (rolesRadOpe.includes(rol)) {
                         modelo.setProperty("/DataSession/IsRolRadOpe", true);
-                    }  
-                    
-                    if(rolIngCOmb.includes(rol)){
+                    }
+
+                    if (rolIngCOmb.includes(rol)) {
                         modelo.setProperty("/DataSession/IsRollngComb", true);
                     }
                 }
                 BusyIndicator.hide();
                 //modelo.setProperty("/DataSession/RolFlota", true);
             },
-            
-            onSelectItemList: function(evt){
+
+            onSelectItemList: function (evt) {
                 //console.log(evt);
                 var listItem = evt.getSource();
                 var expanded = listItem.getExpanded();
                 listItem.setExpanded(!expanded);
                 //console.log(listItem);
+            },
+
+            onAnularMarea: async function (evt) {
+                var selectedItem = evt.getSource().getParent().getBindingContext().getObject();
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var oButton = this.getView().byId("messagePopoverBtn");
+                if (selectedItem) {
+                    var me = this;
+                    MessageBox.confirm("¿Realmente quiere anular esta marea?, este proceso puede durar varios minutos.", {
+                        title: "Anular Marea",
+                        onClose: async function (bOk) {
+                            if (bOk == "OK") {
+                                await me.anularMarea(selectedItem.NRMAR);
+                                var messageItems = modelo.getProperty("/Utils/MessageItemsDM");
+                                if (messageItems.length > 0) {
+                                    oMessagePopover.getBinding("items").attachChange(function (oEvent) {
+                                        oMessagePopover.navigateBack();
+                                        oButton.setType(this.buttonTypeFormatter("DM"));
+                                        oButton.setIcon(this.buttonIconFormatter("DM"));
+                                        oButton.setText(this.highestSeverityMessages("DM"));
+                                    }.bind(this));
+
+                                    setTimeout(function () {
+                                        oMessagePopover.openBy(oButton);
+                                        oButton.setType(this.buttonTypeFormatter("DM"));
+                                        oButton.setIcon(this.buttonIconFormatter("DM"));
+                                        oButton.setText(this.highestSeverityMessages("DM"));
+                                    }.bind(this), 100);
+                                }
+                            }
+                        }
+                    });
+                }
             },
 
 
@@ -1531,18 +1564,18 @@ sap.ui.define([
                 });
             },
 
-            onCallUsuario: async function(){
+            onCallUsuario: async function () {
                 /*var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 var dataModelo = modelo.getData();
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 oStore.put("DataModelo", dataModelo);
                 var oCrossAppNav = sap.ushell.Container.getService("CrossApplicationNavigation");
                 oCrossAppNav.toExternal({
-					target: {
-						semanticObject: "mareaevento",
-						action: "display"
-					}
-				});*/
+                    target: {
+                        semanticObject: "mareaevento",
+                        action: "display"
+                    }
+                });*/
 
                 /*$.ajax({
                     url: 'https://current-user-qas.cfapps.us10.hana.ondemand.com/getuserinfo',
@@ -1556,11 +1589,11 @@ sap.ui.define([
                     }
                   });*/
 
-                  //var appPath = appId.replaceAll(".", "");
+                //var appPath = appId.replaceAll(".", "");
                 var appPath = "03ca268b-52db-4b05-8855-e05a82e96d53.com-tasa-registroeventospescav2.comtasaregistroeventospescav2-1.0.0";
                 //var url_data = "./GetUserInfo/getuserinfo";
                 var url_data = "./userinfodetails/getuserinfo";
-                
+
                 var aData = jQuery.ajax({
                     method: 'GET',
                     cache: false,
@@ -1568,7 +1601,7 @@ sap.ui.define([
                         "X-CSRF-Token": "Fetch"
                     },
                     async: false,
-                    url: url_data 
+                    url: url_data
 
                 }).then(function successCallback(result, xhr, data) {
                     var token = data.getResponseHeader("X-CSRF-Token");
@@ -1618,17 +1651,17 @@ sap.ui.define([
                     }
                  });*/
 
-                
+
                 //abrir componente externo
             },
 
-            getUserInfoService: function() {
+            getUserInfoService: function () {
                 return new Promise(resolve => sap.ui.require([
-                  "sap/ushell/library"
+                    "sap/ushell/library"
                 ], oSapUshellLib => {
-                  const oContainer = oSapUshellLib.Container;
-                  const pService = oContainer.getServiceAsync("UserInfo"); // .getService is deprecated!
-                  resolve(pService);
+                    const oContainer = oSapUshellLib.Container;
+                    const pService = oContainer.getServiceAsync("UserInfo"); // .getService is deprecated!
+                    resolve(pService);
                 }));
             }
 
