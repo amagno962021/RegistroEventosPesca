@@ -52,7 +52,7 @@
 							<Text text="{eventos>CDEQP}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 							<Text text="{eventos>DSEQP}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 							<Text text="{eventos>DSUMD}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-							<Input value="{eventos>CNEPE}" type="Text" showValueHelp="false" enabled="{eventos>/enabledCantEquipamiento}" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" />
+							<Input value="{eventos>CNEPE}" type="Number" textAlign="Right" showValueHelp="false" enabled="{eventos>/enabledCantEquipamiento}" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" />
 						</cells>
 					</ColumnListItem>
 				</items>
