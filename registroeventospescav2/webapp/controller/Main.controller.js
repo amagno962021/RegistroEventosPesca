@@ -59,8 +59,6 @@ sap.ui.define([
                 this.segundoOption = [];
                 this.currentPage = "";
                 this.lastPage = "";
-                this.bckEmbarcacion = null;
-                this.bckArmador = null;
 
                 this.cargarMessagePopover();
 
@@ -70,6 +68,14 @@ sap.ui.define([
                 var dataModelo = modelo.getData();
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 oStore.put('InitData', dataModelo);
+            },
+
+            /**
+             * @override
+             */
+            onAfterRendering: function() {
+                //MainComp.prototype.onAfterRendering.apply(this, arguments);
+                
             },
 
             _onPatternMatched: function () {
@@ -485,9 +491,10 @@ sap.ui.define([
                         if (emba) {
                             var bOk = await this.verificarCambiosCodigo("EMB", selectedItem.CDEMB, emba[0]);
                             if (!bOk) {
+                                var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                                 var codemba = modelo.getProperty("/DatosGenerales/CDEMB");
-                                var codPlanta = modelo.getProperty("/DatosGenerales/CDPTA");
+                                var codPlanta = modelo.getProperty("/DatosGenerales/CDPTA") ? modelo.getProperty("/DatosGenerales/CDPTA") : oStore.get("CDPTA");
                                 var nmbemb = modelo.getProperty("/DatosGenerales/NMEMB");
                                 var validaBodCert = await this.validarBodegaCert(codemba, codPlanta);
                                 if (validaBodCert) { //se puso la admiracion para pruebas
@@ -1094,10 +1101,10 @@ sap.ui.define([
                 if (codigo != null && codigo.trim().length > 0) {
                     codigo = codigo.trim();
                     if (tipo == "EMB") {
-                        if (this.bckEmbarcacion == null || codigo != this.bckEmbarcacion) {
-                            modelo.setProperty("/DatosGenerales/CDMMA", null);
-                            bOk = await this.buscarEmbarcacion(codigo, embarcacion);
-                        }
+                        //if (this.bckEmbarcacion == null || codigo != this.bckEmbarcacion) {
+                        modelo.setProperty("/DatosGenerales/CDMMA", null);
+                        bOk = await this.buscarEmbarcacion(codigo, embarcacion);
+                        //}
                     } else if (tipo == "ARM") {
                         if (this.bckArmador == null || codigo != this.bckArmador) {
                             bOk = await this.buscarArmador(codigo);
@@ -1240,7 +1247,7 @@ sap.ui.define([
                 }
                 if (clearData) {
 
-                    this.bckEmbarcacion = null;
+                    //this.bckEmbarcacion = null;
                     //form.setProperty("/Embarcacion", null);
                     modelo.setProperty("/Cabecera/CDEMB", null);
                     //form.setProperty("/DescEmbarcacion", null);
@@ -1258,7 +1265,7 @@ sap.ui.define([
                     modelo.setProperty("/DatosGenerales/CDMMA", null);
                 } else {
                     this.validarIndPropiedad(indPropiedad);
-                    this.bckEmbarcacion = codigo;
+                    //this.bckEmbarcacion = codigo;
                 }
                 modelo.setProperty("/Cabecera/VEDAVERIF", false);
                 //utils.setProperty("/VedaVerificada", false);
@@ -1590,11 +1597,11 @@ sap.ui.define([
                   });*/
 
                 //var appPath = appId.replaceAll(".", "");
-                var appPath = "03ca268b-52db-4b05-8855-e05a82e96d53.com-tasa-registroeventospescav2.comtasaregistroeventospescav2-1.0.0";
+                //var appPath = "03ca268b-52db-4b05-8855-e05a82e96d53.com-tasa-registroeventospescav2.comtasaregistroeventospescav2-1.0.0";
                 //var url_data = "./GetUserInfo/getuserinfo";
-                var url_data = "./userinfodetails/getuserinfo";
+                //var url_data = "./userinfodetails/getuserinfo";
 
-                var aData = jQuery.ajax({
+                /*var aData = jQuery.ajax({
                     method: 'GET',
                     cache: false,
                     headers: {
@@ -1610,7 +1617,7 @@ sap.ui.define([
                 }, function errorCallback(xhr, readyState) {
                     var ddd2 = '';
                 });
-                var gg = 'dfd';
+                var gg = 'dfd';*/
 
                 /*
                 const oUserInfo = await this.getUserInfoService();
@@ -1653,6 +1660,7 @@ sap.ui.define([
 
 
                 //abrir componente externo
+
             },
 
             getUserInfoService: function () {
