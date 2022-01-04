@@ -268,9 +268,9 @@
 										<content>
 											<Title text="{DetalleMarea>/Eventos/TituloEventos}" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
 											<ToolbarSpacer width=""/>
-											<OverflowToolbarButton text="Add" type="Default" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="true"
+											<OverflowToolbarButton text="Add" type="Default" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleDetalleEvento}"
 														iconDensityAware="false" press="abrirCrearEvento"/>
-											<OverflowToolbarButton text="Delete" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="true"
+											<OverflowToolbarButton text="Delete" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleDetalleEvento}"
 														iconDensityAware="false" press="onEliminarEvento"/>
 										</content>
 									</OverflowToolbar>
@@ -332,7 +332,7 @@
 									</Column>
 									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false" visible="{DetalleMarea>/Config/visibleDetalleEvento}">
 										<header>
-											<Text text="D" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 										</header>
 										<footer/>
 									</Column>

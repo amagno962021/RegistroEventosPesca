@@ -10,17 +10,19 @@
 						<form:formElements>
 							<form:FormElement visible="true">
 								<form:label>
-									<Label text="" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+									<Label text="Marea" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<Text maxLines="1" text="{DetalleMarea>/Utils/MensajeGrabacion}"/>
+									<Text text="{DetalleMarea>/Utils/TxtMareaConfirm}"/>
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement>
-								<HBox>
-									
-									
-								</HBox>
+							<form:FormElement visible="true">
+								<form:label>
+									<Label text="Embarcación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+								</form:label>
+								<form:fields>
+									<Text text="{DetalleMarea>/Utils/TxtEmbaConfirm}"/>
+								</form:fields>
 							</form:FormElement>
 						</form:formElements>
 						<form:title/>
@@ -32,10 +34,10 @@
 			</form:Form>
 		</content>
 		<beginButton>
-			<Button type="Emphasized" id="btnConfirmSave" text="Inicio" press="onNavInicio" enabled="true"></Button>
+			<Button type="Emphasized" text="Inicio" press="onNavInicio" enabled="true"></Button>
 		</beginButton>
 		<endButton>
-			<Button text="Ver Marea" press="onNavVerMarea"></Button>
+			<Button type="Emphasized" text="Ver Marea" press="onNavVerMarea"></Button>
 		</endButton>
 	</Dialog>
 </core:FragmentDefinition>
