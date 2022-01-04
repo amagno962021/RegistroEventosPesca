@@ -1486,6 +1486,7 @@ sap.ui.define([
             this.getDialog().close();
         },
         onCloseConfirm: async function(){
+            this.getDialog().close();
             await this.SaveGeneral();
         },
         getDialog: function () {
