@@ -2,7 +2,7 @@
 	xmlns="sap.m"
 	xmlns:core="sap.ui.core"
 	xmlns:form="sap.ui.layout.form">
-	<Dialog title="Evento registrado">
+	<Dialog title="Datos Guardados">
 		<content>
 			<form:Form width="100%" editable="true" visible="true">
 				<form:formContainers>
@@ -18,31 +18,8 @@
 							</form:FormElement>
 							<form:FormElement>
 								<HBox>
-									<Link
-										emphasized="false"
-										enabled="true"
-										href=""
-										subtle="false"
-										target=""
-										text="empty string"
-										textAlign="Initial"
-										textDirection="Inherit"
-										validateUrl="false"
-										width=""
-										wrapping="false"
-									>
-															
-								</Link>
-									<Text
-										renderWhitespace="false"
-										text="empty string"
-										textAlign="Begin"
-										textDirection="Inherit"
-										width=""
-										wrapping="true"
-										wrappingType="Normal"
-									>
-									</Text>
+									
+									
 								</HBox>
 							</form:FormElement>
 						</form:formElements>
@@ -55,10 +32,10 @@
 			</form:Form>
 		</content>
 		<beginButton>
-			<Button type="Emphasized" id="btnConfirmSave" text="Aceptar" press="onCloseConfirm" enabled="true"></Button>
+			<Button type="Emphasized" id="btnConfirmSave" text="Inicio" press="onNavInicio" enabled="true"></Button>
 		</beginButton>
 		<endButton>
-			<Button text="Cancelar" press=".onCancelConfirm"></Button>
+			<Button text="Ver Marea" press="onNavVerMarea"></Button>
 		</endButton>
 	</Dialog>
 </core:FragmentDefinition>

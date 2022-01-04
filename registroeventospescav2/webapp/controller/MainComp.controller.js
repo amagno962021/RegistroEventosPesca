@@ -283,21 +283,43 @@ sap.ui.define([
                 HEARR: Utils.strHourToSapHo(modelo.getProperty("/DatosGenerales/HEARR")),
                 OBMAR: modelo.getProperty("/Cabecera/OBMAR"),
                 ESMAR: modelo.getProperty("/DatosGenerales/ESMAR"),
-                FEMAR: Utils.strDateToDate(modelo.getProperty("/DatosGenerales/FEMAR")),
-                HAMAR: modelo.getProperty("/DatosGenerales/HAMAR"), //Utils.strHourToSapHo(modelo.getProperty("/DatosGenerales/HAMAR")),
+                //FEMAR: Utils.strDateToDate(modelo.getProperty("/DatosGenerales/FEMAR")),
+                //HAMAR: modelo.getProperty("/DatosGenerales/HAMAR"),
+                //HAMAR: Utils.strHourToSapHo(modelo.getProperty("/DatosGenerales/HAMAR")),
                 FIMAR: Utils.strDateToDate(modelo.getProperty("/DatosGenerales/FIMAR")),
-                HIMAR: modelo.getProperty("/DatosGenerales/HIMAR"),//Utils.strHourToSapHo(modelo.getProperty("/DatosGenerales/HIMAR")),
+                //HIMAR: modelo.getProperty("/DatosGenerales/HIMAR"),
+                HIMAR: Utils.strHourToSapHo(modelo.getProperty("/DatosGenerales/HIMAR")),
                 FFMAR: Utils.strDateToDate(modelo.getProperty("/DatosGenerales/FFMAR")),
-                HFMAR: modelo.getProperty("/DatosGenerales/HFMAR"),//Utils.strHourToSapHo(modelo.getProperty("/DatosGenerales/HFMAR")),
+                //HFMAR: modelo.getProperty("/DatosGenerales/HFMAR"),
+                HFMAR:Utils.strHourToSapHo(modelo.getProperty("/DatosGenerales/HFMAR")),
                 CDPTA: modelo.getProperty("/Cabecera/CDPTA"),
                 ESCMA: modelo.getProperty("/Cabecera/ESCMA"),
                 FCCRE: Utils.strDateToDate(modelo.getProperty("/Cabecera/FCCRE")),
-                HRCRE: modelo.getProperty("/Cabecera/HRCRE"),//Utils.strHourToSapHo(modelo.getProperty("/Cabecera/HRCRE")),
+                //HRCRE: modelo.getProperty("/Cabecera/HRCRE"),
+                HRCRE: Utils.strHourToSapHo(modelo.getProperty("/Cabecera/HRCRE")),
                 ATCRE: modelo.getProperty("/Cabecera/ATCRE"),
-                FCMOD: Utils.strDateToDate(modelo.getProperty("/Cabecera/FCMOD")),
-                HRMOD: modelo.getProperty("/Cabecera/HRMOD"),//Utils.strHourToSapHo(modelo.getProperty("/Cabecera/HRMOD")),
+                FCMOD: Utils.strDateToDate(modelo.getProperty("/Cabecera/FCMOD")),  
+                //HRMOD: modelo.getProperty("/Cabecera/HRMOD"),
+                HRMOD: Utils.strHourToSapHo(modelo.getProperty("/Cabecera/HRMOD")),
                 ATMOD: modelo.getProperty("/Cabecera/ATMOD")
             };
+
+            var estadoMarea = modelo.getProperty("/DatosGenerales/ESMAR");
+            if(estadoMarea == "C"){
+                var currentDate = new Date();
+                objMarea.FXMAR = currentDate;
+                objMarea.HXMAR = Utils.strHourToSapHo(Utils.dateToStrHours(currentDate)),
+                objMarea.AXMAR = this.getCurrentUser();
+            }
+
+            var esNuevo = false;
+            if(esNuevo){
+                var currentDate = new Date();
+                objMarea.FEMAR = currentDate;
+                objMarea.HAMAR = Utils.strHourToSapHo(Utils.dateToStrHours(currentDate)),
+                objMarea.AAMAR = this.getCurrentUser();
+            }
+
 
             marea.str_marea.push(objMarea);
             var equipamientos = [];
@@ -333,9 +355,9 @@ sap.ui.define([
                     FFEVN: Utils.strDateToSapDate(element.FFEVN),
                     HFEVN: Utils.strHourToSapHo(element.HFEVN),
                     FICAL: Utils.strDateToSapDate(element.FICAL),
-                    HICAL: element.HICAL,
+                    HICAL: Utils.strHourToSapHo(element.HICAL),
                     FFCAL: Utils.strDateToSapDate(element.FFCAL),
-                    HFCAL: element.HFCAL,
+                    HFCAL: Utils.strHourToSapHo(element.HFCAL),
                     CDZPC: element.CDZPC,
                     CDPTO: element.CDPTO,
                     CDPTA: element.CDPTA,
@@ -354,15 +376,17 @@ sap.ui.define([
                     MUEST: element.MUEST,
                     ESEVN: element.ESEVN,
                     FCEVN: Utils.strDateToSapDate(element.FCEVN),
-                    HCEVN: element.HCEVN,
+                    HCEVN: Utils.strHourToSapHo(element.HCEVN),
                     ACEVN: element.ACEVN,
                     FMEVN: Utils.strDateToSapDate(element.FMEVN),
-                    HMEVN: element.HMEVN,
+                    HMEVN: Utils.strHourToSapHo(element.HMEVN),
                     AMEVN: element.AMEVN,
                     NRDES: element.NRDES,
                     ESTSF: element.ESTSF,
                     KMEVN: obs
                 };
+
+
 
                 if (eveVisTabEquip.includes(element.CDTEV)) {
                     equipamientos = this.obtenerEquipamientos(element)
@@ -402,6 +426,7 @@ sap.ui.define([
             marea.str_horom = horometros;
 
             console.log("GUARDAR MAREA: ", marea);
+            
             try {
                 var guardar = await TasaBackendService.crearActualizarMarea(marea);
                 if(guardar.length > 0){
@@ -418,7 +443,7 @@ sap.ui.define([
             if(bOk){
                 this.informarHorometroAveriado();
             }
-            
+        
         },
         informarHorometroAveriado : function (){
 

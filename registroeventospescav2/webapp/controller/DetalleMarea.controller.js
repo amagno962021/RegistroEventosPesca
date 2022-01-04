@@ -523,6 +523,7 @@ sap.ui.define([
                     modelo.setProperty("/Config/visibleBtnSiguiente", true); //si es nueva marea
                     modelo.setProperty("/DatosGenerales/FEARR", "");
                     modelo.setProperty("/DatosGenerales/HEARR", "");
+                    modelo.setProperty("/DatosGenerales/ESMAR", "A");
                 }
             } else if (motivo == "3" || motivo == "7" || motivo == "8") {
                 modelo.setProperty("/Config/visibleFecHoEta", false);
@@ -530,9 +531,12 @@ sap.ui.define([
                 modelo.setProperty("/Config/visibleFechIni", true);
                 modelo.setProperty("/Config/readOnlyFechIni", false);
                 modelo.setProperty("/Config/readOnlyEstaMar", true);
-                modelo.setProperty("/Config/visibleBtnGuardar", true); //si es nueva marea
-                modelo.setProperty("/Config/visibleBtnSiguiente", false); //si es nueva marea
                 modelo.setProperty("/DatosGenerales/INUBC", "1");
+                if(indicador == "N"){
+                    modelo.setProperty("/Config/visibleBtnGuardar", true); //si es nueva marea
+                    modelo.setProperty("/Config/visibleBtnSiguiente", false); //si es nueva marea
+                    modelo.setProperty("/DatosGenerales/ESMAR", "A");
+                }
                 var MareAntNrmar = modelo.getProperty("/MareaAnterior/NRMAR");
                 var MareAntDesc = modelo.getProperty("/MareaAnterior/DESC_CDMMA");
                 var MareAntEvt = modelo.getProperty("/MareaAnterior/EventoMarAnt/DESC_CDTEV");
@@ -560,6 +564,7 @@ sap.ui.define([
                 modelo.setProperty("/Cabecera/TXTNOTIF1", "");
                 modelo.setProperty("/Config/visibleBtnGuardar", false); //si es nueva marea
                 modelo.setProperty("/Config/visibleBtnSiguiente", true); //si es nueva marea
+                modelo.setProperty("/DatosGenerales/ESMAR", "A");
             }
         },
 
