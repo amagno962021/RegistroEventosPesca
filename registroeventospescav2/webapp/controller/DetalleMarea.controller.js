@@ -172,12 +172,26 @@ sap.ui.define([
                     } else {
                         if (motivoMarea == "2" && inprpEvento == "P") {
                             if (!that.verificarCambiosDescarga()) {
-                                that.eliminarEvento(object);
+                                MessageBox.confirm("Realmente desea eliminar este evento ?", {
+                                    actions: [MessageBox.Action.OK, MessageBox.Action.CLOSE],
+                                    onClose: function (sAction) {
+                                        if (sAction == MessageBox.Action.OK) {
+                                            that.eliminarEvento(object);
+                                        }
+                                    }
+                                });
                             } else {
                                 MessageBox.information(this.oBundle.getText("NOANULDESCARGA"));
                             }
                         } else {
-                            that.eliminarEvento(object);
+                            MessageBox.confirm("Realmente desea eliminar este evento ?", {
+                                actions: [MessageBox.Action.OK, MessageBox.Action.CLOSE],
+                                onClose: function (sAction) {
+                                    if (sAction == MessageBox.Action.OK) {
+                                        that.eliminarEvento(object);
+                                    }
+                                }
+                            });
                         }
                     }
                 } else {
