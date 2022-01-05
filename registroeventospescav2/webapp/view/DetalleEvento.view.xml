@@ -15,7 +15,7 @@
 								<attributes>
 									<ObjectAttribute title="Embarcacion" text="{DetalleMarea>/Cabecera/CDEMB} {DetalleMarea>/Cabecera/NMEMB}" active="false" visible="true" />
 									<ObjectAttribute title="Matricula" text="{DetalleMarea>/Cabecera/MREMB}" active="false" visible="true" />
-									<ObjectAttribute title="Tipo de Evento" text="Zarpe" active="false" visible="true" />
+									<ObjectAttribute title="Tipo de Evento" text="{DetalleMarea>/Utils/DescTipoEvento}" active="false" visible="true" />
 								</attributes>
 								<firstStatus />
 								<secondStatus />

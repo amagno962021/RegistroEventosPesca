@@ -36,6 +36,7 @@ sap.ui.define([
             this.ctr = oThis;
             this._navBio = idBiometria;
             console.log("TextoNav : " + idBiometria);
+            this._oView.byId("table_biometria").destroyColumns();
             this.getTableDefault();
 
         },
@@ -526,9 +527,11 @@ sap.ui.define([
                     
 
                 }else{
+                    this._oView.byId("table_biometria").destroyColumns();
                     this.getTableDefault();
                 }
             }else{
+                this._oView.byId("table_biometria").destroyColumns();
                 this.getTableDefault();
             }
         },
