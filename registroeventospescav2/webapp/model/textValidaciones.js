@@ -89,7 +89,7 @@ sap.ui.define([], function () {
 					"Biometria" : "Biom",
 					"Pesca descargada" : "PDesc",
 					"Pesca declarada" : "PDecl",
-					"Horometro" : "Horo",
+					"Horómetro" : "Horo",
 					"Equipamiento" : "Equi",
 					"Siniestro" : "Sini",
 					"Accidente" : "Acci"
