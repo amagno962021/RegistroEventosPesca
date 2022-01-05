@@ -108,6 +108,10 @@ sap.ui.define([
             let FormEvent_cont = dataDetalleMarea;
             let TipoCons = modeloDetalleMarea.getProperty("/Utils/TipoConsulta");
             modeloDetalleMarea.setProperty("/Utils/MessageItemsEP", []);
+
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+            oStore.put("ListaBck", ListaEventos_cont);
+
             if(TipoCons == "E"){
 
                 /********* Carga de variables globales **********/
@@ -146,6 +150,7 @@ sap.ui.define([
                 /************ Listas iniciales vacias **************/
                 this._ConfiguracionEvento = {};
                 this._cmbPuntosDescarga = [];
+                this.validacioncampos = true;
 
                 // var cardManifests = new JSONModel();
                 var EventosModelo = new JSONModel();
@@ -173,6 +178,8 @@ sap.ui.define([
 
                 this.modeloVisibleModel = this.getView().getModel("visible");
                 this.modeloVisible = this.modeloVisibleModel.getData();
+                this.modeloVisible.LinkRemover = false;
+                this.modeloVisible.LinkDescartar = false
 
                 // this.prueba01 = "Hola"
                 // EventosModelo.setProperty("/prueba001", this.prueba01);
@@ -203,7 +210,7 @@ sap.ui.define([
                 this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "" == "" ? "0" : FormEvent_cont.Cabecera.NRMAR + "";//"165728";
                 this._nroDescarga = "";
                 this._indicadorPropXPlanta = "";
-                this._indicador = "E"
+                this._indicador = "N"
                 this._codPlanta = FormEvent_cont.Cabecera.CDPTA ? FormEvent_cont.Cabecera.CDPTA : FormEvent_cont.DatosGenerales.CDPTA;
                 this._embarcacion = FormEvent_cont.Cabecera.CDEMB;//"0000000012";
                 this._indicadorProp = FormEvent_cont.Cabecera.INPRP;
@@ -226,6 +233,7 @@ sap.ui.define([
                 /************ Listas iniciales vacias **************/
                 this._ConfiguracionEvento = {};
                 this._cmbPuntosDescarga = [];
+                this.validacioncampos = true;
 
                 var ModeloVisible = new JSONModel();
                 this.getView().setModel(ModeloVisible, "visible");
@@ -233,6 +241,8 @@ sap.ui.define([
 
                 this.modeloVisibleModel = this.getView().getModel("visible");
                 this.modeloVisible = this.modeloVisibleModel.getData();
+                this.modeloVisible.LinkRemover = false;
+                this.modeloVisible.LinkDescartar = false
                 this.cerrarCrearEvento();
             }
 
@@ -473,11 +483,15 @@ sap.ui.define([
         },
 
         SaveAll:async function () {
-            /*let mod = this.getOwnerComponent().getModel("DetalleMarea");
-            mod.setProperty("/Utils/MessageItemsEP", []);
-            this.resetearValidaciones();
-            await this.validarDatos();*/
-            this.getConfirmSaveDialogTest().open();
+            if(this.validacioncampos == false){
+
+            }else{
+                let mod = this.getOwnerComponent().getModel("DetalleMarea");
+                mod.setProperty("/Utils/MessageItemsEP", []);
+                this.resetearValidaciones();
+                await this.validarDatos();
+            }
+            
 
         },
 
@@ -969,10 +983,13 @@ sap.ui.define([
 
         },
         mngBckEventos: function (respaldar) {
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+            
             if (respaldar) {
-                this._listaEventosBkup = this._listaEventos;
+                this._listaEventosBkup = oStore.get("ListaBck");
             } else {
-                this._listaEventos = this._listaEventosBkup;
+                let lstbkcEven =  oStore.get("ListaBck");
+                this._listaEventos = lstbkcEven;
             }
 
         },
@@ -1436,20 +1453,29 @@ sap.ui.define([
         },
 
         validarCambios:async function () {
-            var bOk = await this.Dat_PescaDescargada.validarDatosEvento();
-            var detalleMarea = this._FormMarea;//modelo detalle marea
-            if (!bOk) {
-                var mensaje = this.oBundle.getText("DISCCHANEVENTMESSAGE");
-                MessageBox.error(mensaje);
-                this.Dat_Horometro.mostrarEnlaces();
-                this.getView().getModel("eventos").updateBindings(true);
-            } else {
-                detalleMarea.FormEditado = true;
-                let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
-                o_iconTabBar.setSelectedKey("");
-                this.getView().getModel("eventos").updateBindings(true);
-                history.go(-1);
+            if(this.validacioncampos == false){
+
+            }else{
+                var bOk = await this.Dat_PescaDescargada.validarDatosEvento();
+                var detalleMarea = this._FormMarea;//modelo detalle marea
+                if (!bOk) {
+                    var mensaje = this.oBundle.getText("DISCCHANEVENTMESSAGE");
+                    this.agregarMensajeValid("Error", mensaje);
+                    this.Dat_Horometro.mostrarEnlaces();
+                    this.getView().getModel("eventos").updateBindings(true);
+                } else {
+                    detalleMarea.FormEditado = true;
+                    let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
+                    o_iconTabBar.setSelectedKey("");
+                    await this.cargarValoresFormateados();
+                    this.resetearValidaciones();
+                    this.getView().getModel("eventos").updateBindings(true);
+                    history.go(-1);
+                }
             }
+
+
+            
             
             //refresh model
         },
@@ -2101,6 +2127,7 @@ sap.ui.define([
         cerrarCrearEvento : async function(){
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let tipoEvento  =  mod.getProperty("/Utils/TipoEvento");
+            let descrip_tipoEvento  =  mod.getProperty("/Utils/DescTipoEvento");
             let LstEvento = mod.getProperty("/Eventos/Lista")
 
             let timeInMilis = new Date();
@@ -2113,6 +2140,7 @@ sap.ui.define([
                 var obj = {
                     INDTR : "N",
                     CDTEV : tipoEvento,
+                    DESC_CDTEV : descrip_tipoEvento,
                     NREVN : Number(LstEvento.length) + 1,
                     ESEVN : "S",
                     ACEVN : this.getCurrentUser(),
@@ -2592,7 +2620,8 @@ sap.ui.define([
                     break;
                 case 'FIEVN':
                     NmbCampo = "Fecha inicio de evento";
-                    this.byId("dtf_fechaIniEnv").setValueState( sap.ui.core.ValueState.Error);
+                    this.byId("dtf_fechaIniEnv").setValueState("Error");
+                    //this.byId("dtf_fechaIniEnv").setValueStateText("Holaaaaaaaaaaaaaaaaaaaaa");
                     break;
                 case 'HIEVN':
                     NmbCampo = "Hora inicio de evento";
@@ -2659,6 +2688,37 @@ sap.ui.define([
             this.byId("dtf_FechaProduccion").setValueState( sap.ui.core.ValueState.None);
             this.byId("cmb_motivoLim").setValueState( sap.ui.core.ValueState.None);
             this.byId("cb_motNoPesca").setValueState( sap.ui.core.ValueState.None);
+        },
+        cargarValoresFormateados : function (){
+            var eventoActual = this._listaEventos[this._elementAct];
+            eventoActual.HIEVN = Utils.formatHoraBTP(eventoActual.HIEVN);
+            eventoActual.CNPDC = eventoActual.CNPDC ? eventoActual.CNPDC : 0;
+            eventoActual.CNPDS = eventoActual.CNPDS ? eventoActual.CNPDS : 0;
+            eventoActual.NREVN = Utils.formatoNroEvento(eventoActual.NREVN);
+        },
+        validacionStock :function (){
+            let valorStock = this.byId("i_stockCombustible").getValue();
+            if(valorStock.length > 0){
+                let v_st = valorStock.split(".");
+                let v_entero = v_st[0];
+                let v_decimal = v_st[1] ? v_st[1].length : 0;
+                if(v_entero.length > 10){
+                    this.byId("i_stockCombustible").setValueState( sap.ui.core.ValueState.Error);
+                    this.byId("i_stockCombustible").setValueStateText("Introduzca un valor con 10 pociones predecimales como máximo y 3 decimales como máximo");
+                    this.validacioncampos = false;
+
+                }else if(v_decimal > 3){
+                    this.byId("i_stockCombustible").setValueState( sap.ui.core.ValueState.Error);
+                    this.byId("i_stockCombustible").setValueStateText("Introduzca un valor con 10 pociones predecimales como máximo y 3 decimales como máximo");
+                    this.validacioncampos = false;
+                    
+                }else{
+                    this.byId("i_stockCombustible").setValueState( sap.ui.core.ValueState.Success);
+                    this.validacioncampos = true;
+
+                }
+            }
+
         }   
 
     });

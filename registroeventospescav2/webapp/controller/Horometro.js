@@ -84,7 +84,7 @@ sap.ui.define([
             this.ctr.modeloVisible.LinkRemover = false;
             this.ctr.modeloVisible.LinkDescartar = false;
 
-            if (indEvento == "N" && eventoActual == ListaEventos[ListaEventos - 1]) {
+            if (indEvento == "N" && eventoActual == (ListaEventos - 1)) {
                 this.ctr.modeloVisible.LinkRemover = true;
             } else {
                 this.ctr.modeloVisible.LinkDescartar = true;
@@ -153,10 +153,14 @@ sap.ui.define([
             var eventoActual = this.ctr._listaEventos[this.ctr._eventoNuevo];
             var newArray = this.farrayRemove(ListaEventos, eventoActual);
             ListaEventos = newArray;
+            let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
+            mod.setProperty("/Eventos/Lista", ListaEventos);
             //refresh model
             if (ListaEventos.length < 1) {
-                history.go(-1);
+               
             }
+            this.ctr.resetearValidaciones();
+            history.go(-1);
         },
 
         farrayRemove: function (arr, value) {
@@ -168,7 +172,9 @@ sap.ui.define([
 
         onActionDescartarCambios: function () {
             //metodo backmanage
-            this.ctr._listaEventos = this.ctr._listaEventosBkup;
+            let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
+            mod.setProperty("/Eventos/Lista", this.ctr._listaEventosBkup);
+            this.ctr.resetearValidaciones();
             history.go(-1);
         },
 

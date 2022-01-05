@@ -374,7 +374,7 @@ sap.ui.define([
                 var element = eventos[index];
 
 
-                if ((element.KMEVN != "") && (element.ObseAdicional != "")) {
+                if ((element.KMEVN != "" && element.KMEVN != undefined) && (element.ObseAdicional != "" && element.ObseAdicional != undefined)) {
                     obs = element.KMEVN + " " + element.ObseAdicional;
                 } else if (element.KMEVN != "") {
                     obs = element.KMEVN;

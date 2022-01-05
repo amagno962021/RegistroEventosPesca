@@ -1,6 +1,6 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form">
 
-	<Panel id="0003" headerText="Operacion" expandable="true" expanded="true">
+	<Panel id="0003" headerText="Operación" expandable="true" expanded="true">
 		<content>
 			<form:Form width="100%" editable="true" visible="true">
 				<form:formContainers>
@@ -56,7 +56,7 @@
 									<Label text="Stock de combustible" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<Input id="i_stockCombustible" value="{eventos>/STCMB}" textAlign="Right" submit=".prueba" type="Number" showValueHelp="false" enabled="true" visible="true" width="30%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0"/>
+									<Input id="i_stockCombustible" value="{eventos>/STCMB}" textAlign="Right" submit=".prueba" type="Number" showValueHelp="false" enabled="true" visible="true" width="30%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" change=".valStock_gen"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement id="fe_muestra" visible="true">

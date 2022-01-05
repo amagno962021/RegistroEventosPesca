@@ -43,7 +43,7 @@
 							textDirection="Inherit" enabled="true" visible="false" iconDensityAware="false">
 								
 							</IconTabFilter>
-							<IconTabFilter key="Horo" id="idHorometro" iconColor="Default" text="Horometro" count="" design="Vertical" showAll="false" 
+							<IconTabFilter key="Horo" id="idHorometro" iconColor="Default" text="Horómetro" count="" design="Vertical" showAll="false" 
 							textDirection="Inherit" enabled="true" visible="{visible>/TabHorometro}" iconDensityAware="false">
 								
 							</IconTabFilter>
