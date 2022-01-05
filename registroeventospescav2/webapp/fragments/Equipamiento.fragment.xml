@@ -2,7 +2,7 @@
 
 	<Panel id="0011" expandable="false">
 		<content>
-			<Table width="auto" 
+			<Table width="50rem" 
 			noDataText="No data" 
 			mode="None" 
 			items="{eventos>/ListaEquipamiento}"
@@ -21,7 +21,7 @@
 				<headerToolbar />
 				
 				<columns>
-					<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+					<Column width="8rem" hAlign="Left" vAlign="Middle" minScreenWidth="Phone" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
 						<header>
 							<Text text="Equipamiento" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 						</header>

@@ -1442,10 +1442,15 @@ sap.ui.define([
                 var mensaje = this.oBundle.getText("DISCCHANEVENTMESSAGE");
                 MessageBox.error(mensaje);
                 this.Dat_Horometro.mostrarEnlaces();
+                this.getView().getModel("eventos").updateBindings(true);
             } else {
                 detalleMarea.FormEditado = true;
+                let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
+                o_iconTabBar.setSelectedKey("");
+                this.getView().getModel("eventos").updateBindings(true);
+                history.go(-1);
             }
-            this.getView().getModel("eventos").updateBindings(true);
+            
             //refresh model
         },
 
