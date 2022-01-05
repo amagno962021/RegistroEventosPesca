@@ -808,7 +808,7 @@ sap.ui.define([
                 let sResponsivePaddingClasses = "sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer";
                 if (this._controler._listaEventos[this._controler._elementAct].INPRP == "T") {
 					MessageBox.show(
-                        '�Realmente desea eliminar el registro de pesca descargada?',
+                        'Realmente desea eliminar el registro de pesca descargada?',
                         {
                             icon: MessageBox.Icon.WARNING,
                             title: "Eliminar pesca descargada",
@@ -825,7 +825,7 @@ sap.ui.define([
 				} else if (this._controler._listaEventos[this._controler._elementAct].INPRP =="P") { //Descarga en planta propia
 					if (this._controler._motivoMarea == "1") {
 						MessageBox.show(
-                            '�Realmente desea eliminar el registro de pesca descargada?',
+                            'Realmente desea eliminar el registro de pesca descargada?',
                             {
                                 icon: MessageBox.Icon.WARNING,
                                 title: "Eliminar pesca descargada",
