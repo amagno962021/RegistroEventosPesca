@@ -209,7 +209,7 @@
 													<Label text="Estado de Marea" width="100%"/>
 												</form:label>
 												<form:fields>
-													<ComboBox width="27.5%" selectedKey="{DetalleMarea>/DatosGenerales/ESMAR}" items="{DetalleMarea>/Config/datosCombo/EstMar}" enabled="{DetalleMarea>/Config/readOnlyEstaMar}">
+													<ComboBox width="27.5%" selectedKey="{DetalleMarea>/DatosGenerales/ESMAR}" items="{DetalleMarea>/Config/datosCombo/EstMar}" enabled="{DetalleMarea>/Config/readOnlyEstaMar}" change="onMostrarFechaFin">
 														<items>
 															<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
 														</items>

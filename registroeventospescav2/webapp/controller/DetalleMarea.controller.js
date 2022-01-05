@@ -156,7 +156,8 @@ sap.ui.define([
             var motivoMarea = dataDetalleMarea.Cabecera.CDMMA;
             if (selectedItem) {
                 var object = selectedItem.getBindingContext("DetalleMarea").getObject();
-                if (object.NREVN == eventos.length) {
+                var intNrevn = !isNaN(object.NREVN) ? parseInt(object.NREVN) : 0;
+                if (intNrevn == eventos.length) {
                     //validar y eliminar evento
                     var inprpEvento = object.INPRP;
                     if (object.CDTEV !== "6") {
@@ -515,6 +516,7 @@ sap.ui.define([
                 modelo.setProperty("/Config/visibleFecHoEta", true);
                 modelo.setProperty("/Config/visibleUbiPesca", false);
                 modelo.setProperty("/Config/visibleFechIni", false);
+                modelo.setProperty("/Config/visibleFechFin", false);
                 modelo.setProperty("/Cabecera/TXTNOTIF", "");
                 modelo.setProperty("/Cabecera/TXTNOTIF1", "");
                 if (indicador == "N") {
@@ -644,7 +646,7 @@ sap.ui.define([
                 modelo.setProperty("/Config/visibleTabSepComb", false);
                 modelo.setProperty("/Config/visibleTabVenta", false);
                 modelo.setProperty("/Config/visibleBtnGuardar", true);
-                modelo.setProperty("/Config/visibleBtnSiguiente", true);
+                modelo.setProperty("/Config/visibleBtnSiguiente", false);
             } else {
                 var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
                 this.validarMotivo(motivoMarea);
@@ -1317,6 +1319,44 @@ sap.ui.define([
                 oRouter.navTo("DetalleEvento");
                 this.getNuevoEvento().close();
             }
+        },
+
+        onMostrarFechaFin: function(){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var motivoMarea = modelo.getProperty("/DatosGenerales/CDMMA");
+            var estadoMarea = modelo.getProperty("/DatosGenerales/ESMAR");
+            var motivoSinZarpe = ["3", "7", "8"];
+            var cerrar = true;
+            if(motivoSinZarpe.includes(motivoMarea)){
+                modelo.setProperty("/DatosGenerales/FEARR", "");
+                modelo.setProperty("/DatosGenerales/HEARR", "");
+                var visibleFecHorFin = modelo.getProperty("/Config/visibleFechFin");
+                if(visibleFecHorFin == false){
+                    modelo.setProperty("/DatosGenerales/FFMAR", "");
+                    modelo.setProperty("/DatosGenerales/HFMAR", "");
+                }
+                if(estadoMarea == "C"){
+                    modelo.setProperty("/Config/visibleFechFin", true);
+                }else{
+                    modelo.setProperty("/Config/visibleFechFin", false);
+                }
+            }else{
+                modelo.setProperty("/DatosGenerales/FIMAR", "");
+                modelo.setProperty("/DatosGenerales/HIMAR", "");
+                modelo.setProperty("/DatosGenerales/FFMAR", "");
+                modelo.setProperty("/DatosGenerales/HFMAR", "");
+                modelo.setProperty("/Config/visibleFechFin", false);
+                if(estadoMarea == "C"){
+                    cerrar = this.verificarCierreMarea();
+                }
+            }
+
+            if(!cerrar){
+                var mssg = this.oBundle.getText("EVENTOSNOCOMPLE");
+                MessageBox.error(mssg);
+                modelo.setProperty("/DatosGenerales/ESMAR", "A")
+            }
+
         },
 
         onCallUsuario: function () {

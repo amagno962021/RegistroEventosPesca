@@ -7,16 +7,16 @@ sap.ui.define([
     return {
 
         getHostService: function () {
-			/*var urlIntance = window.location.origin;
+			var urlIntance = window.location.origin;
 			var servicioNode = 'cheerful-bat-js';
 			if (urlIntance.indexOf('tasaqas') !== -1) {
 				servicioNode = 'qas';
 			} else if (urlIntance.indexOf('tasaprd') !== -1) {
 				servicioNode = 'prd';
 			}
-            var urlServicio = "https://cf-nodejs-" + servicioNode + ".cfapps.us10.hana.ondemand.com";*/
-            return "https://cf-nodejs-qas.cfapps.us10.hana.ondemand.com";
-            //return urlServicio;
+            var urlServicio = "https://cf-nodejs-" + servicioNode + ".cfapps.us10.hana.ondemand.com";
+            //return "https://cf-nodejs-qas.cfapps.us10.hana.ondemand.com";
+            return urlServicio;
         },
 
         getBodyDetalleMarea: function () {
