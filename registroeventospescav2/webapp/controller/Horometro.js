@@ -439,6 +439,19 @@ sap.ui.define([
             //     console.log(cells[2].getText());
 
             // }
+        },
+        validarLecturaHorom : function(evt){
+            let id = evt.getParameter("id");
+            let valorhorom =  sap.ui.getCore().byId(id).getValue();
+            if(Number.isInteger(valorhorom) || Number(valorhorom) < 0){
+                sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.Error);
+                sap.ui.getCore().byId(id).setValueStateText("Introduzca un valor entero positivo");
+                this.ctr.validacioncampos = false;
+                
+            }else{
+                sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.None);
+                this.ctr.validacioncampos = true;
+            }
         }
 
 

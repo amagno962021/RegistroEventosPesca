@@ -46,7 +46,7 @@
 									<Label text="Planta" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<Input type="Text" value="{eventos>/CDPTA}" description="{eventos>/DESCR}" showValueHelp="false" enabled="false" visible="true" width="70%" required="false" maxLength="0"/>
+									<Input type="Text" value="{eventos>/CDPTA}" description="{eventos>/DESCR}" showValueHelp="false" enabled="false" visible="true" width="50%" required="false" maxLength="0"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement visible="true">
@@ -55,6 +55,7 @@
 							</form:FormElement>
 						</form:formElements>
 					</form:FormContainer>
+					
 				</form:formContainers>
 				<form:layout>
 					<form:ResponsiveGridLayout singleContainerFullSize="false" adjustLabelSpan="false" columnsL="3" labelSpanL="3" columnsM="2" labelSpanM="2" labelSpanS="8" />
