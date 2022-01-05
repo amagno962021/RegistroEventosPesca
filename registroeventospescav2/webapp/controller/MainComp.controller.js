@@ -253,16 +253,33 @@ sap.ui.define([
             return this.oDialogConfirmSave;
         },
 
-        onNavInicio: function(){
-            this.getConfirmSaveDialog().close();
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("");
+        onNavInicio: function(evt){
+            var view = evt.getSource().getParent().getParent().getProperty("viewName");
+            var viewName = view.split(".")[4];
+            if(viewName == "DetalleMarea"){
+                this.getConfirmSaveDialog().close();
+                history.go(-1);//navegar a comp. reut. Lista Mareas
+            }else{
+                this.getConfirmSaveDialog().close();
+                history.go(-2);//navegar a comp. reut. Lista Mareas
+            }
+            //console.log(evt.getSource().getParent().getParent().getProperty("viewName"));
+            /*this.getConfirmSaveDialog().close();
+            history.go(-1);*/
         },
 
-        onNavVerMarea: function(){
-            this.getConfirmSaveDialog().close();
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("DetalleMarea");
+        onNavVerMarea: function(evt){
+            var view = evt.getSource().getParent().getParent().getProperty("viewName");
+            var viewName = view.split(".")[4];
+            if(viewName == "DetalleMarea"){
+                this.getConfirmSaveDialog().close();
+                //history.go(-1);
+            }else{
+                this.getConfirmSaveDialog().close();
+                history.go(-1);
+            }
+            //console.log(evt.getSource().getParent().getParent().getProperty("viewName"));
+            //this.getConfirmSaveDialog().close();
         },
 
         guardarDatosMarea: async function () {

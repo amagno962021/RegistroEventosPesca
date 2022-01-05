@@ -495,6 +495,15 @@ sap.ui.define([
 
         },
 
+        getConfirmSaveDialogTest: function () {
+            if (!this.oDialogConfirmSave) {
+                this.oDialogConfirmSave = sap.ui.xmlfragment("com.tasa.registroeventospescav2.view.fragments.EventoFinalizado", this);
+                this.getView().addDependent(this.oDialogConfirmSave);
+            }
+            return this.oDialogConfirmSave;
+        },
+
+
         _onButtonPress: function (o_event) {
             console.log(o_event);
         },
