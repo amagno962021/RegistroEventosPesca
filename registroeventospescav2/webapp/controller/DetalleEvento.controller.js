@@ -473,12 +473,22 @@ sap.ui.define([
         },
 
         SaveAll:async function () {
-            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            /*let mod = this.getOwnerComponent().getModel("DetalleMarea");
             mod.setProperty("/Utils/MessageItemsEP", []);
             this.resetearValidaciones();
-            await this.validarDatos();
+            await this.validarDatos();*/
+            this.getConfirmSaveDialogTest().open();
 
         },
+
+        getConfirmSaveDialogTest: function () {
+            if (!this.oDialogConfirmSave) {
+                this.oDialogConfirmSave = sap.ui.xmlfragment("com.tasa.registroeventospescav2.view.fragments.EventoFinalizado", this);
+                this.getView().addDependent(this.oDialogConfirmSave);
+            }
+            return this.oDialogConfirmSave;
+        },
+
 
         _onButtonPress: function (o_event) {
             console.log(o_event);

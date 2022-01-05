@@ -532,7 +532,7 @@ sap.ui.define([
                 modelo.setProperty("/Config/readOnlyFechIni", false);
                 modelo.setProperty("/Config/readOnlyEstaMar", true);
                 modelo.setProperty("/DatosGenerales/INUBC", "1");
-                if(indicador == "N"){
+                if (indicador == "N") {
                     modelo.setProperty("/Config/visibleBtnGuardar", true); //si es nueva marea
                     modelo.setProperty("/Config/visibleBtnSiguiente", false); //si es nueva marea
                     modelo.setProperty("/DatosGenerales/ESMAR", "A");
@@ -721,55 +721,66 @@ sap.ui.define([
         },
 
         onSelectTabMarea: function (evt) {
-            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var motivo = modelo.getProperty("/DatosGenerales/CDMMA");
-            var ubicPesca = modelo.getProperty("/DatosGenerales/INUBC");
             var key = evt.getParameter("key");
             var previousKey = evt.getParameter("previousKey");
             var iconTabBar = this.getView().byId("itbDetalleMarea");
             if (key == "itfEventos" && previousKey == "itfDatosGenerales") {
-                if (!motivo) {
-                    modelo.setProperty("/Utils/MessageItemsDM", []);
+                var valMotUbicPesca = this.validarMotivoUbiPesca();
+                if (!valMotUbicPesca) {
                     iconTabBar.setSelectedKey("itfDatosGenerales");
-                    var mssg = this.oBundle.getText("MISSMOTMAR");
-                    //MessageBox.error(mssg);
-                    var objMessage = {
-                        type: 'Error',
-                        title: 'Mensaje de Error',
-                        activeTitle: false,
-                        description: mssg,
-                        subtitle: mssg,
-                        counter: 1
-                    };
-                    var messageItems = modelo.getProperty("/Utils/MessageItemsDM");
-                    messageItems.push(objMessage);
-                    modelo.refresh();
+                }
+            }
+        },
 
-                    var oButton = this.getView().byId("messagePopoverBtn");
-                    oMessagePopover.getBinding("items").attachChange(function (oEvent) {
-                        oMessagePopover.navigateBack();
-                        oButton.setType(this.buttonTypeFormatter("DM"));
-                        oButton.setIcon(this.buttonIconFormatter("DM"));
-                        oButton.setText(this.highestSeverityMessages("DM"));
-                    }.bind(this));
+        validarMotivoUbiPesca: function () {
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var motivo = modelo.getProperty("/DatosGenerales/CDMMA");
+            var ubicPesca = modelo.getProperty("/DatosGenerales/INUBC");
+            var bOk = true;
+            if (!motivo) {
+                modelo.setProperty("/Utils/MessageItemsDM", []);
+                bOk = false;
+                //iconTabBar.setSelectedKey("itfDatosGenerales");
+                var mssg = this.oBundle.getText("MISSMOTMAR");
+                //MessageBox.error(mssg);
+                var objMessage = {
+                    type: 'Error',
+                    title: 'Mensaje de Error',
+                    activeTitle: false,
+                    description: mssg,
+                    subtitle: mssg,
+                    counter: 1
+                };
+                var messageItems = modelo.getProperty("/Utils/MessageItemsDM");
+                messageItems.push(objMessage);
+                modelo.refresh();
 
-                    setTimeout(function () {
-                        oMessagePopover.openBy(oButton);
-                        oButton.setType(this.buttonTypeFormatter("DM"));
-                        oButton.setIcon(this.buttonIconFormatter("DM"));
-                        oButton.setText(this.highestSeverityMessages("DM"));
-                    }.bind(this), 100);
+                var oButton = this.getView().byId("messagePopoverBtn");
+                oMessagePopover.getBinding("items").attachChange(function (oEvent) {
+                    oMessagePopover.navigateBack();
+                    oButton.setType(this.buttonTypeFormatter("DM"));
+                    oButton.setIcon(this.buttonIconFormatter("DM"));
+                    oButton.setText(this.highestSeverityMessages("DM"));
+                }.bind(this));
 
-                } else {
-                    if (motivo == "3" || motivo == "7" || motivo == "8") {
-                        if (!ubicPesca) {
-                            iconTabBar.setSelectedKey("itfDatosGenerales");
-                            var mssg = this.oBundle.getText("MISSUBICPESCA");
-                            MessageBox.error(mssg);
-                        }
+                setTimeout(function () {
+                    oMessagePopover.openBy(oButton);
+                    oButton.setType(this.buttonTypeFormatter("DM"));
+                    oButton.setIcon(this.buttonIconFormatter("DM"));
+                    oButton.setText(this.highestSeverityMessages("DM"));
+                }.bind(this), 100);
+
+            } else {
+                if (motivo == "3" || motivo == "7" || motivo == "8") {
+                    if (!ubicPesca) {
+                        bOk = false;
+                        //iconTabBar.setSelectedKey("itfDatosGenerales");
+                        var mssg = this.oBundle.getText("MISSUBICPESCA");
+                        MessageBox.error(mssg);
                     }
                 }
             }
+            return bOk;
         },
 
         onNavEventos: function (evt) {
@@ -783,6 +794,7 @@ sap.ui.define([
         },
 
         onSave: async function () {
+            /*
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var validarMareaEventos = sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").validarMareaEventos(this);
             var tieneErrores = modelo.getProperty("/Cabecera/TERRORES");
@@ -793,7 +805,8 @@ sap.ui.define([
                     this.prepararVistaConfirm();
                     this.getConfirmDialog().open();
                 }
-            }
+            }*/
+            this.getConfirmSaveDialogTest().open();
         },
 
         onCloseConfirm: async function () {
@@ -1262,18 +1275,18 @@ sap.ui.define([
                     oButton.setText(this.highestSeverityMessages("DM"));
                 }.bind(this), 100);
                 modelo.setProperty("/Config/visibleDetalleEvento", false);
-            }else{
+            } else {
                 modelo.setProperty("/Config/visibleDetalleEvento", true);
             }
         },
 
-        onNuevaReserva: async function(){
+        onNuevaReserva: async function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var inprp = modelo.getProperty("/Cabecera/INPRP");
-            if(inprp == "P"){
+            if (inprp == "P") {
                 modelo.setProperty("/Config/TxtNuevaVentaRes", "Nueva Reserva");
             }
-            if(inprp == "T"){
+            if (inprp == "T") {
                 modelo.setProperty("/Config/TxtNuevaVentaRes", "Nueva Venta");
             }
 
@@ -1282,7 +1295,7 @@ sap.ui.define([
         },
 
 
-        getNuevaResVenDialog: function(){
+        getNuevaResVenDialog: function () {
             if (!this.oDialogNuevaResVent) {
                 this.oDialogNuevaResVent = sap.ui.xmlfragment("com.tasa.registroeventospescav2.view.fragments.NuevaReservaVenta", this);
                 this.getView().addDependent(this.oDialogNuevaResVent);
@@ -1290,17 +1303,20 @@ sap.ui.define([
             return this.oDialogNuevaResVent;
         },
 
-        onCancelNuevaResVent: function(){
+        onCancelNuevaResVent: function () {
             this.getNuevaResVenDialog().close();
         },
 
-        onNext: function(){
+        onNext: function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            modelo.setProperty("/Utils/TipoConsulta", "C");
-            modelo.setProperty("/Utils/TipoEvento", "1");
-            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-            oRouter.navTo("DetalleEvento");
-            this.getNuevoEvento().close();
+            var valMotUbicPesca = this.validarMotivoUbiPesca();
+            if (valMotUbicPesca) {
+                modelo.setProperty("/Utils/TipoConsulta", "C");
+                modelo.setProperty("/Utils/TipoEvento", "1");
+                var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                oRouter.navTo("DetalleEvento");
+                this.getNuevoEvento().close();
+            }
         },
 
         onCallUsuario: function () {
@@ -1321,8 +1337,15 @@ sap.ui.define([
 
             });*/
 
-            
-        }
+        },
+
+        getConfirmSaveDialogTest: function () {
+            if (!this.oDialogConfirmSave) {
+                this.oDialogConfirmSave = sap.ui.xmlfragment("com.tasa.registroeventospescav2.view.fragments.EventoFinalizado", this);
+                this.getView().addDependent(this.oDialogConfirmSave);
+            }
+            return this.oDialogConfirmSave;
+        },
 
 
     });
