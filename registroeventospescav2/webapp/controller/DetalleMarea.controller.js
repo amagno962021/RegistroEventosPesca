@@ -214,7 +214,7 @@ sap.ui.define([
         onCrearEvento: function () {
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             mod.setProperty("/Utils/TipoConsulta", "C");
-            mod.setProperty("/Utils/DescTipoEvento", sap.ui.getCore().byId("ne_tipoEvn").getSelectedItem().getText(),);
+            mod.setProperty("/Utils/DescTipoEvento", sap.ui.getCore().byId("ne_tipoEvn").getSelectedItem().getText());
             //mod.setProperty("/Utils/TipoEvento","6");
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("DetalleEvento");
@@ -790,6 +790,7 @@ sap.ui.define([
             var indexEvento = object.NREVN - 1;
             modelo.setProperty("/Utils/TipoConsulta", "E");
             modelo.setProperty("/Eventos/LeadSelEvento", indexEvento);
+            modelo.setProperty("/Utils/DescTipoEvento", object.DESC_CDTEV);
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("DetalleEvento");
         },
