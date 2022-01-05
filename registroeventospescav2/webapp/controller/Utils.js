@@ -137,7 +137,7 @@ sap.ui.define([
                 let minutos = date.getMinutes();
                 let segundos = date.getSeconds();
                 let strHor = "";
-                if(hora > 0 && hora < 10){
+                if(hora >= 0 && hora < 10){
                     strHor = "0" + hora;
                 }else{
                     strHor = hora;
@@ -288,6 +288,33 @@ sap.ui.define([
         },
         convKmAMillNaut :function(km){
             return km/1.852;
+        },
+        formatHoraBTP : function(hora){
+            let horaFormat = ""
+            let hora_size = hora.length
+
+            if(hora_size == 6 || hora_size == 4){
+                let c_hora = hora + "";
+                let hour_v = c_hora.substr(0,2);
+                let minute_v = c_hora.substr(2,2);
+                horaFormat = hour_v + ":" + minute_v ;
+            }
+            else{
+                horaFormat = hora;
+            }
+
+            return horaFormat;
+        },
+
+        formatoNroEvento : function(nro_evn){
+            let ne = Number(nro_evn);
+            let ne_format = "";
+            if(ne<10){
+                ne_format = "0" + ne;
+            }else{
+                ne_format = ne;
+            }
+            return ne_format;
         }
 
 

@@ -16,7 +16,7 @@
 									<Label text="Eventos" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 								</form:label>
 								<form:fields>
-									<ComboBox selectedKey="{DetalleMarea>/Utils/TipoEvento}" editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%" items="{DetalleMarea>/Config/datosCombo/TipoEventos}">
+									<ComboBox id="ne_tipoEvn" selectedKey="{DetalleMarea>/Utils/TipoEvento}" editable="true" enabled="true" visible="true" width="auto" valueState="None" maxWidth="100%" items="{DetalleMarea>/Config/datosCombo/TipoEventos}">
 										<items>
 											<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
 										</items>

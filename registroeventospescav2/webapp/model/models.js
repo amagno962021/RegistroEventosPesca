@@ -87,6 +87,7 @@ sap.ui.define([
 					TituloEventos: "",
                     CantPescaDescDeclText : "",
                     Lista: [],
+                    ListaBck: [],
                     LeadSelEvento: 0
 				},
                 Incidental: [],
@@ -257,6 +258,7 @@ sap.ui.define([
                     VisibleObsvComb: false,
                     OpSistFrio : false,
                     TipoEvento : "1",
+                    DescTipoEvento : "",
                     FlagVistaBiometria : false,
                     NroEvento_Incidental : "",
                     NroEvento_Biometria : "",

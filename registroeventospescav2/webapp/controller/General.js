@@ -350,111 +350,114 @@ sap.ui.define([
         },
 
         onActionSelectTab: async function (tab_seleccionado, event) {
-            let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
-            mod.setProperty("/Utils/MessageItemsEP", []);
-            this.ctr.resetearValidaciones();
-            BusyIndicator.show(0);
-            this.nextTab = tab_seleccionado;
-            if (this.previousTab == undefined) {
-                this.previousTab = "General";
-            }
-            var visible = this.ctr.modeloVisible;//modelo visible
-            var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //nodo evento actual
-            var motivoEnCalend = ["1", "2", "8"]; // Motivos de marea con registros en calendario
-            var detalleMarea = this.ctr._FormMarea;//modelo detalle marea
-            if (!this.ctr._soloLectura) {
-                visible.LinkRemover = false;
-                visible.LinkDescartar = false;
-                var tipoEvento = eventoActual.CDTEV;
-                var motivoMarea = detalleMarea.CDMMA;
-                var fechEvento = new Date(eventoActual.FIEVN);
-                if (this.previousTab == "General") {
-                    //var validarStockCombustible = await this.validarStockCombustible();
-                    let val = await this.validarCamposGeneral(true);
-                    if (!val) {
-                        this.nextTab = this.previousTab;
-                    } else if (tipoEvento == "6" && motivoEnCalend.includes(motivoMarea)) {
+            if(this.ctr.validacioncampos == true){
+            
+                let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
+                mod.setProperty("/Utils/MessageItemsEP", []);
+                this.ctr.resetearValidaciones();
+                BusyIndicator.show(0);
+                this.nextTab = tab_seleccionado;
+                if (this.previousTab == undefined) {
+                    this.previousTab = "General";
+                }
+                var visible = this.ctr.modeloVisible;//modelo visible
+                var eventoActual = this.ctr._listaEventos[this.ctr._elementAct]; //nodo evento actual
+                var motivoEnCalend = ["1", "2", "8"]; // Motivos de marea con registros en calendario
+                var detalleMarea = this.ctr._FormMarea;//modelo detalle marea
+                if (!this.ctr._soloLectura) {
+                    visible.LinkRemover = false;
+                    visible.LinkDescartar = false;
+                    var tipoEvento = eventoActual.CDTEV;
+                    var motivoMarea = detalleMarea.CDMMA;
+                    var fechEvento = new Date(eventoActual.FIEVN);
+                    if (this.previousTab == "General") {
+                        //var validarStockCombustible = await this.validarStockCombustible();
+                        let val = await this.validarCamposGeneral(true);
+                        if (!val) {
+                            this.nextTab = this.previousTab;
+                        } else if (tipoEvento == "6" && motivoEnCalend.includes(motivoMarea)) {
+                            visible.visibleDescarga = false;
+                            visible.FechFin = false;
+                            var verificarTemporada = this.verificarTemporada(motivoMarea, fechEvento);
+                            if (fechEvento && !verificarTemporada) {
+                                this.nextTab = this.previousTab;
+                            }
+                        } else if (tipoEvento == "5" && visible.TabHorometro) {
+                            let validarStockCombustible = await this.validarStockCombustible();
+                            if(!validarStockCombustible){
+                                visible.visibleDescarga = true;
+                                this.nextTab = this.previousTab;
+                            }
+                        }
+                    }
+
+                    if (tipoEvento == "3" && this.nextTab !== this.previousTab) {
+                        if (motivoMarea == "1") {
+                            var bOk = true;
+                            this.ctr.Dat_Horometro.calcularCantTotalBodegaEve();
+                            var validarBodegas = this.ctr.Dat_PescaDescargada.validarBodegas(true);
+                            if (bOk && this.previousTab == "General" && this.nextTab == "Pesca declarada" && !validarBodegas) {
+                                this.nextTab = "Distribucion";
+                            }
+
+                            if (this.previousTab == "Distribucion" && this.nextTab == "Pesca declarada" && !validarBodegas) {
+                                this.nextTab = this.previousTab;
+                            }
+
+                            if (bOk && this.previousTab == "Distribucion" && this.nextTab != "Biometria" && !validarBodegas) {
+                                this.nextTab = this.previousTab;
+                            }
+                            this.ctr.Dat_PescaDeclarada.calcularPescaDeclarada();
+                        } else if (motivoMarea == "2") {
+                            this.ctr.Dat_PescaDeclarada.calcularCantTotalPescDeclEve();
+                        }
+
+                        //var valCantTotPesca = this.ctr.Dat_PescaDeclarada.validarCantidadTotalPesca();
+                        if (this.previousTab != "General" && (!this.ctr.Dat_PescaDeclarada.validarCantidadTotalPesca())) {
+                            this.nextTab = this.previousTab;
+                        }
+
+                        if ((this.nextTab == "PescaDeclarada" && eventoActual.ObteEspePermitidas) ||
+                            (this.nextTab == "Biometria" && eventoActual.ObteEspePermitidas)) {
+                            await this.obtenerTemporadas(motivoMarea, eventoActual.FIEVN);
+                            await this.obtenerTemporadas("8", eventoActual.FIEVN);
+                            await this.consultarPermisoPesca(this.ctr._embarcacion, motivoMarea);
+                            this.obtenerEspeciesPermitidas();//obtenerEspeciesPermitidas - falta metodo
+                        }
+                    }
+
+                    if (tipoEvento == "6" && this.nextTab == "Horómetro" && eventoActual.NroDescarga) {
                         visible.visibleDescarga = false;
-                        visible.FechFin = false;
-                        var verificarTemporada = this.verificarTemporada(motivoMarea, fechEvento);
-                        if (fechEvento && !verificarTemporada) {
-                            this.nextTab = this.previousTab;
-                        }
-                    } else if (tipoEvento == "5" && visible.TabHorometro) {
-                        let validarStockCombustible = await this.validarStockCombustible();
-                        if(!validarStockCombustible){
-                            visible.visibleDescarga = true;
-                            this.nextTab = this.previousTab;
-                        }
-                    }
-                }
-
-                if (tipoEvento == "3" && this.nextTab !== this.previousTab) {
-                    if (motivoMarea == "1") {
-                        var bOk = true;
-                        this.ctr.Dat_Horometro.calcularCantTotalBodegaEve();
-                        var validarBodegas = this.ctr.Dat_PescaDescargada.validarBodegas(true);
-                        if (bOk && this.previousTab == "General" && this.nextTab == "Pesca declarada" && !validarBodegas) {
-                            this.nextTab = "Distribucion";
-                        }
-
-                        if (this.previousTab == "Distribucion" && this.nextTab == "Pesca declarada" && !validarBodegas) {
-                            this.nextTab = this.previousTab;
-                        }
-
-                        if (bOk && this.previousTab == "Distribucion" && this.nextTab != "Biometria" && !validarBodegas) {
-                            this.nextTab = this.previousTab;
-                        }
-                        this.ctr.Dat_PescaDeclarada.calcularPescaDeclarada();
-                    } else if (motivoMarea == "2") {
-                        this.ctr.Dat_PescaDeclarada.calcularCantTotalPescDeclEve();
+                        visible.fechFin = false;
+                        this.nextTab = "Pesca descargada";
                     }
 
-                    //var valCantTotPesca = this.ctr.Dat_PescaDeclarada.validarCantidadTotalPesca();
-                    if (this.previousTab != "General" && (!this.ctr.Dat_PescaDeclarada.validarCantidadTotalPesca())) {
+                    if (this.previousTab == "Horómetro" && (!(this.ctr.Dat_Horometro.validarLecturaHorometros()) || !(await this.ctr.Dat_Horometro.validarHorometrosEvento()))) {
                         this.nextTab = this.previousTab;
                     }
 
-                    if ((this.nextTab == "PescaDeclarada" && eventoActual.ObteEspePermitidas) ||
-                        (this.nextTab == "Biometria" && eventoActual.ObteEspePermitidas)) {
-                        await this.obtenerTemporadas(motivoMarea, eventoActual.FIEVN);
-                        await this.obtenerTemporadas("8", eventoActual.FIEVN);
-                        await this.consultarPermisoPesca(this.ctr._embarcacion, motivoMarea);
-                        this.obtenerEspeciesPermitidas();//obtenerEspeciesPermitidas - falta metodo
+                    if (this.nextTab == "Pesca descargada") {
+                        this.prepararInputsDescargas();
                     }
-                }
 
-                if (tipoEvento == "6" && this.nextTab == "Horometro" && eventoActual.NroDescarga) {
-                    visible.visibleDescarga = false;
-                    visible.fechFin = false;
-                    this.nextTab = "Pesca descargada";
-                }
+                    if (this.previousTab == "Pesca descargada" && !this.ctr.Dat_PescaDescargada.validarPescaDescargada()) {
+                        this.nextTab = this.previousTab;
+                    }
 
-                if (this.previousTab == "Horometro" && (!(this.ctr.Dat_Horometro.validarLecturaHorometros()) || !(await this.ctr.Dat_Horometro.validarHorometrosEvento()))) {
-                    this.nextTab = this.previousTab;
-                }
+                    if (this.previousTab == "Siniestro" && !this.ctr.Dat_Siniestro.validarSiniestros()) {
+                        this.nextTab = this.previousTab;
+                    }
 
-                if (this.nextTab == "Pesca descargada") {
-                    this.prepararInputsDescargas();
                 }
+                this.previousTab = this.nextTab;
+                this.ctr.modeloVisibleModel.refresh();
 
-                if (this.previousTab == "Pesca descargada" && !this.ctr.Dat_PescaDescargada.validarPescaDescargada()) {
-                    this.nextTab = this.previousTab;
-                }
-
-                if (this.previousTab == "Siniestro" && !this.ctr.Dat_Siniestro.validarSiniestros()) {
-                    this.nextTab = this.previousTab;
-                }
-
+                let tabRedirect = this.buscarCodTab(textValidaciones.KeyTabs, this.nextTab)
+                let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
+                o_iconTabBar.setSelectedKey(tabRedirect);
+                BusyIndicator.hide();
+                //refrescar modelos
             }
-            this.previousTab = this.nextTab;
-            this.ctr.modeloVisibleModel.refresh();
-
-            let tabRedirect = this.buscarCodTab(textValidaciones.KeyTabs, this.nextTab)
-            let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
-            o_iconTabBar.setSelectedKey(tabRedirect);
-            BusyIndicator.hide();
-            //refrescar modelos
         },
 
         prepararInputsDescargas: function () {
@@ -875,6 +878,9 @@ sap.ui.define([
         prueba : function(){
             let valor = sap.ui.getCore().byId("dtp_fechaIniCala").getValue();
             console.log("Holaaaaaaaaaaaa : " + valor);
+        },
+        valStock_gen :function(){
+            this.ctr.validacionStock();
         }
 
     });
