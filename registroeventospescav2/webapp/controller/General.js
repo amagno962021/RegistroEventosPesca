@@ -882,6 +882,9 @@ sap.ui.define([
         valStock_gen :function(){
             this.ctr.validacionStock();
         },
+        validarLatLong : function(evt){
+
+        }
 
 
     });

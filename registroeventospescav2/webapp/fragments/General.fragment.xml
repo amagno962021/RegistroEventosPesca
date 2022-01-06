@@ -74,8 +74,8 @@
 									<Label text="Latitud" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<Input id="ip_latitud1" value="{eventos>/LatitudD}" textAlign="Right" description="º" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0" change="ValidarLatLong"/>
-									<Input id="ip_latitud2" value="{eventos>/LatitudM}" textAlign="Right" description="'" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0" change="ValidarLatLong"/>
+									<Input id="ip_latitud1" value="{eventos>/LatitudD}" textAlign="Right" description="º" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0" change="validarLatLong"/>
+									<Input id="ip_latitud2" value="{eventos>/LatitudM}" textAlign="Right" description="'" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0" change="validarLatLong"/>
 								</form:fields>
 							</form:FormElement>
 						</form:formElements>
