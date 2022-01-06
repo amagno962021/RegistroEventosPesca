@@ -337,7 +337,7 @@ sap.ui.define([
                 } else {
                     eventoActual.ValiCoordCala = false;
                     let mssg = that.ctr.oBundle.getText("NODATACOORDCOSTA");
-                    that.ctr.agregarMensajeValid("Error", mssg);
+                    that.ctr.agregarMensajeValid("Warning", mssg);
                     //MessageBox.error(mssg);
                 }
 

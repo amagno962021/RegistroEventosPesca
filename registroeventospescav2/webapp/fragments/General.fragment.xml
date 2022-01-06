@@ -20,7 +20,7 @@
 									<Label text="Zona de pesca" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<ComboBox selectedKey="{eventos>/CDZPC}" id="cb_ZonaPesca" placeholder="Zona de pesca" items="{combZonaPesca>/data}" editable="true" enabled="true" visible="true" width="100%" maxWidth="100%">
+									<ComboBox selectedKey="{eventos>/CDZPC}" id="cb_ZonaPesca" placeholder="Zona de pesca" items="{combZonaPesca>/data}" editable="true" enabled="true" visible="true" width="100%">
 										<items>
 											<core:Item key="{combZonaPesca>id}" text="{combZonaPesca>descripcion}" />
 										</items>
@@ -50,7 +50,10 @@
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement visible="true">
-								<Label text="{eventos>/DescLatiLongZonaPesca}" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+								<VBox>
+										<Label text="{eventos>/DescLati}" design="Bold" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+										<Label text="{eventos>/DescLong}" design="Bold" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+								</VBox>
 
 							</form:FormElement>
 						</form:formElements>
@@ -71,8 +74,8 @@
 									<Label text="Latitud" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<Input id="ip_latitud1" value="{eventos>/LatitudD}" textAlign="Right" description="º" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0" />
-									<Input id="ip_latitud2" value="{eventos>/LatitudM}" textAlign="Right" description="'" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0"/>
+									<Input id="ip_latitud1" value="{eventos>/LatitudD}" textAlign="Right" description="º" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0" change="ValidarLatLong"/>
+									<Input id="ip_latitud2" value="{eventos>/LatitudM}" textAlign="Right" description="'" type="Number" showValueHelp="false" enabled="true" visible="true" width="90%" maxLength="0" change="ValidarLatLong"/>
 								</form:fields>
 							</form:FormElement>
 						</form:formElements>

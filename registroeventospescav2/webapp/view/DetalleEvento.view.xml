@@ -7,7 +7,8 @@
 	height="100%"
 >
 	
-			<Page title="Detalle de Evento" showNavButton="true" navButtonPress="onBackDetalleMarea">
+			<Page title="Detalle de Evento" >
+			<!-- showNavButton="false" navButtonPress="onBackDetalleMarea" -->
 				<content>
 					<layout:VerticalLayout width="100%" visible="true">
 						<layout:content>
@@ -69,10 +70,10 @@
 						<content>
 							<Button id="messagePopoverDetalleEve" icon="{ path: '/', formatter: 'buttonIconFormatter' }" type="{ path: '/', formatter: 'buttonTypeFormatter' }" text= "{path: '/', formatter: 'highestSeverityMessages' }" press="handleMessagePopoverPress"/>
 							<ToolbarSpacer width="" />
-							<Button text="Remover evento" type="Emphasized" icon="" iconFirst="true" width="auto" enabled="true" visible="{visible>/LinkRemover}" iconDensityAware="false" press=".removerEvento_button" />
-							<Button text="Descartar cambios" type="Emphasized" icon="" iconFirst="true" width="auto" enabled="true" visible="{visible>/LinkDescartar}" iconDensityAware="false" press=".descartarCambios_button" />
-							<Button text="Atras" type="Emphasized" icon="sap-icon://nav-back" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press=".validarCambios" />
-							<Button text="Guardar" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press=".SaveAll" />
+							<Button text="Remover evento" type="Reject" icon="" iconFirst="true" width="auto" enabled="true" visible="{visible>/LinkRemover}" iconDensityAware="false" press=".removerEvento_button" />
+							<Button text="Descartar cambios" type="Reject" icon="" iconFirst="true" width="auto" enabled="true" visible="{visible>/LinkDescartar}" iconDensityAware="false" press=".descartarCambios_button" />
+							<Button text="Atras"  icon="sap-icon://nav-back" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press=".validarCambios" />
+							<Button text="Guardar"  icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press=".SaveAll" />
 						</content>
 					</OverflowToolbar>
 				</footer>
