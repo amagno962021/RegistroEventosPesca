@@ -1006,14 +1006,17 @@ sap.ui.define([
 
                 let elementoCoordZonaPesca = JSON.parse(this._listasServicioCargaIni[2]).data[0];
 
-                let descLatiLong = mensajes_o.getText("DESCLATLONGINIFIN", [elementoCoordZonaPesca.LTMIN, elementoCoordZonaPesca.LTMAX, elementoCoordZonaPesca.LNMIN, elementoCoordZonaPesca.LNMAX]);
+                let descLati = mensajes_o.getText("DESCLATINIFIN", [elementoCoordZonaPesca.LTMIN, elementoCoordZonaPesca.LTMAX]);
+                let descLong = mensajes_o.getText("DESCLONGINIFIN", [elementoCoordZonaPesca.LNMIN, elementoCoordZonaPesca.LNMAX]);
                 //this.formatGeoCoord('00830');
                 this._listaEventos[this._elementAct].ZPLatiIni = elementoCoordZonaPesca.LTMIN_S;
                 this._listaEventos[this._elementAct].ZPLatiFin = elementoCoordZonaPesca.LTMAX_S;
                 this._listaEventos[this._elementAct].ZPLongIni = elementoCoordZonaPesca.LNMIN_S;
                 this._listaEventos[this._elementAct].ZPLongFin = elementoCoordZonaPesca.LNMAX_S;
-                this._listaEventos[this._elementAct].DescLatiLongZonaPesca = descLatiLong;
-                //wdContext.currentEventosElement().setDescLatiLongZonaPesca(descLatiLong);
+
+                this._listaEventos[this._elementAct].DescLatiLongZonaPesca = descLati + " " + descLong;
+                this._listaEventos[this._elementAct].DescLati = descLati;
+                this._listaEventos[this._elementAct].DescLong = descLong;
                 this.getView().getModel("eventos").updateBindings(true);
             }
 
@@ -1453,6 +1456,9 @@ sap.ui.define([
         },
 
         validarCambios:async function () {
+            this.resetearValidaciones();
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            mod.setProperty("/Utils/MessageItemsEP", []);
             if(this.validacioncampos == false){
 
             }else{
@@ -1468,7 +1474,6 @@ sap.ui.define([
                     let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
                     o_iconTabBar.setSelectedKey("");
                     await this.cargarValoresFormateados();
-                    this.resetearValidaciones();
                     this.getView().getModel("eventos").updateBindings(true);
                     history.go(-1);
                 }
@@ -2237,6 +2242,8 @@ sap.ui.define([
                 let longMin = this._listaEventos[this._elementAct].ZPLongIni;
                 let longMax = this._listaEventos[this._elementAct].ZPLongFin;
                 let descLatiLongZP = this._listaEventos[this._elementAct].DescLatiLongZonaPesca;
+                let v_descLati     = this._listaEventos[this._elementAct].DescLati;
+                let v_descLong     = this._listaEventos[this._elementAct].DescLong;
                 
                 this._elementAct = this._eventoNuevo;
                 nodoEventos[this._eventoNuevo].ZPLatiIni = latiMin;
@@ -2244,6 +2251,8 @@ sap.ui.define([
                 nodoEventos[this._eventoNuevo].ZPLongIni = longMin;
                 nodoEventos[this._eventoNuevo].ZPLongFin = longMax;
                 nodoEventos[this._eventoNuevo].DescLatiLongZonaPesca = descLatiLongZP;
+                nodoEventos[this._eventoNuevo].DescLati = v_descLati;
+                nodoEventos[this._eventoNuevo].DescLong = v_descLong;
                 nodoEventos[this._eventoNuevo].ObteEspePermitidas = true;
                 nodoEventos[this._eventoNuevo].CantTotalPescDecla = 0;
             }
