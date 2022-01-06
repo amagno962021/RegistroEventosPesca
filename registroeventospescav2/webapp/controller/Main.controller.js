@@ -641,7 +641,7 @@ sap.ui.define([
                 modelo.setProperty("/Config/visibleReserva2", false);
                 modelo.setProperty("/Config/visibleReserva3", false);
                 if (response) {
-                    if (response.data) {
+                    if (response.data.length > 0) {
                         mostrarTab = true;
                     }
                 }
