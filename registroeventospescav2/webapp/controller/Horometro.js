@@ -265,22 +265,24 @@ sap.ui.define([
                     const horoActual = nodoHoroActual[index];
                     for (let index1 = 0; index1 < nodoHoroCompar.length; index1++) {
                         const horoCompar = nodoHoroCompar[index1];
-                        if (horoActual.TipoHorometro == horoCompar.TipoHorometro) {
+                        if (horoActual.tipoHorometro == horoCompar.tipoHorometro) {
                             var valLimHoro0 = difHoras ? difHoras + 5 : 0;
-                            if (horoActual.TipoHorometro == "8") {
+                            if (horoActual.tipoHorometro == "8") {
                                 visible.VisibleDescarga = true;
                                 valLimHoro0 = detalleMarea.ValMaxFlujPanga;
                             }
-                            var valLimHoro = horoCompar.Lectura + valLimHoro0;
+                            var valLimHoro = horoCompar.lectura + valLimHoro0;
                             var bOk1 = true;
-                            if (horoActual.Lectura < 0 || horoActual.Lectura > valLimHoro0) {
+                            if (horoActual.lectura < 0 || horoActual.lectura > valLimHoro0) {
                                 bOk1 = false;
                             }
                             if (!bOk1) {
-                                if (horoActual.Lectura < horoCompar.Lectura || horoActual.Lectura > valLimHoro) {
-                                    var message = this.oBundle.getText("LECTHORORANGO", [horoActual.DescTipoHorom, valLimHoro0, horoCompar.Lectura, valLimHoro]);
-                                    MessageBox.error(message);
+                                if (horoActual.lectura < horoCompar.lectura || horoActual.lectura > valLimHoro) {
+                                    var message = this.oBundle.getText("LECTHORORANGO", [horoActual.descTipoHorom, valLimHoro0, horoCompar.lectura, valLimHoro]);
+                                    horoActual.ValueSt = "Error";
+                                    this.ctr.agregarMensajeValid("Error", message);
                                 } else {
+                                    horoActual.ValueSt = "None";
                                     bOk1 = true;
                                 }
                             }
@@ -331,14 +333,14 @@ sap.ui.define([
                     const horoActual = nodoHoroActual[index];
                     for (let index1 = 0; index1 < nodoHoroCompar.length; index1++) {
                         const horoCompar = nodoHoroCompar[index1];
-                        if (horoActual.TipoHorometro == horoCompar.TipoHorometro) {
+                        if (horoActual.tipoHorometro == horoCompar.CDTHR) {
                             var valLimHoro0 = difHoras + 5;
-                            if (horoActual.TipoHorometro == "8") {
+                            if (horoActual.tipoHorometro == "8") {
                                 valLimHoro0 = detalleMarea.ValMaxFlujPanga;
                             }
-                            var valLimHoro = horoCompar.Lectura + valLimHoro0;
+                            var valLimHoro = horoCompar.LCHOR + valLimHoro0;
                             var bOk1 = true;
-                            if (horoActual.Lectura < 0 || horoActual.Lectura > valLimHoro0) {
+                            if (horoActual.lectura < 0 || horoActual.lectura > valLimHoro0) {
                                 bOk1 = false;
                             }
                             var valFlujometroPanga = 0;
@@ -346,20 +348,24 @@ sap.ui.define([
                             var horActual = 0;
                             var horCompar = 0;
                             if (!bOk1) {
-                                valFlujometroPanga = horoCompar.Lectura + capaTanBarca;
-                                horActual = horoActual.Lectura;
+                                valFlujometroPanga = horoCompar.LCHOR + capaTanBarca;
+                                horActual = horoActual.lectura;
                                 capaTanaBarca = capaTanBarca;
-                                horCompar = horoCompar.Lectura;
-                                if ((horoActual.Lectura < horoCompar.Lectura && (horoActual.TipoHorometro != "8" && motivoMarea == "7")) ||
-                                    (horoActual.Lectura < horoCompar.Lectura && (motivoMarea != "7")) ||
-                                    (horoActual.Lectura > valLimHoro && (horoActual.TipoHorometro != "8" && motivoMarea == "7")) ||
-                                    (horoActual.Lectura > valLimHoro && (motivoMarea != "7"))) {
-                                    var message = this.oBundle.getText("LECTHORORANGO", [horoActual.DescTipoHorom, valLimHoro0, horoCompar.Lectura, valLimHoro]);
-                                    MessageBox.error(message);
-                                }else if((horActual > capaTanaBarca && horActual < horCompar && capaTanaBarca < horCompar) && (horoActual.TipoHorometro == "8" && motivoMarea == "7") ||
-                                    (horActual > valFlujometroPanga) && (horoActual.TipoHorometro == "8" && motivoMarea == "7")){
-                                    var message = this.oBundle.getText("LECTHORORANGO", [horoActual.DescTipoHorom, capaTanBarca, horoCompar.Lectura, valFlujometroPanga]);
-                                    MessageBox.error(message);
+                                horCompar = horoCompar.LCHOR;
+                                if ((horoActual.lectura < horoCompar.LCHOR && (horoActual.tipoHorometro != "8" && motivoMarea == "7")) ||
+                                    (horoActual.lectura < horoCompar.LCHOR && (motivoMarea != "7")) ||
+                                    (horoActual.lectura > valLimHoro && (horoActual.tipoHorometro != "8" && motivoMarea == "7")) ||
+                                    (horoActual.lectura > valLimHoro && (motivoMarea != "7"))) {
+                                    var message = this.oBundle.getText("LECTHORORANGO", [horoActual.descTipoHorom, valLimHoro0, horoCompar.LCHOR, valLimHoro]);
+                                    horoActual.ValueSt = "Error";
+                                    this.ctr.agregarMensajeValid("Error", message);
+                                }else if((horActual > capaTanaBarca && horActual < horCompar && capaTanaBarca < horCompar) && (horoActual.tipoHorometro == "8" && motivoMarea == "7") ||
+                                    (horActual > valFlujometroPanga) && (horoActual.tipoHorometro == "8" && motivoMarea == "7")){
+                                    var message = this.oBundle.getText("LECTHORORANGO", [horoActual.descTipoHorom, capaTanBarca, horoCompar.LCHOR, valFlujometroPanga]);
+                                    horoActual.ValueSt = "Error";
+                                    this.ctr.agregarMensajeValid("Error", message);
+                                }else{
+                                    horoActual.ValueSt = "None";
                                 }
                             }
                             if (bOk) {
@@ -370,6 +376,7 @@ sap.ui.define([
                     }
                 }
             }
+            this._oView.getModel("eventos").updateBindings(true);
             return bOk;
         },
 
@@ -443,14 +450,25 @@ sap.ui.define([
         validarLecturaHorom : function(evt){
             let id = evt.getParameter("id");
             let valorhorom =  sap.ui.getCore().byId(id).getValue();
-            if(Number.isInteger(valorhorom) || Number(valorhorom) < 0){
+            let v_st = valorhorom.split(".");
+            let v_decimal = v_st[1] ? v_st[1].length : 0;
+
+            if(Number(valorhorom) < 0){
                 sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.Error);
                 sap.ui.getCore().byId(id).setValueStateText("Introduzca un valor entero positivo");
                 this.ctr.validacioncampos = false;
                 
             }else{
-                sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.None);
-                this.ctr.validacioncampos = true;
+                if(v_decimal > 0){
+                    sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.Error);
+                    sap.ui.getCore().byId(id).setValueStateText("Introduzca un valor entero positivo");
+                    this.ctr.validacioncampos = false;
+
+                }else{
+                    sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.None);
+                    this.ctr.validacioncampos = true;
+                }
+                
             }
         }
 

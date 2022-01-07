@@ -39,7 +39,7 @@
 					<ColumnListItem type="Inactive">
 						<cells>
 							<Text text="{eventos>descTipoHorom}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-							<Input value="{eventos>lectura}" textAlign="Right" type="Number" showValueHelp="false" enabled="{eventos>readOnly}" visible="true" width="auto" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" change=".validarLecturaHorom"/>
+							<Input value="{eventos>lectura}" valueState="{eventos>ValueSt}" textAlign="Right" type="Number" showValueHelp="false" enabled="{eventos>readOnly}" visible="true" width="auto" valueHelpOnly="false" required="false" maxLength="0" change=".validarLecturaHorom"/>
 							<CheckBox text="" select="onCheckBoxSelected" editable="true" enabled="{eventos>/enabledAveriado}" selected="{=${eventos>lectura} === 'A' ? true : false }" />
 						</cells>
 					</ColumnListItem>

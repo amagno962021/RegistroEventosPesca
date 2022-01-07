@@ -553,7 +553,7 @@ sap.ui.define([
             for (let index1 = 0; index1 < ListaEventos.length; index1++) {
                 const element1 = ListaEventos[index1];
                 if (element1.CDTEV == "3") {
-                    let ListaBiom = element1.ListaBiometria;
+                    let ListaBiom = element1.ListaBiometria ? element1.ListaBiometria : [];
                     for (let index = 0; index < ListaBiom.length; index++) {
                         const element = ListaBiom[index];
                         if (motivoMarea == "2") {
