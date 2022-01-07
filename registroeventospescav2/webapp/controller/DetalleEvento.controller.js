@@ -1111,6 +1111,8 @@ sap.ui.define([
             await this.service_obtenerListaHorometro();
             if (this._listasServicioCargaIni[8] ? true : false) {
                 this._listaEventos[this._elementAct].ListaHorometros = this._listasServicioCargaIni[8];
+            }else{
+                this._listaEventos[this._elementAct].ListaHorometros = [];
             }
 
         },
