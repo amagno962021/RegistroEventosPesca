@@ -417,7 +417,7 @@ sap.ui.define([
                             this.nextTab = this.previousTab;
                         }
 
-                        if ((this.nextTab == "PescaDeclarada" && eventoActual.ObteEspePermitidas) ||
+                        if ((this.nextTab == "Pesca declarada" && eventoActual.ObteEspePermitidas) ||
                             (this.nextTab == "Biometria" && eventoActual.ObteEspePermitidas)) {
                             await this.obtenerTemporadas(motivoMarea, eventoActual.FIEVN);
                             await this.obtenerTemporadas("8", eventoActual.FIEVN);
@@ -572,6 +572,9 @@ sap.ui.define([
                 } else {
                     codTemp = "V";
                 }
+            }
+            if(fecha.length == 10){
+                fecha = Utils.strDateToSapDate(fecha);
             }
 
             await TasaBackendService.obtenerTemporadas(codTemp, fecha).then(function (response) {//14.12.2021
@@ -882,8 +885,54 @@ sap.ui.define([
         valStock_gen :function(){
             this.ctr.validacionStock();
         },
-        validarLatLong : function(evt){
+        validarLat : function(evt){
+            let id = evt.getParameter("id");
+            let valorlat =  sap.ui.getCore().byId(id).getValue();
+            if(Number.isInteger(valorlat) || Number(valorlat) < 0){
+                sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.Error);
+                sap.ui.getCore().byId(id).setValueStateText("Introduzca un valor entero positivo");
+                this.ctr.validacioncampos = false;
+                
+            }else{
+                if(valorlat.length > 2){
+                    sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.Error);
+                    sap.ui.getCore().byId(id).setValueStateText("Introduzca un valor entero positivo de dos dígitos");
+                    this.ctr.validacioncampos = false;
+                }else{
+                    sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.None);
+                    this.ctr.validacioncampos = true;
+                }
+                
+            }
 
+        },
+        validarLong : function(evt){
+            let id = evt.getParameter("id");
+            let valorlat =  sap.ui.getCore().byId(id).getValue();
+            if(Number.isInteger(valorlat) || Number(valorlat) < 0){
+                sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.Error);
+                sap.ui.getCore().byId(id).setValueStateText("Introduzca un valor entero positivo");
+                this.ctr.validacioncampos = false;
+                
+            }else{
+                if(valorlat.length > 3){
+                    sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.Error);
+                    sap.ui.getCore().byId(id).setValueStateText("Introduzca un valor entero positivo de tres dígitos");
+                    this.ctr.validacioncampos = false;
+                }else{
+                    sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.None);
+                    this.ctr.validacioncampos = true;
+                }
+                
+            }
+
+        },
+        cargarStockFormat :function(evt){
+            let id = evt.getParameter("id");
+            let valorstock =  sap.ui.getCore().byId(id).getValue();
+            let val = Number(valorstock);
+            let n_valorstock  = new Intl.NumberFormat('es-MX').format(val);
+            this._oView.getModel("eventos").setProperty("/DESSTCMB", n_valorstock);
         }
 
 

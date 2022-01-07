@@ -56,7 +56,7 @@
 									<Label text="Stock de combustible" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<Input id="i_stockCombustible" value="{eventos>/STCMB}" textAlign="Right" submit=".prueba" type="Number" showValueHelp="false" enabled="true" visible="true" width="30%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" change=".valStock_gen"/>
+										<Input id="i_stockCombustible" description=":: {eventos>/DESSTCMB}" value="{eventos>/STCMB}" textAlign="Right" submit=".prueba" type="Number" showValueHelp="false" enabled="true" visible="true" width="50%" valueHelpOnly="false" required="false" valueStateText="Invalid entry" maxLength="0" change=".valStock_gen" liveChange=".cargarStockFormat"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement id="fe_muestra" visible="true">

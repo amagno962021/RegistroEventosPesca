@@ -12,7 +12,7 @@
 				<content>
 					<layout:VerticalLayout width="100%" visible="true">
 						<layout:content>
-							<ObjectListItem intro="{DetalleMarea>/Cabecera/DESC_CDMMA}" title="{=${DetalleMarea>/Cabecera/NRMAR} === '' ? 0 : ${DetalleMarea>/Cabecera/NRMAR} }" icon="sap-icon://order-status" number="" numberUnit="" numberState="None" type="Active" selected="false">
+							<ObjectListItem intro="{DetalleMarea>/Cabecera/DESC_CDMMA}" title="Marea : {=${DetalleMarea>/Cabecera/NRMAR} === '' ? 0 : ${DetalleMarea>/Cabecera/NRMAR} }" icon="sap-icon://order-status" number="" numberUnit="" numberState="None" type="Active" selected="false">
 								<attributes>
 									<ObjectAttribute title="Embarcacion" text="{DetalleMarea>/Cabecera/CDEMB} {DetalleMarea>/Cabecera/NMEMB}" active="false" visible="true" />
 									<ObjectAttribute title="Matricula" text="{DetalleMarea>/Cabecera/MREMB}" active="false" visible="true" />
