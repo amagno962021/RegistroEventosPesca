@@ -198,7 +198,7 @@ sap.ui.define([
 
                 /*
                 if(nuevo){
-                    modelo.setProperty("/Cabecera/NRMAR", marea);
+                    modelo.setProperty("/Cabecera/NRMAR", marea);222222
                     mensaje += " " + this.getResourceBundle().getText("NROMAREAGEN") + " " + modelo.getProperty("/Cabecera/NRMAR");
                 }
 

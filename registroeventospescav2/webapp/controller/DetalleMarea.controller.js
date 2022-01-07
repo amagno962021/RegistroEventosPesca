@@ -406,7 +406,7 @@ sap.ui.define([
             }
 
             //combo motivos de marea
-            TasaBackendService.obtenerDominio("ZDO_ZCDMMA").then(function (response) {
+            TasaBackendService.obtenerDominio("ZCDMMA").then(function (response) {
                 var sData = response.data[0].data;
                 var inprp = dataDetalleMarea.Cabecera.INPRP;
                 var items = [];
@@ -811,8 +811,7 @@ sap.ui.define([
             oRouter.navTo("DetalleEvento");
         },
 
-        onSave: async function () {
-            /*
+        onSave: async function () {           
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var validarMareaEventos = sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").validarMareaEventos(this);
             var tieneErrores = modelo.getProperty("/Cabecera/TERRORES");
@@ -823,8 +822,8 @@ sap.ui.define([
                     this.prepararVistaConfirm();
                     this.getConfirmDialog().open();
                 }
-            }*/
-            this.getConfirmSaveDialogTest().open();
+            }
+            //this.getConfirmSaveDialogTest().open();
         },
 
         onCloseConfirm: async function () {
@@ -1331,6 +1330,7 @@ sap.ui.define([
             if (valMotUbicPesca) {
                 modelo.setProperty("/Utils/TipoConsulta", "C");
                 modelo.setProperty("/Utils/TipoEvento", "1");
+                modelo.setProperty("/Utils/DescTipoEvento", sap.ui.getCore().byId("ne_tipoEvn").getSelectedItem().getText());
                 var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.navTo("DetalleEvento");
                 this.getNuevoEvento().close();
