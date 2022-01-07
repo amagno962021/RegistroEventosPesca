@@ -5,7 +5,8 @@ sap.ui.define([
     "sap/ui/integration/library",
     "sap/m/MessageBox",
     "../model/textValidaciones",
-	"../Service/TasaBackendService"
+	"../Service/TasaBackendService",
+    "./Utils"
 ], function(
 	ManagedObject,
 	JSONModel,
@@ -13,7 +14,8 @@ sap.ui.define([
 	library,
 	MessageBox,
 	textValidaciones,
-	TasaBackendService
+	TasaBackendService,
+    Utils
 ) {
 	"use strict";
 
@@ -216,6 +218,11 @@ sap.ui.define([
                     if (evenLimites.includes(eventoCompar.CDTEV)) {
                         indCompar = index;
                         this.ctr._elementAct = index;
+                        if(indicadorSel == this.ctr._elementAct){
+                            this.ctr._indicador = "N"
+                        }else{
+                            this.ctr._indicador = "E"
+                        }
                         await this.ctr.obtenerDetalleEvento();
                         this.ctr._elementAct = indicadorSel;
                         break;
@@ -233,6 +240,9 @@ sap.ui.define([
                 var nodoHoroCompar = eventoCompar.ListaHorometros;
                 var fechIniEveAct = eventoActual.FIEVN; //dd/MM/yyyy
                 var horaIniEveAct = eventoActual.HIEVN; // hh:mm formato 24h
+                if(horaIniEveAct.length == 6){
+                    horaIniEveAct = Utils.formatHoraBTP(horaIniEveAct);
+                }
                 var dateIniEveAct = null;
                 if (fechIniEveAct && horaIniEveAct) {
                     var anio = fechIniEveAct.split("/")[2];
@@ -269,16 +279,16 @@ sap.ui.define([
                             var valLimHoro0 = difHoras ? difHoras + 5 : 0;
                             if (horoActual.tipoHorometro == "8") {
                                 visible.VisibleDescarga = true;
-                                valLimHoro0 = detalleMarea.ValMaxFlujPanga;
+                                valLimHoro0 = Number(mod.getProperty("/Constantes/ValMaxFlujPanga"));;
                             }
                             var valLimHoro = horoCompar.lectura + valLimHoro0;
                             var bOk1 = true;
-                            if (horoActual.lectura < 0 || horoActual.lectura > valLimHoro0) {
+                            if (Number(horoActual.lectura) < 0 || Number(horoActual.lectura) > valLimHoro0) {
                                 bOk1 = false;
                             }
                             if (!bOk1) {
-                                if (horoActual.lectura < horoCompar.lectura || horoActual.lectura > valLimHoro) {
-                                    var message = this.oBundle.getText("LECTHORORANGO", [horoActual.descTipoHorom, valLimHoro0, horoCompar.lectura, valLimHoro]);
+                                if (Number(horoActual.lectura) < Number(horoCompar.lectura) || Number(horoActual.lectura) > Number(valLimHoro)) {
+                                    var message = this.oBundle.getText("LECTHORORANGO", [horoActual.descTipoHorom, valLimHoro0, horoCompar.lectura, Number(valLimHoro)]);
                                     horoActual.ValueSt = "Error";
                                     this.ctr.agregarMensajeValid("Error", message);
                                 } else {

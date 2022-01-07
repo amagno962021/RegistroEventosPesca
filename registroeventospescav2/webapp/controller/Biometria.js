@@ -186,7 +186,8 @@ sap.ui.define([
             o_control_muestra.setText(sumaTotal_Muestra);
             let calculo_porc = Number(0);
             calculo_porc = (sumaMuestraJuvenil * 100)/sumaTotal_Muestra
-            o_control_porcPesca.setText(calculo_porc + "%")
+            let cal_fix =  calculo_porc.toFixed(2);
+            o_control_porcPesca.setText(cal_fix + "%")
 
             //----------------------------Lista pesca declarada -----------------//
             let ListaPescaDeclarada = this.ctr._listaEventos[this.ctr._elementAct].ListaPescaDeclarada;
@@ -458,6 +459,11 @@ sap.ui.define([
                     //------------------ cargar data dinamica -------------------------------------//
 
                     for (let i = 0; i < listaDataBio.length; i++) {
+                        let TallaMinPorcJuvenil = Number(0);
+                        let sumaMuestraJuvenil = Number(0);
+                        let ser_medidaMin = await TasaBackendService.obtenerMedidaEspecie(listaDataBio[i].CDSPC, this.ctr.getCurrentUser());
+                        TallaMinPorcJuvenil = Number(ser_medidaMin.data[0].TMMIN);
+
                         let obj_bio = {};
                         let item_bio_key = Object.keys(listaDataBio[i]);
                         let item_bio_value = Object.values(listaDataBio[i]);
@@ -485,6 +491,10 @@ sap.ui.define([
                                         if(item_bio_key[j] == v2 ){
                                             let v3 = Number(contBio) - Number(1);
                                             obj_bio['col_' + v_talla_bio] = item_bio_value[v3];
+
+                                            if(v_talla_bio < TallaMinPorcJuvenil){
+                                                sumaMuestraJuvenil += Number(item_bio_value[v3]);
+                                            }
                                             break;
                                         }
                                     }
@@ -498,6 +508,10 @@ sap.ui.define([
                                         if(item_bio_key[j] == v2 ){
                                             let v3 = Number(contBio) - Number(1);
                                             obj_bio['col_' + v_talla_bio] = item_bio_value[v3];
+
+                                            if(v_talla_bio < TallaMinPorcJuvenil){
+                                                sumaMuestraJuvenil += Number(item_bio_value[v3]);
+                                            }
                                             break;
                                         }
                                     }
@@ -514,12 +528,21 @@ sap.ui.define([
                                     if(item_bio_key[j] == v2 ){
                                         let v3 = Number(contBio) - Number(1);
                                         obj_bio['col_' + k] = item_bio_value[v3];
+
+                                        if(k < TallaMinPorcJuvenil){
+                                            sumaMuestraJuvenil += Number(item_bio_value[v3]);
+                                        }
                                         break;
                                     }
                                 }
                             }
 
                         }
+
+                        let calculo_porc = Number(0);
+                        calculo_porc = (sumaMuestraJuvenil * 100)/ Number(listaDataBio[i].CDSPC_TOTAL)
+                        let cal_fix =  calculo_porc.toFixed(2);
+                        obj_bio['PorcJuveniles'] = cal_fix + "%";
                         
                         this.ctr._listaEventos[this.ctr._elementAct].ListaBiometria.push(obj_bio);
 
