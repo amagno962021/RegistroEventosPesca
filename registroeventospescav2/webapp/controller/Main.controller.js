@@ -27,7 +27,7 @@ sap.ui.define([
 
             onInit: async function () {
                 BusyIndicator.show(0);
-                var currentUser = this.getCurrentUser();
+                var currentUser = await this.getCurrentUser();
                 this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
                 //this.formCust = sap.ui.controller("com.tasa.registroeventospescav2.controller.FormCust")
                 var tipoEmba = await TasaBackendService.obtenerTipoEmbarcacion(currentUser);
@@ -51,7 +51,7 @@ sap.ui.define([
                     this.filtarMareas(cdtem, cdpta);
                 }
                 */
-                this.loadInitData();
+                await this.loadInitData();
 
                 this.CDTEM = "";
                 this.CDPTA = "";
@@ -105,7 +105,7 @@ sap.ui.define([
                 oMessagePopover.toggle(oEvent.getSource());
             },
 
-            loadInitData: function () {
+            loadInitData: async function () {
                 let zinprpDom = [];
                 let plantas = [];
                 const bodyDominios = {
@@ -128,7 +128,7 @@ sap.ui.define([
 
                 const bodyAyudaPlantas = {
                     "nombreAyuda": "BSQPLANTAS",
-                    "p_user": this.getCurrentUser()
+                    "p_user": await this.getCurrentUser()
                 };
 
                 fetch(`${mainUrlServices}General/AyudasBusqueda/`,
@@ -377,10 +377,10 @@ sap.ui.define([
 
             },
 
-            onActualizaMareas: function () {
+            onActualizaMareas: async function () {
                 BusyIndicator.show(0);
                 var me = this;
-                var currentUser = me.getCurrentUser();
+                var currentUser = await me.getCurrentUser();
                 if (me.CDTEM && me.CDPTA) {
                     TasaBackendService.cargarListaMareas(currentUser).then(function (mareas) {
                         me.validarDataMareas(mareas);
@@ -397,12 +397,12 @@ sap.ui.define([
                 }
             },
 
-            onActionCrearMarea: function () {
+            onActionCrearMarea: async function () {
                 //abrir poup
                 var me = this;
                 var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
                 var dataDetalleMarea = modeloDetalleMarea.getData();
-                var currentUser = this.getCurrentUser();
+                var currentUser = await this.getCurrentUser();
                 TasaBackendService.obtenerPlantas(currentUser).then(function (plantas) {
                     dataDetalleMarea.Config.datosCombo.Plantas = plantas.data; // cargar combo plantas nueva marea
                     modeloDetalleMarea.refresh();
@@ -465,7 +465,7 @@ sap.ui.define([
                 var selectedItem = evt.getSource().getParent().getBindingContext().getObject();
                 var me = this;
                 if (selectedItem) {
-                    var currentUser = this.getCurrentUser();
+                    var currentUser = await this.getCurrentUser();
                     if (selectedItem.ESMAR == "A") {
                         var response = await TasaBackendService.obtenerDetalleMarea(selectedItem.NRMAR, currentUser);
                         if (response) {
@@ -534,218 +534,6 @@ sap.ui.define([
 
             },
 
-            setDetalleMarea: async function (data) {
-                BusyIndicator.show(0);
-                var me = this;
-                var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-                var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
-                var dataDetalleMarea = modeloDetalleMarea.getData();
-                var marea = data.s_marea[0];
-                var eventos = data.s_evento;
-                var incidental = data.str_pscinc;
-                var biometria = data.str_flbsp;
-                var motivoResCombu = ["1", "2", "4", "5", "6", "7", "8"];
-                await this.clearAllData();//inicalizar valores
-                modeloDetalleMarea.setProperty("/Cabecera/INDICADOR", "E");
-                //setear cabecera de formulario
-                //var cabecera = dataDetalleMarea.Cabecera;
-                var cabecera = modeloDetalleMarea.getProperty("/Cabecera");
-                for (var keyC in cabecera) {
-                    if (marea.hasOwnProperty(keyC)) {
-                        cabecera[keyC] = marea[keyC];
-                    }
-                }
-
-                //setear pestania datos generales
-                //var datsoGenerales = dataDetalleMarea.DatosGenerales;
-                var datsoGenerales = modeloDetalleMarea.getProperty("/DatosGenerales");
-                for (var keyC in datsoGenerales) {
-                    if (marea.hasOwnProperty(keyC)) {
-                        datsoGenerales[keyC] = marea[keyC];
-                    }
-                }
-
-                //cargar dsitribucion de flota
-                var codigo = modeloDetalleMarea.getProperty("/Cabecera/CDEMB");
-                await this.obtenerDatosDistribFlota(codigo);
-
-                var estMarea = modeloDetalleMarea.getProperty("/DatosGenerales/ESMAR");
-                var marea = modeloDetalleMarea.getProperty("/Cabecera/NRMAR");
-                if (estMarea == "A") {
-                    await this.obtenerDatosMareaAnt(marea, codigo);
-                }
-
-                //setear lista de eventos
-                modeloDetalleMarea.setProperty("/Eventos/TituloEventos", "Eventos (" + eventos.length + ")")
-                //dataDetalleMarea.Eventos.TituloEventos = "Eventos (" + eventos.length + ")";
-
-                for (let index1 = 0; index1 < eventos.length; index1++) {
-                    const element = eventos[index1];
-                    element.Indicador = "E";
-                    element.LatitudD = Utils.getDegrees(element.LTGEO);
-                    element.LatitudM = Utils.getMinutes(element.LTGEO);
-                    element.LongitudD = Utils.getDegrees(element.LNGEO);
-                    element.LongitudM = Utils.getMinutes(element.LNGEO)
-                }
-
-                //dataDetalleMarea.Eventos.Lista = eventos;
-                modeloDetalleMarea.setProperty("/Eventos/Lista", eventos);
-                //dataDetalleMarea.Incidental = incidental;
-                modeloDetalleMarea.setProperty("/Incidental", incidental);
-                //dataDetalleMarea.Biometria = biometria;
-                modeloDetalleMarea.setProperty("/Biometria", biometria);
-
-                modeloDetalleMarea.setProperty("/Config/visibleTabReserva", false);
-                modeloDetalleMarea.setProperty("/Config/visibleTabVenta", false);
-                var inprp = modeloDetalleMarea.getProperty("/Cabecera/INPRP");
-                var motivo = modeloDetalleMarea.getProperty("/Cabecera/CDMMA");
-                if (inprp == "P" && motivoResCombu.includes(motivo)) {
-                    await this.obtenerReservasCombustible(marea, codigo);
-                }
-
-                if (inprp == "T") {
-                    await this.obtenerVentasCombustible(marea);
-                }
-
-                //la pestania de reserva de combustible y venta de combustible se setean en el Detalle
-
-                //setear config inicial
-                /*dataDetalleMarea.Config.visibleLinkSelecArmador = false;
-                dataDetalleMarea.Config.visibleArmadorRuc = false;
-                dataDetalleMarea.Config.visibleArmadorRazon = false;
-                dataDetalleMarea.Config.visibleArmadorCalle = false;
-                dataDetalleMarea.Config.visibleArmadorDistrito = false;
-                dataDetalleMarea.Config.visibleArmadorProvincia = false;
-                dataDetalleMarea.Config.visibleArmadorDepartamento = false;*/
-
-                //refrescar modelo y navegar al detalle
-                modeloDetalleMarea.refresh();
-                BusyIndicator.hide();
-                oRouter.navTo("DetalleMarea");
-                //me.navToExternalComp();
-            },
-
-            obtenerReservasCombustible: async function (marea, codigo) {
-                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-                var listaEventos = modelo.getProperty("/Eventos/Lista");
-                var motivoSinZarpe = ["3", "7", "8"];
-                var eveReserCombus = ["4", "5", "6"];
-                var visibleNuevo = true;
-                var mostrarTab = false;
-                var mareaCerrada = modelo.getProperty("/DatosGenerales/ESMAR") == "C" ? true : false;
-                var usuario = this.getCurrentUser();
-                var response = await TasaBackendService.obtenerNroReserva(marea, usuario);
-                var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
-                var embarcacion = modelo.getProperty("/Cabecera/CDEMB");
-                modelo.setProperty("/Config/visibleReserva1", false);
-                modelo.setProperty("/Config/visibleReserva2", false);
-                modelo.setProperty("/Config/visibleReserva3", false);
-                if (response) {
-                    if (response.data.length > 0) {
-                        mostrarTab = true;
-                    }
-                }
-                if (!mareaCerrada) {
-                    if (!motivoSinZarpe.includes(motivoMarea)) {
-                        var ultimoEvento = listaEventos[listaEventos.length - 1];
-                        var tipoUltEvnt = ultimoEvento.CDTEV;
-                        visibleNuevo = eveReserCombus.includes(tipoUltEvnt);
-                        if (!mostrarTab && visibleNuevo) {
-                            mostrarTab = true;
-                        }
-                    } else {
-                        mostrarTab = true;
-                    }
-                }
-                modelo.setProperty("/Config/visibleTabReserva", mostrarTab);
-                if (mostrarTab) {
-                    var configReservas = await TasaBackendService.obtenerConfigReservas(usuario);
-                    if (configReservas) {
-                        modelo.setProperty("/ConfigReservas/BWART", configReservas.bwart);
-                        modelo.setProperty("/ConfigReservas/MATNR", configReservas.matnr);
-                        modelo.setProperty("/ConfigReservas/WERKS", configReservas.werks);
-                        modelo.setProperty("/ConfigReservas/Almacenes", configReservas.almacenes);
-                    }
-                    var embaComb = await TasaBackendService.obtenerEmbaComb(usuario, embarcacion);
-                    if (embaComb) {
-                        if (embaComb.data) {
-                            var emba = embaComb.data[0];
-                            var objEmbComb = modelo.getProperty("/EmbaComb");
-                            for (var key in emba) {
-                                if (objEmbComb.hasOwnProperty(key)) {
-                                    objEmbComb[key] = emba[key];
-                                }
-                            }
-                        }
-                    }
-                    await this.obtenerReservas(visibleNuevo);
-                    /*if (!mareaCerrada) {
-                        await this.obtenerReservas(visibleNuevo);
-                    }else{
-                        modelo.setProperty("/ReservasCombustible", reservas);
-                        modelo.setProperty("/Config/visibleReserva3", true);
-                    }*/
-                }
-
-            },
-
-            obtenerVentasCombustible: async function (marea) {
-                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-                var listaEventos = modelo.getProperty("/Eventos/Lista");
-                console.log("EVENTOS: ", listaEventos);
-                var mostrarTab = false;
-                var mareaCerrada = modelo.getProperty("/DatosGenerales/ESMAR") == "C" ? true : false;
-                var usuario = this.getCurrentUser();
-                var embarcacion = modelo.getProperty("/Cabecera/CDEMB");
-                var nroVenta = await TasaBackendService.obtenerNroReserva(marea, usuario);
-                if (nroVenta) {
-                    mostrarTab = true;
-                }
-                var primerRegVenta = !mostrarTab;
-                var regVenta = false;
-                var tipoEvento = "";
-                if (!mareaCerrada) {
-                    for (let index = 0; index < listaEventos.length; index++) {
-                        const element = listaEventos[index];
-                        tipoEvento = element.CDTEV;
-                        if (tipoEvento == "5") {
-                            //setear centro de planta de suministro
-                            regVenta = true;
-                            break;
-                        }
-                    }
-                    if (regVenta) {
-                        mostrarTab = true;
-                    } else {
-                        mostrarTab = false;
-                    }
-                }
-                console.log("MOST5RAR TAB: ", mostrarTab);
-                modelo.setProperty("/Config/visibleTabVenta", mostrarTab);
-                if (mostrarTab) {
-                    var configReservas = await TasaBackendService.obtenerConfigReservas(usuario);
-                    if (configReservas) {
-                        modelo.setProperty("/ConfigReservas/BWART", configReservas.bwart);
-                        modelo.setProperty("/ConfigReservas/MATNR", configReservas.matnr);
-                        modelo.setProperty("/ConfigReservas/WERKS", configReservas.werks);
-                        modelo.setProperty("/ConfigReservas/Almacenes", configReservas.almacenes);
-                    }
-                    var embaComb = await TasaBackendService.obtenerEmbaComb(usuario, embarcacion);
-                    if (embaComb) {
-                        if (embaComb.data) {
-                            var emba = embaComb.data[0];
-                            var objEmbComb = modelo.getProperty("/EmbaComb");
-                            for (var key in emba) {
-                                if (objEmbComb.hasOwnProperty(key)) {
-                                    objEmbComb[key] = emba[key];
-                                }
-                            }
-                        }
-                    }
-                    await this.obtenerVentas(primerRegVenta);
-                }
-            },
-
             preparaFormulario: function () {
                 var me = this;
                 var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
@@ -756,9 +544,9 @@ sap.ui.define([
                 oRouter.navTo("DetalleMarea");
             },
 
-            getCurrentUser: function () {
+            /*getCurrentUser: function () {
                 return "FGARCIA";
-            },
+            },*/
 
             getRolUser: function () {
                 return [];//este metodo debe devolver la lista de roles asignado. Ejem. ["Administrador", "Operador"]
@@ -1119,7 +907,7 @@ sap.ui.define([
                 var clearData = false;
                 //var dataSesionModel = this.getModel("DataSession");
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-                var usuario = this.getCurrentUser();
+                var usuario = await this.getCurrentUser();
                 var response = await TasaBackendService.buscarArmador(codigo, usuario);
                 if (response) {
                     //var form = this.getModel("Form");
@@ -1153,7 +941,7 @@ sap.ui.define([
                 //var dataSesionModel = this.getModel("DataSession");
                 //var visibleModel = this.getModel("Visible");
                 //var utils = this.getModel("Utils");
-                var usuario = this.getCurrentUser();
+                var usuario = await this.getCurrentUser();
                 var valFijoPlanta = modelo.getProperty("/DatosGenerales/CDPTA");
                 //visibleModel.setProperty("/EnlMarAnterior", false);
                 //var emba = await TasaBackendService.buscarEmbarcacion(codigo, usuario);
@@ -1323,7 +1111,7 @@ sap.ui.define([
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 //var dataSesionModel = this.getModel("DataSession");
                 //var usuario = dataSesionModel.getProperty("/User");
-                var usuario = this.getCurrentUser();
+                var usuario = await this.getCurrentUser();
                 //var distribFlota = this.getModel("DistribFlota");
                 var distribFlota = modelo.getProperty("/DistribFlota");
                 var constantsUtility = this.getModel("ConstantsUtility");
@@ -1357,7 +1145,7 @@ sap.ui.define([
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 //var dataSesionModel = this.getModel("DataSession");
                 //var usuario = dataSesionModel.getProperty("/User");
-                var usuario = this.getCurrentUser();
+                var usuario = await this.getCurrentUser();
                 //var distribFlota = this.getModel("DistribFlota");
                 var distribFlota = modelo.getProperty("/DistribFlota");
                 var constantsUtility = this.getModel("ConstantsUtility");
@@ -1388,7 +1176,7 @@ sap.ui.define([
                 var mareaAnterior = modelo.getProperty("/MareaAnterior");
                 //var utilitario = this.getModel("Utilitario");
                 //var dataSesionModel = this.getModel("DataSession");
-                var usuario = this.getCurrentUser();
+                var usuario = await this.getCurrentUser();
                 var motivosSinZarpe = ["3", "7", "8"]; // motivos sin zarpe
                 //var mareaAnterior = this.getModel("MareaAnterior");
                 var response = await TasaBackendService.obtenerMareaAnterior(marea, codigo, usuario);
@@ -1420,7 +1208,7 @@ sap.ui.define([
             consultarPermisoZarpe: async function (codigo) {
                 //var me = this;
                 //var dataSesionModel = this.getModel("DataSession");
-                var usuario = this.getCurrentUser();
+                var usuario = await this.getCurrentUser();
                 //var form = this.getModel("Form");
                 var form = this.getOwnerComponent().getModel("DetalleMarea");
                 var puedeZarpar = await TasaBackendService.obtenerPermisoZarpe(codigo, usuario).then(function (response) {
@@ -1445,7 +1233,7 @@ sap.ui.define([
 
             validarBodegaCert: async function (codEmba, codPlanta) {
                 var bOk = false;
-                var usuario = this.getCurrentUser();
+                var usuario = await this.getCurrentUser();
                 var response = await TasaBackendService.validarBodegaCert(codEmba, codPlanta, usuario);
                 if (response) {
                     bOk = response.estado;

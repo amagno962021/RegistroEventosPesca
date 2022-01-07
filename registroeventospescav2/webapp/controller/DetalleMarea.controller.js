@@ -1330,7 +1330,7 @@ sap.ui.define([
             if (valMotUbicPesca) {
                 modelo.setProperty("/Utils/TipoConsulta", "C");
                 modelo.setProperty("/Utils/TipoEvento", "1");
-                modelo.setProperty("/Utils/DescTipoEvento", sap.ui.getCore().byId("ne_tipoEvn").getSelectedItem().getText());
+                modelo.setProperty("/Utils/DescTipoEvento", "Zarpe");
                 var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.navTo("DetalleEvento");
                 this.getNuevoEvento().close();
