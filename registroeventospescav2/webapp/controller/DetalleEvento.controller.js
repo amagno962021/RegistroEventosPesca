@@ -2091,7 +2091,7 @@ sap.ui.define([
             this.getView().byId("table_pesc_desc_ticket").setVisible(false);
             this.getView().byId("pdt_col_BuscarDesc").setVisible(false);
             this.getView().byId("pdCHD_col_BuscarDesc").setVisible(false);
-            this.getView().byId("pdt_col_EliminarDesc").setVisible(true);
+            this.getView().byId("pdt_col_EliminarDesc").setVisible(false);
             this.getView().byId("pde_col_EliminarDesc").setVisible(false);
             this.getView().byId("pdCHD_col_EliminarDesc").setVisible(false);
             this.getView().byId("col_porc_pesc_desc").setVisible(false);

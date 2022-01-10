@@ -7,7 +7,7 @@
 			enableCellFilter="{ui>/cellFilterOn}" ariaLabelledBy="title">
 				<extension>
 					<m:OverflowToolbar id="ext_pesc_desc" style="Clear">
-						<m:Title id="title2" text="Cantidad de pesca en declarada: " />
+						<m:Title id="title2" text="Cantidad de pesca declarada: " />
 						<m:Text text="{DetalleMarea>/Eventos/CantPescaDescDeclText} " />
 						<m:Text text="TM" />
 						<m:ToolbarSpacer />
@@ -150,7 +150,7 @@
 			<Table id="table_pesc_desc_CHD" selectionMode="MultiToggle" rows="{eventos>/ListaPescaDescargada}" visibleRowCount="3" enableCellFilter="{ui>/cellFilterOn}" ariaLabelledBy="title">
 			<extension>
 					<m:OverflowToolbar id="ext_pesc_desc_chd" style="Clear">
-						<m:Title id="title3" text="Cantidad de pesca en declarada: " />
+						<m:Title id="title3" text="Cantidad de pesca declarada: " />
 						<m:Text text="{DetalleMarea>/Eventos/CantPescaDescDeclText} " />
 						<m:Text text="TM" />
 						<m:ToolbarSpacer />
