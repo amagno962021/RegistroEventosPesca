@@ -1641,7 +1641,7 @@ sap.ui.define([
                                     pescaDescElement.CDLDS = datos.CDLDS;
                                     pescaDescElement.DESC_CDLDS = datos.DESC_CDLDS;
                                     pescaDescElement.CNPDS = datos.CNPDS;
-                                    pescaDescElement.PESACUMOD = datos.PESACUMOD;
+                                    pescaDescElement.PESACUMOD = datos.CNPDS;
                                     pescaDescElement.BckCantPescaModificada = pescaDescElement.PESACUMOD;
                                     pescaDescElement.FIDES = fechaIniDescarga;	//posicion 15				
                                     pescaDescElement.HIDES = datos.HIDES;
