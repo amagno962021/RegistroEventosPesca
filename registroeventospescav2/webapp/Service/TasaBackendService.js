@@ -41,12 +41,12 @@ sap.ui.define([
             return data;
         },
 
-        cargarListaMareas: function (sUsuario) {
+        cargarListaMareas: async function (sUsuario) {
             var uri = UtilService.getHostService() + "/api/embarcacion/ObtenerFlota";
             var arg = {
                 usuario: sUsuario
             };
-            var data = this.http(uri).get(null, arg).then(function (response) {
+            var data = await this.http(uri).get(null, arg).then(function (response) {
                 var data = JSON.parse(response);
                 var sData = JSON.parse(data);
                 return sData;
@@ -974,6 +974,23 @@ sap.ui.define([
                 return data;
             }).catch(function(error){
                 console.log("ERROR: TasaBackendService.anularMarea: ", error);
+                return null
+            });
+            return data;
+        },
+
+        obtenerEveElim: async function(marea, nroEvento, estructura, usuario){
+            var uri = UtilService.getHostService() + "/api/embarcacion/ObtenerEveElim/";
+            var sBody = UtilService.getBodyEveElim();
+            sBody.marea = marea;
+            sBody.numero_evento = nroEvento;
+            sBody.estructura = estructura;
+            sBody.usuario = usuario;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerEveElim: ", error);
                 return null
             });
             return data;

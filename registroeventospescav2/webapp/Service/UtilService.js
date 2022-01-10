@@ -257,6 +257,16 @@ sap.ui.define([
                 "p_marea": ""
             };
             return sBody;
+        },
+
+        getBodyEveElim: function(){
+            var sBody = {
+                "marea": 0,
+                "numero_evento": 0,
+                "estructura": "",
+                "usuario": ""
+            };
+            return sBody;
         }
 
     }

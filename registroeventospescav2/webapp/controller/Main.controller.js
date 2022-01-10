@@ -232,7 +232,8 @@ sap.ui.define([
                     var cdpta = selectedItem.cdpta;
                     var txtCabecera = selectedItem.text + " - " + selectedItem.descr;
                     this.getView().byId("idObjectHeader").setTitle(txtCabecera);
-                    modelo.setProperty("/DatosGenerales/CDPTA", cdpta)
+                    modelo.setProperty("/DatosGenerales/CDPTA", cdpta);
+                    modelo.setProperty("/Cabecera/CDPTA", cdpta);
                     this.CDTEM = cdtem;
                     this.CDPTA = cdpta;
                     oStore.put("CDTEM", cdtem);
@@ -382,16 +383,16 @@ sap.ui.define([
                 var me = this;
                 var currentUser = await me.getCurrentUser();
                 if (me.CDTEM && me.CDPTA) {
-                    TasaBackendService.cargarListaMareas(currentUser).then(function (mareas) {
-                        me.validarDataMareas(mareas);
-                        me.filtarMareas(me.CDTEM, me.CDPTA);
+                    var listaMareas = await TasaBackendService.cargarListaMareas(currentUser);
+                    console.log("Lista Mareas: ", listaMareas);
+                    if(listaMareas){
+                        this.validarDataMareas(listaMareas);
+                        this.filtarMareas(me.CDTEM, me.CDPTA);
                         BusyIndicator.hide();
                         MessageBox.success("Se actualizó correctamente...", {
                             title: "Exitoso"
                         });
-                    }).catch(function (error) {
-                        console.log("ERROR: Main.onActualizaMareas - " + error);
-                    });
+                    }
                 } else {
                     MessageBox.information(this.oBundle.getText("ERRORSLECCIONEPLANTA"));
                 }
@@ -1328,20 +1329,21 @@ sap.ui.define([
                         onClose: async function (bOk) {
                             if (bOk == "OK") {
                                 await me.anularMarea(selectedItem.NRMAR);
-                                var messageItems = modelo.getProperty("/Utils/MessageItemsDM");
+                                await me.onActualizaMareas();
+                                var messageItems = modelo.getProperty("/Utils/MessageItemsMA");
                                 if (messageItems.length > 0) {
                                     oMessagePopover.getBinding("items").attachChange(function (oEvent) {
                                         oMessagePopover.navigateBack();
-                                        oButton.setType(this.buttonTypeFormatter("DM"));
-                                        oButton.setIcon(this.buttonIconFormatter("DM"));
-                                        oButton.setText(this.highestSeverityMessages("DM"));
+                                        oButton.setType(this.buttonTypeFormatter("MA"));
+                                        oButton.setIcon(this.buttonIconFormatter("MA"));
+                                        oButton.setText(this.highestSeverityMessages("MA"));
                                     }.bind(this));
 
                                     setTimeout(function () {
                                         oMessagePopover.openBy(oButton);
-                                        oButton.setType(this.buttonTypeFormatter("DM"));
-                                        oButton.setIcon(this.buttonIconFormatter("DM"));
-                                        oButton.setText(this.highestSeverityMessages("DM"));
+                                        oButton.setType(this.buttonTypeFormatter("MA"));
+                                        oButton.setIcon(this.buttonIconFormatter("MA"));
+                                        oButton.setText(this.highestSeverityMessages("MA"));
                                     }.bind(this), 100);
                                 }
                             }
@@ -1349,7 +1351,6 @@ sap.ui.define([
                     });
                 }
             },
-
 
             onTest: function () {
                 TasaBackendService.test().then(function (response) {

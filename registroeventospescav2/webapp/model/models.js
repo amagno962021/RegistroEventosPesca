@@ -88,6 +88,15 @@ sap.ui.define([
                     CantPescaDescDeclText : "",
                     Lista: [],
                     ListaBck: [],
+                    ListaBiometriaElim: [],
+                    EvenEliminados: {
+                        NREVN: 0,
+                        EEHorometros: [],
+                        EEBodegas: [],
+                        EEPescaDeclarada: [],
+                        EEPescaDescargada: []
+                    },
+                    PreciosMareaElim: [],
                     LeadSelEvento: 0
 				},
                 Incidental: [],
