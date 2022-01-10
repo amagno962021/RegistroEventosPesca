@@ -59,11 +59,11 @@ sap.ui.define([
         },
 
         getCurrentUser: async function () {
-            /*const oUserInfo = await this.getUserInfoService();
-            const sUserEmail = oUserInfo.getEmail(); //fgarcia@tasa.com.pe
-            var usuario = sUserEmail.split("@")[0].toUpperCase();
-            return usuario;*/
-            return "FGARCIA";
+            return "FGARCIA"; // COMENTADO POR PRUEBAS
+            // const oUserInfo = await this.getUserInfoService();
+            // const sUserEmail = oUserInfo.getEmail(); //fgarcia@tasa.com.pe
+            // var usuario = sUserEmail.split("@")[0].toUpperCase();
+            // return usuario;
         },
 
         getUserInfoService: function () {

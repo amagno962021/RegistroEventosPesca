@@ -224,6 +224,7 @@ sap.ui.define([
                             this.ctr._indicador = "E"
                         }
                         await this.ctr.obtenerDetalleEvento();
+                        this.ctr._indicador = "N";
                         this.ctr._elementAct = indicadorSel;
                         break;
                     }
