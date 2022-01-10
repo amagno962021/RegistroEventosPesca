@@ -356,6 +356,12 @@ sap.ui.define([
                 await this.obtenerVentasCombustible(marea);
             }
 
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+            var cdpta = oStore.get("CDPTA");
+            modeloDetalleMarea.setProperty("/DatosGenerales/CDPTA", cdpta);
+            modeloDetalleMarea.setProperty("/Cabecera/CDPTA", cdpta);
+                    
+
             //la pestania de reserva de combustible y venta de combustible se setean en el Detalle
 
             //setear config inicial
@@ -1363,9 +1369,9 @@ sap.ui.define([
         setVisibleBtnSave: function (btnSave, btnNext) {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             if (btnSave) {
-                modelo.setProperty("/Config/visibleBtnGuardar", true)
+                modelo.setProperty("/Config/visibleBtnGuardar", true);
             } else {
-                modelo.setProperty("/Config/visibleBtnGuardar", false)
+                modelo.setProperty("/Config/visibleBtnGuardar", false);
             }
 
             if (btnNext) {
@@ -1382,8 +1388,8 @@ sap.ui.define([
             var anularMarea = await TasaBackendService.anularMarea(marea);
             if (anularMarea) {
                 var mensajes = anularMarea.t_mensaje;
-                var messageItems = modelo.getProperty("/Utils/MessageItemsDM");
-                modelo.setProperty("/Utils/MessageItemsDM", []);
+                modelo.setProperty("/Utils/MessageItemsMA", []);
+                var messageItems = modelo.getProperty("/Utils/MessageItemsMA");
                 for (let index = 0; index < mensajes.length; index++) {
                     const element = mensajes[index];
                     var objMessage = {
@@ -1398,6 +1404,48 @@ sap.ui.define([
                 }
             }
             BusyIndicator.hide();
+        },
+
+        anularDescargaMarea: async function(nroDescarga, anularEvento, nroEvento){
+            var bOk = await this.anulaDescRfc(nroDescarga);
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var marea = modelo.getProperty("/Cabecera/NRMAR");
+            var usuario = await this.getCurrentUser();
+            if(bOk){
+                if(anularEvento){
+                    await TasaBackendService.eliminarPescaDescargada(marea, nroEvento, usuario);
+                }else{
+                    await TasaBackendService.actualizarPescaDescargada(marea, nroEvento, usuario);
+                }
+            }
+            return bOk;
+        },
+
+        anulaDescRfc: async function(nroDescarga){
+            var bOk = true;
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var anularDescarga = await TasaBackendService.anularDescargaRFC(nroDescarga);
+            if(anularDescarga){
+                var mensajes = anularDescarga.t_mensaje;
+                modelo.setProperty("/Utils/MessageItemsDM", []);
+                var messageItems = modelo.getProperty("/Utils/MessageItemsDM");
+                for (let index = 0; index < mensajes.length; index++) {
+                    const element = mensajes[index];
+                    if(element.CMIN == "E"){
+                        bOk = false;
+                        var objMessage = {
+                            type: 'Error',
+                            title: 'Mensaje de Error',
+                            activeTitle: false,
+                            description: element.DSMIN,
+                            subtitle: element.DSMIN,
+                            counter: index
+                        };
+                        messageItems.push(objMessage);
+                    }
+                }
+            }
+            return bOk;
         }
 
     });

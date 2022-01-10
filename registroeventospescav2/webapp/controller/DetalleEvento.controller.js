@@ -1225,6 +1225,7 @@ sap.ui.define([
                         MessageBox.error(mssg);
                         textValidaciones.EspMareaAct = true;
                         //wdThis.wdFireEventCrearEventoEspera();
+                        //LLAMAR EVENTO Eespera
                     } else if (tiempo > limiteMax) {
                         bOk = false;
 
@@ -1257,6 +1258,8 @@ sap.ui.define([
                             if (exisEspMarAnt) {
                                 fechaFin = this._EsperaMareaAnt[0].FechFin;
                                 horaFin = this._EsperaMareaAnt[0].HoraFin;
+                                //wdThis.wdFireEventCrearEventoEspera();
+                                //CREAR POUP EVENTO ESPERA
                             } else {
                                 if (this.buscarValorFijo(textValidaciones.EVEVISTABFECHAFIN, tipoEvento)) {
                                     fechaFin = this._listaMareaAnterior.EventosMareaAnt.FechFin;
