@@ -280,9 +280,9 @@ sap.ui.define([
                             var valLimHoro0 = difHoras ? difHoras + 5 : 0;
                             if (horoActual.tipoHorometro == "8") {
                                 visible.VisibleDescarga = true;
-                                valLimHoro0 = Number(mod.getProperty("/Constantes/ValMaxFlujPanga"));;
+                                valLimHoro0 = Number(mod.getProperty("/Constantes/ValMaxFlujPanga"));
                             }
-                            var valLimHoro = horoCompar.lectura + valLimHoro0;
+                            var valLimHoro = Number(horoCompar.lectura) + valLimHoro0;
                             var bOk1 = true;
                             if (Number(horoActual.lectura) < 0 || Number(horoActual.lectura) > valLimHoro0) {
                                 bOk1 = false;
@@ -345,13 +345,13 @@ sap.ui.define([
                     for (let index1 = 0; index1 < nodoHoroCompar.length; index1++) {
                         const horoCompar = nodoHoroCompar[index1];
                         if (horoActual.tipoHorometro == horoCompar.CDTHR) {
-                            var valLimHoro0 = difHoras + 5;
+                            var valLimHoro0 = Number(difHoras) + 5;
                             if (horoActual.tipoHorometro == "8") {
-                                valLimHoro0 = detalleMarea.ValMaxFlujPanga;
+                                valLimHoro0 = Number(mod.getProperty("/Constantes/ValMaxFlujPanga"));
                             }
-                            var valLimHoro = horoCompar.LCHOR + valLimHoro0;
+                            var valLimHoro = Number(horoCompar.LCHOR) + valLimHoro0;
                             var bOk1 = true;
-                            if (horoActual.lectura < 0 || horoActual.lectura > valLimHoro0) {
+                            if (Number(horoActual.lectura) < 0 || Number(horoActual.lectura) > Number(valLimHoro0)) {
                                 bOk1 = false;
                             }
                             var valFlujometroPanga = 0;
@@ -359,10 +359,10 @@ sap.ui.define([
                             var horActual = 0;
                             var horCompar = 0;
                             if (!bOk1) {
-                                valFlujometroPanga = horoCompar.LCHOR + capaTanBarca;
-                                horActual = horoActual.lectura;
-                                capaTanaBarca = capaTanBarca;
-                                horCompar = horoCompar.LCHOR;
+                                valFlujometroPanga = Number(horoCompar.LCHOR) + Number(capaTanBarca);
+                                horActual = Number(horoActual.lectura);
+                                capaTanaBarca = Number(capaTanBarca);
+                                horCompar = Number(horoCompar.LCHOR);
                                 if ((horoActual.lectura < horoCompar.LCHOR && (horoActual.tipoHorometro != "8" && motivoMarea == "7")) ||
                                     (horoActual.lectura < horoCompar.LCHOR && (motivoMarea != "7")) ||
                                     (horoActual.lectura > valLimHoro && (horoActual.tipoHorometro != "8" && motivoMarea == "7")) ||
