@@ -1481,6 +1481,48 @@ sap.ui.define([
 
         },
 
+        onAbrirArmadorHelp: function(oEvent){
+            let sIdInput = oEvent.getSource().getId(),
+				oView = this.getView(),
+				oModel = this.getModel(),
+				sUrl =this.HOST_HELP+".AyudasBusqueda.busqarmadores-1.0.0",
+				nameComponent = "busqarmadores",
+				idComponent = "busqarmadores",
+				oInput = this.getView().byId(sIdInput);
+				oModel.setProperty("/input",oInput);
+	
+				if(!this.DialogComponent){
+					this.DialogComponent = await Fragment.load({
+						name:"tasa.com.preciosacopio.view.fragments.BusqArmadores",
+						controller:this
+					});
+					oView.addDependent(this.DialogComponent);
+				}
+				oModel.setProperty("/idDialogComp",this.DialogComponent.getId());
+				
+				let compCreateOk = function(){
+					BusyIndicator.hide()
+				}
+				if(this.DialogComponent.getContent().length===0){
+					BusyIndicator.show(0);
+					const oContainer = new sap.ui.core.ComponentContainer({
+						id: idComponent,
+						name: nameComponent,
+						url: sUrl,
+						settings: {},
+						componentData: {},
+						propagateModel: true,
+						componentCreated: compCreateOk,
+						height: '100%',
+						// manifest: true,
+						async: false
+					});
+					this.DialogComponent.addContent(oContainer);
+				}
+	
+				this.DialogComponent.open();
+        },
+
         onCallUsuario: function () {
 
             /*var sUrl = "https://current-user-qas.cfapps.us10.hana.ondemand.com/getuserinfo";

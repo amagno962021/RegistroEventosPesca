@@ -68,14 +68,42 @@ sap.ui.define([
                 var dataModelo = modelo.getData();
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 oStore.put('InitData', dataModelo);
+
+                
             },
 
             /**
              * @override
              */
-            onAfterRendering: function () {
+            onAfterRendering: async function () {
                 //MainComp.prototype.onAfterRendering.apply(this, arguments);
+                this.objetoHelp =  this._getHelpSearch();
+			    this.parameter= this.objetoHelp[0].parameter;
+			    this.url= this.objetoHelp[0].url;
+			    await this.callConstantes();
+            },
 
+            callConstantes: async function(){
+                oGlobalBusyDialog.open();
+                var body={
+                    "nombreConsulta": "CONSGENCONST",
+                    "p_user": await this.getCurrentUser(),
+                    "parametro1": this.parameter,
+                    "parametro2": "",
+                    "parametro3": "",
+                    "parametro4": "",
+                    "parametro5": ""
+                }
+                fetch(`${this.getHostSubaccount()}General/ConsultaGeneral/`,
+                      {
+                          method: 'POST',
+                          body: JSON.stringify(body)
+                      })
+                      .then(resp => resp.json()).then(data => {
+                        this.HOST_HELP=this.url+data.data[0].LOW;
+                        oGlobalBusyDialog.close();
+                      }).catch(error => console.log(error)
+                );
             },
 
             _onPatternMatched: function () {
