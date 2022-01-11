@@ -413,8 +413,12 @@ sap.ui.define([
                         }
 
                         //var valCantTotPesca = this.ctr.Dat_PescaDeclarada.validarCantidadTotalPesca();
-                        if (this.previousTab != "General" && (!this.ctr.Dat_PescaDeclarada.validarCantidadTotalPesca())) {
-                            this.nextTab = this.previousTab;
+                        if (this.previousTab != "General") {
+                            if(this.ctr._indicadorProp == "T" && (!this.ctr.Dat_PescaDeclarada.validarCantidadTotalPesca())){
+                                this.nextTab = "Pesca declarada";
+                            }else if((!this.ctr.Dat_PescaDeclarada.validarCantidadTotalPesca())){
+                                this.nextTab = this.previousTab;
+                            }
                         }
 
                         if ((this.nextTab == "Pesca declarada" && eventoActual.ObteEspePermitidas) ||
