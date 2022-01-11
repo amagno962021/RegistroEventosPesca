@@ -2,9 +2,9 @@
    <SplitApp>
       <masterPages>
          <Page title="Plantas">
-            <tnt:NavigationList id="navigationList" width="auto" items="{path: '/'}" itemSelect="onSearchMarea">
-               <tnt:NavigationListItem text="{text}" icon="{ref}" items="{path: 'nodes', templateShareable:false}" expanded="false" select="onSelectItemList">
-                  <tnt:NavigationListItem text="{text}" icon="sap-icon://factory" />
+            <tnt:NavigationList id="navigationList" width="auto" items="{PlantasModel>/Items}" itemSelect="onSearchMarea">
+               <tnt:NavigationListItem text="{PlantasModel>text}" icon="{PlantasModel>ref}" items="{path: 'PlantasModel>nodes', templateShareable:false}" expanded="false" select="onSelectItemList">
+                  <tnt:NavigationListItem text="{PlantasModel>text}" icon="sap-icon://factory" />
                </tnt:NavigationListItem>
             </tnt:NavigationList>
          </Page>
@@ -12,12 +12,12 @@
       <detailPages>
          <Page title="Detalle de Mareas">
             <content>
-               <ObjectHeader id="idObjectHeader" icon="sap-icon://factory" titleActive="false" backgroundDesign="Translucent" numberUnit="Tn" numberState="Success" />
-               <IconTabBar id="idIconTabBar" expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true" select="onSelectTab">
+               <ObjectHeader id="idObjectHeader" icon="sap-icon://factory" titleActive="false" backgroundDesign="Translucent" numberUnit="Tn" numberState="Success" number="{ListaMareas>/Utils/TotalPescDecl}"/>
+               <IconTabBar id="idIconTabBar" expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true" select="onSelectTab" selectedKey="{ListaMareas>/Utils/SelectedKey}">
                   <items>
-                     <IconTabFilter id="itfPropios" icon="sap-icon://person-placeholder" iconColor="Default" text="Propios" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false">
+                     <IconTabFilter id="itfPropios" icon="sap-icon://person-placeholder" iconColor="Default" text="Propios" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false" count="{ListaMareas>/Utils/CountPropios}">
                         <content>
-                           <Table id="tblMareasPropios" width="auto" noDataText="No data" growing="true" growingThreshold="10" growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'/', templateShareable:true}">
+                           <Table id="tblMareasPropios" width="auto" noDataText="No data" growing="true" growingThreshold="10" growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'ListaMareas>/PropiosFiltro', templateShareable:true}">
                               <infoToolbar />
                               <columns>
                                  <Column width="5%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
@@ -84,19 +84,19 @@
                               <items>
                                  <ColumnListItem type="Active" press="onNavToDetailMaster">
                                     <customData>
-                                       <core:CustomData key="mydata" value="{ESMAR}" writeToDom="true" />
+                                       <core:CustomData key="mydata" value="{ListaMareas>ESMAR}" writeToDom="true" />
                                     </customData>
                                     <cells>
-                                       <Text text="{NRO}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{NRMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{NMEMB}" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{DESC_CDMMA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{DSEEC}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <ObjectNumber number="{CNPCM}" unit="Tn" />
-                                       <Text text="{FEHOARR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{DESC_ESMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Link text="{DESCLINK}" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" press="onEditarCrearMarea" />
-                                       <Link text="Anular" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="{visibleAnularMarea}" press="onAnularMarea"/>
+                                       <Text text="{ListaMareas>NRO}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{ListaMareas>NRMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{ListaMareas>NMEMB}" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{ListaMareas>DESC_CDMMA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{ListaMareas>DSEEC}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <ObjectNumber number="{ListaMareas>CNPCM}" unit="Tn" />
+                                       <Text text="{ListaMareas>FEHOARR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{ListaMareas>DESC_ESMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Link text="{ListaMareas>DESCLINK}" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" press="onEditarCrearMarea" />
+                                       <Link text="Anular" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="{ListaMareas>visibleAnularMarea}" press="onAnularMarea"/>
                                     </cells>
                                  </ColumnListItem>
                               </items>
@@ -104,9 +104,9 @@
                         </content>
                      </IconTabFilter>
                      <IconTabSeparator icon="" iconDensityAware="false" />
-                     <IconTabFilter id="itfTerceros" icon="sap-icon://group" iconColor="Default" text="Terceros" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false">
+                     <IconTabFilter id="itfTerceros" icon="sap-icon://group" iconColor="Default" text="Terceros" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false" count="{ListaMareas>/Utils/CountTerceros}">
                         <content>
-                           <Table id="tblMareasTerceros" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'/', templateShareable:true}">
+                           <Table id="tblMareasTerceros" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'ListaMareas>/TercerosFiltro', templateShareable:true}">
                               <infoToolbar />
                               <columns>
                                  <Column width="5%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
@@ -173,19 +173,19 @@
                               <items>
                                  <ColumnListItem type="Active">
                                     <customData>
-                                       <core:CustomData key="mydata" value="{ESMAR}" writeToDom="true" />
+                                       <core:CustomData key="mydata" value="{ListaMareas>ESMAR}" writeToDom="true" />
                                     </customData>
                                     <cells>
-                                       <Text text="{NRO}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{NRMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{NMEMB}" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{DESCMOTMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{DSEEC}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <ObjectNumber number="{CNPCM}" unit="Tn" />
-                                       <Text text="{FEHOARR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{DESCESMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Link text="{DESCLINK}" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" press="onEditarCrearMarea" />
-                                       <Link text="Anular" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" press="onAnularMarea"/>
+                                       <Text text="{ListaMareas>NRO}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{ListaMareas>NRMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{ListaMareas>NMEMB}" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{ListaMareas>DESCMOTMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{ListaMareas>DSEEC}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <ObjectNumber number="{ListaMareas>CNPCM}" unit="Tn" />
+                                       <Text text="{ListaMareas>FEHOARR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Text text="{ListaMareas>DESCESMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                       <Link text="{ListaMareas>DESCLINK}" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" press="onEditarCrearMarea" />
+                                       <Link text="Anular" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="{ListaMareas>visibleAnularMarea}" press="onAnularMarea"/>
                                     </cells>
                                  </ColumnListItem>
                               </items>

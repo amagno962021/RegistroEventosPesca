@@ -282,6 +282,7 @@ sap.ui.define([
                     CrearMarea: [],
                     TxtMareaConfirm: "",
                     TxtEmbaConfirm: ""
+
                 },
                 InputsDescargas :{
                     CentPlanta : "",
@@ -474,8 +475,32 @@ sap.ui.define([
             };
             var oModel = new JSONModel(data);
 			return oModel;
-        }
+        },
 
+        createPlantasModel: function(){
+            var data = {
+                Items: []
+            };
+            var oModel = new JSONModel(data);
+			return oModel;
+        },
+
+        ListaMareas: function(){
+            var data = {
+                Propios: [],
+                Terceros: [],
+                PropiosFiltro: [],
+                TercerosFiltro: [],
+                Utils:{
+                    CountPropios: 0,
+                    CountTerceros: 0,
+                    SelectedKey: "",
+                    TotalPescDecl: 0
+                }
+            };
+            var oModel = new JSONModel(data);
+			return oModel;
+        }
 
 	};
 });

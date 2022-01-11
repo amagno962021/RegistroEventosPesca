@@ -1094,7 +1094,7 @@ sap.ui.define([
                         modelo.setProperty("/Utils/TextoConfirmacion", texto);
                     }
                 } else if (motivoCalaSDes.includes(motivoMarea) && tipoEvento == "5") {
-
+                    verEstCierre = true;
                 }
                 if (verEstCierre) {
                     modelo.setProperty("/Utils/VisibleEstCierre", true);

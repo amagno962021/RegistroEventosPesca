@@ -32,6 +32,12 @@ sap.ui.define([
 			//set combos model
 			this.setModel(models.createCombosModel(), "ComboModel");
 
+			//sett plantas model
+			this.setModel(models.createPlantasModel(), "PlantasModel");
+
+			//set propios model
+			this.setModel(models.ListaMareas(), "ListaMareas");
+
 			//set form model
 			sap.ui.getCore().setModel(models.createFormModel(), "Form");
 
