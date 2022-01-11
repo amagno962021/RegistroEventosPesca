@@ -84,7 +84,7 @@ sap.ui.define([
             },
 
             callConstantes: async function(){
-                oGlobalBusyDialog.open();
+                BusyIndicator.show(0);
                 var body={
                     "nombreConsulta": "CONSGENCONST",
                     "p_user": await this.getCurrentUser(),
@@ -94,14 +94,14 @@ sap.ui.define([
                     "parametro4": "",
                     "parametro5": ""
                 }
-                fetch(`${this.getHostSubaccount()}General/ConsultaGeneral/`,
+                fetch(`${this.onLocation()}General/ConsultaGeneral/`,
                       {
                           method: 'POST',
                           body: JSON.stringify(body)
                       })
                       .then(resp => resp.json()).then(data => {
                         this.HOST_HELP=this.url+data.data[0].LOW;
-                        oGlobalBusyDialog.close();
+                        BusyIndicator.hide();
                       }).catch(error => console.log(error)
                 );
             },
