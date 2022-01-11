@@ -462,7 +462,7 @@ sap.ui.define([
                 var currentDate = new Date();
                 objMarea.FXMAR = currentDate;
                 objMarea.HXMAR = Utils.strHourToSapHo(Utils.dateToStrHours(currentDate)),
-                    objMarea.AXMAR = await this.getCurrentUser();
+                objMarea.AXMAR = await this.getCurrentUser();
             }
 
             var esNuevo = false;
@@ -470,7 +470,7 @@ sap.ui.define([
                 var currentDate = new Date();
                 objMarea.FEMAR = currentDate;
                 objMarea.HAMAR = Utils.strHourToSapHo(Utils.dateToStrHours(currentDate)),
-                    objMarea.AAMAR = await this.getCurrentUser();
+                objMarea.AAMAR = await this.getCurrentUser();
             }
 
             marea.str_marea.push(objMarea);
@@ -2142,6 +2142,91 @@ sap.ui.define([
             }
         },
 
+        getSerachingHelpComponents:function(oModel,sAyudaBusqId){
+			let sUrlSubaccount = this.getHostSubaccount().url,
+			aSearchingHelp = ["busqarmadores"],
+			// iCountF = aSearchingHelp.length,
+			// iCount = 0,
+			oComponent,
+			nameComponent,
+			idComponent,
+			urlComponent;
+			
+			// BusyIndicator.show(0);
+			aSearchingHelp.forEach(elem=>{
+				// let comCreateOk = function(oEvent){
+				// 	if(iCountF === iCount) BusyIndicator.hide();
+				// };
+				oComponent = {};
+				nameComponent = elem;
+				idComponent = elem;
+				urlComponent = `${sUrlSubaccount}/${sAyudaBusqId}.AyudasBusqueda.${elem}-1.0.0`;
+				oComponent = new sap.ui.core.ComponentContainer({
+					id:idComponent,
+					name:nameComponent,
+					url:urlComponent,
+					settings:{},
+					componentData:{},
+					propagateModel:true,
+					// componentCreated:comCreateOk,
+					height:'100%',
+					// manifest:true,
+					async:false
+				});
+				oModel.setProperty(`/${elem}`,oComponent)
+				// iCount++
+			});
+		},
+
+        getHostSubaccount: function () {
+
+            var urlIntance = window.location.origin,
+
+            sUrlSubaccount,
+
+            sParam;
+
+
+
+            if (urlIntance.indexOf('tasaqas') !== -1) {
+
+                sUrlSubaccount = 'tasaqas'; // aputando a QAS
+
+                sParam = "IDH4_QAS"
+
+            } else if (urlIntance.indexOf('tasaprd') !== -1) {
+
+                sUrlSubaccount = 'tasaprd'; // apuntando a PRD
+
+                sParam = "IDH4_PRD"
+
+            }else if(urlIntance.indexOf('localhost') !== -1){
+
+                sUrlSubaccount = 'tasadev'; // apuntando a DEV
+
+                sParam = "IDH4_DEV"
+
+            }else{
+
+                sUrlSubaccount = 'tasadev'; // apuntando a DEV
+
+                sParam = "IDH4_DEV"
+
+            }
+
+
+
+            return {
+
+                url : `https://${sUrlSubaccount}.launchpad.cfapps.us10.hana.ondemand.com`,
+
+                param : sParam
+
+            };
+
+        },
+
+        
     });
 
 }
