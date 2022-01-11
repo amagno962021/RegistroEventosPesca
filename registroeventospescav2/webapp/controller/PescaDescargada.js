@@ -450,6 +450,16 @@ sap.ui.define([
         buscarDescarga: async function (oEvent) {
             await this.obtenerTipoPesca();
             await this.obtenerEstadoDesc();
+            var indActual = this._controler._elementAct;//indicie actual de la lista de eventos
+            var ListaEventos = this._controler._listaEventos; // mapear modelo de lista de eventos
+            var eventosElement = ListaEventos[indActual - 1];
+            var fechaIni = eventosElement.FIEVN;
+            var horaIni = eventosElement.HIEVN;
+            var eveVisFechaFin = ["3", "6", "7"];
+            if (eveVisFechaFin.includes(eventosElement.CDTEV)) {
+                fechaIni = eventosElement.FFEVN;
+                horaIni = eventosElement.HFEVN;
+            }
             this._oView.getModel("popup_descarga").setProperty("/TipoPesca", this._TipoPesca.data);
             this._oView.getModel("popup_descarga").setProperty("/ListaEstado", this._Estado.data);
             if(this._controler._motivoMarea == "1"){
@@ -461,7 +471,7 @@ sap.ui.define([
                 this._oView.getModel("popup_descarga").setProperty("/CodPlanta", "FP12");
                 this._oView.getModel("popup_descarga").setProperty("/NomPlanta", "TASA CHD");
                 this._oView.getModel("popup_descarga").setProperty("/Estado", "N");
-                this._oView.getModel("popup_descarga").setProperty("/HoraInicio", this._controler._listaEventos[this._controler._elementAct].HIEVN);
+                this._oView.getModel("popup_descarga").setProperty("/HoraInicio", horaIni);
 
             }else if(this._controler._motivoMarea == "2"){
                 this._oView.getModel("popup_descarga").setProperty("/TipoPescaSel", "I");
@@ -471,7 +481,7 @@ sap.ui.define([
                 this._oView.getModel("popup_descarga").setProperty("/NomEmb", this._controler._FormMarea.NMEMB);
                 this._oView.getModel("popup_descarga").setProperty("/CodPlanta", this._controler._listaEventos[this._controler._elementAct].WERKS);
                 this._oView.getModel("popup_descarga").setProperty("/NomPlanta", this._controler._listaEventos[this._controler._elementAct].DESCR);
-                this._oView.getModel("popup_descarga").setProperty("/HoraInicio", this._controler._listaEventos[this._controler._elementAct].HIEVN);
+                this._oView.getModel("popup_descarga").setProperty("/HoraInicio", horaIni);
                 this._oView.getModel("popup_descarga").setProperty("/Estado", "N");
                 
 
@@ -607,7 +617,7 @@ sap.ui.define([
           
             }
             console.log(this._controler._nroEvento);
-            let s = await this.cargar_servicios_pescaDesc(matricula, nom_embarcacion, cod_planta, nom_planta, fecha_inicio, this._controler.getCurrentUser(),nro_descarga);
+            let s = await this.cargar_servicios_pescaDesc(matricula, nom_embarcacion, cod_planta, nom_planta, fecha_inicio, this._controler.getCurrentUser(),nro_descarga,estado);
             let listaDes_RFC = JSON.parse(this._DataPopup[0]).data;
             let lista_popup = []
             for (let index = 0; index < listaDes_RFC.length; index++) {
@@ -715,9 +725,9 @@ sap.ui.define([
 
         },
 
-        cargar_servicios_pescaDesc :function (matricula, nom_embarcacion, cod_planta, nom_planta, fecha_inicio, user,nro_descarga){
+        cargar_servicios_pescaDesc :function (matricula, nom_embarcacion, cod_planta, nom_planta, fecha_inicio, user,nro_descarga,estado){
             let self = this;
-            var s1 = TasaBackendService.obtenerListaDescargaPopUp(matricula, nom_embarcacion, cod_planta, nom_planta, fecha_inicio, user,nro_descarga);
+            var s1 = TasaBackendService.obtenerListaDescargaPopUp(matricula, nom_embarcacion, cod_planta, nom_planta, fecha_inicio, user,nro_descarga,estado);
             return Promise.all([s1]).then(values => {
                 self._DataPopup = values;
                 console.log(self._DataPopup);

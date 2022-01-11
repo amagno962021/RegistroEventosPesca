@@ -21,7 +21,7 @@
 									<Label id="labelTextFechIniEnv" text="Fech/hora Inic. envase" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<DatePicker value="{eventos>/FIEVN}" id="dtf_fechaIniEnv" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy" />
+									<DatePicker value="{eventos>/FIEVN}" id="dtf_fechaIniEnv" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy" change=".validarFechaEnv"/>
 									<TimePicker id="dtf_horaIniEnv"  value="{eventos>/HIEVN}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%"/>
 								</form:fields>
 							</form:FormElement>
