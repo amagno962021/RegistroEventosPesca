@@ -457,6 +457,10 @@ sap.ui.define([
                 o_iconTabBar.setSelectedKey(tabRedirect);
                 BusyIndicator.hide();
                 //refrescar modelos
+            }else{
+                let tabRedirect = event.getParameter("previousKey");
+                let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
+                o_iconTabBar.setSelectedKey(tabRedirect);
             }
         },
 
@@ -933,6 +937,25 @@ sap.ui.define([
             let val = Number(valorstock);
             let n_valorstock  = new Intl.NumberFormat('es-MX').format(val);
             this._oView.getModel("eventos").setProperty("/DESSTCMB", n_valorstock);
+        },
+
+        validarFechaEnv :function(evt){
+            let id = evt.getParameter("id");
+            let valorstock =  sap.ui.getCore().byId(id).getValue();
+            let valorMinFech =  sap.ui.getCore().byId("dtp_fechaIniCala").getValue();
+            let valorMaxFech =  sap.ui.getCore().byId("dtp_fechaFinCala").getValue();
+
+            if(this.ctr._listaEventos[this.ctr._elementAct].CDTEV == "3"){
+                if(valorstock < valorMinFech && valorstock > valorMaxFech){
+                    sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.Error);
+                    sap.ui.getCore().byId(id).setValueStateText("La fecha de inicio de envase debe estar entre la fecha de inicio y fin de cala");
+                    this.ctr.validacioncampos = false;
+                }else{
+                    sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.None);
+                    this.ctr.validacioncampos = true;
+                }
+                
+            }
         }
 
 

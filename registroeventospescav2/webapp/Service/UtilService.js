@@ -150,7 +150,8 @@ sap.ui.define([
                 parametro3: "",
                 parametro4: "",
                 parametro5: "",
-                parametro6: ""
+                parametro6: "",
+                parametro7: ""
             };
             return sBody;
         },

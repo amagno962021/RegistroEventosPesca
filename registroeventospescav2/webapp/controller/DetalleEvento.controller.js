@@ -264,10 +264,10 @@ sap.ui.define([
             this._listaEventos[this._elementAct].ListaBiometria = [];
             this._listaEventos[this._elementAct].ListaPescaDeclarada = [];
             this._listaEventos[this._elementAct].ListaPescaDescargada = [];
-            this._listaEventos[this._elementAct].ListaHorometros = [];
-            this._listaEventos[this._elementAct].ListaEquipamiento = [];
+            this._listaEventos[this._elementAct].ListaHorometros = this._listaEventos[this._elementAct].ListaHorometros ? this._listaEventos[this._elementAct].ListaHorometros : [];
+            this._listaEventos[this._elementAct].ListaEquipamiento = this._listaEventos[this._elementAct].ListaEquipamiento ? this._listaEventos[this._elementAct].ListaEquipamiento :[];
             this._listaEventos[this._elementAct].ListaAccidente = [];
-            this._listaEventos[this._elementAct].ListaSiniestros = [];
+            this._listaEventos[this._elementAct].ListaSiniestros = this._listaEventos[this._elementAct].ListaSiniestros ? this._listaEventos[this._elementAct].ListaSiniestros : [];
             this._listaEventos[this._elementAct].ListaIncidental = this._listaIncidental;
             this._listaEventos[this._elementAct].eListaPescaDeclarada = [];
             this._listaEventos[this._elementAct].EspePermitida = [];
@@ -1108,13 +1108,16 @@ sap.ui.define([
 
         },
         obtenerHorometros: async function () {
-            await this.service_obtenerListaHorometro();
-            if (this._listasServicioCargaIni[8] ? true : false) {
-                this._listaEventos[this._elementAct].ListaHorometros = this._listasServicioCargaIni[8];
-            }else{
-                this._listaEventos[this._elementAct].ListaHorometros = [];
+            let listaHor = this._listaEventos[this._elementAct].ListaHorometros.length
+            if(listaHor == 0){
+                await this.service_obtenerListaHorometro();
+                if (this._listasServicioCargaIni[8] ? true : false) {
+                    this._listaEventos[this._elementAct].ListaHorometros = this._listasServicioCargaIni[8];
+                }else{
+                    this._listaEventos[this._elementAct].ListaHorometros = [];
+                }
             }
-
+            
         },
         obtenerCantTotalPescaDecla: function (nroEventoTope, me) {
             var modelo = me.getOwnerComponent().getModel("DetalleMarea");
@@ -1661,7 +1664,7 @@ sap.ui.define([
                                     eventosNode[this._elementAct].HIEVN = pescaDescElement.HIDES;
                                     eventosNode[this._elementAct].HFEVN = pescaDescElement.HFDES;
 
-                                    limpiar = !this.validarFechaAnterior();
+                                    limpiar = await !this.validarFechaAnterior();
 
                                     if (!limpiar) {
                                         let mensaje = await this.validarErroresDescarga(pescaDescElement.Nro_descarga);
@@ -1708,6 +1711,7 @@ sap.ui.define([
                     eventosNode[this._elementAct].HIEVN = "";
                     eventosNode[this._elementAct].HFEVN = "";
                     eventosNode[this._elementAct].FechProduccion = "";
+                    eventosNode[this._elementAct].ListaPescaDescargada = [];
                     data = [];
                 }
 
@@ -2302,9 +2306,11 @@ sap.ui.define([
                 
                 if (this.buscarValorFijo(textValidaciones.MOTIVOPESCADES, motivoMarea)) {
                     this.obtenerPuntosDescarga();
+                    let psc_dcl = await this.obtenerPescaDeclDescarga();
+                    psc_dcl = Utils.formatoPescaDcl(psc_dcl);
                     nodoEventos[this._eventoNuevo].ListaPescaDescargada[0] = {}
                     nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].EsNuevo = true;
-                    nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CantPescaDeclarada = await this.obtenerPescaDeclDescarga();
+                    nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CantPescaDeclarada = psc_dcl;
                     mod.setProperty("/Eventos/CantPescaDescDeclText",nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CantPescaDeclarada);
                     if (indiPropPlanta == "P") { 	//Descarga en planta propia
                         //Si es (CHI o CHD)
