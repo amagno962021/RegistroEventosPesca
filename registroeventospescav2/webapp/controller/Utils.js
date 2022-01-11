@@ -317,9 +317,8 @@ sap.ui.define([
             return ne_format;
         },
         formatoPescaDcl : function(numero){
-            let num_format = ""
-            let n = Number(numero);
-            let v_n = n.split(".");
+            let num_format = "" + numero;
+            let v_n = num_format.split(".");
             let v_decimal = v_n[1] ? v_n[1].length : 0;
             if(v_decimal == 0){
                 num_format = numero + ".000";
