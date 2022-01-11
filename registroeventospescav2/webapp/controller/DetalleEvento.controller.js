@@ -2306,9 +2306,11 @@ sap.ui.define([
                 
                 if (this.buscarValorFijo(textValidaciones.MOTIVOPESCADES, motivoMarea)) {
                     this.obtenerPuntosDescarga();
+                    let psc_dcl = await this.obtenerPescaDeclDescarga();
+                    psc_dcl = Utils.formatoPescaDcl(psc_dcl);
                     nodoEventos[this._eventoNuevo].ListaPescaDescargada[0] = {}
                     nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].EsNuevo = true;
-                    nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CantPescaDeclarada = await this.obtenerPescaDeclDescarga();
+                    nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CantPescaDeclarada = psc_dcl;
                     mod.setProperty("/Eventos/CantPescaDescDeclText",nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CantPescaDeclarada);
                     if (indiPropPlanta == "P") { 	//Descarga en planta propia
                         //Si es (CHI o CHD)

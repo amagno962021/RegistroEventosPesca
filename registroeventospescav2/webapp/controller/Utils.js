@@ -315,6 +315,18 @@ sap.ui.define([
                 ne_format = ne;
             }
             return ne_format;
+        },
+        formatoPescaDcl : function(numero){
+            let num_format = ""
+            let n = Number(numero);
+            let v_n = n.split(".");
+            let v_decimal = v_n[1] ? v_n[1].length : 0;
+            if(v_decimal == 0){
+                num_format = numero + ".000";
+            }else{
+                num_format = numero;
+            }
+            return num_format;
         }
 
 
