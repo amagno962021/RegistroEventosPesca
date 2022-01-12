@@ -1483,9 +1483,11 @@ sap.ui.define([
 
         onAbrirArmadorHelp: function(oEvent){
             let sIdInput = oEvent.getSource().getId(),
+                modeloConstantes = sap.ui.getCore().getModel("ConstantsUtility"),
+                host = modeloConstantes.getProperty("/HelpHost");
 				oView = this.getView(),
 				oModel = this.getModel(),
-				sUrl =this.HOST_HELP+".AyudasBusqueda.busqarmadores-1.0.0",
+				sUrl = host+".AyudasBusqueda.busqarmadores-1.0.0",
 				nameComponent = "busqarmadores",
 				idComponent = "busqarmadores",
 				oInput = this.getView().byId(sIdInput);
@@ -1493,7 +1495,7 @@ sap.ui.define([
 	
 				if(!this.DialogComponent){
 					this.DialogComponent = await Fragment.load({
-						name:"tasa.com.preciosacopio.view.fragments.BusqArmadores",
+						name:"com.tasa.registroeventospescav2.view.fragments.NuevoArmador",
 						controller:this
 					});
 					oView.addDependent(this.DialogComponent);

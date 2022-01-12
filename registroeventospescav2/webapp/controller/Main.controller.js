@@ -85,6 +85,7 @@ sap.ui.define([
 
             callConstantes: async function(){
                 BusyIndicator.show(0);
+                var modeloConstantes = sap.ui.getCore().getModel("ConstantsUtility");
                 var body={
                     "nombreConsulta": "CONSGENCONST",
                     "p_user": await this.getCurrentUser(),
@@ -100,7 +101,8 @@ sap.ui.define([
                           body: JSON.stringify(body)
                       })
                       .then(resp => resp.json()).then(data => {
-                        this.HOST_HELP=this.url+data.data[0].LOW;
+                        var host = this.url+data.data[0].LOW;
+                        modeloConstantes.setProperty("/HelpHost", host);
                         BusyIndicator.hide();
                       }).catch(error => console.log(error)
                 );

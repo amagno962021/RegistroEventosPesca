@@ -437,7 +437,8 @@ sap.ui.define([
             var data = {
                 CARACTERNUEVO: "N",
                 CARACTEREDITAR: "E",
-                CARACTERBORRAR: "D"
+                CARACTERBORRAR: "D",
+                HelpHost: ""
             };
             var oModel = new JSONModel(data);
 			return oModel;
