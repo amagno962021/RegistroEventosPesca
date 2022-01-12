@@ -52,7 +52,8 @@ sap.ui.define([
                     FECVEDMAX: "",
                     NUEVOARM: "",
                     OBSCOMB: "",
-                    CantTotalPescDecla: ""
+                    CantTotalPescDecla: "",
+                    EsNuevo: false
 				},
                 DatosGenerales: {
 					CDEMB: "",
@@ -438,7 +439,9 @@ sap.ui.define([
                 CARACTERNUEVO: "N",
                 CARACTEREDITAR: "E",
                 CARACTERBORRAR: "D",
-                HelpHost: ""
+                HelpHost: "",
+                input: null,
+                idDialogComp: null
             };
             var oModel = new JSONModel(data);
 			return oModel;

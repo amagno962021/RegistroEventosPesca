@@ -8,7 +8,8 @@ sap.ui.define([
     "sap/ui/core/BusyIndicator",
     "./Utils",
     'sap/m/MessageItem',
-    'sap/m/MessagePopover'
+    'sap/m/MessagePopover',
+    "sap/ui/core/Fragment"
 ], function (
     MainComp,
     Controller,
@@ -19,7 +20,8 @@ sap.ui.define([
     BusyIndicator,
     Utils,
     MessageItem,
-    MessagePopover
+    MessagePopover,
+    Fragment
 ) {
     "use strict";
 
@@ -1484,23 +1486,20 @@ sap.ui.define([
         onAbrirArmadorHelp: function(oEvent){
             let sIdInput = oEvent.getSource().getId(),
                 modeloConstantes = sap.ui.getCore().getModel("ConstantsUtility"),
-                host = modeloConstantes.getProperty("/HelpHost");
+                host = modeloConstantes.getProperty("/HelpHost"),
 				oView = this.getView(),
-				oModel = this.getModel(),
+				//oModel = this.getModel(),
 				sUrl = host+".AyudasBusqueda.busqarmadores-1.0.0",
 				nameComponent = "busqarmadores",
 				idComponent = "busqarmadores",
 				oInput = this.getView().byId(sIdInput);
-				oModel.setProperty("/input",oInput);
+				modeloConstantes.setProperty("/input",oInput);
 	
 				if(!this.DialogComponent){
-					this.DialogComponent = await Fragment.load({
-						name:"com.tasa.registroeventospescav2.view.fragments.NuevoArmador",
-						controller:this
-					});
+					this.DialogComponent = sap.ui.xmlfragment("com.tasa.registroeventospescav2.view.fragments.NuevoArmador", this);
 					oView.addDependent(this.DialogComponent);
 				}
-				oModel.setProperty("/idDialogComp",this.DialogComponent.getId());
+				modeloConstantes.setProperty("/idDialogComp",this.DialogComponent.getId());
 				
 				let compCreateOk = function(){
 					BusyIndicator.hide()

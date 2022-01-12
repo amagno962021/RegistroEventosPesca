@@ -377,7 +377,7 @@ sap.ui.define([
             var cdpta = oStore.get("CDPTA");
             modeloDetalleMarea.setProperty("/DatosGenerales/CDPTA", cdpta);
             modeloDetalleMarea.setProperty("/Cabecera/CDPTA", cdpta);
-
+            modeloDetalleMarea.setProperty("/Cabecera/EsNuevo", false);
 
             //la pestania de reserva de combustible y venta de combustible se setean en el Detalle
 
@@ -465,7 +465,7 @@ sap.ui.define([
                 objMarea.AXMAR = await this.getCurrentUser();
             }
 
-            var esNuevo = false;
+            var esNuevo = modelo.getProperty("/Cabecera/EsNuevo");
             if (esNuevo) {
                 var currentDate = new Date();
                 objMarea.FEMAR = currentDate;
@@ -1566,6 +1566,7 @@ sap.ui.define([
                             if (valMareaProd) {//se puso la admiracion para pruebas
                                 modelo.setProperty("/Cabecera/INDICADOR", "N");
                                 modelo.setProperty("/DatosGenerales/ESMAR", "A");
+                                modelo.setProperty("/Cabecera/EsNuevo", true);
                                 BusyIndicator.hide();
                                 if (navegar) {
                                     var oRouter = sap.ui.core.UIComponent.getRouterFor(this);

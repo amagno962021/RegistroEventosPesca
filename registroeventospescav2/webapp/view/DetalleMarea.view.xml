@@ -55,8 +55,16 @@
 													<Label text="Armador Comercial" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 												</form:label>
 												<form:fields>
-													<Input value="{DetalleMarea>/DatosGenerales/CDEMP}" description="{DetalleMarea>/DatosGenerales/NAME1}" enabled="true" 
-																width="60%" valueStateText="Invalid entry" valueHelpRequest="onAbrirArmadorHelp"/>
+								
+													<HBox
+													>
+														<Input value="{DetalleMarea>/DatosGenerales/CDEMP}" description="{DetalleMarea>/DatosGenerales/NAME1}" enabled="false" 
+																width="60%" valueStateText="Invalid entry"/>
+													<Button
+														icon="sap-icon://search"
+														press="onAbrirArmadorHelp"
+													/>	
+													</HBox>
 												</form:fields>
 											</form:FormElement>
 											<form:FormElement visible="{DetalleMarea>/Config/visibleLinkCrearArmador}">
