@@ -1102,6 +1102,7 @@ sap.ui.define([
                 this._listaEventos[this._elementAct].ListaPescaDescargada = JSON.parse(this._listasServicioCargaIni[7]).data;
                 if(this._listaEventos[this._elementAct].ListaPescaDescargada.length > 0){
                     this._listaEventos[this._elementAct].ListaPescaDescargada[0].CantPescaDeclarada = this._listaEventos[this._elementAct].ListaPescaDescargada[0].CNPCM;
+                    this._listaEventos[this._elementAct].ListaPescaDescargada[0].BckCantPescaModificada = this._listaEventos[this._elementAct].ListaPescaDescargada[0].CNPDS;
                     this._listaEventos[this._elementAct].FechProduccion = this._listaEventos[this._elementAct].ListaPescaDescargada[0].FECCONMOV;
                 }
             }
