@@ -1109,7 +1109,7 @@ sap.ui.define([
 
         },
         obtenerHorometros: async function () {
-            let listaHor = this._listaEventos[this._elementAct].ListaHorometros.length
+            let listaHor = this._listaEventos[this._elementAct].ListaHorometros ? this._listaEventos[this._elementAct].ListaHorometros.length : 0;
             if(listaHor == 0){
                 await this.service_obtenerListaHorometro();
                 if (this._listasServicioCargaIni[8] ? true : false) {

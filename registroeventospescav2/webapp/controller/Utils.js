@@ -34,7 +34,7 @@ sap.ui.define([
                 value = value.trim();		
                 type = this.getFormatGeo(value);
                 if (type != null) {
-                    return Number(value.substring(0, 3));
+                    return value.substring(0, 3);
                 }
             }
             return 0;
@@ -47,9 +47,9 @@ sap.ui.define([
                 type = this.getFormatGeo(value);
                 if (type != null) {
                     if (type == "D") {
-                        return Number(value.substring(3));
+                        return value.substring(3);
                     } else if (type == "G") {
-                        return Number(value.substring(4, 7));
+                        return value.substring(4, 7);
                     }
                 } 
             }
@@ -326,6 +326,34 @@ sap.ui.define([
                 num_format = numero;
             }
             return num_format;
+        },
+
+        formatGraInput :function(gra){
+            let val = "";
+            let n_lat = Number(gra);
+
+            if(n_lat<10){
+                val = "00" + n_lat;
+            }else if(10 <= n_lat && n_lat > 100){
+                val = "0" + n_lat;
+            }else{
+                val = n_lat;
+            }
+            return val;
+
+        },
+
+        formatMinInput :function(min){
+            let val = "";
+            let n_lat = Number(min);
+
+            if(n_lat<10){
+                val = "0" + n_lat;
+            }else if(10 <= n_lat && n_lat > 100){
+                val = n_lat;
+            }
+            return val;
+
         }
 
 
