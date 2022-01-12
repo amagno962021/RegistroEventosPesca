@@ -56,7 +56,7 @@
 												</form:label>
 												<form:fields>
 													<Input value="{DetalleMarea>/DatosGenerales/CDEMP}" description="{DetalleMarea>/DatosGenerales/NAME1}" enabled="true" 
-																width="60%" valueStateText="Invalid entry"/>
+																width="60%" valueStateText="Invalid entry" valueHelpRequest="onAbrirArmadorHelp"/>
 												</form:fields>
 											</form:FormElement>
 											<form:FormElement visible="{DetalleMarea>/Config/visibleLinkCrearArmador}">
