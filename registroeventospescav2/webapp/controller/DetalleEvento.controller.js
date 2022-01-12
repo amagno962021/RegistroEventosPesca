@@ -2190,7 +2190,7 @@ sap.ui.define([
         },
         prepararNuevoEvento :async function(){
             this._elementAct = this._eventoNuevo;
-            this.obtenerDatosDistribFlota();
+            await this.obtenerDatosDistribFlota();
             this.prepararVista(true);
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let nodoEventos = mod.getProperty("/Eventos/Lista");
@@ -2386,12 +2386,13 @@ sap.ui.define([
             }
             this.getView().getModel("eventos").updateBindings(true);
         },
-        obtenerDatosDistribFlota :function(){
+        obtenerDatosDistribFlota : async function(){
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             if (this._tipoEvento != "6") {
                 this.getView().byId("FechaEnvaseIni").setVisible(true);
                 if (this._FormMarea.EsNuevo == false ||  (this._FormMarea.EsNuevo && this._indicadorProp == "P")) {
-                    DetalleMarea.obtenerDatosDistribFlota();
+                    await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleMarea").obtenerDatosDistribFlota(this);
+                    //DetalleMarea.obtenerDatosDistribFlota();
                 }
                 let nodoEventos = mod.getProperty("/Eventos/Lista");
                 let distribFlotaElement = mod.getProperty("/DistribFlota");

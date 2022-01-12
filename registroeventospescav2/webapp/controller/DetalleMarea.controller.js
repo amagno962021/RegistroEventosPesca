@@ -585,8 +585,8 @@ sap.ui.define([
             modeloDetalleMarea.refresh();
         },
 
-        obtenerDatosDistribFlota: async function () {
-            var me = this;
+        obtenerDatosDistribFlota: async function (ctx) {
+            var me = ctx;
             var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
             var dataDetalleMarea = modeloDetalleMarea.getData();
             var embarcacion = dataDetalleMarea.Cabecera.CDEMB;
