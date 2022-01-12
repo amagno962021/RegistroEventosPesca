@@ -311,6 +311,7 @@ sap.ui.define([
             var incidental = data.str_pscinc;
             var biometria = data.str_flbsp;
             var motivoResCombu = ["1", "2", "4", "5", "6", "7", "8"];
+            var motivoSinZarpe = ["3", "7", "8"];
             await this.clearAllData();//inicalizar valores
             modeloDetalleMarea.setProperty("/Cabecera/INDICADOR", "E");
             //setear cabecera de formulario
@@ -334,12 +335,15 @@ sap.ui.define([
             //cargar dsitribucion de flota
             var codigo = modeloDetalleMarea.getProperty("/Cabecera/CDEMB");
             await this.obtenerDatosDistribFlotaMarea(codigo);
+            
 
             var estMarea = modeloDetalleMarea.getProperty("/DatosGenerales/ESMAR");
             var marea = modeloDetalleMarea.getProperty("/Cabecera/NRMAR");
             if (estMarea == "A") {
                 await this.obtenerDatosMareaAnt(marea, codigo);
             }
+
+
 
             //setear lista de eventos
             modeloDetalleMarea.setProperty("/Eventos/TituloEventos", "Eventos (" + eventos.length + ")")
@@ -378,6 +382,16 @@ sap.ui.define([
             modeloDetalleMarea.setProperty("/DatosGenerales/CDPTA", cdpta);
             modeloDetalleMarea.setProperty("/Cabecera/CDPTA", cdpta);
             modeloDetalleMarea.setProperty("/Cabecera/EsNuevo", false);
+
+            if(motivoSinZarpe.includes(motivo)){
+                modeloDetalleMarea.setProperty("/Config/readOnlyFechIni", false);
+                modeloDetalleMarea.setProperty("/Config/visibleFecHoEta", false);
+                modeloDetalleMarea.setProperty("/Config/visibleFechIni", true);
+                modeloDetalleMarea.setProperty("/Config/visibleFechFin", true);
+                if(estMarea == "A" && motivo == "8"){
+                    
+                }
+            }
 
             //la pestania de reserva de combustible y venta de combustible se setean en el Detalle
 
@@ -1767,13 +1781,13 @@ sap.ui.define([
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
 
             if (ind == null || (ind != null && ind == "T")) {
-                //modelo.setProperty("/BtnArmador", true);//activar ayuda de bsuqeuda de armador
+                modelo.setProperty("/Config/visibleBuscarArmador", true);//activar ayuda de bsuqeuda de armador
                 modelo.setProperty("/Config/visibleLinkCrearArmador", true);
                 modelo.setProperty("/Cabecera/CDEMP", null);
                 modelo.setProperty("/Cabecera/NAME1", null);
                 modelo.setProperty("/Cabecera/INPRP", "T");
             } else {//setArmLectura
-                //modelo.setProperty("/BtnArmador", false);//DESACTIVAR  ayuda de bsuqeuda de armador
+                modelo.setProperty("/Config/visibleBuscarArmador", false);//DESACTIVAR  ayuda de bsuqeuda de armador
                 modelo.setProperty("/Config/visibleLinkCrearArmador", false);
                 modelo.setProperty("/Cabecera/INPRP", "P");
             }

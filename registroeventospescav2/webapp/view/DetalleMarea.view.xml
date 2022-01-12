@@ -63,6 +63,7 @@
 													<Button
 														icon="sap-icon://search"
 														press="onAbrirArmadorHelp"
+														visible="{DetalleMarea>/Config/visibleBuscarArmador}"
 													/>	
 													<Text
 														

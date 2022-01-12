@@ -514,8 +514,9 @@ sap.ui.define([
             }
 
             //combo motivos de marea
-            TasaBackendService.obtenerDominio("ZCDMMA").then(function (response) {
-                var sData = response.data[0].data;
+            var motivosMareas = await TasaBackendService.obtenerDominio("ZCDMMA")
+            if(motivosMareas){
+                var sData = motivosMareas.data[0].data;
                 var inprp = dataDetalleMarea.Cabecera.INPRP;
                 var items = [];
                 if (inprp == "P") {
@@ -530,9 +531,7 @@ sap.ui.define([
                 }
                 dataDetalleMarea.Config.datosCombo.MotivosMarea = items;
                 modeloDetalleMarea.refresh();
-            }).catch(function (error) {
-                console.log("ERROR: DetalleMarea.cargarCombos - ", error);
-            });
+            }
 
             //combo ubicacion de pesca
             TasaBackendService.obtenerDominio("ZDO_ZINUBC").then(function (response) {
@@ -748,8 +747,10 @@ sap.ui.define([
             var indProp = modelo.getProperty("/Cabecera/INPRP");
             if (indProp == "P") {
                 modelo.setProperty("/Config/visibleLinkCrearArmador", false);
+                modelo.setProperty("/Config/visibleBuscarArmador", false);
             } else {
                 modelo.setProperty("/Config/visibleLinkCrearArmador", true);
+                modelo.setProperty("/Config/visibleBuscarArmador", false);
             }
 
             modelo.setProperty("/Utils/MessageItemsDM", []);
@@ -965,6 +966,7 @@ sap.ui.define([
             var estado = modelo.getProperty("/DatosGenerales/ESMAR");
             var esNuevo = modelo.getProperty("/Cabecera/INDICADOR") == "N" ? true : false;
             var motivoSinZarpe = ["3", "7", "8"];
+            var embarcacion = modelo.getProperty("/Cabecera/CDEMB");
             var campos = [];
             if (esNuevo) {
                 campos = ["/DatosGenerales/CDEMB", "/DatosGenerales/CDMMA", "/DatosGenerales/INUBC"];
@@ -982,13 +984,20 @@ sap.ui.define([
                         campos = ["/DatosGenerales/FIMAR", "/DatosGenerales/FFMAR"];
                     }
                 }
+                if(campos.length > 0){
+                    var emba = await this.consultarEmba(embarcacion);
+                    if (emba) {
+                        await this.verificarCambiosCodigo("EMB", embarcacion, emba[0]);
+                    }
+                }
             } else {
                 if (motivoSinZarpe.includes(motivo) && estado == "C") {
                     campos = ["/DatosGenerales/HIMAR", "/DatosGenerales/FFMAR"]
                 }
             }
-            this.validateFormFields(campos);
+            var bOk = this.validateFormFields(campos);
             await this.validarFechaIniFin();
+            return bOk;
         },
 
         validarFechaIniFin: async function () {

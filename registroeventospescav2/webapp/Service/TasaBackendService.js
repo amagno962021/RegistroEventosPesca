@@ -72,11 +72,11 @@ sap.ui.define([
             return data
         },
 
-        obtenerDominio: function (dominio) {
+        obtenerDominio: async function (dominio) {
             var uri = UtilService.getHostService() + "/api/dominios/Listar";
             var sBody = UtilService.getBodyDominio();
             sBody.dominios[0].domname = dominio;
-            var data = this.http(uri).post(null, sBody).then(function (response) {
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
                 var data = JSON.parse(response);
                 return data;
             }).catch(function(error){

@@ -226,6 +226,7 @@ sap.ui.define([
                     visibleBtnSiguiente: true,
                     visibleBtnCrear: true,
                     visibleBtnReabrir: true,
+                    visibleBuscarArmador: true,
 					datosCombo: {
                         Departamentos: [],
                         MotivosMarea: [],
