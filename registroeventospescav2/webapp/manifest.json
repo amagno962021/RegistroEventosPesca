@@ -79,7 +79,12 @@
             "Dominios": {
                 "preload": true,
                 "type": "sap.ui.model.json.JSONModel"
+            },
+            "Test": {
+                "preload": true,
+                "type": "sap.ui.model.json.JSONModel"
             }
+            
         },
         "resources": {
             "css": [

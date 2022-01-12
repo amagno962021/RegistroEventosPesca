@@ -1484,6 +1484,8 @@ sap.ui.define([
         },
 
         onAbrirArmadorHelp: function(oEvent){
+            var modeloUndefined = new JSONModel();
+            this.getOwnerComponent().setModel(modeloUndefined, undefined);
             let sIdInput = oEvent.getSource().getId(),
                 modeloConstantes = sap.ui.getCore().getModel("ConstantsUtility"),
                 host = modeloConstantes.getProperty("/HelpHost"),

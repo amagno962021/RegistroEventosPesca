@@ -504,7 +504,7 @@ sap.ui.define([
             };
             var oModel = new JSONModel(data);
 			return oModel;
-        }
+        },
 
 	};
 });
