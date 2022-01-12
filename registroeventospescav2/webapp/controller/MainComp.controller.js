@@ -1815,7 +1815,7 @@ sap.ui.define([
             var usuario = await this.getCurrentUser();
             //var distribFlota = this.getModel("DistribFlota");
             var distribFlota = modelo.getProperty("/DistribFlota");
-            var constantsUtility = this.getModel("ConstantsUtility");
+            var constantsUtility = this.getOwnerComponent().getModel("ConstantsUtility");
             var caracterNuevo = constantsUtility.getProperty("/CARACTERNUEVO");
             var response = await TasaBackendService.obtenerDatosPlantaDist(planta, usuario);
             if (response) {
@@ -1849,7 +1849,7 @@ sap.ui.define([
             var usuario = await this.getCurrentUser();
             //var distribFlota = this.getModel("DistribFlota");
             var distribFlota = modelo.getProperty("/DistribFlota");
-            var constantsUtility = this.getModel("ConstantsUtility");
+            var constantsUtility = this.getOwnerComponent().getModel("ConstantsUtility");
             var caracterEditar = constantsUtility.getProperty("/CARACTEREDITAR");
             var response = await TasaBackendService.obtenerDatosDstrFlota(codigo, usuario);
             if (response) {

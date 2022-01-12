@@ -85,7 +85,7 @@ sap.ui.define([
 
             callConstantes: async function(){
                 BusyIndicator.show(0);
-                var modeloConstantes = sap.ui.getCore().getModel("ConstantsUtility");
+                var modeloConstantes = this.getOwnerComponent().getModel("ConstantsUtility");
                 var body={
                     "nombreConsulta": "CONSGENCONST",
                     "p_user": await this.getCurrentUser(),

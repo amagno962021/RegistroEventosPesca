@@ -10,7 +10,7 @@
                 text="Cerrar"
                 icon="sap-icon://decline"
                 type="Reject" 
-                press="onCloseDialog"/>
+                press="onCloseDialogArmador"/>
         </beginButton>
     </Dialog>
 </core:FragmentDefinition>

@@ -441,7 +441,11 @@ sap.ui.define([
                 CARACTERBORRAR: "D",
                 HelpHost: "",
                 input: null,
-                idDialogComp: null
+                idDialogComp: null,
+                helpArma: null,
+                user: {
+                    name: ""
+                }
             };
             var oModel = new JSONModel(data);
 			return oModel;

@@ -42,6 +42,9 @@ sap.ui.define([
 			//set propios model
 			this.setModel(models.ListaMareas(), "ListaMareas");
 
+			//set constants utilitis model
+			this.setModel(models.createConstantsUtility(), "ConstantsUtility");
+
 			//set form model
 			sap.ui.getCore().setModel(models.createFormModel(), "Form");
 
@@ -70,7 +73,7 @@ sap.ui.define([
 			sap.ui.getCore().setModel(models.createDistribFlotaModel(), "DistribFlota");
 
 			//set constants utiliy model
-			sap.ui.getCore().setModel(models.createConstantsUtility(), "ConstantsUtility");
+			//sap.ui.getCore().setModel(models.createConstantsUtility(), "ConstantsUtility");
 
 			//set constantes model
 			sap.ui.getCore().setModel(models.createConstantesModel(), "Constantes");

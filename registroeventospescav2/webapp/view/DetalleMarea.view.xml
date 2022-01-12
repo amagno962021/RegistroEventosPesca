@@ -58,12 +58,19 @@
 								
 													<HBox
 													>
-														<Input value="{DetalleMarea>/DatosGenerales/CDEMP}" description="{DetalleMarea>/DatosGenerales/NAME1}" enabled="false" 
-																width="60%" valueStateText="Invalid entry"/>
+														<Input id="idArmadorComercial_R" value="{DetalleMarea>/DatosGenerales/CDEMP}" enabled="false" 
+																width="auto" valueStateText="Invalid entry"/>
 													<Button
 														icon="sap-icon://search"
 														press="onAbrirArmadorHelp"
 													/>	
+													<Text
+														
+														text="{DetalleMarea>/DatosGenerales/NAME1}"
+														
+													/>
+														
+													
 													</HBox>
 												</form:fields>
 											</form:FormElement>

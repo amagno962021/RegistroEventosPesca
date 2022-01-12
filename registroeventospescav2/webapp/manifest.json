@@ -80,7 +80,7 @@
                 "preload": true,
                 "type": "sap.ui.model.json.JSONModel"
             },
-            "Test": {
+            "ConstantsUtility": {
                 "preload": true,
                 "type": "sap.ui.model.json.JSONModel"
             }

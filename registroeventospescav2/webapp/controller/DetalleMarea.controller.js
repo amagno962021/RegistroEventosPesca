@@ -1483,25 +1483,29 @@ sap.ui.define([
 
         },
 
-        onAbrirArmadorHelp: function(oEvent){
-            var modeloUndefined = new JSONModel();
-            this.getOwnerComponent().setModel(modeloUndefined, undefined);
-            let sIdInput = oEvent.getSource().getId(),
-                modeloConstantes = sap.ui.getCore().getModel("ConstantsUtility"),
-                host = modeloConstantes.getProperty("/HelpHost"),
+        onAbrirArmadorHelp: async function(oEvent){
+            /*var modeloUndefined = new JSONModel();
+            this.getOwnerComponent().setModel(modeloUndefined, undefined);*/
+            BusyIndicator.show(0);
+            var modeloConst = this.getOwnerComponent().getModel("ConstantsUtility");
+            var usuario = await this.getCurrentUser();
+            modeloConst.setProperty("/user/name", usuario);
+
+            //let sIdInput = oEvent.getSource().getId(),
+            let host = modeloConst.getProperty("/HelpHost"),
 				oView = this.getView(),
 				//oModel = this.getModel(),
 				sUrl = host+".AyudasBusqueda.busqarmadores-1.0.0",
 				nameComponent = "busqarmadores",
 				idComponent = "busqarmadores",
-				oInput = this.getView().byId(sIdInput);
-				modeloConstantes.setProperty("/input",oInput);
+				oInput = this.getView().byId("idArmadorComercial_R");
+				modeloConst.setProperty("/input",oInput);
 	
 				if(!this.DialogComponent){
 					this.DialogComponent = sap.ui.xmlfragment("com.tasa.registroeventospescav2.view.fragments.NuevoArmador", this);
 					oView.addDependent(this.DialogComponent);
 				}
-				modeloConstantes.setProperty("/idDialogComp",this.DialogComponent.getId());
+				modeloConst.setProperty("/idDialogComp",this.DialogComponent.getId());
 				
 				let compCreateOk = function(){
 					BusyIndicator.hide()
@@ -1522,8 +1526,13 @@ sap.ui.define([
 					});
 					this.DialogComponent.addContent(oContainer);
 				}
-	
+
+                BusyIndicator.hide();
 				this.DialogComponent.open();
+        },
+
+        onCloseDialogArmador: function(oEvent){
+            oEvent.getSource().getParent().close();
         },
 
         onCallUsuario: function () {
