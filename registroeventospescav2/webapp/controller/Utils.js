@@ -354,7 +354,22 @@ sap.ui.define([
             }
             return val;
 
-        }
+        },
+        formatoDosDecimales : function(numero){
+            let num_format = "" + numero;
+            let v_n = num_format.split(".");
+            let v_decimal = v_n[1] ? v_n[1].length : 0;
+            if(v_decimal == 0){
+                num_format = numero + ".00";
+            }else{
+                if(v_decimal ==  1 ){
+                    num_format = num_format + "0";
+                }else{
+                    num_format = numero;
+                }
+            }
+            return num_format;
+        },
 
 
     }
