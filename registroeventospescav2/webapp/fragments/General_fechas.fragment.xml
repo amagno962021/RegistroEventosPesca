@@ -12,8 +12,8 @@
 									<Label text="Fecha/Hora Inic. Cala" design="Standard" width="100%" required="false" textAlign="Left" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<DatePicker value="{eventos>/FICAL}" id="dtp_fechaIniCala" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy"  />
-									<TimePicker id="dtp_horaIniCala" value="{eventos>/HICAL}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%"/>
+									<DatePicker value="{eventos>/FICAL}" id="dtp_fechaIniCala" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy" change=".validarFechaCalas_Evn" />
+									<TimePicker id="dtp_horaIniCala" value="{eventos>/HICAL}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%" change=".validarFechaCalas_Evn"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement id ="FechaEnvaseIni" visible="{visible>/VisibleDescarga}">
@@ -21,8 +21,8 @@
 									<Label id="labelTextFechIniEnv" text="Fech/hora Inic. envase" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<DatePicker value="{eventos>/FIEVN}" id="dtf_fechaIniEnv" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy" change=".validarFechaEnv"/>
-									<TimePicker id="dtf_horaIniEnv"  value="{eventos>/HIEVN}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%"/>
+									<DatePicker value="{eventos>/FIEVN}" id="dtf_fechaIniEnv" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy" change=".validarFechaEnvIni"/>
+									<TimePicker id="dtf_horaIniEnv"  value="{eventos>/HIEVN}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%" change=".validarFechaEnvIni"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement id ="fe_FechaProduccion" visible="true">
@@ -51,8 +51,8 @@
 									<Label text="Fech/hora fin Cala" design="Standard" width="100%" required="false" textAlign="Left" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<DatePicker value="{eventos>/FFCAL}" id="dtp_fechaFinCala" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy" />
-									<TimePicker id="dtp_horaFinCala" value="{eventos>/HFCAL}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%"/>
+									<DatePicker value="{eventos>/FFCAL}" id="dtp_fechaFinCala" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy" change=".validarFechaCalas_Evn"/>
+									<TimePicker id="dtp_horaFinCala" value="{eventos>/HFCAL}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%" change=".validarFechaCalas_Evn"/>
 								</form:fields>
 							</form:FormElement>
 							<form:FormElement id ="FechaEnvaseFin" visible="{visible>/FechFin}">
@@ -60,8 +60,8 @@
 									<Label text="Fech/hora fin envase" design="Standard" width="100%" required="false" textAlign="Left" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<DatePicker value="{eventos>/FFEVN}" id="dtf_fechaFinEnv" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd" />
-									<TimePicker id="dtf_horaFinEnv" value="{eventos>/HFEVN}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%"/>
+									<DatePicker value="{eventos>/FFEVN}" id="dtf_fechaFinEnv" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd" change=".validarFechaEnvFin"/>
+									<TimePicker id="dtf_horaFinEnv" value="{eventos>/HFEVN}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%" change=".validarFechaEnvFin"/>
 								</form:fields>
 							</form:FormElement>
 						</form:formElements>

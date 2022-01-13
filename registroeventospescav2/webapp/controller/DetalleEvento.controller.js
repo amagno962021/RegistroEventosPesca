@@ -2038,6 +2038,7 @@ sap.ui.define([
         //-----------------------------
 
         resetView: function () {
+            this.getView().byId("labelTextFechIniEnv").setText("Fecha/hora");
             this.getView().byId("cb_ZonaPesca").setEnabled(true);
             this.getView().byId("dtp_fechaIniCala").setEnabled(true);
             this.getView().byId("dtp_horaIniCala").setEnabled(true);
@@ -2741,7 +2742,142 @@ sap.ui.define([
                 }
             }
 
-        }   
+        },   
+
+        validarFechaEnvIni_Det :function(){
+            let fechaval =  this._listaEventos[this._elementAct].FIEVN;
+            let horaval = Utils.formatHoraBTP(this._listaEventos[this._elementAct].HIEVN);
+            let fechaHoraVal = Utils.strDateHourToDate(fechaval,horaval);
+            
+
+            if(this._listaEventos[this._elementAct].CDTEV == "3"){
+                let valorMinFech =  this._listaEventos[this._elementAct].FICAL;
+                let valorMinHor =   Utils.formatHoraBTP(this._listaEventos[this._elementAct].HICAL);
+                let valorMaxFech =  this._listaEventos[this._elementAct].FFCAL;
+                let valorMaxHor =  Utils.formatHoraBTP(this._listaEventos[this._elementAct].HFCAL);
+
+                let  fechaHoraMax = Utils.strDateHourToDate(valorMaxFech,valorMaxHor);
+                let  fechaHoraMin = Utils.strDateHourToDate(valorMinFech,valorMinHor);
+                if(fechaHoraVal < fechaHoraMin || fechaHoraVal > fechaHoraMax){
+                    this.byId("dtf_fechaIniEnv").setValueState( sap.ui.core.ValueState.Error);
+                    this.byId("dtf_fechaIniEnv").setValueStateText("La fecha y hora de inicio de envase debe estar entre " + valorMinFech + " " + valorMinHor + " y " + valorMaxFech + " " + valorMaxHor);
+
+                    this.byId("dtf_horaIniEnv").setValueState( sap.ui.core.ValueState.Error);
+                    this.byId("dtf_horaIniEnv").setValueStateText("La fecha de inicio de envase debe estar entre " + valorMinFech + " " + valorMinHor + " y " + valorMaxFech + " " + valorMaxHor);
+                    this.validacioncampos = false;
+                }else{
+                    this.byId("dtf_fechaIniEnv").setValueState( sap.ui.core.ValueState.Success);
+                    this.byId("dtf_horaIniEnv").setValueState( sap.ui.core.ValueState.Success);
+                    this.validacioncampos = true;
+                }
+                
+            }
+        },
+        validarFechaEnvFin_Det :function(){
+            let fechaval =  this._listaEventos[this._elementAct].FFEVN;
+            let horaval = Utils.formatHoraBTP(this._listaEventos[this._elementAct].HFEVN);
+            let fechaHoraVal = Utils.strDateHourToDate(fechaval,horaval);
+            
+
+            if(this._listaEventos[this._elementAct].CDTEV == "3"){
+                let valorMinFech =  this._listaEventos[this._elementAct].FICAL;
+                let valorMinHor =   Utils.formatHoraBTP(this._listaEventos[this._elementAct].HICAL);
+                let valorMaxFech =  this._listaEventos[this._elementAct].FFCAL;
+                let valorMaxHor =  Utils.formatHoraBTP(this._listaEventos[this._elementAct].HFCAL);
+
+                let  fechaHoraMax = Utils.strDateHourToDate(valorMaxFech,valorMaxHor);
+                let  fechaHoraMin = Utils.strDateHourToDate(valorMinFech,valorMinHor);
+                if(fechaHoraVal <= fechaHoraMin || fechaHoraVal >= fechaHoraMax){
+                    this.byId("dtf_fechaFinEnv").setValueState( sap.ui.core.ValueState.Error);
+                    this.byId("dtf_fechaFinEnv").setValueStateText("La fecha y hora de inicio de envase debe estar entre " + valorMinFech + " " + valorMinHor + " y " + valorMaxFech + " " + valorMaxHor);
+
+                    this.byId("dtf_horaFinEnv").setValueState( sap.ui.core.ValueState.Error);
+                    this.byId("dtf_horaFinEnv").setValueStateText("La fecha de inicio de envase debe estar entre " + valorMinFech + " " + valorMinHor + " y " + valorMaxFech + " " + valorMaxHor);
+                    this.validacioncampos = false;
+                }else{
+                    this.byId("dtf_fechaFinEnv").setValueState( sap.ui.core.ValueState.Success);
+                    this.byId("dtf_horaFinEnv").setValueState( sap.ui.core.ValueState.Success);
+                    this.validacioncampos = true;
+                }
+                
+            }
+        },
+
+        validarFechaCalas : function(){
+            let fechaval =  this._listaEventos[this._elementAct].FIEVN;
+            let horaval = Utils.formatHoraBTP(this._listaEventos[this._elementAct].HIEVN);
+            let fechaHoraVal = Utils.strDateHourToDate(fechaval,horaval);
+            
+
+            if(this._listaEventos[this._elementAct].CDTEV == "3"){
+                let valorMinFech =  this._listaEventos[this._elementAct].FICAL;
+                let valorMinHor =   Utils.formatHoraBTP(this._listaEventos[this._elementAct].HICAL);
+                let valorMaxFech =  this._listaEventos[this._elementAct].FFCAL;
+                let valorMaxHor =  Utils.formatHoraBTP(this._listaEventos[this._elementAct].HFCAL);
+
+                let  fechaHoraMax = Utils.strDateHourToDate(valorMaxFech,valorMaxHor);
+                let  fechaHoraMin = Utils.strDateHourToDate(valorMinFech,valorMinHor);
+                if(fechaHoraVal <= fechaHoraMin || fechaHoraVal >= fechaHoraMax){
+                    this.byId("dtf_fechaIniEnv").setValueState( sap.ui.core.ValueState.Error);
+                    this.byId("dtf_fechaIniEnv").setValueStateText("La fecha y hora de inicio de envase debe estar entre " + valorMinFech + " " + valorMinHor + " y " + valorMaxFech + " " + valorMaxHor);
+
+                    this.byId("dtf_horaIniEnv").setValueState( sap.ui.core.ValueState.Error);
+                    this.byId("dtf_horaIniEnv").setValueStateText("La fecha de inicio de envase debe estar entre " + valorMinFech + " " + valorMinHor + " y " + valorMaxFech + " " + valorMaxHor);
+                    this.validacioncampos = false;
+                }else{
+                    this.byId("dtf_fechaIniEnv").setValueState( sap.ui.core.ValueState.Success);
+                    this.byId("dtf_horaIniEnv").setValueState( sap.ui.core.ValueState.Success);
+                    this.validacioncampos = true;
+                }
+                
+            }
+
+
+            let fechaval2 =  this._listaEventos[this._elementAct].FFEVN;
+            let horaval2 = Utils.formatHoraBTP(this._listaEventos[this._elementAct].HFEVN);
+            let fechaHoraVal2 = Utils.strDateHourToDate(fechaval2,horaval2);
+            
+
+            if(this._listaEventos[this._elementAct].CDTEV == "3"){
+                let valorMinFech =  this._listaEventos[this._elementAct].FICAL;
+                let valorMinHor =   Utils.formatHoraBTP(this._listaEventos[this._elementAct].HICAL);
+                let valorMaxFech =  this._listaEventos[this._elementAct].FFCAL;
+                let valorMaxHor =  Utils.formatHoraBTP(this._listaEventos[this._elementAct].HFCAL);
+
+                let  fechaHoraMax = Utils.strDateHourToDate(valorMaxFech,valorMaxHor);
+                let  fechaHoraMin = Utils.strDateHourToDate(valorMinFech,valorMinHor);
+
+                if(this.validacioncampos == false ){
+                    if(fechaHoraVal2 <= fechaHoraMin || fechaHoraVal2 >= fechaHoraMax){
+                        this.byId("dtf_fechaFinEnv").setValueState( sap.ui.core.ValueState.Error);
+                        this.byId("dtf_fechaFinEnv").setValueStateText("La fecha y hora de inicio de envase debe estar entre " + valorMinFech + " " + valorMinHor + " y " + valorMaxFech + " " + valorMaxHor);
+    
+                        this.byId("dtf_horaFinEnv").setValueState( sap.ui.core.ValueState.Error);
+                        this.byId("dtf_horaFinEnv").setValueStateText("La fecha de inicio de envase debe estar entre " + valorMinFech + " " + valorMinHor + " y " + valorMaxFech + " " + valorMaxHor);
+                    }else{
+                        this.byId("dtf_fechaFinEnv").setValueState( sap.ui.core.ValueState.Success);
+                        this.byId("dtf_horaFinEnv").setValueState( sap.ui.core.ValueState.Success);
+                    }
+                }else{
+                    if(fechaHoraVal2 <= fechaHoraMin || fechaHoraVal2 >= fechaHoraMax){
+                        this.byId("dtf_fechaFinEnv").setValueState( sap.ui.core.ValueState.Error);
+                        this.byId("dtf_fechaFinEnv").setValueStateText("La fecha y hora de inicio de envase debe estar entre " + valorMinFech + " " + valorMinHor + " y " + valorMaxFech + " " + valorMaxHor);
+    
+                        this.byId("dtf_horaFinEnv").setValueState( sap.ui.core.ValueState.Error);
+                        this.byId("dtf_horaFinEnv").setValueStateText("La fecha de inicio de envase debe estar entre " + valorMinFech + " " + valorMinHor + " y " + valorMaxFech + " " + valorMaxHor);
+                        this.validacioncampos = false;
+                    }else{
+                        this.byId("dtf_fechaFinEnv").setValueState( sap.ui.core.ValueState.Success);
+                        this.byId("dtf_horaFinEnv").setValueState( sap.ui.core.ValueState.Success);
+                        this.validacioncampos = true;
+                    }
+                }
+                
+                
+            }
+
+
+        }
 
     });
 });
