@@ -669,7 +669,7 @@
 												<Title text="Ventas" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
 												<ToolbarSpacer width=""/>
 												<Button text="Nueva Venta" type="Default" icon="sap-icon://add-product" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleBtnNuevaVenta}"
-														iconDensityAware="false" press="onNuevaVentaComb"/>
+														iconDensityAware="false" press="onNuevaReserva"/>
 												<Button text="Anular" type="Default" icon="sap-icon://add-product" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleAnulaVenta}"
 														iconDensityAware="false" press="onAnulaVentaComb"/>
 											</content>

@@ -751,7 +751,7 @@ sap.ui.define([
                 modelo.setProperty("/Config/visibleBuscarArmador", false);
             } else {
                 modelo.setProperty("/Config/visibleLinkCrearArmador", true);
-                modelo.setProperty("/Config/visibleBuscarArmador", false);
+                modelo.setProperty("/Config/visibleBuscarArmador", true);
             }
 
             modelo.setProperty("/Utils/MessageItemsDM", []);
@@ -1350,8 +1350,8 @@ sap.ui.define([
             var reserva = evt.getSource().getParent().getBindingContext("DetalleMarea").getObject();
             if (reserva.NRMAR && reserva.NRRSV) {
                 var nrmar = reserva.NRMAR;
-                //var nrrsv = reserva.NRRSV;
-                var nrrsv = "0023985052";//para pruebas
+                var nrrsv = reserva.NRRSV;
+                //var nrrsv = "0023985052";//para pruebas
                 var abrirPopup = await this.obtenerDetalleSuministro(nrmar, nrrsv);
                 if (abrirPopup) {
                     this.getReviewDialog().open();
