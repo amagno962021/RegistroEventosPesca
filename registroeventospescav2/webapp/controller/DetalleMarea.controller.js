@@ -634,6 +634,7 @@ sap.ui.define([
         validarMotivo: async function (motivo) {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var indicador = modelo.getProperty("/Cabecera/INDICADOR");
+            modelo.setProperty("/Cabecera/CDMMA", motivo);
             if (motivo == "1" || motivo == "2") {
                 modelo.setProperty("/Config/visibleFecHoEta", true);
                 modelo.setProperty("/Config/visibleUbiPesca", false);
@@ -995,12 +996,29 @@ sap.ui.define([
                     campos = ["/DatosGenerales/HIMAR", "/DatosGenerales/FFMAR"]
                 }
             }
+            console.log("CAMPOS VALIDAR: ", campos);
             var bOk = this.validateFormFields(campos);
-            //if(!bOk){
+            if(!bOk){
+                var mensajes = modelo.getProperty("/Utils/MessageItemsDM");
+                if(mensajes.length > 0){
+                    var oButton = this.getView().byId("messagePopoverBtn");
+                    oMessagePopover.getBinding("items").attachChange(function (oEvent) {
+                        oMessagePopover.navigateBack();
+                        oButton.setType(this.buttonTypeFormatter("DM"));
+                        oButton.setIcon(this.buttonIconFormatter("DM"));
+                        oButton.setText(this.highestSeverityMessages("DM"));
+                    }.bind(this));
 
-            //}else{
-            //   await this.validarFechaIniFin();
-            //}
+                    setTimeout(function () {
+                        oMessagePopover.openBy(oButton);
+                        oButton.setType(this.buttonTypeFormatter("DM"));
+                        oButton.setIcon(this.buttonIconFormatter("DM"));
+                        oButton.setText(this.highestSeverityMessages("DM"));
+                    }.bind(this), 100);
+                }
+            }else{
+               await this.validarFechaIniFin();
+            }
             return bOk;
         },
 
@@ -1060,17 +1078,29 @@ sap.ui.define([
         validateFormFields: function (campos) {
             var bOk = true;
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var mensajes = [];
+            modelo.setProperty("/Utils/MessageItemsDM", []);
             for (let index = 0; index < campos.length; index++) {
                 const path = campos[index];
                 var value = modelo.getProperty(path);
+                var nroMensaje = 0;
                 if (!value) {
                     bOk = false;
+                    nroMensaje++;
                     var etiqueta = Utils.getEtiqueta(path);
                     var mssg = this.oBundle.getText("MISSFORMFIELD", [etiqueta]);
-                    
-                    
+                    var objMessage = {
+                        type: 'Error',
+                        title: 'Mensaje de Validación',
+                        activeTitle: false,
+                        description: mssg,
+                        subtitle: mssg,
+                        counter: nroMensaje
+                    };
+                    mensajes.push(objMessage);
                 }
             }
+            modelo.setProperty("/Utils/MessageItemsDM", mensajes);
             return bOk;
         },
 
