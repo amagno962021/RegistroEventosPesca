@@ -822,6 +822,8 @@ sap.ui.define([
                             if (element.CDSPC != especieDef) {
                                 espOk = false;
                                 obsvEspecie += this.oBundle.getText("EMBNOPERMISOESP");
+                            }else if(element.CDSPC == especieDef){
+                                espOk = true;
                                 break;
                             }
                         }
@@ -831,6 +833,8 @@ sap.ui.define([
                             if (element.CDSPC != especieDef) {
                                 espOk = false;
                                 obsvEspecie += this.oBundle.getText("ESPNOPERMITZONA");
+                            }else if(element.CDSPC == especieDef){
+                                espOk = true;
                                 break;
                             }
                         }
@@ -841,6 +845,8 @@ sap.ui.define([
                                 if (element.CDSPC != especieDef) {
                                     espOk = false;
                                     obsvEspecie += this.oBundle.getText("ESPECIEENVEDA");
+                                }else if(element.CDSPC == especieDef){
+                                    espOk = true;
                                     break;
                                 }
                             }
@@ -943,23 +949,15 @@ sap.ui.define([
             this._oView.getModel("eventos").setProperty("/DESSTCMB", n_valorstock);
         },
 
-        validarFechaEnv :function(evt){
-            let id = evt.getParameter("id");
-            let valorstock =  sap.ui.getCore().byId(id).getValue();
-            let valorMinFech =  sap.ui.getCore().byId("dtp_fechaIniCala").getValue();
-            let valorMaxFech =  sap.ui.getCore().byId("dtp_fechaFinCala").getValue();
+        validarFechaEnvIni :function(){
+            this.ctr.validarFechaEnvIni_Det();
+        },
 
-            if(this.ctr._listaEventos[this.ctr._elementAct].CDTEV == "3"){
-                if(valorstock < valorMinFech && valorstock > valorMaxFech){
-                    sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.Error);
-                    sap.ui.getCore().byId(id).setValueStateText("La fecha de inicio de envase debe estar entre la fecha de inicio y fin de cala");
-                    this.ctr.validacioncampos = false;
-                }else{
-                    sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.None);
-                    this.ctr.validacioncampos = true;
-                }
-                
-            }
+        validarFechaEnvFin : function(){
+            this.ctr.validarFechaEnvFin_Det();
+        },
+        validarFechaCalas_Evn :function(){
+            this.ctr.validarFechaCalas();
         }
 
 
