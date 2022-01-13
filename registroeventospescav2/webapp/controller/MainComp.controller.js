@@ -656,7 +656,7 @@ sap.ui.define([
             for (let index = 0; index < horometros.length; index++) {
                 const element = horometros[index];
                 var listHorometros = {
-                    INDTR: "N",
+                    INDTR: element.indicador,
                     NRMAR: ListaEventos[elementSel].NRMAR,
                     NREVN: ListaEventos[elementSel].NREVN,
                     CDTHR: element.tipoHorometro,

@@ -2044,6 +2044,8 @@ sap.ui.define([
         //-----------------------------
 
         resetView: function () {
+            this.getView().byId("idTallaMenor").setValue("0");
+            this.getView().byId("idTallaMayor").setValue("0");
             this.getView().byId("labelTextFechIniEnv").setText("Fecha/hora");
             this.getView().byId("cb_ZonaPesca").setEnabled(true);
             this.getView().byId("dtp_fechaIniCala").setEnabled(true);

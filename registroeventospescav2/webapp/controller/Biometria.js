@@ -8,18 +8,20 @@ sap.ui.define([
     "sap/m/MessageToast",
 	"sap/ui/integration/library",
     "sap/m/MessageBox",
-    "../Service/TasaBackendService"
+    "../Service/TasaBackendService",
+	"com/tasa/registroeventospescav2/controller/Utils"
 ], function(
 	FilterOperator,
-    Filter,
-    syncStyleClass,
-    Fragment,
+	Filter,
+	syncStyleClass,
+	Fragment,
 	ManagedObject,
-    JSONModel,
-    MessageToast,
-    integrationLibrary,
-    MessageBox,
-    TasaBackendService
+	JSONModel,
+	MessageToast,
+	library,
+	MessageBox,
+	TasaBackendService,
+	Utils
 ) {
 	"use strict";
 
@@ -182,7 +184,7 @@ sap.ui.define([
                     } 
                 }
             }
-            o_control_moda.setText(v_Moda);
+            o_control_moda.setText(Utils.formatoDosDecimales(v_Moda));
             o_control_muestra.setText(sumaTotal_Muestra);
             let calculo_porc = Number(0);
             calculo_porc = (sumaMuestraJuvenil * 100)/sumaTotal_Muestra
@@ -203,7 +205,7 @@ sap.ui.define([
                         let porcentPD = Number(0);
                         porcentPD = (Number(ListaBiometria[j].Muestra) * 100)/Muestra_Total;
                         ListaPescaDeclarada[i].PorcPesca = porcentPD.toFixed(2);
-                        ListaPescaDeclarada[i].ZMODA = ListaBiometria[j].Moda;
+                        ListaPescaDeclarada[i].ZMODA = Utils.formatoDosDecimales(ListaBiometria[j].Moda);
                     }
                 }
             }
@@ -324,7 +326,7 @@ sap.ui.define([
                         CDSPC: especie,
                         DSSPC: sap.ui.getCore().byId("cb_especies_espec").getSelectedItem().getText(),
                         PorcPesca: "",
-                        CNPCM: cantPesca,
+                        CNPCM: Number(cantPesca).toFixed(2),
                         DSUMD: this.ctr._ConfiguracionEvento.calaDescUMPescaDeclDesc,
                         UnidMedida: this.ctr._ConfiguracionEvento.calaDescUMPescaDecl,
                         ZMODA: "",
@@ -469,7 +471,7 @@ sap.ui.define([
                         let item_bio_value = Object.values(listaDataBio[i]);
                         obj_bio['CodEspecie'] = listaDataBio[i].CDSPC;
                         obj_bio['Especie'] = listaDataBio[i].DESC_CDSPC;
-                        obj_bio['Moda'] = listaDataBio[i].MODA;
+                        obj_bio['Moda'] =  Utils.formatoDosDecimales(listaDataBio[i].MODA);
                         obj_bio['Muestra'] = listaDataBio[i].CDSPC_TOTAL;
                         
                         if(this.ctr._motivoMarea == "2"){
