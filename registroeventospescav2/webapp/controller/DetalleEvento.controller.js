@@ -1160,16 +1160,19 @@ sap.ui.define([
             var cabecera = modelo.getProperty("/Cabecera");
             for (var j = 0; j < listaEventos.length; j++) {
                 if (listaEventos[j].CDTEV == "6") {
-                    if (!me) {
-                        this.getView().byId("FechaEnvaseIni").setVisible(false);
-                        this.getView().byId("FechaEnvaseFin").setVisible(false);
+                    if(listaEventos[j].ListaPescaDescargada.length > 0){
+                        if (!me) {
+                            this.getView().byId("FechaEnvaseIni").setVisible(false);
+                            this.getView().byId("FechaEnvaseFin").setVisible(false);
+                        }
+                        var pescDesc = listaEventos[j].ListaPescaDescargada[0].CantPescaDeclarada;
+                        if (pescDesc && !isNaN(pescDesc)) {
+                            cantTotal += Number(pescDesc);
+                        } else {
+                            cantTotal += 0;
+                        }
                     }
-                    var pescDesc = listaEventos[j].CantPescaDeclarada;
-                    if (pescDesc && !isNaN(pescDesc)) {
-                        cantTotal += pescDesc;
-                    } else {
-                        cantTotal += 0;
-                    }
+                    
 
 
                     /*if (listaEventos[j].Numero == this._nroEvento) {
@@ -2917,6 +2920,10 @@ sap.ui.define([
                 return verEstCierre;
             }
             return false;
+        },
+
+        verificarCambiosDescarga :function(){
+            
         }
 
     });
