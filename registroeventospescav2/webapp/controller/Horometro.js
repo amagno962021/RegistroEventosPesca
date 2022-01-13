@@ -202,7 +202,7 @@ sap.ui.define([
             var eventoActual = listaEventos[this.ctr._elementAct];//model ode evento
             var eventoCompar = null;
             var tipoEvento = eventoActual.CDTEV;
-            var motivoMarea = detalleMarea.CDMMA;
+            var motivoMarea = this.ctr._motivoMarea;
             var indActual = this.ctr._elementAct;
             var indCompar = -1;
             var visible = this.ctr.modeloVisible;
@@ -377,6 +377,7 @@ sap.ui.define([
                                     this.ctr.agregarMensajeValid("Error", message);
                                 }else{
                                     horoActual.ValueSt = "None";
+                                    bOk1 = true;
                                 }
                             }
                             if (bOk) {

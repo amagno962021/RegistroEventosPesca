@@ -204,7 +204,7 @@ sap.ui.define([
                 this._listaIncidental = dataDetalleMarea.Incidental;
                 this._utilNroEventoBio = "001";
                 this._utilNroEventoIncid = "001";
-                this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA ? dataDetalleMarea.Cabecera.CDMMA : dataDetalleMarea.DatosGenerales.CDMMA;
+                this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA != "" ? dataDetalleMarea.Cabecera.CDMMA : dataDetalleMarea.DatosGenerales.CDMMA;
                 this._tipoEvento = "";
                 this._nroEvento = "";
                 this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "" == "" ? "0" : FormEvent_cont.Cabecera.NRMAR + "";//"165728";
@@ -1515,10 +1515,13 @@ sap.ui.define([
                     if (isRolIngComb) {
                         visible.VisibleObsvComb = true;
                     } else {
-                        visible.VisibleObsvComb = true;
+                        visible.VisibleObsvComb = false;
                     }
+
+                    mod.setProperty("/Utils/VisibleEstCierre", false);
                     let texto = this.oBundle.getText("CONFIRMSAVEMESSAGE");
                     mod.setProperty("/Utils/TextoConfirmacion", texto);
+                    this.verificarCierreMarea();
                     this.getDialog().open();
                 }
             }
@@ -2877,6 +2880,43 @@ sap.ui.define([
             }
 
 
+        },
+
+        verificarCierreMarea: function () {
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var eventos = modelo.getProperty("/Eventos/Lista");
+            var estadoMarea = modelo.getProperty("/DatosGenerales/ESMAR");
+            var ultimoEvento = eventos[eventos.length - 1];
+            var cantTotalDeclMarea = this.obtenerCantTotalPescaDecla(0, this);
+            var cantTotalDeclDescMarea = this.obtenerCantTotalPescaDeclDesc(0, this);
+            var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
+            var motivoMarPesca = ["1", "2"];
+            var motivoCalaSDes = ["4", "5", "6"];
+            if (ultimoEvento) {
+                var tipoEvento = ultimoEvento.CDTEV;
+                var verEstCierre = false;
+                if (tipoEvento == "8") {
+                    verEstCierre = true;
+                } else if (motivoMarPesca.includes(motivoMarea)) {
+                    if ((tipoEvento == "5" || tipoEvento == "6") && cantTotalDeclMarea == cantTotalDeclDescMarea) {
+                        verEstCierre = true;
+
+                    } else if (estadoMarea == "C" && tipoEvento == "5" && cantTotalDeclMarea > 0 && cantTotalDeclDescMarea > 0) {
+                        verEstCierre = true;
+                        var mssg = this.oBundle.getText("CERRPDECMAYPDESC");
+                        MessageBox.warning(mssg);
+                        var texto = mssg + " " + this.oBundle.getText("CONFIRMSAVEMESSAGE");
+                        modelo.setProperty("/Utils/TextoConfirmacion", texto);
+                    }
+                } else if (motivoCalaSDes.includes(motivoMarea) && tipoEvento == "5") {
+                    verEstCierre = true;
+                }
+                if (verEstCierre) {
+                    modelo.setProperty("/Utils/VisibleEstCierre", true);
+                }
+                return verEstCierre;
+            }
+            return false;
         }
 
     });
