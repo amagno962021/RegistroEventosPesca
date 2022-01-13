@@ -996,7 +996,11 @@ sap.ui.define([
                 }
             }
             var bOk = this.validateFormFields(campos);
-            await this.validarFechaIniFin();
+            //if(!bOk){
+
+            //}else{
+            //   await this.validarFechaIniFin();
+            //}
             return bOk;
         },
 
@@ -1063,8 +1067,8 @@ sap.ui.define([
                     bOk = false;
                     var etiqueta = Utils.getEtiqueta(path);
                     var mssg = this.oBundle.getText("MISSFORMFIELD", [etiqueta]);
-                    MessageBox.error(mssg);
-                    break;
+                    
+                    
                 }
             }
             return bOk;
