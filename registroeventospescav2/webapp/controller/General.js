@@ -741,10 +741,10 @@ sap.ui.define([
             this.ctr.calendarioPescaVED;
             for (let index = 0; index < listCalendario.length; index++) {
                 const element = listCalendario[index];
-                var latiIni = element.LTINI;
-                var latiFin = element.LTFIN;
-                var longIni = element.LNINI;
-                var longFin = element.LGFIN;
+                var latiIni = Utils.formatCoordenadaBTP(element.LTINI);
+                var latiFin = Utils.formatCoordenadaBTP(element.LTFIN);
+                var longIni = Utils.formatCoordenadaBTP( element.LNINI);
+                var longFin = Utils.formatCoordenadaBTP(element.LGFIN);
                 if (((latiIni < latiIniZonaPesca && latiFin > latiIniZonaPesca) ||
                     (latiIni >= latiIniZonaPesca && latiIni < latiFinZonaPesca)) &&
                     ((longIni < longIniZonaPesca && longFin > longIniZonaPesca) ||
@@ -797,7 +797,7 @@ sap.ui.define([
                                     var obj = {
                                         INDTR: "N",
                                         CDSPC: especie.toString(),
-                                        DSSPC: descEspecie,
+                                        DSSPC: element1.DSSPC,
                                         UnidMedida: confEventosPesca.calaDescUMPescaDecl,
                                         DSUMD: confEventosPesca.calaDescUMPescaDeclDesc
                                     };
@@ -805,7 +805,7 @@ sap.ui.define([
 
                                     var objBiometria = {
                                         CodEspecie: especie.toString(),
-                                        Especie: element1.DescEspecie
+                                        Especie: element1.DSSPC
                                     };
                                     listaBiometria.push(objBiometria);
                                 }
