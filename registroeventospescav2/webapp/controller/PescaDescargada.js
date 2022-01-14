@@ -464,7 +464,7 @@ sap.ui.define([
             this._oView.getModel("popup_descarga").setProperty("/ListaEstado", this._Estado.data);
             if(this._controler._motivoMarea == "1"){
                 this._oView.getModel("popup_descarga").setProperty("/TipoPescaSel", "D");
-                this._oView.getModel("popup_descarga").setProperty("/FechaInicio", this._controler._listaEventos[this._controler._elementAct].FechProduccion);
+                this._oView.getModel("popup_descarga").setProperty("/FechaInicio", fechaIni);
                 this._oView.getModel("popup_descarga").setProperty("/CodEmb", this._controler._FormMarea.CDEMB);
                 this._oView.getModel("popup_descarga").setProperty("/Matricula", this._controler._FormMarea.MREMB);
                 this._oView.getModel("popup_descarga").setProperty("/NomEmb", this._controler._FormMarea.NMEMB);
@@ -475,7 +475,7 @@ sap.ui.define([
 
             }else if(this._controler._motivoMarea == "2"){
                 this._oView.getModel("popup_descarga").setProperty("/TipoPescaSel", "I");
-                this._oView.getModel("popup_descarga").setProperty("/FechaInicio", this._controler._listaEventos[this._controler._elementAct].FechProduccion);
+                this._oView.getModel("popup_descarga").setProperty("/FechaInicio", fechaIni);
                 this._oView.getModel("popup_descarga").setProperty("/CodEmb", this._controler._FormMarea.CDEMB);
                 this._oView.getModel("popup_descarga").setProperty("/Matricula", this._controler._FormMarea.MREMB);
                 this._oView.getModel("popup_descarga").setProperty("/NomEmb", this._controler._FormMarea.NMEMB);
@@ -850,9 +850,9 @@ sap.ui.define([
                             }
                         );
 					} else if (this._controler._motivoMarea == "2") {
-                        if(await this._controler.verificarCambiosDescarga(this._controler._elementAct)){
+                        if(await this._controler.verificarCambiosDescarga_eve(this._controler._elementAct)){
                             MessageBox.show(
-                                '�Realmente desea eliminar el registro de pesca descargada?,\n este proceso es irreversible y puede durar varios minutos.',
+                                'Realmente desea eliminar el registro de pesca descargada?,\n este proceso es irreversible y puede durar varios minutos.',
                                 {
                                     icon: MessageBox.Icon.WARNING,
                                     title: "Eliminar pesca descargada",
