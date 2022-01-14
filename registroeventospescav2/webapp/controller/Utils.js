@@ -322,6 +322,22 @@ sap.ui.define([
 
             return fechaFormat;
         },
+        formatCoordenadaBTP : function(cord){
+            let cordenada = ""
+            let coord_size = cord.length
+
+            if(coord_size == 7){
+                let c_coord = cord + "";
+                let gra_v = c_coord.substr(0,3);
+                let min_v = c_coord.substr(4,2);
+                cordenada = gra_v + min_v;
+            }
+            else{
+                cordenada = fecha;
+            }
+
+            return cordenada;
+        },
 
         formatoNroEvento : function(nro_evn){
             let ne = Number(nro_evn);

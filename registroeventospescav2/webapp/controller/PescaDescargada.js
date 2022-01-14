@@ -139,7 +139,7 @@ sap.ui.define([
                     //     });
                     // }
                 } else {
-                    mensaje = this.oBundle.getText("BODDECPESCANODEC");
+                    let mensaje = this.oBundle.getText("BODDECPESCANODEC");
                     this._controler.agregarMensajeValid("Error", mensaje);
                 }
                 bOk = false;
