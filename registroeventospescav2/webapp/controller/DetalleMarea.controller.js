@@ -175,7 +175,7 @@ sap.ui.define([
                         });
                     } else {
                         if (motivoMarea == "2" && inprpEvento == "P") {
-                            if (!that.verificarCambiosDescarga()) {
+                            if ( await that.verificarCambiosDescarga()) {
                                 MessageBox.confirm("Realmente desea eliminar este evento ?", {
                                     actions: [MessageBox.Action.OK, MessageBox.Action.CLOSE],
                                     onClose: async function (sAction) {
@@ -316,9 +316,14 @@ sap.ui.define([
             BusyIndicator.hide();
         },
 
-        verificarCambiosDescarga: function () {
+        verificarCambiosDescarga: async function () {
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            mod.setProperty("/Utils/TipoConsulta", "E");
+            await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").cargarEstrucuturas();
+            await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").cargaModelos();
+            let bol = await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").verificarCambiosDescarga_eve(Indicador);
             //VALIDAR CON ERICK ESTE METODO POR QUE ES DE EVENTOCUST
-            return true;
+            return bol;
         },
 
         anularDescarga: function () {

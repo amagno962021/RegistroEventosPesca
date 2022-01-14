@@ -103,15 +103,39 @@ sap.ui.define([
             var modeloDetalleMarea = this.getOwnerComponent().getModel("DetalleMarea");
             var dataDetalleMarea = modeloDetalleMarea.getData();
             let ListaEventos_cont = dataDetalleMarea.Eventos.Lista;
-            let MareaAnterior_cont = dataDetalleMarea.MareaAnterior;
-            let EsperaMareaAnt_cont = dataDetalleMarea.EsperaMareaAnt;
-            let FormEvent_cont = dataDetalleMarea;
             let TipoCons = modeloDetalleMarea.getProperty("/Utils/TipoConsulta");
             modeloDetalleMarea.setProperty("/Utils/MessageItemsEP", []);
+            await this.cargarEstrucuturas();
 
             var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
             oStore.put("ListaBck", ListaEventos_cont);
 
+            if(TipoCons == "E"){
+                /************ Carga de fragments de los eventos **************/
+                let self = this;
+                await this.cargarServiciosPreEvento().then(r => {
+
+                    if (r) {
+                        self.getFragment();
+                    } else {
+                        BusyIndicator.hide();
+                        alert("Error");
+                    }
+
+                })
+            }else{
+                this.cerrarCrearEvento();
+            }
+
+        },
+        cargarEstrucuturas : function() {
+            var modeloDetalleMarea = this.getOwnerComponent().getModel("DetalleMarea");
+            var dataDetalleMarea = modeloDetalleMarea.getData();
+            let ListaEventos_cont = dataDetalleMarea.Eventos.Lista;
+            let MareaAnterior_cont = dataDetalleMarea.MareaAnterior;
+            let EsperaMareaAnt_cont = dataDetalleMarea.EsperaMareaAnt;
+            let FormEvent_cont = dataDetalleMarea;
+            let TipoCons = modeloDetalleMarea.getProperty("/Utils/TipoConsulta");
             if(TipoCons == "E"){
 
                 /********* Carga de variables globales **********/
@@ -181,21 +205,6 @@ sap.ui.define([
                 this.modeloVisible.LinkRemover = false;
                 this.modeloVisible.LinkDescartar = false
 
-                // this.prueba01 = "Hola"
-                // EventosModelo.setProperty("/prueba001", this.prueba01);
-
-                /************ Carga de fragments de los eventos **************/
-                let self = this;
-                await this.cargarServiciosPreEvento().then(r => {
-
-                    if (r) {
-                        self.getFragment();
-                    } else {
-                        BusyIndicator.hide();
-                        alert("Error");
-                    }
-
-                })
             }else{
                 /********* Carga de variables globales **********/
                 this.calendarioPescaCHD = dataDetalleMarea.calendarioPescaCHD;
@@ -243,9 +252,7 @@ sap.ui.define([
                 this.modeloVisible = this.modeloVisibleModel.getData();
                 this.modeloVisible.LinkRemover = false;
                 this.modeloVisible.LinkDescartar = false
-                this.cerrarCrearEvento();
             }
-
         },
         cargarListasEventoSelVacias: function () {
             this._listaEventos[this._elementAct].ESOPE = this._listaEventos[this._elementAct].ESOPE ? this._listaEventos[this._elementAct].ESOPE : "";
