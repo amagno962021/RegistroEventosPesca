@@ -151,6 +151,7 @@ sap.ui.define([
         },
 
         onEliminarEvento: async function (evt) {
+            //console.log(evt.getSource().getParent());
             var that = this;
             var tablaEventos = this.getView().byId("tblEventos");
             var selectedItem = tablaEventos.getSelectedItem();
