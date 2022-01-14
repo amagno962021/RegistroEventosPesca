@@ -770,7 +770,7 @@ sap.ui.define([
             this.getDialogConsultaDescarga().close();
             //console.log("Holaaaaaaaaaaaaaa");
         },
-        eliminarDesacarga: function(event){
+        eliminarDesacarga: async function(event){
             let pescaDesc = this._oView.getModel("eventos").getData().ListaPescaDescargada;
             let desc = pescaDesc[0].Nro_descarga;
             let self = this;
@@ -850,21 +850,26 @@ sap.ui.define([
                             }
                         );
 					} else if (this._controler._motivoMarea == "2") {
-						MessageBox.show(
-                            '�Realmente desea eliminar el registro de pesca descargada?,\n este proceso es irreversible y puede durar varios minutos.',
-                            {
-                                icon: MessageBox.Icon.WARNING,
-                                title: "Eliminar pesca descargada",
-                                actions: [MessageBox.Action.OK, MessageBox.Action.NO],
-                                emphasizedAction: MessageBox.Action.OK,
-                                styleClass: sResponsivePaddingClasses,
-                                onClose: function (sAction) {
-                                    if(sAction == "OK"){
-                                        self.eliminarPescaDescargada();
+                        if(await this._controler.verificarCambiosDescarga(this._controler._elementAct)){
+                            MessageBox.show(
+                                '�Realmente desea eliminar el registro de pesca descargada?,\n este proceso es irreversible y puede durar varios minutos.',
+                                {
+                                    icon: MessageBox.Icon.WARNING,
+                                    title: "Eliminar pesca descargada",
+                                    actions: [MessageBox.Action.OK, MessageBox.Action.NO],
+                                    emphasizedAction: MessageBox.Action.OK,
+                                    styleClass: sResponsivePaddingClasses,
+                                    onClose: function (sAction) {
+                                        if(sAction == "OK"){
+                                            self.eliminarPescaDescargada();
+                                        }
                                     }
                                 }
-                            }
-                        );
+                            );
+                        }else{
+                            MessageBox.error(this.oBundle.getText("NOANULDESCARGA"));
+                        }
+						
 					}
 				}
                 

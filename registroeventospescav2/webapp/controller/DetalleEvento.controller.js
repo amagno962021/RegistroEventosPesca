@@ -122,7 +122,7 @@ sap.ui.define([
                 this._elementAct = modeloDetalleMarea.getProperty("/Eventos/LeadSelEvento");//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
                 this._utilNroEventoBio = "001";
                 this._utilNroEventoIncid = "001";
-                this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA ? dataDetalleMarea.Cabecera.CDMMA : dataDetalleMarea.DatosGenerales.CDMMA;
+                this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA != "" ? dataDetalleMarea.Cabecera.CDMMA : dataDetalleMarea.DatosGenerales.CDMMA;
                 this._tipoEvento = ListaEventos_cont[this._elementAct].CDTEV;
                 this._nroEvento = ListaEventos_cont[this._elementAct].NREVN;//ESTE ES EL NUMERO DEL EVENTO SELECCIONADO DE LA LISTA DE DETALLE
                 this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "" == "" ? "0" : FormEvent_cont.Cabecera.NRMAR + "";//"165728";
@@ -2766,7 +2766,7 @@ sap.ui.define([
 
                 let  fechaHoraMax = Utils.strDateHourToDate(valorMaxFech,valorMaxHor);
                 let  fechaHoraMin = Utils.strDateHourToDate(valorMinFech,valorMinHor);
-                if(fechaHoraVal < fechaHoraMin || fechaHoraVal > fechaHoraMax){
+                if(fechaHoraVal <= fechaHoraMin || fechaHoraVal >= fechaHoraMax){
                     this.byId("dtf_fechaIniEnv").setValueState( sap.ui.core.ValueState.Error);
                     this.byId("dtf_fechaIniEnv").setValueStateText("La fecha y hora de inicio de envase debe estar entre " + valorMinFech + " " + valorMinHor + " y " + valorMaxFech + " " + valorMaxHor);
 
@@ -2782,7 +2782,7 @@ sap.ui.define([
             }
         },
         validarFechaEnvFin_Det :function(){
-            let fechaval =  this._listaEventos[this._elementAct].FFEVN;
+            let fechaval =  Utils.formatfechaBTP(this._listaEventos[this._elementAct].FFEVN);
             let horaval = Utils.formatHoraBTP(this._listaEventos[this._elementAct].HFEVN);
             let fechaHoraVal = Utils.strDateHourToDate(fechaval,horaval);
             
@@ -2841,7 +2841,7 @@ sap.ui.define([
             }
 
 
-            let fechaval2 =  this._listaEventos[this._elementAct].FFEVN;
+            let fechaval2 =  Utils.formatfechaBTP(this._listaEventos[this._elementAct].FFEVN);
             let horaval2 = Utils.formatHoraBTP(this._listaEventos[this._elementAct].HFEVN);
             let fechaHoraVal2 = Utils.strDateHourToDate(fechaval2,horaval2);
             
@@ -2924,7 +2924,31 @@ sap.ui.define([
             return false;
         },
 
-        verificarCambiosDescarga :function(){
+        verificarCambiosDescarga_eve : async function(indicador){
+            let modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            let eventos = modelo.getProperty("/Eventos/Lista");
+
+            await this.prepararRevisionEvento(true);
+            let pescaDescargada = eventos[indicador].ListaPescaDescargada;
+            let cantDescarga = Number(pescaDescargada.BckCantPescaModificada);
+            let saldo = Number(pescaDescargada.SALDO); 
+            let motMarea = this._motivoMarea;
+            let indPropPlanta = this._indicadorPropXPlanta;
+            let indPropiedad = this._indicadorProp;
+            let nroDocCompras = pescaDescargada.NROPEDI;
+            let nroDocMatMB1B = pescaDescargada.DOC_MB1B;
+            let nroDocMatMIGO = pescaDescargada.DOC_MIGO;
+            let nroDocMatMFBF = pescaDescargada.DOC_MFBF;
+            let exiDocumentos = (indPropiedad == "T" && nroDocCompras != "" && nroDocMatMIGO != "") 
+                            || (indPropiedad == "P" && nroDocMatMB1B != "" && nroDocMatMFBF != "");
+            
+            if (motMarea == "1" || (motMarea == "2" && indPropPlanta != "P") || (motMarea == "2" && indPropPlanta == "P" 
+                    && (!exiDocumentos || (exiDocumentos && saldo != null && cantDescarga != null && saldo == cantDescarga)))) {
+                    
+                return false;
+            }
+            
+            return true;
             
         }
 

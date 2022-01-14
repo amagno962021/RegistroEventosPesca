@@ -305,6 +305,23 @@ sap.ui.define([
 
             return horaFormat;
         },
+        formatfechaBTP : function(fecha){
+            let fechaFormat = ""
+            let fecha_size = fecha.length
+
+            if(fecha_size == 8){
+                let c_fecha = fecha + "";
+                let dia_v = c_fecha.substr(6,2);
+                let mes_v = c_fecha.substr(4,2);
+                let anio_v = c_fecha.substr(0,4);
+                fechaFormat = dia_v + "/" + mes_v + "/" + anio_v;
+            }
+            else{
+                fechaFormat = fecha;
+            }
+
+            return fechaFormat;
+        },
 
         formatoNroEvento : function(nro_evn){
             let ne = Number(nro_evn);
