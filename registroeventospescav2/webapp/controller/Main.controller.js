@@ -27,22 +27,23 @@ sap.ui.define([
 
             onInit: async function () {
                 BusyIndicator.show(0);
-                var currentUser = await this.getCurrentUser();
+                //var currentUser = await this.getCurrentUser();
                 this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
                 //this.formCust = sap.ui.controller("com.tasa.registroeventospescav2.controller.FormCust")
-                var tipoEmba = await TasaBackendService.obtenerTipoEmbarcacion(currentUser);
-                if (tipoEmba) {
-                    var plantas = await TasaBackendService.obtenerPlantas(currentUser);
-                    if (plantas) {
-                        this.prepararDataTree(tipoEmba, plantas.data);
-                        var listaMareas = await TasaBackendService.cargarListaMareas(currentUser);
-                        if (listaMareas) {
-                            console.log("MAREAS: ", listaMareas);
+                BusyIndicator.show(0);
+                var currentUser = await this.getCurrentUser();
+                var listaMareas = await TasaBackendService.cargarListaMareas(currentUser);
+                if (listaMareas) {
+                    var tipoEmba = await TasaBackendService.obtenerTipoEmbarcacion(currentUser);
+                    if (tipoEmba) {
+                        var plantas = await TasaBackendService.obtenerPlantas(currentUser);
+                        if (plantas) {
+                            this.prepararDataTree(tipoEmba, plantas.data);
                             this.validarDataMareas(listaMareas);
                         }
                     }
                 }
-
+                BusyIndicator.hide();
                 /*
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 var cdpta = oStore.get("CDPTA");
@@ -69,6 +70,13 @@ sap.ui.define([
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 oStore.put('InitData', dataModelo);
 
+
+            },
+
+            /**
+             * @override
+             */
+            onBeforeRendering: async function () {
                 
             },
 
@@ -77,16 +85,17 @@ sap.ui.define([
              */
             onAfterRendering: async function () {
                 //MainComp.prototype.onAfterRendering.apply(this, arguments);
-                this.objetoHelp =  this._getHelpSearch();
-			    this.parameter= this.objetoHelp[0].parameter;
-			    this.url= this.objetoHelp[0].url;
-			    await this.callConstantes();
+                this.objetoHelp = this._getHelpSearch();
+                this.parameter = this.objetoHelp[0].parameter;
+                this.url = this.objetoHelp[0].url;
+                await this.callConstantes();
+                //BusyIndicator.hide();
             },
 
-            callConstantes: async function(){
+            callConstantes: async function () {
                 BusyIndicator.show(0);
-                var modeloConstantes = this.getOwnerComponent().getModel("ConstantsUtility");
-                var body={
+                var modeloConstantes = this.getOwnerComponent().getModel("DetalleMarea");
+                var body = {
                     "nombreConsulta": "CONSGENCONST",
                     "p_user": await this.getCurrentUser(),
                     "parametro1": this.parameter,
@@ -96,16 +105,16 @@ sap.ui.define([
                     "parametro5": ""
                 }
                 fetch(`${this.onLocation()}General/ConsultaGeneral/`,
-                      {
-                          method: 'POST',
-                          body: JSON.stringify(body)
-                      })
-                      .then(resp => resp.json()).then(data => {
-                        var host = this.url+data.data[0].LOW;
+                    {
+                        method: 'POST',
+                        body: JSON.stringify(body)
+                    })
+                    .then(resp => resp.json()).then(data => {
+                        var host = this.url + data.data[0].LOW;
                         modeloConstantes.setProperty("/HelpHost", host);
-                        BusyIndicator.hide();
-                      }).catch(error => console.log(error)
-                );
+                    }).catch(error => console.log(error)
+                    );
+                    BusyIndicator.hide();
             },
 
             _onPatternMatched: function () {
@@ -240,7 +249,7 @@ sap.ui.define([
                 var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
                 var dataDetalleMarea = modeloDetalleMarea.getData();
                 var currentUser = await this.getCurrentUser();
-                TasaBackendService.obtenerPlantas(currentUser).then(function (plantas) {
+                await TasaBackendService.obtenerPlantas(currentUser).then(function (plantas) {
                     dataDetalleMarea.Config.datosCombo.Plantas = plantas.data; // cargar combo plantas nueva marea
                     modeloDetalleMarea.refresh();
                 }).catch(function (error) {

@@ -1602,13 +1602,13 @@ sap.ui.define([
 
         consultarEmba: async function (cdemb) {
             var options = [{
-                "cantidad": "20",
+                "cantidad": "1",
                 "control": "COMBOBOX",
                 "key": "ESEMB",
                 "valueHigh": "",
                 "valueLow": "O"
             }, {
-                "cantidad": "20",
+                "cantidad": "10",
                 "control": "INPUT",
                 "key": "CDEMB",
                 "valueHigh": "",
@@ -1662,12 +1662,13 @@ sap.ui.define([
             //var emba = await TasaBackendService.buscarEmbarcacion(codigo, usuario);
             if (embarcacion) {
                 await this.obtenerDatosMareaAnt(0, codigo);
-                var mareaAnterior = modelo.getProperty("/MareaAnterior");
-                console.log("Marea Anterior: ", mareaAnterior);
+                //var mareaAnterior = modelo.getProperty("/MareaAnterior");
+                //console.log("Marea Anterior: ", mareaAnterior);
                 //var estMarAnt = mareaAnterior.getProperty("/EstMarea");
                 var estMarAnt = modelo.getProperty("/MareaAnterior/ESMAR");
                 //var cieMarAnt = mareaAnterior.getProperty("/EstCierre");
                 var cieMarAnt = modelo.getProperty("/MareaAnterior/ESCMA");
+                var nrmarAnt = modelo.getProperty("/MareaAnterior/NRMAR");
                 //var ce_embaElement = emba[0];
                 var ce_embaElement = embarcacion;
                 indPropiedad = ce_embaElement.INPRP;
@@ -1735,7 +1736,21 @@ sap.ui.define([
                         //visibleModel.setProperty("/EnlMarAnterior", true);
                         var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + this.getResourceBundle().getText("EMBMAREAABIERTA");
                         console.log(mssg);
-                        MessageBox.error(mssg);
+                        var me = this;
+                        MessageBox.error(mssg, {
+                            actions: ["Ver Marea", MessageBox.Action.CLOSE],
+                            onClose: async function (sAction) {
+                                console.log("Action: ", sAction);
+                                if(sAction == "Ver Marea"){
+                                    BusyIndicator.show(0);
+                                    var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+                                    var initData = oStore.get('InitData');
+                                    modelo.setData(initData);
+                                    await me.cargarMarea(nrmarAnt, "A", null, true);
+                                    BusyIndicator.hide();
+                                }
+                            }
+                        });
                         clearData = true;
                     } else {
                         var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + this.getResourceBundle().getText("MAREATRATADAADMIN");

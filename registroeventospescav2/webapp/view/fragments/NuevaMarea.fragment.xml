@@ -26,7 +26,7 @@
                                     <Label text="Embarcación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <Input id="txtEmba" valueHelpRequest="onAbrirAyudaEmbarcacion" value="{DetalleMarea>/DatosGenerales/CDEMB}" showValueHelp="true" width="auto" valueStateText="Invalid entry" description="{DetalleMarea>/DatosGenerales/NMEMB}"/>
+                                    <Input id="txtEmba" maxLength="10" valueHelpRequest="onAbrirAyudaEmbarcacion" value="{DetalleMarea>/DatosGenerales/CDEMB}" showValueHelp="true" width="auto" valueStateText="Invalid entry" description="{DetalleMarea>/DatosGenerales/NMEMB}"/>
                                 </form:fields>
                             </form:FormElement>
                         </form:formElements>

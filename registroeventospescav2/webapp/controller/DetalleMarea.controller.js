@@ -1531,7 +1531,7 @@ sap.ui.define([
             /*var modeloUndefined = new JSONModel();
             this.getOwnerComponent().setModel(modeloUndefined, undefined);*/
             BusyIndicator.show(0);
-            var modeloConst = this.getOwnerComponent().getModel("ConstantsUtility");
+            var modeloConst = this.getOwnerComponent().getModel("DetalleMarea");
             var usuario = await this.getCurrentUser();
             modeloConst.setProperty("/user/name", usuario);
 

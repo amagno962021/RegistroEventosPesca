@@ -82,7 +82,7 @@ sap.ui.define([
                         DISTRITO: "",
                         PROVINCIA: "",
                         DEPARTAMENTO: ""
-                    }
+                    }   
 				},
                 Eventos: {
 					TituloEventos: "",
@@ -284,7 +284,6 @@ sap.ui.define([
                     CrearMarea: [],
                     TxtMareaConfirm: "",
                     TxtEmbaConfirm: ""
-
                 },
                 InputsDescargas :{
                     CentPlanta : "",
@@ -305,6 +304,13 @@ sap.ui.define([
                     CodUbicSur: "",
                     PorcCalRangComb: "",
                     ValMaxFlujPanga: 250
+                },
+                HelpHost: "",
+                input: null,
+                idDialogComp: null,
+                helpArma: null,
+                user: {
+                    name: ""
                 }
 			};
 			var oModel = new JSONModel(initModel);
