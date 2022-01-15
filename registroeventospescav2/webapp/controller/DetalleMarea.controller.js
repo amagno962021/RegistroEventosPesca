@@ -320,9 +320,10 @@ sap.ui.define([
         verificarCambiosDescarga: async function () {
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             mod.setProperty("/Utils/TipoConsulta", "E");
+            let listaEventos = mod.getProperty("/Eventos/Lista");
             await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").cargarEstrucuturas();
             await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").cargaModelos();
-            let bol = await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").verificarCambiosDescarga_eve(Indicador);
+            let bol = await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").verificarCambiosDescarga_eve(listaEventos.length - 1);
             //VALIDAR CON ERICK ESTE METODO POR QUE ES DE EVENTOCUST
             return bol;
         },
