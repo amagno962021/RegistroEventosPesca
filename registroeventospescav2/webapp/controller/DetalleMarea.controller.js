@@ -1004,7 +1004,7 @@ sap.ui.define([
             }
             console.log("CAMPOS VALIDAR: ", campos);
             var bOk = this.validateFormFields(campos);
-            if(!bOk){
+            /*if(!bOk){
                 var mensajes = modelo.getProperty("/Utils/MessageItemsDM");
                 if(mensajes.length > 0){
                     var oButton = this.getView().byId("messagePopoverBtn");
@@ -1022,9 +1022,9 @@ sap.ui.define([
                         oButton.setText(this.highestSeverityMessages("DM"));
                     }.bind(this), 100);
                 }
-            }else{
+            }else{*/
                await this.validarFechaIniFin();
-            }
+            //}
             return bOk;
         },
 
