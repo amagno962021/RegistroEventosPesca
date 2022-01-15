@@ -457,12 +457,16 @@ sap.ui.define([
                 this.ctr.modeloVisibleModel.refresh();
 
                 let tabRedirect = this.buscarCodTab(textValidaciones.KeyTabs, this.nextTab)
+                let id_val = event.getParameter("id");
+                console.log("id_log : " + id_val + " reirect : " + tabRedirect);
                 let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
                 o_iconTabBar.setSelectedKey(tabRedirect);
                 BusyIndicator.hide();
                 //refrescar modelos
             }else{
                 let tabRedirect = event.getParameter("previousKey");
+                let id_val = event.getParameter("id");
+                console.log("id_log : " + id_val + " reirect : " + tabRedirect);
                 let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
                 o_iconTabBar.setSelectedKey(tabRedirect);
             }
