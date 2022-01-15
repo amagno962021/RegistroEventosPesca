@@ -527,6 +527,19 @@ sap.ui.define([
                 var fechaIniEnvaseText = this.getView().byId("0001");
                 fechaIniEnvaseText.setHeaderText("Fechas");
             }
+            // AGRAGADO --------------------------------------
+            let eventoActual = this._listaEventos[this._elementAct];
+            let estOper = eventoActual.ESOPE;
+            var visible = this.modeloVisible;//nodo visible
+            if (estOper =="L") {
+                //this.getView().getModel("visible").setProperty("/MotiLimitacion", true);
+                visible.MotiLimitacion = true;
+
+            } else {
+                //this.getView().getModel("visible").setProperty("/MotiLimitacion", false);
+                visible.MotiLimitacion = false;
+            }
+            //---------------------------------------
 
             await this.obtenerDetalleEvento();
 
@@ -1024,8 +1037,10 @@ sap.ui.define([
                 this._listaEventos[this._elementAct].ZPLongFin = elementoCoordZonaPesca.LNMAX_S;
 
                 this._listaEventos[this._elementAct].DescLatiLongZonaPesca = descLati + " " + descLong;
-                this._listaEventos[this._elementAct].DescLati = descLati;
-                this._listaEventos[this._elementAct].DescLong = descLong;
+                this._listaEventos[this._elementAct].DescLati1 = elementoCoordZonaPesca.LTMIN;
+                this._listaEventos[this._elementAct].DescLati2 = elementoCoordZonaPesca.LTMAX;
+                this._listaEventos[this._elementAct].DescLong1 = elementoCoordZonaPesca.LNMIN;
+                this._listaEventos[this._elementAct].DescLong2 = elementoCoordZonaPesca.LNMAX;
                 this.getView().getModel("eventos").updateBindings(true);
             }
 
@@ -2112,7 +2127,7 @@ sap.ui.define([
             this.getView().byId("fe_estadoOperacion").setVisible(false);
             this.getView().byId("fe_tipoDescarga").setVisible(false);
             this.getView().byId("fe_stockCombustible").setVisible(false);
-            this.getView().byId("fe_motivoLimitacion").setVisible(false);
+            //this.getView().byId("fe_motivoLimitacion").setVisible(false);
             this.getView().byId("fe_temperaturaMar").setVisible(false);
             this.getView().byId("fe_sistema_frio").setVisible(false);
             this.getView().byId("fe_observacioAdic").setVisible(false);
@@ -2277,8 +2292,10 @@ sap.ui.define([
                 let longMin = this._listaEventos[this._elementAct].ZPLongIni;
                 let longMax = this._listaEventos[this._elementAct].ZPLongFin;
                 let descLatiLongZP = this._listaEventos[this._elementAct].DescLatiLongZonaPesca;
-                let v_descLati     = this._listaEventos[this._elementAct].DescLati;
-                let v_descLong     = this._listaEventos[this._elementAct].DescLong;
+                let v_descLati1     = this._listaEventos[this._elementAct].DescLati1;
+                let v_descLati2    = this._listaEventos[this._elementAct].DescLati2;
+                let v_descLong1     = this._listaEventos[this._elementAct].DescLong1;
+                let v_descLong2     = this._listaEventos[this._elementAct].DescLong2;
                 
                 this._elementAct = this._eventoNuevo;
                 nodoEventos[this._eventoNuevo].ZPLatiIni = latiMin;
@@ -2286,8 +2303,10 @@ sap.ui.define([
                 nodoEventos[this._eventoNuevo].ZPLongIni = longMin;
                 nodoEventos[this._eventoNuevo].ZPLongFin = longMax;
                 nodoEventos[this._eventoNuevo].DescLatiLongZonaPesca = descLatiLongZP;
-                nodoEventos[this._eventoNuevo].DescLati = v_descLati;
-                nodoEventos[this._eventoNuevo].DescLong = v_descLong;
+                nodoEventos[this._eventoNuevo].DescLati1 = v_descLati1;
+                nodoEventos[this._eventoNuevo].DescLati2 = v_descLati2;
+                nodoEventos[this._eventoNuevo].DescLong1 = v_descLong1;
+                nodoEventos[this._eventoNuevo].DescLong2 = v_descLong2;
                 nodoEventos[this._eventoNuevo].ObteEspePermitidas = true;
                 nodoEventos[this._eventoNuevo].CantTotalPescDecla = 0;
             }

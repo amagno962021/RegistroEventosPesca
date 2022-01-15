@@ -125,9 +125,9 @@ sap.ui.define([
             var eventoActual = this.ctr._listaEventos[this.ctr._elementAct];
             var estOper = eventoActual.ESOPE;
             var visible = this.ctr.modeloVisible;//nodo visible
-            eventoActual.MotiLimitacion = null;
+            eventoActual.CDMLM = "";
             if (estOper =="L") {
-                eventoActual.MotiLimitacion = null;
+                eventoActual.CDMLM = "";
                 visible.MotiLimitacion = true;
             } else {
                 visible.MotiLimitacion = false;

@@ -51,8 +51,45 @@
 							</form:FormElement>
 							<form:FormElement visible="true">
 								<VBox>
-										<Label text="{eventos>/DescLati}" design="Bold" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-										<Label text="{eventos>/DescLong}" design="Bold" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+									<FlexBox>
+										<GenericTag text="Lat. Ini.:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom sapUiSmallMarginEnd">
+											<ObjectNumber
+												class="sapUiSmallMarginBottom"
+												inverted="true"
+												number="{eventos>/DescLati1}"
+												state="Warning" />
+										</GenericTag>
+
+										<GenericTag text="Lat. Fin:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom">
+											<ObjectNumber
+												class="sapUiSmallMarginBottom"
+												inverted="true"
+												number="{eventos>/DescLati2}"
+												state="Warning" />
+										</GenericTag>
+											
+									</FlexBox>
+
+									<FlexBox>
+										<GenericTag text="Long. Ini.:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom sapUiSmallMarginEnd">
+											<ObjectNumber
+												class="sapUiSmallMarginBottom"
+												inverted="true"
+												number="{eventos>/DescLong1}"
+												state="Warning" />
+										</GenericTag>
+
+										<GenericTag text="Long. Fin:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom">
+											<ObjectNumber
+												class="sapUiSmallMarginBottom"
+												inverted="true"
+												number="{eventos>/DescLong2}"
+												state="Warning" />
+										</GenericTag>
+										<!-- <Label text="{eventos>/DescLati}" design="Bold" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+										<Label text="{eventos>/DescLong}" design="Bold" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" /> -->
+									</FlexBox>
+									
 								</VBox>
 
 							</form:FormElement>
