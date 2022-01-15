@@ -177,6 +177,8 @@ sap.ui.define([
                     } else {
                         if (motivoMarea == "2" && inprpEvento == "P") {
                             if ( await that.verificarCambiosDescarga()) {
+                                MessageBox.information(this.oBundle.getText("NOANULDESCARGA"));
+                            } else {
                                 MessageBox.confirm("Realmente desea eliminar este evento ?", {
                                     actions: [MessageBox.Action.OK, MessageBox.Action.CLOSE],
                                     onClose: async function (sAction) {
@@ -185,8 +187,6 @@ sap.ui.define([
                                         }
                                     }
                                 });
-                            } else {
-                                MessageBox.information(this.oBundle.getText("NOANULDESCARGA"));
                             }
                         } else {
                             MessageBox.confirm("Realmente desea eliminar este evento ?", {
@@ -321,9 +321,10 @@ sap.ui.define([
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             mod.setProperty("/Utils/TipoConsulta", "E");
             let listaEventos = mod.getProperty("/Eventos/Lista");
-            await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").cargarEstrucuturas();
-            await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").cargaModelos();
-            let bol = await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").verificarCambiosDescarga_eve(listaEventos.length - 1);
+            mod.setProperty("/Eventos/LeadSelEvento" , listaEventos.length - 1);
+            await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").cargarEstrucuturas(this);
+            await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").cargarServiciosPreEvento(this);
+            let bol = await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").verificarCambiosDescarga_eve(listaEventos.length - 1, this);
             //VALIDAR CON ERICK ESTE METODO POR QUE ES DE EVENTOCUST
             return bol;
         },

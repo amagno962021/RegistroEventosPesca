@@ -850,7 +850,7 @@ sap.ui.define([
                             }
                         );
 					} else if (this._controler._motivoMarea == "2") {
-                        if(await this._controler.verificarCambiosDescarga_eve(this._controler._elementAct)){
+                        if(await this._controler.verificarCambiosDescarga_eve(this._controler._elementAct, this)){
                             MessageBox.show(
                                 'Realmente desea eliminar el registro de pesca descargada?,\n este proceso es irreversible y puede durar varios minutos.',
                                 {

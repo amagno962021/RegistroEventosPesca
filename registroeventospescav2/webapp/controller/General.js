@@ -351,7 +351,7 @@ sap.ui.define([
 
         onActionSelectTab: async function (tab_seleccionado, event) {
             if(this.ctr.validacioncampos == true){
-            
+                let params = event.mParameters;
                 let mod = this.ctr.getOwnerComponent().getModel("DetalleMarea");
                 mod.setProperty("/Utils/MessageItemsEP", []);
                 this.ctr.resetearValidaciones();
@@ -457,9 +457,9 @@ sap.ui.define([
                 this.ctr.modeloVisibleModel.refresh();
 
                 let tabRedirect = this.buscarCodTab(textValidaciones.KeyTabs, this.nextTab)
-                let id_val = event.getParameter("id");
+                let id_val = params.id;
                 console.log("id_log : " + id_val + " reirect : " + tabRedirect);
-                let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
+                let o_iconTabBar = sap.ui.getCore().byId(id_val);
                 o_iconTabBar.setSelectedKey(tabRedirect);
                 BusyIndicator.hide();
                 //refrescar modelos
@@ -467,7 +467,7 @@ sap.ui.define([
                 let tabRedirect = event.getParameter("previousKey");
                 let id_val = event.getParameter("id");
                 console.log("id_log : " + id_val + " reirect : " + tabRedirect);
-                let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
+                let o_iconTabBar = sap.ui.getCore().byId(id_val);
                 o_iconTabBar.setSelectedKey(tabRedirect);
             }
         },
@@ -917,8 +917,10 @@ sap.ui.define([
                     sap.ui.getCore().byId(id).setValueStateText("Introduzca un valor entero positivo de dos dígitos");
                     this.ctr.validacioncampos = false;
                 }else{
-                    sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.None);
-                    this.ctr.validacioncampos = true;
+                    if(this.ctr.validacioncampos != false){
+                        sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.None);
+                        this.ctr.validacioncampos = true;
+                    }
                 }
                 
             }
@@ -938,8 +940,11 @@ sap.ui.define([
                     sap.ui.getCore().byId(id).setValueStateText("Introduzca un valor entero positivo de tres dígitos");
                     this.ctr.validacioncampos = false;
                 }else{
-                    sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.None);
-                    this.ctr.validacioncampos = true;
+                    if(this.ctr.validacioncampos != false){
+                        sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.None);
+                        this.ctr.validacioncampos = true;
+                    }
+                    
                 }
                 
             }
