@@ -17,7 +17,7 @@
 										<core:CustomData key="multi" value="true" />
 									</m:customData>
 								</m:Button>
-								<m:Button text="Eliminar" icon="sap-icon://decline" tooltip="Clear all filters" press=".deleteItemsBiometria" />
+								<m:Button text="Eliminar" type="Reject" icon="sap-icon://decline" tooltip="Clear all filters" press=".deleteItemsBiometria" />
 
 							</m:OverflowToolbar>
 							<m:OverflowToolbar style="Clear">
@@ -51,7 +51,7 @@
 								<m:Title id="title_Incidental" text="Lista de Incidental: " />
 								<m:ToolbarSpacer />
 								<m:Button text="Agregar" icon="sap-icon://add" press=".abrirPopup_inc"/>
-								<m:Button text="Eliminar" icon="sap-icon://decline" tooltip="Clear all filters" press=".deleteIncidentalItems" />
+								<m:Button text="Eliminar" type="Reject" icon="sap-icon://decline" tooltip="Clear all filters" press=".deleteIncidentalItems" />
 
 							</m:OverflowToolbar>
 						</extension>
