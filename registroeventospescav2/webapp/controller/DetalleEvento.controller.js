@@ -161,7 +161,7 @@ sap.ui.define([
                 v_this._EsperaMareaAnt = EsperaMareaAnt_cont;//[{ "id": "0" }, { "id": "1" }]; 
                 v_this._listaEventos = ListaEventos_cont;
                 v_this._FormMarea = FormEvent_cont.Cabecera;
-                v_this._mareaReabierta = false;
+                v_this._mareaReabierta = FormEvent_cont.DataSession.MareaReabierta;
                 v_this._zonaPesca = ListaEventos_cont[v_this._elementAct].CDZPC;
                 v_this._IsRolRadOpe = true; //ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
                 v_this._IsRolIngComb = false;//ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
@@ -230,7 +230,7 @@ sap.ui.define([
                 v_this._elementAct = v_this._listaEventos.length;
                 modeloDetalleMarea.setProperty("/Eventos/LeadSelEvento",v_this._elementAct);
                 v_this._FormMarea = FormEvent_cont.Cabecera;
-                v_this._mareaReabierta = false;
+                v_this._mareaReabierta = FormEvent_cont.DataSession.MareaReabierta;;
                 v_this._zonaPesca = "";
                 v_this._IsRolRadOpe = true; //ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
                 v_this._IsRolIngComb = false;//ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
@@ -1516,8 +1516,9 @@ sap.ui.define([
                     this.getView().getModel("eventos").updateBindings(true);
                 } else {
                     detalleMarea.FormEditado = true;
-                    let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
-                    o_iconTabBar.setSelectedKey("");
+                    this.getView().byId("Tab_eventos").setSelectedKey("");
+                    // let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
+                    // o_iconTabBar.setSelectedKey("");
                     await this.cargarValoresFormateados();
                     this.getView().getModel("eventos").updateBindings(true);
                     history.go(-1);
