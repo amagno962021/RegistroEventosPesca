@@ -480,11 +480,13 @@ sap.ui.define([
                 this.cargarListasEventoSelVacias(this);
                 await this.prepararNuevoEvento();
                 this.cargaModelos(this);
+                this.inhabilitarInfoCoord();
                 BusyIndicator.hide();
             }else{
                 var ss = this._listasServicioCargaIni[11].data[0].data;
                 await this.prepararRevisionEvento(false);
                 this.cargaModelos(this);
+                this.inhabilitarInfoCoord();
                 BusyIndicator.hide();
             }
             
@@ -2987,6 +2989,20 @@ sap.ui.define([
             
             return true;
             
+        },
+
+        inhabilitarInfoCoord :function (){
+            if(this._tipoEvento  == "3"){
+                this.getView().byId("lat_1").setVisible(true);
+                this.getView().byId("lat_2").setVisible(true);
+                this.getView().byId("long_1").setVisible(true);
+                this.getView().byId("long_2").setVisible(true);
+            }else{
+                this.getView().byId("lat_1").setVisible(false);
+                this.getView().byId("lat_2").setVisible(false);
+                this.getView().byId("long_1").setVisible(false);
+                this.getView().byId("long_2").setVisible(false);
+            }
         }
 
     });

@@ -52,7 +52,7 @@
 							<form:FormElement visible="true">
 								<VBox>
 									<FlexBox>
-										<GenericTag text="Lat. Ini.:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom sapUiSmallMarginEnd">
+										<GenericTag id="lat_1" text="Latit. Ini.:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom sapUiSmallMarginEnd">
 											<ObjectNumber
 												class="sapUiSmallMarginBottom"
 												inverted="true"
@@ -60,7 +60,7 @@
 												state="Warning" />
 										</GenericTag>
 
-										<GenericTag text="Lat. Fin:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom">
+										<GenericTag id="lat_2" text="Lat. Fin:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom">
 											<ObjectNumber
 												class="sapUiSmallMarginBottom"
 												inverted="true"
@@ -71,7 +71,7 @@
 									</FlexBox>
 
 									<FlexBox>
-										<GenericTag text="Long. Ini.:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom sapUiSmallMarginEnd">
+										<GenericTag id="long_1" text="Long. Ini.:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom sapUiSmallMarginEnd">
 											<ObjectNumber
 												class="sapUiSmallMarginBottom"
 												inverted="true"
@@ -79,7 +79,7 @@
 												state="Warning" />
 										</GenericTag>
 
-										<GenericTag text="Long. Fin:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom">
+										<GenericTag id="long_2" text="Long. Fin:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom">
 											<ObjectNumber
 												class="sapUiSmallMarginBottom"
 												inverted="true"
