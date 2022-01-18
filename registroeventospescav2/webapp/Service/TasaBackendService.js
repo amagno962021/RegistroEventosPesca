@@ -739,7 +739,7 @@ sap.ui.define([
                 console.log("ERROR: TasaBackendService.obtenerDatosPlantaDist 1: ", error);
                 return null;
             });
-            if(data){
+            if(data && data.length > 0){
                 var cdemp = data[0].CDEMP;
                 sBody.fields = ["DSEMP", "INPRP", "MANDT"];
                 sBody.option[0].wa = "CDEMP LIKE '" + cdemp + "'";

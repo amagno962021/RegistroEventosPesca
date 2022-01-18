@@ -82,7 +82,7 @@ sap.ui.define([
             var motivoMarea = modelo.getProperty("/DatosGenerales/CDMMA");
             var estadoMarea = modelo.getProperty("/DatosGenerales/ESMAR");
             var indPropiedad = modelo.getProperty("/Cabecera/INPRP");
-            var mareaReabierta = false;
+            var mareaReabierta = modelo.getProperty("/DataSession/MareaReabierta");
             var eventos = modelo.getProperty("/Eventos/Lista");
             var eventoIni = null;
             var eventoFin = null;
@@ -122,7 +122,8 @@ sap.ui.define([
                             const element = eventos[index];
                             if (element.CDTEV == "6") {
                                 existeDesc = true;
-                                var fechaContabilizacion = Utils.strDateToDate("");//pasar fecha de contabilizacion de modelo pesca descargada
+                                let fechContab = element.ListaPescaDescargada[0].FECCONMOV;
+                                var fechaContabilizacion = Utils.strDateToDate(fechContab);//pasar fecha de contabilizacion de modelo pesca descargada
                                 if ((fechaContabilizacion.getTime() - fechaActual.getTime()) >= 0) {
                                     modelo.setProperty("/Cabecera/ESCMA", "P");
                                 }

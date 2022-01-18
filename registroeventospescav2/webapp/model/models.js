@@ -246,7 +246,7 @@ sap.ui.define([
                     IsAllOk: false,
                     IsRollngComb: false,
                     IsRolRadOpe: false,
-                    MareaReabierta: false,
+                    MareaReabierta: true,
                     RolFlota: "",
                     SoloLectura: false,
                     Type: ""
