@@ -15,7 +15,8 @@ sap.ui.define([
     "./PescaDeclarada",
     "./Siniestro",
     "./Utils",
-    'sap/f/library'
+    'sap/f/library',
+    'sap/ui/core/BusyIndicator',
 ], function (
     TasaBackendService,
     FilterOperator,
@@ -33,7 +34,8 @@ sap.ui.define([
     PescaDeclarada,
     Siniestro,
     Utils,
-    fioriLibrary
+    fioriLibrary,
+    BusyIndicator
 ) {
     "use strict";
 
@@ -83,7 +85,7 @@ sap.ui.define([
                     cantTotal += cantPesca;
                     if (cantPesca > capaMaxim) {
                         bOk = false;
-                        mensaje = this.oBundle.getText("CAPABODEGASUPER");
+                        mensaje = this.oBundle.getText("CAPABODEGASUPER", [element.DSBOD]);
                         this._controler.agregarMensajeValid("Error", mensaje);
                         break;
                     }
@@ -530,6 +532,7 @@ sap.ui.define([
         },
 
         consultarDescarga: async function () {
+            BusyIndicator.show(0);
             let options = [];
             let comandos = [];
             let option = [];
@@ -653,7 +656,7 @@ sap.ui.define([
             }
             this._oView.getModel("popup_descarga").setProperty("/ListaDescargas", lista_popup);
             this._oView.getModel("popup_descarga").updateBindings(true);
-
+            BusyIndicator.hide();
 
         },
         obtenerTipoPesca: async function () {

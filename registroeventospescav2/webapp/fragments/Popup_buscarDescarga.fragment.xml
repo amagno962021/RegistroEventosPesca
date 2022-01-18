@@ -1,4 +1,4 @@
-<core:FragmentDefinition xmlns:core="sap.ui.core"  xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:layout="sap.ui.layout" xmlns:f="sap.f" xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt">
+<core:FragmentDefinition xmlns:core="sap.ui.core"  xmlns="sap.m" xmlns:form="sap.ui.layout.form" xmlns:layout="sap.ui.layout" xmlns:f="sap.f" xmlns:mvc="sap.ui.core.mvc" xmlns:tnt="sap.tnt" xmlns:w="sap.ui.integration.widgets">
     <Dialog contentWidth="100rem" horizontalScrolling="true" showHeader="true" state="None" stretch="false" title="Búsqueda de descarga" type="Standard" verticalScrolling="true">
         <content>
             <form:Form editable="true" visible="true">
@@ -119,17 +119,18 @@
                     <form:ResponsiveGridLayout adjustLabelSpan="false" columnsL="2" labelSpanL="3" columnsM="2" labelSpanM="2" labelSpanS="12"/>
                 </form:layout>
             </form:Form>
-            <f:FlexibleColumnLayout id="flexibleColumnLayout" visible="true">
-                <f:beginColumnPages>
-                    <f:DynamicPage id="dynamicPageId" >
-                    <!-- DynamicPage Title -->
-                    <f:title>
-                    </f:title>
-
-                    <!-- DynamicPage Content -->
-                    <f:content>
-                        <VBox>
-                                <HeaderContainer id="headerContainer" scrollStep="200" showDividers="false">
+            <Panel
+                accessibleRole="Form"
+                backgroundDesign="Translucent"
+                expandAnimation="true"
+                expandable="false"
+                expanded="false"
+                headerText="Detalle descarga"
+                height="auto"
+                width="100%"
+            >
+                <content>
+                    <HeaderContainer id="headerContainer" scrollStep="200" showDividers="false">
                                     <HBox class="sapUiSmallMarginEnd sapUiSmallMarginBottom">
                                         <Avatar src="./image/descarga.png" class="sapUiMediumMarginEnd sapUiSmallMarginBottom" displaySize="L"/>
 
@@ -218,6 +219,10 @@
 
                                     </VBox>
                                 </HeaderContainer>
+                </content>
+            </Panel>
+           <VBox class="sapUiSmallMargin">
+                                
                             <Table
                                 id="productsTable"
                                 items="{path:'popup_descarga>/ListaDescargas', templateShareable:true}"
@@ -282,11 +287,6 @@
                                 </items>
                             </Table>
                         </VBox>
-                    </f:content>
-
-                    </f:DynamicPage>
-                </f:beginColumnPages>
-            </f:FlexibleColumnLayout>
             <!-- <form:Form editable="true" visible="true">
                 <form:title/>
                 <form:formContainers>

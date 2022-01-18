@@ -662,7 +662,7 @@ sap.ui.define([
                     NREVN: ListaEventos[elementSel].NREVN,
                     CDTHR: element.tipoHorometro,
                     LCHOR: element.lectura,
-                    NORAV: element.averiado == null ? '' : element.averiado
+                    NORAV: element.Chk_averiado  === false ? "" : "A"
                 };
                 lista.push(listHorometros);
             }

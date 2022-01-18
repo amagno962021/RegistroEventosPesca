@@ -123,7 +123,7 @@ sap.ui.define([
                             that.CargaDatosBiometria(evt);
                         }
                     }),
-                    width : '5rem'
+                    width : '4rem'
                 }));
             }
             else{

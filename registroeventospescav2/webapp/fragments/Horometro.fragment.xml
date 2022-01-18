@@ -40,7 +40,8 @@
 						<cells>
 							<Text text="{eventos>descTipoHorom}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 							<Input value="{eventos>lectura}" valueState="{eventos>ValueSt}" textAlign="Right" type="Number" showValueHelp="false" enabled="{eventos>readOnly}" visible="true" width="auto" valueHelpOnly="false" required="false" maxLength="0" change=".validarLecturaHorom"/>
-							<CheckBox text="" select="onCheckBoxSelected" editable="true" enabled="{eventos>/enabledAveriado}" selected="{=${eventos>lectura} === 'A' ? true : false }" />
+							<CheckBox text="" select="onCheckBoxSelected" editable="true" enabled="{eventos>/enabledAveriado}" selected="{eventos>Chk_averiado}" />
+							<!-- <CheckBox text="" select="onCheckBoxSelected" editable="true" enabled="{eventos>/enabledAveriado}" selected="{=${eventos>averiado} === 'A' ? true : false }" /> -->
 						</cells>
 					</ColumnListItem>
 				</items>

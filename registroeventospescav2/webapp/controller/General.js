@@ -396,18 +396,23 @@ sap.ui.define([
                             var bOk = true;
                             this.ctr.Dat_Horometro.calcularCantTotalBodegaEve();
                             var validarBodegas = this.ctr.Dat_PescaDescargada.validarBodegas(true);
-                            if (bOk && this.previousTab == "General" && this.nextTab == "Pesca declarada" && !validarBodegas) {
-                                this.nextTab = "Distribucion";
-                            }
-
-                            if (this.previousTab == "Distribucion" && this.nextTab == "Pesca declarada" && !validarBodegas) {
+                            if(!validarBodegas){
                                 this.nextTab = this.previousTab;
+                            }else{
+                                if (bOk && this.previousTab == "General" && this.nextTab == "Pesca declarada" && !validarBodegas) {
+                                    this.nextTab = "Distribucion";
+                                }
+    
+                                if (this.previousTab == "Distribucion" && this.nextTab == "Pesca declarada" && !validarBodegas) {
+                                    this.nextTab = this.previousTab;
+                                }
+    
+                                if (bOk && this.previousTab == "Distribucion" && this.nextTab != "Biometria" && !validarBodegas) {
+                                    this.nextTab = this.previousTab;
+                                }
+                                this.ctr.Dat_PescaDeclarada.calcularPescaDeclarada();
                             }
-
-                            if (bOk && this.previousTab == "Distribucion" && this.nextTab != "Biometria" && !validarBodegas) {
-                                this.nextTab = this.previousTab;
-                            }
-                            this.ctr.Dat_PescaDeclarada.calcularPescaDeclarada();
+                            
                         } else if (motivoMarea == "2") {
                             this.ctr.Dat_PescaDeclarada.calcularCantTotalPescDeclEve();
                         }

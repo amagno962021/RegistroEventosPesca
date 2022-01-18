@@ -542,7 +542,8 @@ sap.ui.define([
                 visible.MotiLimitacion = false;
             }
             //---------------------------------------
-
+            this.getView().byId("idTallaMenor").setValue("0");
+            this.getView().byId("idTallaMayor").setValue("0");
             await this.obtenerDetalleEvento();
 
             if (this._tipoEvento == textValidaciones.TIPOEVENTODESCARGA
@@ -1110,7 +1111,7 @@ sap.ui.define([
                         let porcPesca = Number(0);
                         let cantPesca = Number(this._listaEventos[this._elementAct].ListaPescaDeclarada[j].CNPCM);
                         porcPesca = (cantPesca * 100) / Number(this._listaEventos[this._elementAct].CantTotalPescDecla);
-                        this._listaEventos[this._elementAct].ListaPescaDeclarada[j].PorcPesca = porcPesca;
+                        this._listaEventos[this._elementAct].ListaPescaDeclarada[j].PorcPesca = porcPesca.toFixed(2);
                     }
                 }
             }
@@ -1140,6 +1141,12 @@ sap.ui.define([
                 await this.service_obtenerListaHorometro();
                 if (this._listasServicioCargaIni[8] ? true : false) {
                     this._listaEventos[this._elementAct].ListaHorometros = this._listasServicioCargaIni[8];
+                    let lstHoro = this._listaEventos[this._elementAct].ListaHorometros
+                    if(lstHoro.length > 0){
+                        lstHoro.forEach(element => {
+                            element.Chk_averiado = element.averiado === "" ? false : true
+                        });
+                    }
                 }else{
                     this._listaEventos[this._elementAct].ListaHorometros = [];
                 }
@@ -2078,8 +2085,6 @@ sap.ui.define([
         //-----------------------------
 
         resetView: function () {
-            this.getView().byId("idTallaMenor").setValue("0");
-            this.getView().byId("idTallaMayor").setValue("0");
             this.getView().byId("labelTextFechIniEnv").setText("Fecha/hora");
             this.getView().byId("cb_ZonaPesca").setEnabled(true);
             this.getView().byId("dtp_fechaIniCala").setEnabled(true);
