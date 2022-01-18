@@ -14,7 +14,8 @@ sap.ui.define([
     "./Horometro",
     "./PescaDeclarada",
     "./Siniestro",
-    "./Utils"
+    "./Utils",
+    'sap/f/library'
 ], function (
     TasaBackendService,
     FilterOperator,
@@ -31,7 +32,8 @@ sap.ui.define([
     Horometro,
     PescaDeclarada,
     Siniestro,
-    Utils
+    Utils,
+    fioriLibrary
 ) {
     "use strict";
 
@@ -50,7 +52,9 @@ sap.ui.define([
             this._controler = o_this;
             this._TipoPesca = [];
             this._Estado = [];
-            this._modelosPescaDescargada = {"Estado":"","NomPlanta":"","CodPlanta":"","NomEmb":"","Matricula":"","CodEmb":"","TipoPescaSel":"","FechaInicio" : "", "HoraInicio" : "","ListaDescargas":[], "TipoPesca" : [], "ListaEstado":[]}
+            this._modelosPescaDescargada = {"det_Descarga":"","det_Ticket":"","det_TipoPesca":"","det_Planta":"","det_DesPlanta":"","det_Emba":"","det_DesEmba":"","det_Especie":"","det_DesEspecie":"","det_Lado":"",
+            "det_CantPesca":"","det_FechaIni":"","det_FechaFin":"","det_Estado":"","det_Header":"",
+            "Estado":"","NomPlanta":"","CodPlanta":"","NomEmb":"","Matricula":"","CodEmb":"","TipoPescaSel":"","FechaInicio" : "", "HoraInicio" : "","ListaDescargas":[], "TipoPesca" : [], "ListaEstado":[]}
 
             var Popup_Descarga_Modelo = new JSONModel();
             this._oView.setModel(Popup_Descarga_Modelo, "popup_descarga");
@@ -448,6 +452,23 @@ sap.ui.define([
         },
 
         buscarDescarga: async function (oEvent) {
+            //SETEO DE DETALLE VACIO
+            this._oView.getModel("popup_descarga").setProperty("/det_Descarga", "");
+            this._oView.getModel("popup_descarga").setProperty("/det_Ticket", "");
+            this._oView.getModel("popup_descarga").setProperty("/det_TipoPesca", "");
+            this._oView.getModel("popup_descarga").setProperty("/det_Planta", "");
+            this._oView.getModel("popup_descarga").setProperty("/det_DesPlanta", "");
+            this._oView.getModel("popup_descarga").setProperty("/det_Emba", "");
+            this._oView.getModel("popup_descarga").setProperty("/det_DesEmba", "");
+            this._oView.getModel("popup_descarga").setProperty("/det_Especie", "");
+            this._oView.getModel("popup_descarga").setProperty("/det_DesEspecie", "");
+            this._oView.getModel("popup_descarga").setProperty("/det_Lado", "D");
+            this._oView.getModel("popup_descarga").setProperty("/det_CantPesca", "");
+            this._oView.getModel("popup_descarga").setProperty("/det_FechaIni", "");
+            this._oView.getModel("popup_descarga").setProperty("/det_FechaFin", "");
+            this._oView.getModel("popup_descarga").setProperty("/det_Estado", "");
+            this._oView.getModel("popup_descarga").setProperty("/det_Header", "");
+            //-------------------------
             await this.obtenerTipoPesca();
             await this.obtenerEstadoDesc();
             var indActual = this._controler._elementAct;//indicie actual de la lista de eventos
@@ -953,6 +974,28 @@ sap.ui.define([
                     }).catch(reason => { return false; })
             return consulta;
 
+        },
+        onListItemPress :function (event){
+            let mod = event.getSource().getBindingContext("popup_descarga");
+            let data  =mod.getObject();
+
+            this._oView.getModel("popup_descarga").setProperty("/det_Descarga", data.NRDES);
+            this._oView.getModel("popup_descarga").setProperty("/det_Ticket", data.TICKE);
+            this._oView.getModel("popup_descarga").setProperty("/det_TipoPesca", data.DESC_CDTPC);
+            this._oView.getModel("popup_descarga").setProperty("/det_Planta", data.WEPTA);
+            this._oView.getModel("popup_descarga").setProperty("/det_DesPlanta", data.DSPTA);
+            this._oView.getModel("popup_descarga").setProperty("/det_Emba", data.CDEMB);
+            this._oView.getModel("popup_descarga").setProperty("/det_DesEmba", data.NMEMB);
+            this._oView.getModel("popup_descarga").setProperty("/det_Especie", data.CDSPC);
+            this._oView.getModel("popup_descarga").setProperty("/det_DesEspecie",data.DSSPC);
+            this._oView.getModel("popup_descarga").setProperty("/det_Lado", data.CDLDS);
+            this._oView.getModel("popup_descarga").setProperty("/det_CantPesca", data.CNPDS);
+            this._oView.getModel("popup_descarga").setProperty("/det_FechaIni", data.FIDES + " " + data.HIDES);
+            this._oView.getModel("popup_descarga").setProperty("/det_FechaFin", data.FFDES + " " + data.HFDES);
+            this._oView.getModel("popup_descarga").setProperty("/det_Estado", data.DESC_ESDES);
+            this._oView.getModel("popup_descarga").setProperty("/det_Header", data.CDPTA);
+
+            //console.log("Holaaaaaaaaaaaaaa");
         }
 
 
