@@ -301,12 +301,12 @@ sap.ui.define([
 					let obsvEspecie = "";
 					let espOk = true;
 								
-					if (permisoEspecies == null || permisoEspecies.length == 0 || (permisoEspecies != null && this._containsKey(permisoEspecies,especie))) {
+					if (permisoEspecies == null || permisoEspecies.length == 0 || (permisoEspecies != null && !this._containsKey(permisoEspecies,especie))) {
 						espOk = false;
 						obsvEspecie += this.ctr.oBundle.getText("EMBNOPERMISOESP") + " ";
 					}
 					
-					if (especieZonaPesca == null || especieZonaPesca.length == 0 || (especieZonaPesca != null && this._containsKey(especieZonaPesca,especie))) {
+					if (especieZonaPesca == null || especieZonaPesca.length == 0 || (especieZonaPesca != null && !this._containsKey(especieZonaPesca,especie))) {
 						espOk = false;
 						obsvEspecie += this.ctr.oBundle.getText("ESPNOPERMITZONA") + " ";
 					}
