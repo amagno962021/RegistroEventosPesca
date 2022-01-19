@@ -49,6 +49,8 @@ sap.ui.define([
             console.log("TextoNav2 : " + this._navBio);
             var i_tme =  this._oView.byId("idTallaMenor").getValue();
             var i_tma =  this._oView.byId("idTallaMayor").getValue();
+            this.ctr._listaEventos[this.ctr._elementAct].TallaMin = i_tme;
+            this.ctr._listaEventos[this.ctr._elementAct].TallaMax = i_tma;
             mod.setProperty("/Utils/TallaMin",i_tme);
             mod.setProperty("/Utils/TallaMax",i_tma);
 
@@ -410,155 +412,166 @@ sap.ui.define([
         },
 
         cargarDataBiometria: async function(){
-            if (this.ctr._listasServicioCargaIni[18] ? true : false) {
-                let lista_total_bio = this.ctr._listasServicioCargaIni[18].str_flbsp_matched;
-                let listaDataBio = [];
-                //-------------------------Cargar las biometria pertenecientes solo a ese evento --------------//
-                for(let w = 0; w < lista_total_bio.length; w++){
-                    if(this.ctr._nroEvento == lista_total_bio[w].NREVN){
-                        listaDataBio.push(lista_total_bio[w]);
-                    }
-                    
-                }
-                //------------------------ Cargar el Incidental pertenecientes a ese evento
-                let lista_incidental = this.ctr._listaIncidental;
-                let listaIncEve = [];
-                for(let w = 0; w < lista_incidental.length; w++){
-                    if(this.ctr._nroEvento == lista_incidental[w].NREVN){
-                        listaIncEve.push(lista_incidental[w]);
-                    }
-                    
-                }
-                this.ctr._listaEventos[this.ctr._elementAct].ListaIncidental = listaIncEve;
-                //this._oView.getModel("eventos").setProperty("/ListaPescaDeclarada",ListaPescaDecl);
-
-
-                if(listaDataBio.length != 0){
-                    let tmn = Number(0);
-                    let tmy = Number(0);;
-                    let key_bio = Object.keys(listaDataBio[0]);
-                    let contIni = 0;
-                    //--------------- obtner la talla mayor y menor para armar la tabla dinamica
-                    for (let i = 0; i < key_bio.length; i++) {
-                        if(key_bio[i].slice(0,5) == "TNMED"){
-                            contIni++;
-                            let medida = key_bio[i].split("_");
-                            let key_mn = Number(medida[1]);
-                            if(contIni == 1){
-                                tmn = key_mn;
-                                tmy = key_mn;
-                            }else if(tmn > key_mn){
-                                tmn = key_mn;
-                            }else if(key_mn > tmy){
-                                tmy = key_mn;
-                            }
-                            console.log(key_bio[i]);
+            let lstBiometria = this.ctr._listaEventos[this.ctr._elementAct].ListaBiometria ? this.ctr._listaEventos[this.ctr._elementAct].ListaBiometria.length : 0;
+            if(lstBiometria === 0){
+                if (this.ctr._listasServicioCargaIni[18] ? true : false) {
+                    let lista_total_bio = this.ctr._listasServicioCargaIni[18].str_flbsp_matched;
+                    let listaDataBio = [];
+                    //-------------------------Cargar las biometria pertenecientes solo a ese evento --------------//
+                    for(let w = 0; w < lista_total_bio.length; w++){
+                        if(this.ctr._nroEvento == lista_total_bio[w].NREVN){
+                            listaDataBio.push(lista_total_bio[w]);
                         }
-                    }
-                    this._oView.byId("idTallaMenor").setValue(tmn);
-                    this._oView.byId("idTallaMayor").setValue(tmy);
-                    await this.onButtonPress3();
-                    //------------------ cargar data dinamica -------------------------------------//
-
-                    for (let i = 0; i < listaDataBio.length; i++) {
-                        let TallaMinPorcJuvenil = Number(0);
-                        let sumaMuestraJuvenil = Number(0);
-                        let ser_medidaMin = await TasaBackendService.obtenerMedidaEspecie(listaDataBio[i].CDSPC, this.ctr.getCurrentUser());
-                        TallaMinPorcJuvenil = Number(ser_medidaMin.data[0].TMMIN);
-
-                        let obj_bio = {};
-                        let item_bio_key = Object.keys(listaDataBio[i]);
-                        let item_bio_value = Object.values(listaDataBio[i]);
-                        obj_bio['CodEspecie'] = listaDataBio[i].CDSPC;
-                        obj_bio['Especie'] = listaDataBio[i].DESC_CDSPC;
-                        obj_bio['Moda'] =  Utils.formatoDosDecimales(listaDataBio[i].MODA);
-                        obj_bio['Muestra'] = listaDataBio[i].CDSPC_TOTAL;
                         
-                        if(this.ctr._motivoMarea == "2"){
-                            let v_talla_bio = Number(0);
-                            for (let k = tmn; k <= tmy; k = k + Number(0.5)) {
-                                if(k == tmn){
-                                    v_talla_bio = tmn;
-                                }else{
-                                    v_talla_bio++;
-                                   // v_talla_bio = Number(v_talla_bio) + Number('0.5')
+                    }
+                    //------------------------ Cargar el Incidental pertenecientes a ese evento
+                    let lista_incidental = this.ctr._listaIncidental;
+                    let listaIncEve = [];
+                    for(let w = 0; w < lista_incidental.length; w++){
+                        if(this.ctr._nroEvento == lista_incidental[w].NREVN){
+                            listaIncEve.push(lista_incidental[w]);
+                        }
+                        
+                    }
+                    this.ctr._listaEventos[this.ctr._elementAct].ListaIncidental = listaIncEve;
+                    //this._oView.getModel("eventos").setProperty("/ListaPescaDeclarada",ListaPescaDecl);
+    
+    
+                    if(listaDataBio.length != 0){
+                        let tmn = Number(0);
+                        let tmy = Number(0);;
+                        let key_bio = Object.keys(listaDataBio[0]);
+                        let contIni = 0;
+                        //--------------- obtner la talla mayor y menor para armar la tabla dinamica
+                        for (let i = 0; i < key_bio.length; i++) {
+                            if(key_bio[i].slice(0,5) == "TNMED"){
+                                contIni++;
+                                let medida = key_bio[i].split("_");
+                                let key_mn = Number(medida[1]);
+                                if(contIni == 1){
+                                    tmn = key_mn;
+                                    tmy = key_mn;
+                                }else if(tmn > key_mn){
+                                    tmn = key_mn;
+                                }else if(key_mn > tmy){
+                                    tmy = key_mn;
                                 }
-                                let v_talla_bio_s = "" + k;
-                                let val_dec = v_talla_bio_s.indexOf(".5");
-                                if(val_dec == "-1"){
+                                console.log(key_bio[i]);
+                            }
+                        }
+                        this._oView.byId("idTallaMenor").setValue(tmn);
+                        this._oView.byId("idTallaMayor").setValue(tmy);
+                        await this.onButtonPress3();
+                        //------------------ cargar data dinamica -------------------------------------//
+    
+                        for (let i = 0; i < listaDataBio.length; i++) {
+                            let TallaMinPorcJuvenil = Number(0);
+                            let sumaMuestraJuvenil = Number(0);
+                            let ser_medidaMin = await TasaBackendService.obtenerMedidaEspecie(listaDataBio[i].CDSPC, this.ctr.getCurrentUser());
+                            TallaMinPorcJuvenil = Number(ser_medidaMin.data[0].TMMIN);
+    
+                            let obj_bio = {};
+                            let item_bio_key = Object.keys(listaDataBio[i]);
+                            let item_bio_value = Object.values(listaDataBio[i]);
+                            obj_bio['CodEspecie'] = listaDataBio[i].CDSPC;
+                            obj_bio['Especie'] = listaDataBio[i].DESC_CDSPC;
+                            obj_bio['Moda'] =  Utils.formatoDosDecimales(listaDataBio[i].MODA);
+                            obj_bio['Muestra'] = listaDataBio[i].CDSPC_TOTAL;
+                            
+                            if(this.ctr._motivoMarea == "2"){
+                                let v_talla_bio = Number(0);
+                                for (let k = tmn; k <= tmy; k = k + Number(0.5)) {
+                                    if(k == tmn){
+                                        v_talla_bio = tmn;
+                                    }else{
+                                        v_talla_bio++;
+                                       // v_talla_bio = Number(v_talla_bio) + Number('0.5')
+                                    }
+                                    let v_talla_bio_s = "" + k;
+                                    let val_dec = v_talla_bio_s.indexOf(".5");
+                                    if(val_dec == "-1"){
+                                        let contBio = 0;
+                                        for (let j = 0; j < item_bio_key.length; j++) {
+                                            contBio++;
+                                            let v2 = "TNMED" + "_" + k + "_" + "00";
+                                            if(item_bio_key[j] == v2 ){
+                                                let v3 = Number(contBio) - Number(1);
+                                                obj_bio['col_' + v_talla_bio] = item_bio_value[v3];
+    
+                                                if(v_talla_bio < TallaMinPorcJuvenil){
+                                                    sumaMuestraJuvenil += Number(item_bio_value[v3]);
+                                                }
+                                                break;
+                                            }
+                                        }
+    
+                                    }else{
+                                        let contBio = 0;
+                                        for (let j = 0; j < item_bio_key.length; j++) {
+                                            contBio++;
+                                            let v1 = v_talla_bio_s.split(".");
+                                            let v2 = "TNMED" + "_" + v1[0] + "_" + "50";
+                                            if(item_bio_key[j] == v2 ){
+                                                let v3 = Number(contBio) - Number(1);
+                                                obj_bio['col_' + v_talla_bio] = item_bio_value[v3];
+    
+                                                if(v_talla_bio < TallaMinPorcJuvenil){
+                                                    sumaMuestraJuvenil += Number(item_bio_value[v3]);
+                                                }
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                            }else if(this.ctr._motivoMarea == "1"){
+                                
+                                for (let k = tmn; k <= tmy; k++) {
                                     let contBio = 0;
+                                    let v2 = "TNMED" + "_" + k + "_" + "00";
                                     for (let j = 0; j < item_bio_key.length; j++) {
                                         contBio++;
-                                        let v2 = "TNMED" + "_" + k + "_" + "00";
                                         if(item_bio_key[j] == v2 ){
                                             let v3 = Number(contBio) - Number(1);
-                                            obj_bio['col_' + v_talla_bio] = item_bio_value[v3];
-
-                                            if(v_talla_bio < TallaMinPorcJuvenil){
+                                            obj_bio['col_' + k] = item_bio_value[v3];
+    
+                                            if(k < TallaMinPorcJuvenil){
                                                 sumaMuestraJuvenil += Number(item_bio_value[v3]);
                                             }
                                             break;
                                         }
                                     }
-
-                                }else{
-                                    let contBio = 0;
-                                    for (let j = 0; j < item_bio_key.length; j++) {
-                                        contBio++;
-                                        let v1 = v_talla_bio_s.split(".");
-                                        let v2 = "TNMED" + "_" + v1[0] + "_" + "50";
-                                        if(item_bio_key[j] == v2 ){
-                                            let v3 = Number(contBio) - Number(1);
-                                            obj_bio['col_' + v_talla_bio] = item_bio_value[v3];
-
-                                            if(v_talla_bio < TallaMinPorcJuvenil){
-                                                sumaMuestraJuvenil += Number(item_bio_value[v3]);
-                                            }
-                                            break;
-                                        }
-                                    }
                                 }
+    
                             }
+    
+                            let calculo_porc = Number(0);
+                            calculo_porc = (sumaMuestraJuvenil * 100)/ Number(listaDataBio[i].CDSPC_TOTAL)
+                            let cal_fix =  calculo_porc.toFixed(2);
+                            obj_bio['PorcJuveniles'] = cal_fix + "%";
                             
-                        }else if(this.ctr._motivoMarea == "1"){
-                            
-                            for (let k = tmn; k <= tmy; k++) {
-                                let contBio = 0;
-                                let v2 = "TNMED" + "_" + k + "_" + "00";
-                                for (let j = 0; j < item_bio_key.length; j++) {
-                                    contBio++;
-                                    if(item_bio_key[j] == v2 ){
-                                        let v3 = Number(contBio) - Number(1);
-                                        obj_bio['col_' + k] = item_bio_value[v3];
-
-                                        if(k < TallaMinPorcJuvenil){
-                                            sumaMuestraJuvenil += Number(item_bio_value[v3]);
-                                        }
-                                        break;
-                                    }
-                                }
-                            }
-
+                            this.ctr._listaEventos[this.ctr._elementAct].ListaBiometria.push(obj_bio);
+    
                         }
-
-                        let calculo_porc = Number(0);
-                        calculo_porc = (sumaMuestraJuvenil * 100)/ Number(listaDataBio[i].CDSPC_TOTAL)
-                        let cal_fix =  calculo_porc.toFixed(2);
-                        obj_bio['PorcJuveniles'] = cal_fix + "%";
                         
-                        this.ctr._listaEventos[this.ctr._elementAct].ListaBiometria.push(obj_bio);
-
+    
+                    }else{
+                        this._oView.byId("table_biometria").destroyColumns();
+                        this.getTableDefault();
                     }
-                    
-
                 }else{
                     this._oView.byId("table_biometria").destroyColumns();
                     this.getTableDefault();
                 }
             }else{
                 this._oView.byId("table_biometria").destroyColumns();
-                this.getTableDefault();
+                let tallaMax = Number(this.ctr._listaEventos[this.ctr._elementAct].TallaMax);
+                let tallaMin = Number(this.ctr._listaEventos[this.ctr._elementAct].TallaMin);
+                this._oView.byId("idTallaMenor").setValue(tallaMin);
+                this._oView.byId("idTallaMayor").setValue(tallaMax);
+                await this.onButtonPress3();
             }
+            
         },
         abrirPopup_inc :function(){
             let me = this;
