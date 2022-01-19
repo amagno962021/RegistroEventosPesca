@@ -410,6 +410,12 @@ sap.ui.define([
             BusyIndicator.hide();
             if (navegar) {
                 oRouter.navTo("DetalleMarea");
+            }else{
+                BusyIndicator.show(0);
+                sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleMarea").validaFechaNulaEvt(this);
+                await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleMarea").cargarCombos(this);
+                await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleMarea").validarVista(this);
+                BusyIndicator.hide();
             }
             //me.navToExternalComp();
         },
@@ -436,7 +442,9 @@ sap.ui.define([
                 str_psdec: [],
                 str_flbsp_c: [],
                 str_flbsp_e: [],
-                str_pscinc: []
+                str_pscinc: [],
+                str_desca: [],
+                str_simar: []
             };
 
             var objMarea = {
@@ -500,6 +508,67 @@ sap.ui.define([
             var eveVisTabEquip = ["1", "5"];
             var eveVisTabHorom = ["1", "5", "6", "H", "T"];
             var flagSaveEventos = modelo.getProperty("/Utils/TipoConsulta");
+            var eventosEliminados = modelo.getProperty("/Eventos/EvenEliminados");
+            var nroMarea = modelo.getProperty("/Cabecera/NRMAR");
+
+            for (let index1 = 0; index1 < eventosEliminados.length; index1++) {
+                const element1 = eventosEliminados[index1];
+                var horoElim = element1.EEHorometros;
+                var bodElim = element1.EEBodegas;
+                var pescDeclElim = element1.EEPescaDeclarada;
+                var pescDescElim = element1.EEPescaDescargada;
+                var evtElim = {
+                    INDTR: "D",
+                    NRMAR: nroMarea,
+                    NREVN: element1.NREVN
+                };
+                marea.str_evento.unshift(evtElim);
+
+                for (let index2 = 0; index2 < horoElim.length; index2++) {
+                    const element2 = horoElim[index2];
+                    var objHoroElim = {
+                        INDTR: "D",
+                        NRMAR: nroMarea,
+                        NREVN: element1.NREVN,
+                        CDTHR: element2.CDTHR
+                    };
+                    marea.str_horom.unshift(objHoroElim);
+                }
+
+                for (let index3= 0; index3 < bodElim.length; index3++) {
+                    const element3 = bodElim[index3];
+                    var objBodElim = {
+                        INDTR: "D",
+                        NRMAR: nroMarea,
+                        NREVN: element1.NREVN,
+                        CDBOD: element3.CDBOD
+                    };
+                    marea.str_psbod.unshift(objBodElim);
+                }
+
+                for (let index4 = 0; index4 < pescDeclElim.length; index4++) {
+                    const element4 = pescDeclElim[index4];
+                    var objPescDeclElim = {
+                        INDTR: "D",
+                        NRMAR: nroMarea,
+                        NREVN: element1.NREVN,
+                        CDSPC: element4.CDSPC
+                    };
+                    marea.str_psdec.unshift(objPescDeclElim);
+                }
+
+                for (let index5 = 0; index5 < pescDescElim.length; index5++) {
+                    const element5 = pescDescElim[index5];
+                    var objPescDesc = {
+                        INDTR: "D",
+                        INDJ: null,
+                        NRDES: element5.NRDES
+                    };
+                    marea.str_desca.unshift(objPescDesc);
+                }
+
+            }
+
             for (let index = 0; index < eventos.length; index++) {
                 let obs = "";
                 var element = eventos[index];
@@ -587,11 +656,11 @@ sap.ui.define([
                 marea.str_flbsp_e = this.eliminarDatosBiometria();
                 marea.str_pscinc = this.guardarDatosIncidental();
                 marea.str_simar = siniestros;
-                marea.str_desca = pescaDescargada;
-                marea.str_psbod = pescaBodega;
-                marea.str_psdec = pescaDeclarada;
+                marea.str_desca = marea.str_desca.concat(pescaDescargada);
+                marea.str_psbod = marea.str_psbod.concat(pescaBodega);
+                marea.str_psdec = marea.str_psdec.concat(pescaDeclarada);
                 marea.str_equip = equipamientos;
-                marea.str_horom = horometros;
+                marea.str_horom = marea.str_horom.concat(horometros);
             }
 
             console.log("GUARDAR MAREA: ", marea);
@@ -871,7 +940,7 @@ sap.ui.define([
             var crearReserva = await TasaBackendService.crearReserva(bodyReserva);
             if (crearReserva) {
                 var t_mensaje = crearReserva.t_mensaje;
-                modelo.setProperty("/Result/NroReserva", crearReserva.p_reserva)
+                modelo.setProperty("/Utils/NumeroReservaGen", crearReserva.p_reserva)
                 if (t_mensaje.length) {
                     if (t_mensaje[0].CMIN == "E") {
                         bOk = false;
@@ -888,7 +957,7 @@ sap.ui.define([
             var bOk = true;
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var posiciones = this.obtenerPosiciones();
-            var fechaReserva = modelo.getProperty("/Cabecera/FIEVN")
+            var fechaReserva = Utils.dateToStrDate(new Date());
             var bodyReserva = {
                 p_cdemb: modelo.getProperty("/Cabecera/CDEMB"),
                 p_fhrsv: fechaReserva ? Utils.strDateToSapDate(fechaReserva) : "",
@@ -902,7 +971,7 @@ sap.ui.define([
             var crearVenta = await TasaBackendService.crearVenta(bodyReserva);
             if (crearVenta) {
                 var t_mensaje = crearVenta.t_mensaje;
-                modelo.setProperty("/Result/NroPedido", crearVenta.p_pedido)
+                modelo.setProperty("/Utils/NumeroPedidoGen", crearVenta.p_pedido)
                 if (t_mensaje.length) {
                     if (t_mensaje[0].CMIN == "E") {
                         bOk = false;
@@ -919,16 +988,21 @@ sap.ui.define([
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var lista = [];
             var suministros = modelo.getProperty("/Suministro");
+            var almacenes = modelo.getProperty("/ConfigReservas/Almacenes");
+            var indProp = modelo.getProperty("/Cabecera/INPRP");
             for (let index = 0; index < suministros.length; index++) {
                 const element = suministros[index];
+                var almacen = almacenes.find(function(param){
+                    return param.CDALE == element.CDALE;
+                });
                 var obj = {
                     NRMAR: modelo.getProperty("/Cabecera/NRMAR"),
                     NRPOS: element.NRPOS,
                     CDSUM: element.CDSUM ? element.CDSUM : "",
                     CNSUM: element.CNSUM,
                     CDUMD: element.CDUMD ? element.CDUMD : "",
-                    CDPTA: element.CDPTA,
-                    CDALM: element.CDALE
+                    CDPTA: indProp == "P" ? element.CDPTA : element.WERKS,
+                    CDALM: indProp == "P" && almacen.CDALM ? almacen.CDALM : element.CDALE
                 };
                 lista.push(obj);
             }
@@ -1008,7 +1082,9 @@ sap.ui.define([
                 }
             }
             modelo.setProperty("/Config/visibleTabReserva", mostrarTab);
+            modelo.setProperty("/Config/visibleAlmacenReserva", false);
             if (mostrarTab) {
+                modelo.setProperty("/Config/visibleAlmacenReserva", true);
                 var configReservas = await TasaBackendService.obtenerConfigReservas(usuario);
                 if (configReservas) {
                     modelo.setProperty("/ConfigReservas/BWART", configReservas.bwart);
@@ -1035,7 +1111,6 @@ sap.ui.define([
         obtenerVentasCombustible: async function (marea) {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var listaEventos = modelo.getProperty("/Eventos/Lista");
-            console.log("EVENTOS: ", listaEventos);
             var mostrarTab = false;
             var mareaCerrada = modelo.getProperty("/DatosGenerales/ESMAR") == "C" ? true : false;
             var usuario = await this.getCurrentUser();
@@ -1052,7 +1127,6 @@ sap.ui.define([
                     const element = listaEventos[index];
                     tipoEvento = element.CDTEV;
                     if (tipoEvento == "5") {
-                        //setear centro de planta de suministro
                         regVenta = true;
                         break;
                     }
@@ -1063,8 +1137,9 @@ sap.ui.define([
                     mostrarTab = false;
                 }
             }
-            console.log("MOST5RAR TAB: ", mostrarTab);
+
             modelo.setProperty("/Config/visibleTabVenta", mostrarTab);
+            modelo.setProperty("/Config/visibleAlmacenExterno", false);
             if (mostrarTab) {
                 var configReservas = await TasaBackendService.obtenerConfigReservas(usuario);
                 if (configReservas) {
@@ -1072,6 +1147,12 @@ sap.ui.define([
                     modelo.setProperty("/ConfigReservas/MATNR", configReservas.matnr);
                     modelo.setProperty("/ConfigReservas/WERKS", configReservas.werks);
                     modelo.setProperty("/ConfigReservas/Almacenes", configReservas.almacenes);
+                }
+
+                var almExt = await TasaBackendService.obtenerAlmExterno(usuario);
+                if(almExt){
+                    modelo.setProperty("/ConfigReservas/AlmacenesExt", almExt.data);
+                    modelo.setProperty("/Config/visibleAlmacenExterno", true);
                 }
                 var embaComb = await TasaBackendService.obtenerEmbaComb(usuario, embarcacion);
                 if (embaComb) {
@@ -1093,6 +1174,7 @@ sap.ui.define([
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var usuario = await this.getCurrentUser();
             var eventos = modelo.getProperty("/Eventos/Lista");
+            var indProp = modelo.getProperty("/Cabecera/INPRP")
             modelo.setProperty("/Config/visibleReserva1", visible);
             modelo.setProperty("/Config/visibleVenta2", visible);
             var ultimoEvento = eventos.length > 0 ? eventos[eventos.length - 1] : null;
@@ -1105,18 +1187,37 @@ sap.ui.define([
             var planta = ultimoEvento ? ultimoEvento.CDPTA : "";
             var descr = ultimoEvento ? ultimoEvento.DESCR : "";
             var centro = modelo.getProperty("/ConfigReservas/WERKS");
+            if(indProp == "T"){
+                for (let index1 = 0; index1 < eventos.length; index1++) {
+                    const element = eventos[index1];
+                    if (element.CDTEV == "5") {
+                        centro = element.WERKS;
+                        break;
+                    }
+                }
+            }
             var material = modelo.getProperty("/ConfigReservas/MATNR");
             var data = await TasaBackendService.obtenerSuministro(usuario, material);
             if (data) {
+                var almacenes = modelo.getProperty("/ConfigReservas/Almacenes");
                 var suministro = data.data[0];
                 var dsalm = "";
                 var cdale = "";
-                var almacenes = modelo.getProperty("/ConfigReservas/Almacenes");
-                for (let index = 0; index < almacenes.length; index++) {
-                    const element = almacenes[index];
-                    if (element.DSALM == descr) {
-                        dsalm = element.DSALM;
-                        cdale = element.CDALE;
+                if(indProp == "P"){
+                    for (let index = 0; index < almacenes.length; index++) {
+                        const element = almacenes[index];
+                        if (element.DSALM == descr) {
+                            dsalm = element.DSALM;
+                            cdale = element.CDALE;
+                        }
+                    }
+                }else{
+                    var almExt = await TasaBackendService.obtenerAlmExterno(usuario);
+                    if(almExt){
+                        modelo.setProperty("/ConfigReservas/AlmacenesExt", almExt.data);
+                        var almacen = almExt.data[0];
+                        dsalm = almacen.DESCR;
+                        cdale = almacen.VAL01;
                     }
                 }
                 var listaSuministro = [{
@@ -1205,22 +1306,37 @@ sap.ui.define([
         },
 
         obtenerDetalleSuministro: async function (nrmar, nrrsv) {
+            BusyIndicator.show(0);
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var usuario = await this.getCurrentUser();
             var bOk = false;
+            var indProp = modelo.getProperty("/Cabecera/INPRP");
+            var almacenesExterno = modelo.getProperty("/ConfigReservas/AlmacenesExt");
             var detalleSuministro = await TasaBackendService.obtenerReservas(nrmar, nrrsv, "X", usuario);
             if (detalleSuministro) {
                 var reserva = detalleSuministro.t_reservas[0];
-                var objReserva = modelo.getProperty("DetalleSuministro");
+                var objReserva = modelo.getProperty("/DetalleSuministro");
                 for (var key in reserva) {
                     if (objReserva.hasOwnProperty(key)) {
                         objReserva[key] = reserva[key];
                     }
                 }
                 var detalles = detalleSuministro.t_detalle;
-                modelo.setProperty("DetalleSuministro/Lista", detalles);
-                bOk = true;
+                if(detalles.length > 0){
+                    for (let index = 0; index < detalles.length; index++) {
+                        const element = detalles[index];
+                        if(!element.DSALM && indProp == "T"){
+                            var almExt = almacenesExterno.find(function(param){
+                                return param.VAL01 == element.CDALM;
+                            });
+                            element.DSALM = almExt.DESCR;
+                        }
+                    }
+                    modelo.setProperty("/DetalleSuministro/Lista", detalles);
+                    bOk = true;
+                }
             }
+            BusyIndicator.hide();
             return bOk;
         },
 
@@ -2002,6 +2118,12 @@ sap.ui.define([
 
             modelo.setProperty("/Propios", propios);
             modelo.setProperty("/Terceros", terceros);
+
+            var listaModelos = this.getOwnerComponent().getModel("ListaMareas");
+            listaModelos.setProperty("/Utils/readOnlyNuevaMarea", true);
+            listaModelos.setProperty("/Utils/readOnlyActualizar", true);
+            listaModelos.setProperty("/Utils/readOnlyPescDecl", true);
+
             /*
             var jsonModelPropios = new JSONModel(propios);
             var jsonModelTerceros = new JSONModel(terceros);*/
@@ -2324,6 +2446,185 @@ sap.ui.define([
 			}
 			return service;
 		},
+
+        validaComboTipoEvento: function (sData) {
+            var oVal = [];
+            var modeloDetalleMarea = this.getOwnerComponent().getModel("DetalleMarea");
+            var dataDetalleMarea = modeloDetalleMarea.getData();
+            var motivoMarea = dataDetalleMarea.Cabecera.CDMMA;
+            var eventos = dataDetalleMarea.Eventos.Lista;
+            var motivosSinZarpe = ["3", "7", "8"];
+            var motivoEventoHo = ["7", "8"];
+            var motivoCalaSDes = ["4", "5", "6"];
+            if (motivosSinZarpe.includes(motivoMarea)) {
+                if (motivoEventoHo.includes(motivoMarea)) {
+                    var existeEveHoro = false;
+                    for (let index = 0; index < eventos.length; index++) {
+                        const element = eventos[index];
+                        if (element.CDTEV == "H" || element.CDTEV == "T") {
+                            existeEveHoro = true;
+                            //llenamos solo siniestro
+                            for (let index = 0; index < sData.length; index++) {
+                                const element = sData[index];
+                                if (element.id == "8") {
+                                    oVal.push(element);
+                                    break;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    if (!existeEveHoro) {
+                        for (let index = 0; index < sData.length; index++) {
+                            const element = sData[index];
+                            if (element.id == "8" || element.id == "H" || element.id == "T") {
+                                oVal.push(element);
+                            }
+                        }
+                    }
+                } else {
+                    for (let index = 0; index < sData.length; index++) {
+                        const element = sData[index];
+                        if (element.id == "8") {
+                            oVal.push(element);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                if (eventos.length > 0) {
+                    var ultimoEvento = eventos[eventos.length - 1];
+                    var tipoEvento = ultimoEvento.CDTEV;
+                    if (tipoEvento == "1" || tipoEvento == "4") {
+                        for (let index = 0; index < sData.length; index++) {
+                            const element = sData[index];
+                            if (element.id == "2" || element.id == "5" || element.id == "8") {
+                                oVal.push(element);
+                            }
+                        }
+                    } else if (tipoEvento == "2" || tipoEvento == "3") {
+                        for (let index = 0; index < sData.length; index++) {
+                            const element = sData[index];
+                            if (element.id == "3" || element.id == "4" || element.id == "8") {
+                                oVal.push(element);
+                            }
+                        }
+                    } else if (tipoEvento == "5" || tipoEvento == "6") {
+                        if (tipoEvento == "5" && ultimoEvento.CDMNP || motivoCalaSDes.includes(motivoMarea)) {
+                            for (let index = 0; index < sData.length; index++) {
+                                const element = sData[index];
+                                if (element.id == "1" || element.id == "7" || element.id == "8") {
+                                    oVal.push(element);
+                                }
+                            }
+                        } else {
+                            for (let index = 0; index < sData.length; index++) {
+                                const element = sData[index];
+                                if (element.id == "1" || element.id == "6" || element.id == "7" || element.id == "8") {
+                                    oVal.push(element);
+                                }
+                            }
+                        }
+                    } else if (tipoEvento == "7" || tipoEvento == "8") {
+                        for (let index = 0; index < sData.length; index++) {
+                            const element = sData[index];
+                            if (element.id == "1" || element.id == "8") {
+                                oVal.push(element);
+                            }
+                        }
+                    }
+                } else {
+                    for (let index = 0; index < sData.length; index++) {
+                        const element = sData[index];
+                        if (element.id == "8" || element.id == "1") {
+                            oVal.push(element);
+                        }
+                    }
+                }
+            }
+            var primerItem = oVal[0];
+            modeloDetalleMarea.setProperty("/Utils/TipoEvento", primerItem.id);
+            dataDetalleMarea.Config.datosCombo.TipoEventos = oVal;
+            modeloDetalleMarea.refresh();
+        },
+
+        validarMotivo: async function (motivo) {
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var indicador = modelo.getProperty("/Cabecera/INDICADOR");
+            modelo.setProperty("/Cabecera/CDMMA", motivo);
+            if (motivo == "1" || motivo == "2") {
+                modelo.setProperty("/Config/visibleFecHoEta", true);
+                modelo.setProperty("/Config/visibleUbiPesca", false);
+                modelo.setProperty("/Config/visibleFechIni", false);
+                modelo.setProperty("/Config/visibleFechFin", false);
+                modelo.setProperty("/Cabecera/TXTNOTIF", "");
+                modelo.setProperty("/Cabecera/TXTNOTIF1", "");
+                if (indicador == "N") {
+                    modelo.setProperty("/Config/readOnlyEstaMar", false); //si es nueva marea
+                    modelo.setProperty("/Config/visibleBtnGuardar", false); //si es nueva marea
+                    modelo.setProperty("/Config/visibleBtnSiguiente", true); //si es nueva marea
+                    modelo.setProperty("/DatosGenerales/FEARR", "");
+                    modelo.setProperty("/DatosGenerales/HEARR", "");
+                    modelo.setProperty("/DatosGenerales/ESMAR", "A");
+                }
+            } else if (motivo == "3" || motivo == "7" || motivo == "8") {
+                modelo.setProperty("/Config/visibleFecHoEta", false);
+                modelo.setProperty("/Config/visibleUbiPesca", true);
+                modelo.setProperty("/Config/visibleFechIni", true);
+                modelo.setProperty("/Config/readOnlyFechIni", false);
+                modelo.setProperty("/Config/readOnlyEstaMar", true);
+                modelo.setProperty("/DatosGenerales/INUBC", "1");
+                if (indicador == "N") {
+                    modelo.setProperty("/Config/visibleBtnGuardar", true); //si es nueva marea
+                    modelo.setProperty("/Config/visibleBtnSiguiente", false); //si es nueva marea
+                    modelo.setProperty("/DatosGenerales/ESMAR", "A");
+                }
+                var MareAntNrmar = modelo.getProperty("/MareaAnterior/NRMAR");
+                var MareAntDesc = modelo.getProperty("/MareaAnterior/DESC_CDMMA");
+                var MareAntEvt = modelo.getProperty("/MareaAnterior/EventoMarAnt/DESC_CDTEV");
+                var MareAntFech = modelo.getProperty("/MareaAnterior/FFMAR");
+                var MareAntHora = modelo.getProperty("/MareaAnterior/HFMAR");
+                var mssg = this.oBundle.getText("NOTIFULTMAREA", [MareAntNrmar, MareAntDesc, MareAntEvt, MareAntFech, MareAntHora]);
+                modelo.setProperty("/Cabecera/TXTNOTIF", mssg);
+                modelo.setProperty("/DatosGenerales/FIMAR", MareAntFech);
+                modelo.setProperty("/DatosGenerales/HIMAR", MareAntHora);
+                modelo.setProperty("/Cabecera/TXTNOTIF1", "");
+                if (motivo == "8") {
+                    BusyIndicator.show(0);
+                    await this.validarFechaVeda();
+                    BusyIndicator.hide();
+                }
+            } else if (motivo == "4" || motivo == "5") {
+                modelo.setProperty("/Config/visibleUbiPesca", true);
+                modelo.setProperty("/Config/visibleFecHoEta", true);
+                modelo.setProperty("/Config/visibleEstMarea", true);
+                modelo.setProperty("/Config/readOnlyEstaMar", false);
+                modelo.setProperty("/Config/visibleFechIni", false);
+                modelo.setProperty("/Config/visibleFechFin", false);
+                modelo.setProperty("/DatosGenerales/ESMAR", "A");//Seteamos marea abierta
+                modelo.setProperty("/Cabecera/TXTNOTIF", "");
+                modelo.setProperty("/Cabecera/TXTNOTIF1", "");
+                modelo.setProperty("/Config/visibleBtnGuardar", false); //si es nueva marea
+                modelo.setProperty("/Config/visibleBtnSiguiente", true); //si es nueva marea
+                modelo.setProperty("/DatosGenerales/ESMAR", "A");
+            }
+        },
+
+        validaDescargas: async function () {
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var listaEventos = modelo.getProperty("/Eventos/Lista");
+            var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
+            var estadoMarea = modelo.getProperty("/DatosGenerales/ESMAR");
+            for (let index = 0; index < listaEventos.length; index++) {
+                const element = listaEventos[index];
+                if (element.CDTEV == "6") {
+                    if (estadoMarea == "A" && motivoMarea == "2" && element.INPRP == "P" && element.NRDES) {
+                        await this.verificarErroresMarea(element.NRDES);
+                        break;
+                    }
+                }
+            }
+        },
 
 
     });

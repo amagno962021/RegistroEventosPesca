@@ -18,7 +18,7 @@
 									<Input value="{DetalleMarea>/Suministro/0/CNSUM}" description="{DetalleMarea>/Suministro/0/DSUMD}" showValueHelp="false" width="auto" valueStateText="Invalid entry"/>
                                 </form:fields>
                             </form:FormElement>
-                            <form:FormElement visible="true">
+                            <form:FormElement visible="{DetalleMarea>/Config/visibleAlmacenReserva}">
                                 <form:label>
                                     <Label text="Almacén" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
@@ -26,6 +26,18 @@
                                     <ComboBox id="cbxPlantas" width="auto" items="{DetalleMarea>/ConfigReservas/Almacenes}" selectedKey="{DetalleMarea>/Suministro/0/CDALE}" change="onSelectAlmacen">
                                         <items>
                                             <core:Item text="{DetalleMarea>DSALM}" enabled="true" key="{DetalleMarea>CDALE}"/>
+                                        </items>
+                                    </ComboBox>
+                                </form:fields>
+                            </form:FormElement>
+                            <form:FormElement visible="{DetalleMarea>/Config/visibleAlmacenExterno}">
+                                <form:label>
+                                    <Label text="Almacén" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+                                </form:label>
+                                <form:fields>
+                                    <ComboBox width="auto" items="{DetalleMarea>/ConfigReservas/AlmacenesExt}" selectedKey="{DetalleMarea>/Suministro/0/CDALE}" change="onSelectAlmacen">
+                                        <items>
+                                            <core:Item text="{DetalleMarea>DESCR}" enabled="true" key="{DetalleMarea>VAL01}"/>
                                         </items>
                                     </ComboBox>
                                 </form:fields>

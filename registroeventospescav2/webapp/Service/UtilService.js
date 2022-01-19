@@ -268,7 +268,14 @@ sap.ui.define([
                 "usuario": ""
             };
             return sBody;
-        }
+        },
+
+        getBodyAlmExt: function () {
+            var sBody = {
+                "usuario": ""
+            };
+            return sBody;
+        },
 
     }
 

@@ -90,13 +90,7 @@ sap.ui.define([
                     Lista: [],
                     ListaBck: [],
                     ListaBiometriaElim: [],
-                    EvenEliminados: {
-                        NREVN: 0,
-                        EEHorometros: [],
-                        EEBodegas: [],
-                        EEPescaDeclarada: [],
-                        EEPescaDescargada: []
-                    },
+                    EvenEliminados: [],
                     PreciosMareaElim: [],
                     LeadSelEvento: 0
 				},
@@ -120,7 +114,8 @@ sap.ui.define([
                     BWART: "",
                     MATNR: "",
                     WERKS: "",
-                    Almacenes: []
+                    Almacenes: [],
+                    AlmacenesExt: []
                 },
                 EmbaComb: {
                     CDTAN: "",
@@ -227,6 +222,8 @@ sap.ui.define([
                     visibleBtnCrear: true,
                     visibleBtnReabrir: true,
                     visibleBuscarArmador: true,
+                    visibleAlmacenReserva: false,
+                    visibleAlmacenExterno: false,
 					datosCombo: {
                         Departamentos: [],
                         MotivosMarea: [],
@@ -283,7 +280,11 @@ sap.ui.define([
                     TxtNuevaVentaRes: "",
                     CrearMarea: [],
                     TxtMareaConfirm: "",
-                    TxtEmbaConfirm: ""
+                    TxtEmbaConfirm: "",
+                    NumeroReservaGen: "",
+                    NumeroPedidoGen: "",
+                    TituloReviewReVe: "",
+                    ConfirmDialog: null
                 },
                 InputsDescargas :{
                     CentPlanta : "",
@@ -510,7 +511,10 @@ sap.ui.define([
                     CountPropios: 0,
                     CountTerceros: 0,
                     SelectedKey: "",
-                    TotalPescDecl: 0
+                    TotalPescDecl: 0,
+                    readOnlyNuevaMarea: false,
+                    readOnlyActualizar: false,
+                    readOnlyPescDecl: false,
                 }
             };
             var oModel = new JSONModel(data);

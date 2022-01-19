@@ -46,10 +46,10 @@
 			</form:Form>
 		</content>
 		<beginButton>
-			<Button type="Emphasized" id="btnConfirmSave" text="Aceptar" press="onCloseConfirm" enabled="true"></Button>
+			<Button type="Emphasized" id="btnConfirmSave" text="Aceptar" press="onCloseConfirmMarea" enabled="true"></Button>
 		</beginButton>
 		<endButton>
-			<Button text="Cancelar" press="onCancelConfirm"></Button>
+			<Button text="Cancelar" press="onCancelConfirmMarea"></Button>
 		</endButton>
 	</Dialog>
 </core:FragmentDefinition>

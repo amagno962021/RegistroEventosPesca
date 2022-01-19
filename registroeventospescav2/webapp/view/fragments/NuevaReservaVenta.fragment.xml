@@ -99,7 +99,7 @@
 											</header>
 											<footer/>
 										</Column>
-										<Column width="15%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
+										<Column width="20%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
 											<header>
 												<Text text="Almacén" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 											</header>

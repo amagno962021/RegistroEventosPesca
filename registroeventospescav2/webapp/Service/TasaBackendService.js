@@ -997,6 +997,20 @@ sap.ui.define([
             return data;
         },
 
+        obtenerAlmExterno: async function(usuario){
+            var uri = UtilService.getHostService() + "/api/embarcacion/ObtenerAlmacenExterno/";
+            var sBody = UtilService.getBodyAlmExt();
+            sBody.usuario = usuario;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.ObtenerAlmacenExterno: ", error);
+                return null
+            });
+            return data;
+        },
+
         test: function () {
             var latiCalaD = "";
             var latiCalaM = "";

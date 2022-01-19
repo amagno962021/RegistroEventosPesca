@@ -270,7 +270,7 @@
 					<IconTabFilter key="itfEventos" iconColor="Default" text="Eventos" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true"
 								visible="true" iconDensityAware="false">
 						<content>
-							<Table id="tblEventos" width="auto" noDataText="No data" mode="SingleSelectLeft"  growing="true" growingThreshold="20"
+							<Table id="tblEventos" width="auto" noDataText="No data" mode="None"  growing="true" growingThreshold="20"
 										growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'DetalleMarea>/Eventos/Lista', templateShareable:true}">
 								<infoToolbar>
 									<Toolbar width="100%" height="auto" design="Auto" visible="false" enabled="true">
@@ -284,10 +284,8 @@
 										<content>
 											<Title text="{DetalleMarea>/Eventos/TituloEventos}" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
 											<ToolbarSpacer width=""/>
-											<OverflowToolbarButton text="Add" type="Default" icon="sap-icon://add" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleDetalleEvento}"
-														iconDensityAware="false" press="abrirCrearEvento"/>
-											<OverflowToolbarButton text="Delete" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleDetalleEvento}"
-														iconDensityAware="false" press="onEliminarEvento"/>
+											<Button icon="sap-icon://add" text="Agregar" type="Emphasized" press="abrirCrearEvento" visible="{DetalleMarea>/Config/visibleDetalleEvento}"/>
+											<Button icon="sap-icon://delete" text="Eliminar" type="Emphasized" press="onEliminarEvento" visible="{DetalleMarea>/Config/visibleDetalleEvento}"/>
 										</content>
 									</OverflowToolbar>
 								</headerToolbar>

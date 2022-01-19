@@ -1,7 +1,7 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:tnt="sap.tnt" controllerName="com.tasa.registroeventospescav2.controller.Main" displayBlock="true" height="100%">
    <SplitApp>
       <masterPages>
-         <Page title="Plantas">
+         <Page title="Plantas" backgroundDesign="Transparent">
             <tnt:NavigationList id="navigationList" width="auto" items="{PlantasModel>/Items}" itemSelect="onSearchMarea">
                <tnt:NavigationListItem text="{PlantasModel>text}" icon="{PlantasModel>ref}" items="{path: 'PlantasModel>nodes', templateShareable:false}" expanded="false" select="onSelectItemList">
                   <tnt:NavigationListItem text="{PlantasModel>text}" icon="sap-icon://factory" />
@@ -10,7 +10,7 @@
          </Page>
       </masterPages>
       <detailPages>
-         <Page title="Detalle de Mareas">
+         <Page title="Detalle de Mareas" backgroundDesign="Transparent">
             <content>
                <ObjectHeader id="idObjectHeader" icon="sap-icon://factory" titleActive="false" backgroundDesign="Translucent" numberUnit="Tn" numberState="Success" number="{ListaMareas>/Utils/TotalPescDecl}"/>
                <IconTabBar id="idIconTabBar" expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true" select="onSelectTab" selectedKey="{ListaMareas>/Utils/SelectedKey}">
@@ -18,7 +18,7 @@
                      <IconTabFilter id="itfPropios" icon="sap-icon://person-placeholder" iconColor="Default" text="Propios" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false" count="{ListaMareas>/Utils/CountPropios}">
                         <content>
                            <Table id="tblMareasPropios" width="auto" noDataText="No data" growing="true" growingThreshold="10" growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'ListaMareas>/PropiosFiltro', templateShareable:true}">
-                              <infoToolbar />
+                              
                               <columns>
                                  <Column width="5%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
                                     <header>
@@ -107,7 +107,7 @@
                      <IconTabFilter id="itfTerceros" icon="sap-icon://group" iconColor="Default" text="Terceros" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false" count="{ListaMareas>/Utils/CountTerceros}">
                         <content>
                            <Table id="tblMareasTerceros" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'ListaMareas>/TercerosFiltro', templateShareable:true}">
-                              <infoToolbar />
+                              
                               <columns>
                                  <Column width="5%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
                                     <header>
@@ -200,9 +200,9 @@
                   <content>
                      <Button id="messagePopoverBtnMain" icon="{ path: '/', formatter: 'buttonIconFormatter' }" type="{ path: '/', formatter: 'buttonTypeFormatter' }" text= "{path: '/', formatter: 'highestSeverityMessages' }" press="handleMessagePopoverPress"/>
                      <ToolbarSpacer width="" />
-                     <Button text="Nueva Marea" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onActionCrearMarea" />
-                     <Button text="Actualizar" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onActualizaMareas" />
-                     <Button text="Pesca Declarada" type="Default" iconFirst="true" width="auto" enabled="true" visible="true" iconDensityAware="false" press="onTest" />
+                     <Button text="Nueva Marea" type="Emphasized" iconFirst="true" width="auto" enabled="{ListaMareas>/Utils/readOnlyNuevaMarea}" visible="true" iconDensityAware="false" press="onActionCrearMarea" />
+                     <Button text="Actualizar" type="Emphasized" iconFirst="true" width="auto" enabled="{ListaMareas>/Utils/readOnlyActualizar}" visible="true" iconDensityAware="false" press="onActualizaMareas" />
+                     <Button text="Pesca Declarada" type="Emphasized" iconFirst="true" width="auto" enabled="{ListaMareas>/Utils/readOnlyPescDecl}" visible="true" iconDensityAware="false" press="onTest" />
                      <Button text="BOTON DE PRUEBAS" type="Default" icon="sap-icon://delete" iconFirst="true" width="auto" enabled="true" visible="false"
 								iconDensityAware="false" press="onCallUsuario"/>
                   </content>
