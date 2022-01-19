@@ -910,7 +910,7 @@ sap.ui.define([
         },
         validarLat : function(evt){
             let id = evt.getParameter("id");
-            let valorlat =  sap.ui.getCore().byId(id).getValue();
+            let valorlat =  sap.ui.getCore().byId(id).getValue() ?  Number(sap.ui.getCore().byId(id).getValue()) + "" : "0";
             if(Number.isInteger(valorlat) || Number(valorlat) < 0){
                 sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.Error);
                 sap.ui.getCore().byId(id).setValueStateText("Introduzca un valor entero positivo");
@@ -922,8 +922,12 @@ sap.ui.define([
                     sap.ui.getCore().byId(id).setValueStateText("Introduzca un valor entero positivo de dos dígitos");
                     this.ctr.validacioncampos = false;
                 }else{
-                    if(this.ctr.validacioncampos != false){
-                        sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.None);
+                    sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.None);
+                    let Lat1 = this.ctr.byId("ip_latitud1").getValue() ? Number(this.ctr.byId("ip_latitud1").getValue()) + "": "0";
+                    let Lat2 = this.ctr.byId("ip_latitud2").getValue() ? Number(this.ctr.byId("ip_latitud2").getValue()) + "": "0";
+                    let Long1 = this.ctr.byId("ip_longitud1").getValue() ? Number(this.ctr.byId("ip_longitud1").getValue()) + "": "0";
+                    let Long2 = this.ctr.byId("ip_longitud2").getValue() ? Number(this.ctr.byId("ip_longitud2").getValue()) + "": "0";
+                    if(Lat1.length < 4 && Long1.length < 4 && Lat2.length < 3 && Long2.length < 3){
                         this.ctr.validacioncampos = true;
                     }
                 }
@@ -933,7 +937,7 @@ sap.ui.define([
         },
         validarLong : function(evt){
             let id = evt.getParameter("id");
-            let valorlat =  sap.ui.getCore().byId(id).getValue();
+            let valorlat =  sap.ui.getCore().byId(id).getValue() ?  Number(sap.ui.getCore().byId(id).getValue()) + "" : "0";
             if(Number.isInteger(valorlat) || Number(valorlat) < 0){
                 sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.Error);
                 sap.ui.getCore().byId(id).setValueStateText("Introduzca un valor entero positivo");
@@ -945,8 +949,12 @@ sap.ui.define([
                     sap.ui.getCore().byId(id).setValueStateText("Introduzca un valor entero positivo de tres dígitos");
                     this.ctr.validacioncampos = false;
                 }else{
-                    if(this.ctr.validacioncampos != false){
-                        sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.None);
+                    sap.ui.getCore().byId(id).setValueState( sap.ui.core.ValueState.None);
+                    let Lat1 = this.ctr.byId("ip_latitud1").getValue() ? Number(this.ctr.byId("ip_latitud1").getValue()) + "": "0";
+                    let Lat2 = this.ctr.byId("ip_latitud2").getValue() ? Number(this.ctr.byId("ip_latitud2").getValue()) + "": "0";
+                    let Long1 = this.ctr.byId("ip_longitud1").getValue() ? Number(this.ctr.byId("ip_longitud1").getValue()) + "": "0";
+                    let Long2 = this.ctr.byId("ip_longitud2").getValue() ? Number(this.ctr.byId("ip_longitud2").getValue()) + "": "0";
+                    if(Lat1.length < 4 && Long1.length < 4 && Lat2.length < 3 && Long2.length < 3){
                         this.ctr.validacioncampos = true;
                     }
                     

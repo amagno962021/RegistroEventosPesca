@@ -49,50 +49,6 @@
 									<Input type="Text" value="{eventos>/CDPTA}" description="{eventos>/DESCR}" showValueHelp="false" enabled="false" visible="true" width="50%" required="false" maxLength="0"/>
 								</form:fields>
 							</form:FormElement>
-							<form:FormElement visible="true">
-								<VBox>
-									<FlexBox>
-										<GenericTag id="lat_1" text="Latit. Ini.:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom sapUiSmallMarginEnd">
-											<ObjectNumber
-												class="sapUiSmallMarginBottom"
-												inverted="true"
-												number="{eventos>/DescLati1}"
-												state="Warning" />
-										</GenericTag>
-
-										<GenericTag id="lat_2" text="Lat. Fin:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom">
-											<ObjectNumber
-												class="sapUiSmallMarginBottom"
-												inverted="true"
-												number="{eventos>/DescLati2}"
-												state="Warning" />
-										</GenericTag>
-											
-									</FlexBox>
-
-									<FlexBox>
-										<GenericTag id="long_1" text="Long. Ini.:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom sapUiSmallMarginEnd">
-											<ObjectNumber
-												class="sapUiSmallMarginBottom"
-												inverted="true"
-												number="{eventos>/DescLong1}"
-												state="Warning" />
-										</GenericTag>
-
-										<GenericTag id="long_2" text="Long. Fin:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom">
-											<ObjectNumber
-												class="sapUiSmallMarginBottom"
-												inverted="true"
-												number="{eventos>/DescLong2}"
-												state="Warning" />
-										</GenericTag>
-										<!-- <Label text="{eventos>/DescLati}" design="Bold" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-										<Label text="{eventos>/DescLong}" design="Bold" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" /> -->
-									</FlexBox>
-									
-								</VBox>
-
-							</form:FormElement>
 						</form:formElements>
 					</form:FormContainer>
 					
@@ -108,12 +64,35 @@
 						<form:formElements>
 							<form:FormElement visible="true">
 								<form:label>
+									<Label text="" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+								</form:label>
+								<form:fields>
+									<FlexBox>
+										<GenericTag id="lat_1" text="Latit. Ini.:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom sapUiSmallMarginEnd">
+											<ObjectNumber
+												class="sapUiSmallMarginBottom"
+												inverted="true"
+												number="{eventos>/DescLati1}"/>
+										</GenericTag>
+
+										<GenericTag id="lat_2" text="Lat. Fin:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom">
+											<ObjectNumber
+												class="sapUiSmallMarginBottom"
+												inverted="true"
+												number="{eventos>/DescLati2}" />
+										</GenericTag>
+											
+									</FlexBox>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement visible="true">
+								<form:label>
 									<Label text="Latitud" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<MaskInput mask="999" id="ip_latitud1" value="{eventos>/LatitudD}" textAlign="Right" enabled="true" visible="true" width="90%"  change="validarLong"/>
+									<Input id="ip_latitud1" type="Number" value="{eventos>/LatitudD}" textAlign="Right" enabled="true" visible="true" width="90%"  change="validarLong"/>
 									<Label text="º" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-									<MaskInput mask="99" id="ip_latitud2" value="{eventos>/LatitudM}" textAlign="Right"  enabled="true" visible="true" width="90%"  change="validarLat"/>
+									<Input id="ip_latitud2" type="Number" value="{eventos>/LatitudM}" textAlign="Right"  enabled="true" visible="true" width="90%"  change="validarLat"/>
 									<Label text="'" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:fields>
 							</form:FormElement>
@@ -123,12 +102,36 @@
 						<form:formElements>
 							<form:FormElement visible="true">
 								<form:label>
+									<Label text="" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+								</form:label>
+								<form:fields>
+									<FlexBox>
+										<GenericTag id="long_1" text="Lng. Ini.:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom sapUiSmallMarginEnd">
+											<ObjectNumber
+												class="sapUiSmallMarginBottom"
+												inverted="true"
+												number="{eventos>/DescLong1}"/>
+										</GenericTag>
+
+										<GenericTag id="long_2" text="Lng. Fin:"  design="StatusIconHidden" status="Success" class="sapUiSmallMarginBottom">
+											<ObjectNumber
+												class="sapUiSmallMarginBottom"
+												inverted="true"
+												number="{eventos>/DescLong2}" />
+										</GenericTag>
+										<!-- <Label text="{eventos>/DescLati}" design="Bold" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+										<Label text="{eventos>/DescLong}" design="Bold" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" /> -->
+									</FlexBox>
+								</form:fields>
+							</form:FormElement>
+							<form:FormElement visible="true">
+								<form:label>
 									<Label text="Longitud" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<MaskInput mask="999" id="ip_longitud1" value="{eventos>/LongitudD}" textAlign="Right"  enabled="true" visible="true" width="90%"  change="validarLong"/>
+									<Input id="ip_longitud1" value="{eventos>/LongitudD}" textAlign="Right"  enabled="true" visible="true" width="90%"  change="validarLong"/>
 									<Label text="º" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-									<MaskInput mask="99" id="ip_longitud2" value="{eventos>/LongitudM}"  textAlign="Right"  enabled="true" visible="true" width="90%"  change="validarLat"/>
+									<Input id="ip_longitud2" value="{eventos>/LongitudM}"  textAlign="Right"  enabled="true" visible="true" width="90%"  change="validarLat"/>
 									<Label text="'" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true" />
 								</form:fields>
 							</form:FormElement>

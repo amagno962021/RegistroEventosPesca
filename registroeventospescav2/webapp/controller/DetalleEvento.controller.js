@@ -256,6 +256,8 @@ sap.ui.define([
             }
         },
         cargarListasEventoSelVacias: function (v_this) {
+            v_this._listaEventos[v_this._elementAct].TallaMin = v_this._listaEventos[v_this._elementAct].TallaMin ? v_this._listaEventos[v_this._elementAct].TallaMin : "0";
+            v_this._listaEventos[v_this._elementAct].TallaMax = v_this._listaEventos[v_this._elementAct].TallaMax ? v_this._listaEventos[v_this._elementAct].TallaMax : "0";
             v_this._listaEventos[v_this._elementAct].ESOPE = v_this._listaEventos[v_this._elementAct].ESOPE ? v_this._listaEventos[v_this._elementAct].ESOPE : "";
             v_this._listaEventos[v_this._elementAct].STCMB = v_this._listaEventos[v_this._elementAct].STCMB ? v_this._listaEventos[v_this._elementAct].STCMB : "";
             v_this._listaEventos[v_this._elementAct].ESTSF = v_this._listaEventos[v_this._elementAct].ESTSF ? v_this._listaEventos[v_this._elementAct].ESTSF : "";
@@ -268,10 +270,10 @@ sap.ui.define([
             v_this._listaEventos[v_this._elementAct].LongitudD = v_this._listaEventos[v_this._elementAct].LongitudD ? v_this._listaEventos[v_this._elementAct].LongitudD : "000";
             v_this._listaEventos[v_this._elementAct].LongitudM = v_this._listaEventos[v_this._elementAct].LongitudM ? v_this._listaEventos[v_this._elementAct].LongitudM : "00";
             v_this._listaEventos[v_this._elementAct].CDMNP = v_this._listaEventos[v_this._elementAct].CDMNP ? v_this._listaEventos[v_this._elementAct].CDMNP : "";
-            v_this._listaEventos[v_this._elementAct].ListaBodegas = [];
-            v_this._listaEventos[v_this._elementAct].ListaBiometria = [];
-            v_this._listaEventos[v_this._elementAct].ListaPescaDeclarada = [];
-            v_this._listaEventos[v_this._elementAct].ListaPescaDescargada = [];
+            v_this._listaEventos[v_this._elementAct].ListaBodegas = v_this._listaEventos[v_this._elementAct].ListaBodegas ? v_this._listaEventos[v_this._elementAct].ListaBodegas : [];
+            v_this._listaEventos[v_this._elementAct].ListaBiometria = v_this._listaEventos[v_this._elementAct].ListaBiometria ? v_this._listaEventos[v_this._elementAct].ListaBiometria : [];
+            v_this._listaEventos[v_this._elementAct].ListaPescaDeclarada = v_this._listaEventos[v_this._elementAct].ListaPescaDeclarada ? v_this._listaEventos[v_this._elementAct].ListaPescaDeclarada : [];
+            v_this._listaEventos[v_this._elementAct].ListaPescaDescargada = v_this._listaEventos[v_this._elementAct].ListaPescaDescargada ? v_this._listaEventos[v_this._elementAct].ListaPescaDescargada : [];
             v_this._listaEventos[v_this._elementAct].ListaHorometros = v_this._listaEventos[v_this._elementAct].ListaHorometros ? v_this._listaEventos[v_this._elementAct].ListaHorometros : [];
             v_this._listaEventos[v_this._elementAct].ListaEquipamiento = v_this._listaEventos[v_this._elementAct].ListaEquipamiento ? v_this._listaEventos[v_this._elementAct].ListaEquipamiento :[];
             v_this._listaEventos[v_this._elementAct].ListaAccidente = [];
@@ -1071,51 +1073,60 @@ sap.ui.define([
 
         obtenerPescaDeclarada: function () {
             let sumaCantPesca = Number(0);
-            if (this._listasServicioCargaIni[3] ? true : false) {
-                this._listaEventos[this._elementAct].ListaPescaDeclarada = JSON.parse(this._listasServicioCargaIni[3]).data;
-                for (var j = 0; j < this._listaEventos[this._elementAct].ListaPescaDeclarada.length; j++) {
-
-                    sumaCantPesca = sumaCantPesca + Number(this._listaEventos[this._elementAct].ListaPescaDeclarada[j].CNPCM);
+            let listaPescaDecl = this._listaEventos[this._elementAct].ListaPescaDeclarada ? this._listaEventos[this._elementAct].ListaPescaDeclarada.length : 0;
+            if(listaPescaDecl == 0){
+                if (this._listasServicioCargaIni[3] ? true : false) {
+                    this._listaEventos[this._elementAct].ListaPescaDeclarada = JSON.parse(this._listasServicioCargaIni[3]).data;
+                    for (var j = 0; j < this._listaEventos[this._elementAct].ListaPescaDeclarada.length; j++) {
+    
+                        sumaCantPesca = sumaCantPesca + Number(this._listaEventos[this._elementAct].ListaPescaDeclarada[j].CNPCM);
+                    }
+    
+                    this._listaEventos[this._elementAct].CantTotalPescDecla = sumaCantPesca;
                 }
-
-                this._listaEventos[this._elementAct].CantTotalPescDecla = sumaCantPesca;
             }
-
+            
         },
         obtenerBodegas: function () {
-            if (this._listasServicioCargaIni[4] ? true : false) {
-                this._listaEventos[this._elementAct].ListaBodegas = JSON.parse(this._listasServicioCargaIni[4]).data;
-                //this._ListaBodegas = JSON.parse(this._listasServicioCargaIni[4]).data;
+            let listaBodegas = this._listaEventos[this._elementAct].ListaBodegas ? this._listaEventos[this._elementAct].ListaBodegas.length : 0;
+            if(listaBodegas == 0){
+                if (this._listasServicioCargaIni[4] ? true : false) {
+                    this._listaEventos[this._elementAct].ListaBodegas = JSON.parse(this._listasServicioCargaIni[4]).data;
+                    //this._ListaBodegas = JSON.parse(this._listasServicioCargaIni[4]).data;
+                }
             }
-
+            
         },
 
         obtenerPescaBodega: function () {
-            if (this._listasServicioCargaIni[5] ? true : false) {
-                for (var j = 0; j < this._listaEventos[this._elementAct].ListaBodegas.length; j++) {
-                    try {
-                        let listaPescaBodega1 = JSON.parse(this._listasServicioCargaIni[5]).data;
-                        for (var n = 0; n < listaPescaBodega1.length; n++) {
-                            if (listaPescaBodega1[n].CDBOD == this._listaEventos[this._elementAct].ListaBodegas[j].CDBOD) {
-                                this._listaEventos[this._elementAct].ListaBodegas[j].Indicador = "E";
-                                this._listaEventos[this._elementAct].ListaBodegas[j].CantPesca = listaPescaBodega1[n].CNPCM;
-                                break;
+            let listaBodegas = this._listaEventos[this._elementAct].ListaBodegas ? this._listaEventos[this._elementAct].ListaBodegas.length : 0;
+            if(listaBodegas == 0){
+                if (this._listasServicioCargaIni[5] ? true : false) {
+                    for (var j = 0; j < this._listaEventos[this._elementAct].ListaBodegas.length; j++) {
+                        try {
+                            let listaPescaBodega1 = JSON.parse(this._listasServicioCargaIni[5]).data;
+                            for (var n = 0; n < listaPescaBodega1.length; n++) {
+                                if (listaPescaBodega1[n].CDBOD == this._listaEventos[this._elementAct].ListaBodegas[j].CDBOD) {
+                                    this._listaEventos[this._elementAct].ListaBodegas[j].Indicador = "E";
+                                    this._listaEventos[this._elementAct].ListaBodegas[j].CantPesca = listaPescaBodega1[n].CNPCM;
+                                    break;
+                                }
                             }
+                        } catch (error) {
+    
                         }
-                    } catch (error) {
-
                     }
-                }
-                if (this._listaEventos[this._elementAct].CantTotalPescDecla > 0) {
-                    for (var j = 0; j < this._listaEventos[this._elementAct].ListaPescaDeclarada.length; j++) {
-                        let porcPesca = Number(0);
-                        let cantPesca = Number(this._listaEventos[this._elementAct].ListaPescaDeclarada[j].CNPCM);
-                        porcPesca = (cantPesca * 100) / Number(this._listaEventos[this._elementAct].CantTotalPescDecla);
-                        this._listaEventos[this._elementAct].ListaPescaDeclarada[j].PorcPesca = porcPesca.toFixed(2);
+                    if (this._listaEventos[this._elementAct].CantTotalPescDecla > 0) {
+                        for (var j = 0; j < this._listaEventos[this._elementAct].ListaPescaDeclarada.length; j++) {
+                            let porcPesca = Number(0);
+                            let cantPesca = Number(this._listaEventos[this._elementAct].ListaPescaDeclarada[j].CNPCM);
+                            porcPesca = (cantPesca * 100) / Number(this._listaEventos[this._elementAct].CantTotalPescDecla);
+                            this._listaEventos[this._elementAct].ListaPescaDeclarada[j].PorcPesca = porcPesca.toFixed(2);
+                        }
                     }
                 }
             }
-
+            
         },
         obtenerPuntosDescarga: function () {
             if (this._listasServicioCargaIni[6] ? true : false) {
@@ -1144,7 +1155,7 @@ sap.ui.define([
                     let lstHoro = this._listaEventos[this._elementAct].ListaHorometros
                     if(lstHoro.length > 0){
                         lstHoro.forEach(element => {
-                            element.Chk_averiado = element.averiado === "" ? false : true
+                            element.Chk_averiado = (element.averiado === "" || element.averiado == null) ? false : true
                         });
                     }
                 }else{
