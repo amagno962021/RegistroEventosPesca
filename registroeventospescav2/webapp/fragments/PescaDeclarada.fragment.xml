@@ -3,6 +3,7 @@
 	<m:Panel id="0008" expandable="false">
 		<m:content>
 			<Table
+				class = "tableCol"
 				id="tablePescaDesclarada"
 				selectionMode="Single"
 				rows="{eventos>/ListaPescaDeclarada}"

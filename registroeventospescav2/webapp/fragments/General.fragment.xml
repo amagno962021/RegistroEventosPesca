@@ -1,6 +1,6 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:form="sap.ui.layout.form">
 
-	<Panel id="0002" headerText="Ubicacion" expandable="true" expanded="true">
+	<Panel id="0002" headerText="Ubicacion" expandable="true" expanded="true" class="paneltext">
 		<content>
 			<form:Form width="100%" editable="true" visible="true">
 				<form:formContainers>
