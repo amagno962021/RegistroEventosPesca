@@ -27,13 +27,13 @@
 							<m:Button icon="sap-icon://sys-cancel-2" tooltip="Eliminar descarga" press=".eliminarDesacarga"/>
 						</template>
 					</Column>
-					<Column width="11rem">
+					<Column width="8rem">
 						<m:Label text="Nro. descarga" />
 						<template>
 							<m:Text text="{eventos>Nro_descarga}" wrapping="false" />
 						</template>
 					</Column>
-					<Column width="11rem" filterProperty="Category" defaultFilterOperator="StartsWith">
+					<Column width="8rem" filterProperty="Category" defaultFilterOperator="StartsWith">
 						<m:Label text="Ticket" />
 						<template>
 							<m:Text text="{eventos>TICKE}" wrapping="false" />
@@ -51,13 +51,13 @@
 							<m:Text text="{eventos>DSSPC}" />
 						</template>
 					</Column>
-					<Column width="9rem" filterProperty="Available">
+					<Column width="8rem" filterProperty="Available">
 						<m:Label text="Cant. descargada" />
 						<template>
 							<m:Input value="{eventos>CNPDS}" type="Number" showValueHelp="false" enabled="{eventos>/enabledCantPescDescargada}" visible="true" />
 						</template>
 					</Column>
-					<Column id="price2" width="9rem" filterProperty="Price">
+					<Column id="price2" width="8.5rem" filterProperty="Price">
 						<m:Label text="Cant. declarada" />
 						<template>
 							<m:Input value="{eventos>CantPescaDeclarada}" type="Number" showValueHelp="false" enabled="{eventos>/enabledCantPescDeclDesc}" visible="true" />
@@ -91,7 +91,7 @@
 							<m:DateTimePicker value="{eventos>FFDES} {eventos>HFDES}" displayFormat="dd/MM/yyyy HH:mm:ss" required="false" valueStateText="Invalid entry" enabled="false" visible="true" valueFormat="yyyyMMddHHmmss" />
 						</template>
 					</Column>
-					<Column width="15rem" hAlign="End" filterProperty="Quantity" filterType="sap.ui.model.type.Integer">
+					<Column width="12rem" hAlign="End" filterProperty="Quantity" filterType="sap.ui.model.type.Integer">
 						<m:Label text="Fecha de producción" />
 						<template>
 							<m:DatePicker id= "pd_chi_fechProd" value="{eventos>FECCONMOV}" enabled="{eventos>/enabledFechProdDesc}" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" visible="true" valueFormat="yyyyMMdd" />
