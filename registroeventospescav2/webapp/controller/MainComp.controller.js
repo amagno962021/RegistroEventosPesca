@@ -686,6 +686,35 @@ sap.ui.define([
 
         },
         informarHorometroAveriado: function () {
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
+            let ListaEventos = mod.getProperty("/Eventos/Lista");
+            let Cabecera = mod.getProperty("/Cabecera");
+            let listaHoroAveCorreo = [];
+            ListaEventos.forEach(element => {
+                let LenghtHoro = element.ListaHorometros.length;
+                if(LenghtHoro > 0){
+                    let ListHoro = element.ListaHorometros;
+                    let ListHoroAve = ListHoro.filter(elem => elem.Chk_averiado == true);
+                    if(ListHoroAve > 0){
+                        let obj ={
+                            horometrosAveriados : ListHoroAve,
+                            nroEvento : element.NREVN
+                        };
+                        listaHoroAveCorreo.push(obj);
+                    }
+                }
+            });
+
+            if(listaHoroAveCorreo > 0){
+                //llama al servicio de envio de correo
+                // let serv_correoHoroAve = TasaBackendService.envioCorreoHoroAve(Cabecera.NMEMB , listaHoroAveCorreo);
+                // let that = this;
+                // await Promise.resolve(serv_correoHoroAve).then(values => {
+                //     console.log(values);
+                // }).catch(reason => {
+
+                // });
+            }
 
         },
         enviarCorreosSiniestro: function () {

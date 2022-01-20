@@ -202,17 +202,17 @@ sap.ui.define([
             let me = this;
             me.getDialog_add_especie().open();
             if (this.ctr._motivoMarea == "1") {
-                sap.ui.getCore().byId("fe_popup_cantPesca").setVisible(false);
+                sap.ui.getCore().byId("fe_popup_cantPesca_2").setVisible(false);
             
                         
             } else {
-                sap.ui.getCore().byId("fe_popup_cantPesca").setVisible(true);
+                sap.ui.getCore().byId("fe_popup_cantPesca_2").setVisible(true);
             }
             
 		},
         getDialog_add_especie: function () {
             if (!this.oDialog_e) {
-                this.oDialog_e = sap.ui.xmlfragment("com.tasa.registroeventospescav2.fragments.Popup_especie", this);
+                this.oDialog_e = sap.ui.xmlfragment("com.tasa.registroeventospescav2.fragments.Popup_especie_pescaDcl", this);
                 this._oView.addDependent(this.oDialog_e);
             }
             return this.oDialog_e;
@@ -238,8 +238,8 @@ sap.ui.define([
         obtenerEspecies: function(){
             let nodoPescaDeclarada = this._oView.getModel("eventos").getData().ListaPescaDeclarada;
 			let motivoMarea = this.ctr._motivoMarea;
-			let especie = sap.ui.getCore().byId("cb_especies_espec").getSelectedKey();
-			let cantPesca = sap.ui.getCore().byId("ip_especies_cp").getValue();
+			let especie = sap.ui.getCore().byId("cb_especies_espec_2").getSelectedKey();
+			let cantPesca = sap.ui.getCore().byId("ip_especies_cp_2").getValue();
 			let especiePermitida = this.ctr._listaEventos[this.ctr._elementAct].EspePermitida;//trae vacio
             let bOk = true;
             let Pesca= {};
@@ -294,7 +294,7 @@ sap.ui.define([
                 if(motivoMarea == "2"){
                     this.ctr._listaEventos[this.ctr._elementAct].ListaPescaDeclarada.push({
                         CDSPC: especie,
-                        DSSPC: sap.ui.getCore().byId("cb_especies_espec").getSelectedItem().getText(),
+                        DSSPC: sap.ui.getCore().byId("cb_especies_espec_2").getSelectedItem().getText(),
                         PorcPesca: "",
                         CNPCM: Number(cantPesca).toFixed(2),
                         DSUMD: this.ctr._ConfiguracionEvento.calaDescUMPescaDeclDesc,
@@ -315,7 +315,7 @@ sap.ui.define([
                 }else{
                     this.ctr._listaEventos[this.ctr._elementAct].ListaPescaDeclarada.push({
                         CDSPC: especie,
-                        DSSPC: sap.ui.getCore().byId("cb_especies_espec").getSelectedItem().getText(),
+                        DSSPC: sap.ui.getCore().byId("cb_especies_espec_2").getSelectedItem().getText(),
                         PorcPesca: "",
                         CNPCM: "",
                         DSUMD: this.ctr._ConfiguracionEvento.calaDescUMPescaDeclDesc,

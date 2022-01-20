@@ -1025,7 +1025,21 @@ sap.ui.define([
                 var data = JSON.parse(response);
                 return data;
             });
-        }
+        },
+        envioCorreoHoroAve: async function (nom_embarcacion, listaHoroAve) {
+            var uri = UtilService.getHostService() + "";
+            var sBody = UtilService.getBodyCorreoHoroAve();
+            sBody.embarcacion.descripcion = nom_embarcacion;
+            sBody.embarcacion.eventos = listaHoroAve;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.envioCorreoHoroAve: ", error);
+                return null;
+            });
+            return data;
+        },
 
     });
 

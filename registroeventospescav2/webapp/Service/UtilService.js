@@ -276,6 +276,15 @@ sap.ui.define([
             };
             return sBody;
         },
+        getBodyCorreoHoroAve: function(){
+            var sBody = {
+                embarcacion : {
+                    descripcion : "",
+                    eventos : []
+                }
+            };
+            return sBody;
+        },
 
     }
 
