@@ -1264,6 +1264,7 @@ sap.ui.define([
                         if (evt == "OK") {
                             BusyIndicator.hide();
                             await me.anularVentas(listVentas, indiVentas);
+                            
                         }
                     }
                 });
@@ -1304,6 +1305,7 @@ sap.ui.define([
         },
 
         onNuevaReserva: async function () {
+            BusyIndicator.show(0);
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var inprp = modelo.getProperty("/Cabecera/INPRP");
             if (inprp == "P") {
@@ -1314,6 +1316,7 @@ sap.ui.define([
             }
 
             await this.obtenerNuevoSuministro(false);
+            BusyIndicator.hide();
             this.getNuevaResVenDialog().open();
         },
 
