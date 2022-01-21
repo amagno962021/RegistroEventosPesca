@@ -879,8 +879,11 @@ sap.ui.define([
 
             //Tab Pesca Biometria
             if (this.buscarValorFijo(textValidaciones.EVEVISTABBIOME, this._tipoEvento)) {
-                if (this._listaEventos[this._elementAct].INPRP != textValidaciones.INDIC_PROPIEDAD_TERCEROS) {
+                if (this._FormMarea.INPRP != textValidaciones.INDIC_PROPIEDAD_TERCEROS) {
                     this.getView().byId("idBiometria").setVisible(true);
+                    this.getView().byId("ext_botonesPescaDcl").setVisible(false);
+                }else{
+                    this.getView().byId("ext_botonesPescaDcl").setVisible(true);
                 }
 
             }
@@ -2276,6 +2279,8 @@ sap.ui.define([
             }
             //Cambiar etiqueta a ENVASE sólo cuando se vea calas.
             if (tipoEvento == "3") {
+                this.getView().byId("idTallaMenor").setValue("0");
+                this.getView().byId("idTallaMayor").setValue("0");
                 let fechaIniEnvase = this.getView().byId("FechaEnvaseIni");
                 fechaIniEnvase.setVisible(true);
                 var fechaIniEnvaseText = this.getView().byId("0001");

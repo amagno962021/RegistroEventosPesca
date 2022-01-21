@@ -5,14 +5,39 @@
 	xmlns="sap.m"
 	displayBlock="true"
 	height="100%"
+	xmlns:f="sap.f"
 >
 	
 			<Page title="Detalle de Evento" >
 			<!-- showNavButton="false" navButtonPress="onBackDetalleMarea" -->
 				<content>
+					<!-- <layout:VerticalLayout width="100%" visible="true" class="prueba"> -->
 					<layout:VerticalLayout width="100%" visible="true">
 						<layout:content>
-							<ObjectListItem intro="{DetalleMarea>/Cabecera/DESC_CDMMA}" title="Marea : {=${DetalleMarea>/Cabecera/NRMAR} === '' ? 0 : ${DetalleMarea>/Cabecera/NRMAR} }" icon="sap-icon://order-status" number="" numberUnit="" numberState="None" type="Active" selected="false">
+								<FlexBox wrap="Wrap" fitContainer="true" alignItems="Stretch" class="sapUiSmallMarginBottom sapUiSmallMarginBegin sapUiSmallMarginTop">
+									<VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+									<Label text="{DetalleMarea>/Cabecera/DESC_CDMMA}" design="Bold"/>
+									<f:Avatar
+											displaySize="L"
+											class="sapUiTinyMarginEnd"
+											fallbackIcon="sap-icon://dimension">
+									</f:Avatar>
+									</VBox>
+									<VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+										<layout:VerticalLayout class="sapUiSmallMarginBeginEnd">
+											<ObjectStatus title="Marea" text="{=${DetalleMarea>/Cabecera/NRMAR} === '' ? 0 : ${DetalleMarea>/Cabecera/NRMAR} }" class="sapMObjectStatusLarge" inverted="true" state="Information"/>
+											<ObjectStatus title="Embarcacion" text="{DetalleMarea>/Cabecera/CDEMB} {DetalleMarea>/Cabecera/NMEMB}" class = "sapUiSmallMarginTop"/>
+										</layout:VerticalLayout>
+									</VBox>
+									<VBox justifyContent="Center" class="sapUiSmallMarginEnd">
+										<layout:VerticalLayout class="sapUiSmallMarginBeginEnd">
+											<ObjectStatus title="Matricula" text="{DetalleMarea>/Cabecera/MREMB}"/>
+											<ObjectStatus title="Tipo de Evento" text="{DetalleMarea>/Utils/DescTipoEvento}" class = "sapUiSmallMarginTop" />
+										</layout:VerticalLayout>
+									</VBox>
+									
+								</FlexBox>
+							<!-- <ObjectListItem intro="{DetalleMarea>/Cabecera/DESC_CDMMA}" title="Marea : {=${DetalleMarea>/Cabecera/NRMAR} === '' ? 0 : ${DetalleMarea>/Cabecera/NRMAR} }" icon="sap-icon://order-status" number="" numberUnit="" numberState="None" type="Active" selected="false">
 								<attributes>
 									<ObjectAttribute title="Embarcacion" text="{DetalleMarea>/Cabecera/CDEMB} {DetalleMarea>/Cabecera/NMEMB}" active="false" visible="true" />
 									<ObjectAttribute title="Matricula" text="{DetalleMarea>/Cabecera/MREMB}" active="false" visible="true" />
@@ -20,10 +45,10 @@
 								</attributes>
 								<firstStatus />
 								<secondStatus />
-							</ObjectListItem>
+							</ObjectListItem> -->
 						</layout:content>
 					</layout:VerticalLayout>
-					<IconTabBar id="Tab_eventos" select="obtenerTab"  expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true" selectedKey="Gen">
+					<IconTabBar  id="Tab_eventos" select="obtenerTab"  expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true" selectedKey="Gen">
 						<items>
 							<IconTabFilter key="Gen" id="idGeneral" iconColor="Default" text="General" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false">
 

@@ -396,7 +396,7 @@ sap.ui.define([
                             var bOk = true;
                             this.ctr.Dat_Horometro.calcularCantTotalBodegaEve();
                             var validarBodegas = this.ctr.Dat_PescaDescargada.validarBodegas(true);
-                            if(!validarBodegas){
+                            if(!validarBodegas &&  this.previousTab == "Distribucion"){
                                 this.nextTab = this.previousTab;
                             }else{
                                 if (bOk && this.previousTab == "General" && this.nextTab == "Pesca declarada" && !validarBodegas) {

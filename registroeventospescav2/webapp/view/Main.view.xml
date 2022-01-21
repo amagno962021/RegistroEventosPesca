@@ -17,7 +17,7 @@
                   <items>
                      <IconTabFilter id="itfPropios" icon="sap-icon://person-placeholder" iconColor="Default" text="Propios" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false" count="{ListaMareas>/Utils/CountPropios}">
                         <content>
-                           <Table id="tblMareasPropios" width="auto" noDataText="No data" growing="true" growingThreshold="10" growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'ListaMareas>/PropiosFiltro', templateShareable:true}">
+                           <Table id="tblMareasPropios" width="auto" noDataText="No data" growing="true" growingThreshold="15" growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'ListaMareas>/PropiosFiltro', templateShareable:true}">
                               
                               <columns>
                                  <Column width="5%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
