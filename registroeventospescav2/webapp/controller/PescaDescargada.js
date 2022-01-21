@@ -285,13 +285,16 @@ sap.ui.define([
                 if(bOk && tipoEvento == "6"){
                     visible.VisibleDescarga = false;
                     visible.FechFin = false;
-                    bOk = this.validarPescaDescargada();
-                    if(eventoActual.ListaPescaDescargada[0].CantPescaModificada){
-                        eventoActual.CantTotalPescDescM = eventoActual.ListaPescaDescargada[0].CantPescaModificada;
-                    }else{
-                        eventoActual.CantTotalPescDescM = null;
+                    if(eventoActual.ListaPescaDescargada.length > 0){
+                        bOk = this.validarPescaDescargada();
+                        if(eventoActual.ListaPescaDescargada[0].CantPescaModificada){
+                            eventoActual.CantTotalPescDescM = eventoActual.ListaPescaDescargada[0].CantPescaModificada;
+                        }else{
+                            eventoActual.CantTotalPescDescM = null;
+                        }
+                        this.obtenerTipoDescarga(eveActual);
                     }
-                    this.obtenerTipoDescarga(eveActual);
+                    
                 }
 
                 if(bOk && tipoEvento == "8"){
