@@ -1006,9 +1006,10 @@ sap.ui.define([
                     verEstCierre = true;
                 }
                 if (verEstCierre) {
-                    sap.ui.getCore().byId("estadoMar").setSelectedKey("C");
+                    //sap.ui.getCore().byId("estadoMar").setSelectedKey("C");
                     modelo.setProperty("/DatosGenerales/ESMAR", "C");
                     modelo.setProperty("/Utils/VisibleEstCierre", true);
+                    modelo.refresh();
                 }
                 return verEstCierre;
             }

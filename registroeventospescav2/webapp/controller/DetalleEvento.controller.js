@@ -2976,7 +2976,9 @@ sap.ui.define([
                     verEstCierre = true;
                 }
                 if (verEstCierre) {
+                    modelo.setProperty("/DatosGenerales/ESMAR", "C");
                     modelo.setProperty("/Utils/VisibleEstCierre", true);
+                    modelo.refresh();
                 }
                 return verEstCierre;
             }

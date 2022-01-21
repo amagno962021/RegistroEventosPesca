@@ -3,6 +3,10 @@ tr[data-mydata="A"]{
     background: #BDCFE9!important;
   }
 
+tr[data-mydata="C"]{
+  background: #bde9d3!important;
+}
+
 /* .prueba{
   background: #326ef0;
   background: -webkit-linear-gradient(left, #bbd8ff, #55c487);

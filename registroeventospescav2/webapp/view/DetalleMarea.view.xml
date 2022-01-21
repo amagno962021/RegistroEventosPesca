@@ -361,8 +361,8 @@
 											<ObjectIdentifier title="{DetalleMarea>DSZPC}" text="" titleActive="false" visible="true"/>
 											<ObjectIdentifier title="{DetalleMarea>DSPTO}" text="" titleActive="false" visible="true"/>
 											<ObjectIdentifier title="{DetalleMarea>DESCR}" text="" titleActive="false" visible="true"/>
-											<ObjectNumber number="{DetalleMarea>CNPDC}" unit="Tn." emphasized="true" state="None"/>
-											<ObjectNumber number="{DetalleMarea>CNPDS}" unit="Tn." emphasized="true" state="None"/>
+											<ObjectNumber number="{= ${DetalleMarea>CNPDC} > 0 ? ${DetalleMarea>CNPDC} : '' }" unit="{= ${DetalleMarea>CNPDC} > 0 ? 'Tn' : '' }" emphasized="true" state="None"/>
+											<ObjectNumber number="{= ${DetalleMarea>CNPDS} > 0 ? ${DetalleMarea>CNPDS} : '' }" unit="{= ${DetalleMarea>CNPDS} > 0 ? 'Tn' : '' }" emphasized="true" state="None"/>
 											<Link
 														text="Detalle"
 														press="onNavEventos"

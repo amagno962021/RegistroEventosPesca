@@ -685,7 +685,7 @@ sap.ui.define([
             return bOk;
 
         },
-        informarHorometroAveriado: function () { // errror
+        informarHorometroAveriado: async function () { // errror
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let ListaEventos = mod.getProperty("/Eventos/Lista");
             let Cabecera = mod.getProperty("/Cabecera");
@@ -2229,7 +2229,7 @@ sap.ui.define([
                     dataPropios.push(tmpElement);
                 }
             }
-            //console.log("DATA PROPIOS: ", dataPropios);
+            console.log("DATA PROPIOS: ", dataPropios);
             modelo.setProperty("/PropiosFiltro", dataPropios);
             /*var modeloMareaPropios = new JSONModel(dataPropios);
             this.getView().byId("tblMareasPropios").setModel(modeloMareaPropios);*/
