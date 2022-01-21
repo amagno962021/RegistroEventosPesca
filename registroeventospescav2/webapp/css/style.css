@@ -3,14 +3,14 @@ tr[data-mydata="A"]{
     background: #BDCFE9!important;
   }
 
-.prueba{
+/* .prueba{
   background: #326ef0;
   background: -webkit-linear-gradient(left, #bbd8ff, #55c487);
   background: -o-linear-gradient(left, #bbd8ff, #009605);
   background: -moz-linear-gradient(left, #bbd8ff, #009605);
   background: linear-gradient(left, #bbd8ff, #55c487);
   
-}
+} */
 .prueba2 {
   font-family: Poppins-Medium;
   font-size: 15px;
@@ -82,14 +82,14 @@ tr[data-mydata="A"]{
     font-weight: 600;
 }
 
-#__xmlview3--Tab_eventos--header{
-  background: #4389d8 !important;
-}
+/* #__xmlview3--Tab_eventos--header{
+  background: #154378 !important;
+} */
 
 
-#__xmlview3--idGeneral-text, #__xmlview3--idBiometria-text, #__xmlview3--idPescaDecl-text, #__xmlview3--idHorometro-text, #__xmlview3--idEquipamiento-text, #__xmlview3--idPescaDesc-text{
+/* #__xmlview3--idGeneral-text, #__xmlview3--idBiometria-text, #__xmlview3--idPescaDecl-text, #__xmlview3--idHorometro-text, #__xmlview3--idEquipamiento-text, #__xmlview3--idPescaDesc-text{
   color: white;
-}
+} */
 
 /* .table100.ver6 table {
   background-color: transparent;

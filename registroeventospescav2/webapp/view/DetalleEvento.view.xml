@@ -11,7 +11,8 @@
 			<Page title="Detalle de Evento" >
 			<!-- showNavButton="false" navButtonPress="onBackDetalleMarea" -->
 				<content>
-					<layout:VerticalLayout width="100%" visible="true" class="prueba">
+					<!-- <layout:VerticalLayout width="100%" visible="true" class="prueba"> -->
+					<layout:VerticalLayout width="100%" visible="true">
 						<layout:content>
 								<FlexBox wrap="Wrap" fitContainer="true" alignItems="Stretch" class="sapUiSmallMarginBottom sapUiSmallMarginBegin sapUiSmallMarginTop">
 									<VBox justifyContent="Center" class="sapUiSmallMarginEnd">

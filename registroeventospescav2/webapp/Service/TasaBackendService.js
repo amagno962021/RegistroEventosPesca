@@ -1027,7 +1027,7 @@ sap.ui.define([
             });
         },
         envioCorreoHoroAve: async function (nom_embarcacion, listaHoroAve) {
-            var uri = UtilService.getHostService() + "";
+            var uri = UtilService.getHostService() + "/api/correo/EnviarInfoHorometroAveriado";
             var sBody = UtilService.getBodyCorreoHoroAve();
             sBody.embarcacion.descripcion = nom_embarcacion;
             sBody.embarcacion.eventos = listaHoroAve;
