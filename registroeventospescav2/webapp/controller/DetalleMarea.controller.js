@@ -1431,7 +1431,7 @@ sap.ui.define([
                 nameComponent = "busqarmadores",
                 idComponent = "busqarmadores",
                 oInput = this.getView().byId("idArmadorComercial_R");
-            modeloConst.setProperty("/input", oInput);
+                modeloConst.setProperty("/input", oInput);
 
             if (!this.DialogComponent) {
                 this.DialogComponent = sap.ui.xmlfragment("com.tasa.registroeventospescav2.view.fragments.NuevoArmador", this);
