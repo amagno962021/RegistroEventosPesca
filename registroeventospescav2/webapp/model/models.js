@@ -92,6 +92,9 @@ sap.ui.define([
                     ListaBiometriaElim: [],
                     EvenEliminados: [],
                     PreciosMareaElim: [],
+                    DistribFlotaElim: {
+                        CDEMB: ""
+                    },
                     LeadSelEvento: 0
 				},
                 Incidental: [],

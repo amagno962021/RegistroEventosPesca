@@ -33,7 +33,7 @@
 									<Label text="Observación" width="100%"/>
 								</form:label>
 								<form:fields>
-									<TextArea id="txtObsComb" value="{DetalleMarea>/Cabecera/OBSCOMB}"  width="100%"/>
+									<TextArea id="txtObsCombMarea" value="{DetalleMarea>/Cabecera/OBSCOMB}"  width="100%"/>
 								</form:fields>
 							</form:FormElement>
 						</form:formElements>

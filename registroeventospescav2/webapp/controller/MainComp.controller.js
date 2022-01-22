@@ -360,6 +360,7 @@ sap.ui.define([
             }
 
             //dataDetalleMarea.Eventos.Lista = eventos;
+            console.log("LISTA EVENTOS: ", eventos);
             modeloDetalleMarea.setProperty("/Eventos/Lista", eventos);
             //dataDetalleMarea.Incidental = incidental;
             modeloDetalleMarea.setProperty("/Incidental", incidental);
@@ -444,7 +445,10 @@ sap.ui.define([
                 str_flbsp_e: [],
                 str_pscinc: [],
                 str_desca: [],
-                str_simar: []
+                str_simar: [],
+                str_prema: [],
+                str_disfl: [],
+                str_esper: []
             };
 
             var objMarea = {
@@ -661,6 +665,7 @@ sap.ui.define([
                 marea.str_psdec = marea.str_psdec.concat(pescaDeclarada);
                 marea.str_equip = equipamientos;
                 marea.str_horom = marea.str_horom.concat(horometros);
+                marea.str
             }
 
             console.log("GUARDAR MAREA: ", marea);
@@ -685,6 +690,34 @@ sap.ui.define([
             return bOk;
 
         },
+
+        obtenerALDistribFlota: function(){
+            let modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var distrFlota = modelo.getProperty("/DistribFlota");
+            var distrFlotaElim = modelo.getProperty("/Eventos/DistribFlotaElim");
+            var listaDistrFlota = [];
+            if(distrFlotaElim.CDEMB){
+                var objDistrFlotaElim = {
+                    INDTR: "D",
+                    CDEMB: distrFlotaElim.CDEMB
+                };
+                listaDistrFlota.push(objDistrFlotaElim);
+            }
+
+            if((distrFlota.Indicador && distrFlota.Indicador == "N")){
+                var objDistrFlota = {
+                    INDTR: distrFlota.Indicador,
+                    CDEMB: modelo.getProperty("/Cabecera/CDEMB"),
+                    CDPTA: distrFlota.CDPTA,
+                    FEARR: distrFlota.FEARR,
+                    HEARR: distrFlota.HEARR
+                };
+                listaDistrFlota.push(objDistrFlota);
+            }
+
+            return listaDistrFlota;
+        },
+
         informarHorometroAveriado: async function () { // errror
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let ListaEventos = mod.getProperty("/Eventos/Lista");
@@ -2031,6 +2064,7 @@ sap.ui.define([
             var caracterEditar = constantsUtility.getProperty("/CARACTEREDITAR");
             var response = await TasaBackendService.obtenerDatosDstrFlota(codigo, usuario);
             if (response) {
+                console.log("DSITRIBUCION FLOTA: ", response);
                 for (var key in response) {
                     if (distribFlota.hasOwnProperty(key)) {
                         distribFlota[key] = response[key];

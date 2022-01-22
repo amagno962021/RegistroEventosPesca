@@ -146,7 +146,7 @@ sap.ui.define([
                     return null;
                 }
             }).catch(function(error){
-                console.log("ERROR: TasaBackendService.obtenerDepartamentos: ", error);
+                console.log("ERROR: TasaBackendService.obtenerDatosDstrFlota: ", error);
                 return null
             });
             return data;
