@@ -218,7 +218,7 @@ sap.ui.define([
                         this._controler.Dat_PescaDeclarada.calcularCantTotalPescDeclEve();
                     }
                     if(bOk){
-                        this._controler.Dat_PescaDeclarada.validarCantidadTotalPesca();
+                        await this._controler.Dat_PescaDeclarada.validarCantidadTotalPesca();
                     }
                     if(bOk){
                         bOk = this._controler.Dat_General.validarIncidental();

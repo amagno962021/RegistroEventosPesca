@@ -149,13 +149,13 @@ sap.ui.define([
             //refrescar modelo
         },
 
-        validarCantidadTotalPesca: function(){
+        validarCantidadTotalPesca:async function(){
             var bOk = true;
             this.oBundle = this.ctr.getOwnerComponent().getModel("i18n").getResourceBundle();
             var detalleMarea = this.ctr._FormMarea;//modelo de detalle de marea
             var indProp =  this.ctr._indicadorProp;//obtener indicador de propeidad del modelo de marea
             var cantTotal = 0;
-            cantTotal = this.obtenerCantTotalDeclMarea(0);
+            cantTotal = await this.obtenerCantTotalDeclMarea(0);
 
             if(indProp == "T" && (cantTotal == null || cantTotal == 0)){
                 var mssg = this.oBundle.getText("CANTPESCANOCERO");
@@ -165,7 +165,7 @@ sap.ui.define([
 
             return bOk;
         },
-        obtenerCantTotalDeclMarea :function(nroEventoTope){
+        obtenerCantTotalDeclMarea : async function(nroEventoTope){
             let cantTotal_v = Number(0);
             let codEventoCala = "3";
             let indActual = this.ctr._elementAct;
@@ -175,14 +175,19 @@ sap.ui.define([
 	
             for (let i = 0; i < nodoEventos.length; i++) {
                 let nroEvento = nodoEventos[i].NREVN;		
-                let tipoEvento = nodoEventos[i].CDTEV; 
+                let tipoEvento = nodoEventos[i].CDTEV;
+                this.ctr._elementAct = i; 
+                
                 if (tipoEvento == codEventoCala) {
+                    await this.ctr.obtenerPescaDeclarada();
                     if (eventoConsultado == nroEvento) {
                         if (nodoEventos[i].CantTotalPescDecla != null) {
-                            cantTotal += Number(nodoEventos[i].CantTotalPescDecla);
+                            let cantidadPescaDecl = nodoEventos[i].CantTotalPescDecla ? nodoEventos[i].CantTotalPescDecla : 0;
+                            cantTotal += Number(cantidadPescaDecl);
                         }
-                    } else {                    
-                          cantTotal += Number(nodoEventos[i].CantTotalPescDecla);
+                    } else {       
+                          let cantidadPescaDecl = nodoEventos[i].CantTotalPescDecla ? nodoEventos[i].CantTotalPescDecla : 0;             
+                          cantTotal += Number(cantidadPescaDecl);
                     }
                 } 
                 
@@ -195,6 +200,8 @@ sap.ui.define([
             cantTotal_v = cantTotal;
             
             this.ctr._FormMarea.CantTotalPescDecla = cantTotal;
+            this.ctr._elementAct = indActual;
+
             return cantTotal_v;
         },
         buscarEspeciePopup: function (oEvent) {
