@@ -64,6 +64,7 @@
 														icon="sap-icon://search"
 														press="onAbrirArmadorHelp"
 														visible="{DetalleMarea>/Config/visibleBuscarArmador}"
+														enabled="{DetalleMarea>/Config/enableBtnArmador}"
 													/>	
 													<Text
 														
@@ -179,7 +180,7 @@
 													<Label text="Ubicación de Pesca"  width="100%" />
 												</form:label>
 												<form:fields>
-													<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/INUBC}" items="{DetalleMarea>/Config/datosCombo/UbicPesca}" width="27.5%">
+													<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/INUBC}" items="{DetalleMarea>/Config/datosCombo/UbicPesca}" width="27.5%" enabled="{DetalleMarea>/Config/readOnlyUbicPesca}">
 														<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
 													</ComboBox>
 												</form:fields>
@@ -191,8 +192,8 @@
 												<form:fields>
 													<HBox>
 														<DatePicker value="{DetalleMarea>/DatosGenerales/FEARR}" width="90%"  valueStateText="Invalid entry" 
-																 	valueFormat="dd/MM/yyyy" displayFormat="dd/MM/yyyy"/>
-														<TimePicker id="TP2" value="{DetalleMarea>/DatosGenerales/HEARR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%"/>
+																 	valueFormat="dd/MM/yyyy" displayFormat="dd/MM/yyyy" enabled="{DetalleMarea>/Config/readOnlyFechaEta}"/>
+														<TimePicker id="TP2" value="{DetalleMarea>/DatosGenerales/HEARR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%" enabled="{DetalleMarea>/Config/readOnlyHoraEta}"/>
 													</HBox>
 												</form:fields>
 											</form:FormElement>
@@ -215,8 +216,8 @@
 												<form:fields>
 													<HBox>
 														<DatePicker value="{DetalleMarea>/DatosGenerales/FFMAR}" width="90%"  valueStateText="Invalid entry" 
-																 valueFormat="dd/MM/yyyy HH:mm" displayFormat="dd/MM/yyyy HH:mm"/>
-														<TimePicker id="TP3" value="{DetalleMarea>/DatosGenerales/HFMAR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%"/>
+																 valueFormat="dd/MM/yyyy HH:mm" displayFormat="dd/MM/yyyy HH:mm" enabled="{DetalleMarea>/Config/readOnlyFechFin}"/>
+														<TimePicker id="TP3" value="{DetalleMarea>/DatosGenerales/HFMAR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%" enabled="{DetalleMarea>/Config/readOnlyFechFin}"/>
 													</HBox>
 												</form:fields>
 											</form:FormElement>
@@ -252,7 +253,7 @@
 													<Label text="Observación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 												</form:label>
 												<form:fields>
-													<Input value="{DetalleMarea>/Cabecera/OBMAR}"  enabled="true"  width="27.5%"
+													<Input value="{DetalleMarea>/Cabecera/OBMAR}" enabled="{DetalleMarea>/Config/readOnlyObs}"  width="27.5%"
 																valueStateText="Invalid entry"/>
 												</form:fields>
 											</form:FormElement>
@@ -284,8 +285,8 @@
 										<content>
 											<Title text="{DetalleMarea>/Eventos/TituloEventos}" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
 											<ToolbarSpacer width=""/>
-											<Button icon="sap-icon://add" text="Agregar" type="Emphasized" press="abrirCrearEvento" visible="{DetalleMarea>/Config/visibleDetalleEvento}"/>
-											<Button icon="sap-icon://delete" text="Eliminar" type="Emphasized" press="onEliminarEvento" visible="{DetalleMarea>/Config/visibleDetalleEvento}"/>
+											<Button id="btnAddEvento" icon="sap-icon://add" text="Agregar" type="Emphasized" press="abrirCrearEvento" visible="{DetalleMarea>/Config/visibleAgregarEvento}"/>
+											<Button id="btnDeleteEvento" icon="sap-icon://delete" text="Eliminar" type="Emphasized" press="onEliminarEvento" visible="{DetalleMarea>/Config/visibleEliminarEvento}"/>
 										</content>
 									</OverflowToolbar>
 								</headerToolbar>

@@ -284,10 +284,15 @@ sap.ui.define([
             var marea = modelo.getProperty("/Cabecera/NRMAR");
             var estadoMarea = modelo.getProperty("/DatosGenerales/ESMAR");
             var embarcacion = modelo.getProperty("/Cabecera/CDEMB");
+            var currentUser = await this.getCurrentUser();
             var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
             var initData = oStore.get('InitData');
             modelo.setData(initData);
-            await this.cargarMarea(marea, estadoMarea, embarcacion, false);
+            var response = await TasaBackendService.obtenerDetalleMarea(marea, currentUser);
+            if (response) {
+                await this.setDetalleMarea(response, false);
+            }
+            //await this.cargarMarea(marea, estadoMarea, embarcacion, false);
             BusyIndicator.hide();
             var viewName = view.split(".")[4];
             if (viewName == "DetalleMarea") {
