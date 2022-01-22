@@ -595,7 +595,7 @@ sap.ui.define([
                 if (this._tipoEvento == textValidaciones.TIPOEVENTOCALA) {
                     this.Dat_Biometria.cargarDataBiometria();
                     this.obtenerCoordZonaPesca();
-                    this.obtenerPescaDeclarada();
+                    await this.obtenerPescaDeclarada();
                     if (this._motivoMarea == "1") {
                         this.obtenerBodegas();
                         this.obtenerPescaBodega();
@@ -1074,10 +1074,11 @@ sap.ui.define([
             return cadenaGeo;
         },
 
-        obtenerPescaDeclarada: function () {
+        obtenerPescaDeclarada:async function () {
             let sumaCantPesca = Number(0);
             let listaPescaDecl = this._listaEventos[this._elementAct].ListaPescaDeclarada ? this._listaEventos[this._elementAct].ListaPescaDeclarada.length : 0;
             if(listaPescaDecl == 0){
+                await this.service_obtenerListaPescaDecl();
                 if (this._listasServicioCargaIni[3] ? true : false) {
                     this._listaEventos[this._elementAct].ListaPescaDeclarada = JSON.parse(this._listasServicioCargaIni[3]).data;
                     for (var j = 0; j < this._listaEventos[this._elementAct].ListaPescaDeclarada.length; j++) {
@@ -2349,7 +2350,7 @@ sap.ui.define([
             
             if (tipoEvento == "5") {
                 this.getView().byId("FechaEnvaseIni").setVisible(true);
-                let totalPescaCala = this.Dat_PescaDeclarada.obtenerCantTotalDeclMarea(0);
+                let totalPescaCala = await this.Dat_PescaDeclarada.obtenerCantTotalDeclMarea(0);
                 let totalPescaDeclDesc = this.obtenerCantTotalPescaDeclDesc(0,this);
                 
                 nodoEventos[this._eventoNuevo].CantTotalPescDecla = totalPescaCala;	//Cantidad total de pesca declarada por marea
@@ -2638,6 +2639,17 @@ sap.ui.define([
             let that = this;
             await Promise.resolve(serv_errorDesc).then(values => {
                 that._listasServicioCargaIni[8] = values.lista;
+            }).catch(reason => {
+
+            });
+
+        },
+
+        service_obtenerListaPescaDecl: async function () {
+            let serv_errorDesc = TasaBackendService.obtenerListaPescaDeclarada(this._nroMarea, this._listaEventos[this._elementAct].NREVN, this.getCurrentUser());
+            let that = this;
+            await Promise.resolve(serv_errorDesc).then(values => {
+                that._listasServicioCargaIni[3] = values;
             }).catch(reason => {
 
             });

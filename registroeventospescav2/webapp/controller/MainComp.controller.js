@@ -805,7 +805,6 @@ sap.ui.define([
 
         guardarDatosBiometria: function () {
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
-            let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
             let ListaEventos = mod.getProperty("/Eventos/Lista");
             let motivoMarea = mod.getProperty("/Cabecera/CDMMA");
             let t_max = Number(mod.getProperty("/Utils/TallaMax"));
@@ -831,8 +830,8 @@ sap.ui.define([
                                 }
 
                                 var Biometria = {
-                                    NRMAR: ListaEventos[elementSel].NRMAR,
-                                    NREVN: ListaEventos[elementSel].NREVN,
+                                    NRMAR: ListaEventos[index1].NRMAR,
+                                    NREVN: ListaEventos[index1].NREVN,
                                     CDSPC: element.CodEspecie,
                                     TMMED: k,
                                     CNSPC: element['col_' + v_talla_bio]
@@ -844,8 +843,8 @@ sap.ui.define([
 
                             for (let k = t_min; k <= t_max; k++) {
                                 var Biometria = {
-                                    NRMAR: ListaEventos[elementSel].NRMAR,
-                                    NREVN: ListaEventos[elementSel].NREVN,
+                                    NRMAR: ListaEventos[index1].NRMAR,
+                                    NREVN: ListaEventos[index1].NREVN,
                                     CDSPC: element.CodEspecie,
                                     TMMED: k,
                                     CNSPC: element['col_' + k]
@@ -921,7 +920,7 @@ sap.ui.define([
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
             let ListaEventos = mod.getProperty("/Eventos/Lista");
-            var pescaDeclarada = ListaEventos[elementSel].ListaPescaDeclarada;//modelo pesca declarada
+            var pescaDeclarada = elementParam.ListaPescaDeclarada;//modelo pesca declarada
             var lista = [];
             for (let index = 0; index < pescaDeclarada.length; index++) {
                 const element = pescaDeclarada[index];

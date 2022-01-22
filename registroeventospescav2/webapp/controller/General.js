@@ -419,9 +419,9 @@ sap.ui.define([
 
                         //var valCantTotPesca = this.ctr.Dat_PescaDeclarada.validarCantidadTotalPesca();
                         if (this.previousTab != "General") {
-                            if(this.ctr._indicadorProp == "T" && (!this.ctr.Dat_PescaDeclarada.validarCantidadTotalPesca())){
+                            if(this.ctr._indicadorProp == "T" && (await !this.ctr.Dat_PescaDeclarada.validarCantidadTotalPesca())){
                                 this.nextTab = "Pesca declarada";
-                            }else if((!this.ctr.Dat_PescaDeclarada.validarCantidadTotalPesca())){
+                            }else if((await !this.ctr.Dat_PescaDeclarada.validarCantidadTotalPesca())){
                                 this.nextTab = this.previousTab;
                             }
                         }
