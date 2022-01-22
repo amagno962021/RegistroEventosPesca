@@ -286,8 +286,12 @@ sap.ui.define([
                                 oButton.setText(this.highestSeverityMessages("DM"));
                             }.bind(this), 100);
                             modelo.setProperty("/Config/visibleDetalleEvento", false);
+                            modelo.setProperty("/Config/visibleAgregarEvento", false);
+                            modelo.setProperty("/Config/visibleEliminarEvento", false);
                         } else {
                             modelo.setProperty("/Config/visibleDetalleEvento", true);
+                            modelo.setProperty("/Config/visibleAgregarEvento", true);
+                            modelo.setProperty("/Config/visibleEliminarEvento", true);
                         }
                     }
 
@@ -609,6 +613,7 @@ sap.ui.define([
             //ocultar fecha inicio fecha fin
             var modelo = context.getOwnerComponent().getModel("DetalleMarea");
             var indProp = modelo.getProperty("/Cabecera/INPRP");
+            var esmar = modelo.getProperty("/DatosGenerales/ESMAR");
             if (indProp == "P") {
                 modelo.setProperty("/Config/visibleLinkCrearArmador", false);
                 modelo.setProperty("/Config/visibleBuscarArmador", false);
@@ -643,6 +648,24 @@ sap.ui.define([
                 await context.validaDescargas();
             }
 
+            if (esmar == "C") {
+                modelo.setProperty("/Config/enableBtnArmador", false);
+                modelo.setProperty("/Config/visibleAgregarEvento", false);
+                modelo.setProperty("/Config/visibleEliminarEvento", false);
+                modelo.setProperty("/Config/readOnlyMotMarea", false);
+                modelo.setProperty("/Config/visibleBtnGuardar", false);
+                modelo.setProperty("/Config/visibleBtnSiguiente", false);
+                modelo.setProperty("/Config/visibleLinkCrearArmador", false);
+                modelo.setProperty("/Config/readOnlyMotMarea", false);
+                modelo.setProperty("/Config/readOnlyUbicPesca", false);
+                modelo.setProperty("/Config/readOnlyEstaMar", false);
+                modelo.setProperty("/Config/readOnlyObs", false);
+                modelo.setProperty("/Config/readOnlyFechaEta", false);
+                modelo.setProperty("/Config/readOnlyHoraEta", false);
+                modelo.setProperty("/Config/readOnlyFechIni", false);
+                modelo.setProperty("/Config/readOnlyFechFin", false);
+                modelo.refresh();
+            }
         },
 
         validarTemporadaVeda: async function () {
@@ -1303,8 +1326,12 @@ sap.ui.define([
                     oButton.setText(this.highestSeverityMessages("DM"));
                 }.bind(this), 100);
                 modelo.setProperty("/Config/visibleDetalleEvento", false);
+                modelo.setProperty("/Config/visibleAgregarEvento", false);
+                modelo.setProperty("/Config/visibleEliminarEvento", false);
             } else {
                 modelo.setProperty("/Config/visibleDetalleEvento", true);
+                modelo.setProperty("/Config/visibleAgregarEvento", true);
+                modelo.setProperty("/Config/visibleEliminarEvento", true);
             }
         },
 
