@@ -72,6 +72,16 @@ sap.ui.define([
 
             BusyIndicator.hide();
         },
+        
+        /**
+         * @override
+         */
+        onAfterRendering: function() {
+            
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            console.log("MODELO: ", modelo);
+        
+        },
 
         cargarMessagePopover: function () {
             var oMessageTemplate = new MessageItem({
@@ -157,7 +167,7 @@ sap.ui.define([
                 var tipoEvento = ultimoEvento.CDTEV;
                 var tipoEvntInt = !isNaN(tipoEvento) ? parseInt(tipoEvento) + 1 : 0;
                 var nuevoEvento = tipoEvntInt.toString();
-                sap.ui.getCore().byId("ne_tipoEvn").setSelectedKey(nuevoEvento);
+                //sap.ui.getCore().byId("ne_tipoEvn").setSelectedKey(nuevoEvento); COMENTADO DA ERROR
                 modelo.setProperty("/Utils/TipoEvento", nuevoEvento);
             }
             this.getNuevoEvento().open();
@@ -872,12 +882,12 @@ sap.ui.define([
                         campos = ["/DatosGenerales/FIMAR", "/DatosGenerales/FFMAR"];
                     }
                 }
-                if (campos.length > 0) {
+                /*if (campos.length > 0) {
                     var emba = await this.consultarEmba(embarcacion);
                     if (emba) {
                         await this.verificarCambiosCodigo("EMB", embarcacion, emba[0]);
                     }
-                }
+                }*/
             } else {
                 if (motivoSinZarpe.includes(motivo) && estado == "C") {
                     campos = ["/DatosGenerales/HIMAR", "/DatosGenerales/FFMAR"]

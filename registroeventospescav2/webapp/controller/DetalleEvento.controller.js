@@ -1548,6 +1548,7 @@ sap.ui.define([
                     // let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
                     // o_iconTabBar.setSelectedKey("");
                     await this.cargarValoresFormateados();
+                    console.log("MOD: ", mod);
                     this.getView().getModel("eventos").updateBindings(true);
                     history.go(-1);
                 }
