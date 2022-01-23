@@ -439,7 +439,7 @@ sap.ui.define([
                 p_orto2: modelo.getProperty("/DatosGenerales/NuevoArmador/DISTRITO"),
                 p_orto1: modelo.getProperty("/DatosGenerales/NuevoArmador/PROVINCIA"),
                 p_regio: modelo.getProperty("/DatosGenerales/NuevoArmador/DEPARTAMENTO"),
-                p_dsmma: modelo.getProperty("/Cabecera/CDMMA") == "1" ? "CHD" : null,
+                p_dsmma: modelo.getProperty("/DatosGenerales/CDMMA") == "1" ? "CHD" : null,
                 str_marea: [],
                 str_evento: [],
                 str_equip: [],

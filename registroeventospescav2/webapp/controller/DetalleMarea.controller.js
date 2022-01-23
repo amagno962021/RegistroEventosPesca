@@ -150,8 +150,8 @@ sap.ui.define([
 
         abrirCrearEvento: function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            modelo.refresh();
             var listaEventos = modelo.getProperty("/Eventos/Lista");
-            this.getNuevoEvento().open();
             if (listaEventos.length > 0) {
                 var ultimoEvento = listaEventos[listaEventos.length - 1];
                 var tipoEvento = ultimoEvento.CDTEV;
@@ -160,7 +160,7 @@ sap.ui.define([
                 sap.ui.getCore().byId("ne_tipoEvn").setSelectedKey(nuevoEvento);
                 modelo.setProperty("/Utils/TipoEvento", nuevoEvento);
             }
-            
+            this.getNuevoEvento().open();
         },
 
         onEliminarEvento: async function (evt) {
