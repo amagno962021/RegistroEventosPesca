@@ -670,7 +670,7 @@ sap.ui.define([
                 marea.str_psdec = marea.str_psdec.concat(pescaDeclarada);
                 marea.str_equip = equipamientos;
                 marea.str_horom = marea.str_horom.concat(horometros);
-                marea.str
+                marea.str_disfl = this.obtenerALDistribFlota();
             }
 
             console.log("GUARDAR MAREA: ", marea);
@@ -701,7 +701,7 @@ sap.ui.define([
             var distrFlota = modelo.getProperty("/DistribFlota");
             var distrFlotaElim = modelo.getProperty("/Eventos/DistribFlotaElim");
             var listaDistrFlota = [];
-            if(distrFlotaElim.CDEMB){
+            if(distrFlotaElim.CDEMB){           
                 var objDistrFlotaElim = {
                     INDTR: "D",
                     CDEMB: distrFlotaElim.CDEMB
@@ -714,8 +714,8 @@ sap.ui.define([
                     INDTR: distrFlota.Indicador,
                     CDEMB: modelo.getProperty("/Cabecera/CDEMB"),
                     CDPTA: distrFlota.CDPTA,
-                    FEARR: distrFlota.FEARR,
-                    HEARR: distrFlota.HEARR
+                    FEARR: Utils.strDateToDate(distrFlota.FEARR),
+                    HEARR: Utils.strHourToSapHo(distrFlota.HEARR)                   
                 };
                 listaDistrFlota.push(objDistrFlota);
             }

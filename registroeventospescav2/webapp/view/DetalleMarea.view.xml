@@ -58,7 +58,7 @@
 								
 													<HBox
 													>
-														<Input id="idArmadorComercial_R" value="{DetalleMarea>/DatosGenerales/CDEMP}" enabled="false" 
+														<Input id="idArmadorComercial_R" value="{DetalleMarea>/DatosGenerales/CDEMP}" enabled="true" 
 																width="auto" valueStateText="Invalid entry"/>
 													<Button
 														icon="sap-icon://search"
