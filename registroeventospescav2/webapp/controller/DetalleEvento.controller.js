@@ -109,6 +109,7 @@ sap.ui.define([
 
             var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
             oStore.put("ListaBck", ListaEventos_cont);
+            this.getView().byId("Tab_eventos").setSelectedKey("");
 
             if(TipoCons == "E"){
                 /************ Carga de fragments de los eventos **************/
