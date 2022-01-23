@@ -369,7 +369,7 @@ sap.ui.define([
                     visible.LinkDescartar = false;
                     var tipoEvento = eventoActual.CDTEV;
                     var motivoMarea = detalleMarea.CDMMA;
-                    var fechEvento = new Date(eventoActual.FIEVN);
+                    var fechEvento = eventoActual.FIEVN == null ? null : eventoActual.FIEVN;
                     if (this.previousTab == "General") {
                         //var validarStockCombustible = await this.validarStockCombustible();
                         let val = await this.validarCamposGeneral(true);
@@ -378,8 +378,8 @@ sap.ui.define([
                         } else if (tipoEvento == "6" && motivoEnCalend.includes(motivoMarea)) {
                             visible.visibleDescarga = false;
                             visible.FechFin = false;
-                            var verificarTemporada = this.verificarTemporada(motivoMarea, fechEvento);
-                            if (fechEvento && !verificarTemporada) {
+                            //var verificarTemporada = this.verificarTemporada(motivoMarea, fechEvento);
+                            if (fechEvento && !(this.verificarTemporada(motivoMarea, fechEvento))) {
                                 this.nextTab = this.previousTab;
                             }
                         } else if (tipoEvento == "5" && visible.TabHorometro) {
