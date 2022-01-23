@@ -925,7 +925,7 @@ sap.ui.define([
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
             let ListaEventos = mod.getProperty("/Eventos/Lista");
-            var pescaDeclarada = elementParam.ListaPescaDeclarada;//modelo pesca declarada
+            var pescaDeclarada = elementParam.ListaPescaDeclarada ? elementParam.ListaPescaDeclarada : [];//modelo pesca declarada
             var lista = [];
             for (let index = 0; index < pescaDeclarada.length; index++) {
                 const element = pescaDeclarada[index];

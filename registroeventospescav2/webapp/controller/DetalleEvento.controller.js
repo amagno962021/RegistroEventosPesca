@@ -171,6 +171,7 @@ sap.ui.define([
                 v_this._listaEventosBkup;
                 v_this._listaMareaAnterior = MareaAnterior_cont;
                 v_this._eventoNuevo = "5"; //VALOR DEL ID DEL EVENTO NUEVO DE LA LISTA PRINCIPAL
+                v_this._validBodegas = false;
                 this.cargarListasEventoSelVacias(v_this);
                 /************ Listas iniciales vacias **************/
                 v_this._ConfiguracionEvento = {};
@@ -1095,16 +1096,18 @@ sap.ui.define([
             let listaBodegas = this._listaEventos[this._elementAct].ListaBodegas ? this._listaEventos[this._elementAct].ListaBodegas.length : 0;
             if(listaBodegas == 0){
                 if (this._listasServicioCargaIni[4] ? true : false) {
+                    this._validBodegas = false;
                     this._listaEventos[this._elementAct].ListaBodegas = JSON.parse(this._listasServicioCargaIni[4]).data;
                     //this._ListaBodegas = JSON.parse(this._listasServicioCargaIni[4]).data;
                 }
+            }else{
+                this._validBodegas = true;
             }
             
         },
 
         obtenerPescaBodega: function () {
-            let listaBodegas = this._listaEventos[this._elementAct].ListaBodegas ? this._listaEventos[this._elementAct].ListaBodegas.length : 0;
-            if(listaBodegas == 0){
+            if(!this._validBodegas){
                 if (this._listasServicioCargaIni[5] ? true : false) {
                     for (var j = 0; j < this._listaEventos[this._elementAct].ListaBodegas.length; j++) {
                         try {
@@ -1140,15 +1143,18 @@ sap.ui.define([
         },
 
         obtenerPescaDescargada: function (v_this) {
-            if (v_this._listasServicioCargaIni[7] ? true : false) {
-                v_this._listaEventos[v_this._elementAct].ListaPescaDescargada = JSON.parse(v_this._listasServicioCargaIni[7]).data;
-                if(v_this._listaEventos[v_this._elementAct].ListaPescaDescargada.length > 0){
-                    v_this._listaEventos[v_this._elementAct].ListaPescaDescargada[0].CantPescaDeclarada = v_this._listaEventos[v_this._elementAct].ListaPescaDescargada[0].CNPCM;
-                    v_this._listaEventos[v_this._elementAct].ListaPescaDescargada[0].BckCantPescaModificada = v_this._listaEventos[v_this._elementAct].ListaPescaDescargada[0].CNPDS;
-                    v_this._listaEventos[v_this._elementAct].FechProduccion = v_this._listaEventos[v_this._elementAct].ListaPescaDescargada[0].FECCONMOV;
+            let lstPescaDecl = v_this._listaEventos[v_this._elementAct].ListaPescaDescargada ? v_this._listaEventos[v_this._elementAct].ListaPescaDescargada : [];
+            if(lstPescaDecl.length == 0){
+                if (v_this._listasServicioCargaIni[7] ? true : false) {
+                    v_this._listaEventos[v_this._elementAct].ListaPescaDescargada = JSON.parse(v_this._listasServicioCargaIni[7]).data;
+                    if(v_this._listaEventos[v_this._elementAct].ListaPescaDescargada.length > 0){
+                        v_this._listaEventos[v_this._elementAct].ListaPescaDescargada[0].CantPescaDeclarada = v_this._listaEventos[v_this._elementAct].ListaPescaDescargada[0].CNPCM;
+                        v_this._listaEventos[v_this._elementAct].ListaPescaDescargada[0].BckCantPescaModificada = v_this._listaEventos[v_this._elementAct].ListaPescaDescargada[0].CNPDS;
+                        v_this._listaEventos[v_this._elementAct].FechProduccion = v_this._listaEventos[v_this._elementAct].ListaPescaDescargada[0].FECCONMOV;
+                    }
                 }
             }
-
+            
         },
         obtenerHorometros: async function () {
             let listaHor = this._listaEventos[this._elementAct].ListaHorometros ? this._listaEventos[this._elementAct].ListaHorometros.length : 0;
