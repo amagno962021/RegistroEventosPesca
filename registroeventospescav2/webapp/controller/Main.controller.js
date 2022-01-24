@@ -29,21 +29,7 @@ sap.ui.define([
                 BusyIndicator.show(0);
                 //var currentUser = await this.getCurrentUser();
                 this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
-                //this.formCust = sap.ui.controller("com.tasa.registroeventospescav2.controller.FormCust")
-                BusyIndicator.show(0);
-                var currentUser = await this.getCurrentUser();
-                var listaMareas = await TasaBackendService.cargarListaMareas(currentUser);
-                if (listaMareas) {
-                    var tipoEmba = await TasaBackendService.obtenerTipoEmbarcacion(currentUser);
-                    if (tipoEmba) {
-                        var plantas = await TasaBackendService.obtenerPlantas(currentUser);
-                        if (plantas) {
-                            this.prepararDataTree(tipoEmba, plantas.data);
-                            this.validarDataMareas(listaMareas);
-                        }
-                    }
-                }
-                BusyIndicator.hide();
+                //this.formCust = sap.ui.controller("com.tasa.registroeventospescav2.controller.FormCust"
                 /*
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 var cdpta = oStore.get("CDPTA");
@@ -69,7 +55,7 @@ sap.ui.define([
                 var dataModelo = modelo.getData();
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 oStore.put('InitData', dataModelo);
-
+                
 
             },
 
@@ -85,10 +71,28 @@ sap.ui.define([
              */
             onAfterRendering: async function () {
                 //MainComp.prototype.onAfterRendering.apply(this, arguments);
+                
                 this.objetoHelp = this._getHelpSearch();
                 this.parameter = this.objetoHelp[0].parameter;
                 this.url = this.objetoHelp[0].url;
                 await this.callConstantes();
+
+                BusyIndicator.show(0);
+                var currentUser = await this.getCurrentUser();
+                var listaMareas = await TasaBackendService.cargarListaMareas(currentUser);
+                if (listaMareas) {
+                    var tipoEmba = await TasaBackendService.obtenerTipoEmbarcacion(currentUser);
+                    if (tipoEmba) {
+                        var plantas = await TasaBackendService.obtenerPlantas(currentUser);
+                        if (plantas) {
+                            this.prepararDataTree(tipoEmba, plantas.data);
+                            this.validarDataMareas(listaMareas);
+                        }
+                    }
+                }
+                BusyIndicator.hide();
+
+
                 //BusyIndicator.hide();
             },
 

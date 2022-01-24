@@ -58,7 +58,7 @@
 								
 													<HBox
 													>
-														<Input id="idArmadorComercial_R" value="{DetalleMarea>/DatosGenerales/CDEMP}" enabled="true" 
+														<Input id="idArmadorComercial_R" value="{DetalleMarea>/DatosGenerales/CDEMP}" enabled="false" 
 																width="auto" valueStateText="Invalid entry"/>
 													<Button
 														icon="sap-icon://search"
@@ -876,7 +876,7 @@
 					<ToolbarSpacer width=""/>
 					<Button text="Guardar" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleBtnGuardar}"
 								iconDensityAware="false" press="onSave"/>
-					<Button text="Siguiente" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleBtnSiguiente}"
+					<Button text="Siguiente" type="Emphasized" icon="sap-icon://open-command-field" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleBtnSiguiente}"
 								iconDensityAware="false" press="onNext"/>
 					<Button text="Crear" type="Accept" icon="sap-icon://create" iconFirst="true" width="auto" enabled="true" visible="false"
 								iconDensityAware="false"/>

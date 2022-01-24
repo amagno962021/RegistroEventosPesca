@@ -454,51 +454,54 @@ sap.ui.define([
                 //dataDetalleMarea.Config.datosCombo.Departamentos = departamentos;
             }
 
-            //combo motivos de marea
-            var motivosMareas = await TasaBackendService.obtenerDominio("ZCDMMA")
-            if (motivosMareas) {
-                var sData = motivosMareas.data[0].data;
-                var inprp = dataDetalleMarea.Cabecera.INPRP;
-                var items = [];
-                if (inprp == "P") {
-                    items = sData
-                } else {
-                    for (let index = 0; index < sData.length; index++) {
-                        const element = sData[index];
-                        if (element.id == "1" || element.id == "2") {
-                            items.push(element);
+            var listaDominios = [{
+                "domname": "ZCDMMA",
+                "status": "A"
+            }, {
+                "domname": "ZDO_ZINUBC",
+                "status": "A"
+            }, {
+                "domname": "ZDO_ZESMAR",
+                "status": "A"
+            }, {
+                "domname": "ZCDTEV",
+                "status": "A"
+            }];
+
+            var dominios = await TasaBackendService.obtenerDominioVarios(listaDominios);
+            if(dominios){
+                var data = dominios.data;
+                if (data.length > 0) {
+                    //motivos de marea
+                    var motivosMarea = data[0].data;
+                    var inprp = modeloDetalleMarea.getProperty("/Cabecera/INPRP");
+                    var items = [];
+                    if (inprp == "P") {
+                        items = motivosMarea
+                    } else {
+                        for (let index = 0; index < motivosMarea.length; index++) {
+                            const element = motivosMarea[index];
+                            if (element.id == "1" || element.id == "2") {
+                                items.push(element);
+                            }
                         }
                     }
+                    modeloDetalleMarea.setProperty("/Config/datosCombo/MotivosMarea", items);
+
+                    //indicador de ubicacion
+                    var indUbic = data[1].data;
+                    modeloDetalleMarea.setProperty("/Config/datosCombo/UbicPesca", indUbic);
+
+                    //estado de marea
+                    var estadosMarea = data[2].data;
+                    modeloDetalleMarea.setProperty("/Config/datosCombo/EstMar", estadosMarea);
+
+                    //tipos evento
+                    var tiposEvento = data[3].data;
+                    this.validaComboTipoEvento(tiposEvento);
+
                 }
-                dataDetalleMarea.Config.datosCombo.MotivosMarea = items;
-                modeloDetalleMarea.refresh();
             }
-
-            //combo ubicacion de pesca
-            TasaBackendService.obtenerDominio("ZDO_ZINUBC").then(function (response) {
-                var sData = response.data[0].data;
-                dataDetalleMarea.Config.datosCombo.UbicPesca = sData;
-                modeloDetalleMarea.refresh();
-            }).catch(function (error) {
-                console.log("ERROR: DetalleMarea.cargarCombos - ", error);
-            });
-
-            //combo estado de marea
-            TasaBackendService.obtenerDominio("ZDO_ZESMAR").then(function (response) {
-                var sData = response.data[0].data;
-                dataDetalleMarea.Config.datosCombo.EstMar = sData;
-                modeloDetalleMarea.refresh();
-            }).catch(function (error) {
-                console.log("ERROR: DetalleMarea.cargarCombos - ", error);
-            });
-
-            //combo tipo de eventos
-            TasaBackendService.obtenerDominio("ZCDTEV").then(function (response) {
-                var sData = response.data[0].data;
-                me.validaComboTipoEvento(sData);
-            }).catch(function (error) {
-                console.log("ERROR: DetalleMarea.cargarCombos - ", error);
-            });
         },
 
         validaFechaNulaEvt: function (context) {

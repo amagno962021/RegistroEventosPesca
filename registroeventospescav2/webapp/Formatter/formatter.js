@@ -5,7 +5,7 @@ sap.ui.define([
     return {
 
         eventoTexto: async function (cdtev) {
-            return await TasaBackendService.obtenerDominio("ZCDTEV").then(function(response){
+            /*return await TasaBackendService.obtenerDominio("ZCDTEV").then(function(response){
                 var sData = response.data[0].data;
                 for (let index = 0; index < sData.length; index++) {
                     const element = sData[index];
@@ -16,11 +16,11 @@ sap.ui.define([
                 }
             }).catch(function(error){
                 console.log("ERROR: Formatter.eventoTexto - ", error );
-            });
+            });*/
         },
 
         motivoMareaTexto: async function (cdmma) {
-            return await TasaBackendService.obtenerDominio("ZDO_ZCDMMA").then(function(response){
+            /*return await TasaBackendService.obtenerDominio("ZDO_ZCDMMA").then(function(response){
                 var sData = response.data[0].data;
                 for (let index = 0; index < sData.length; index++) {
                     const element = sData[index];
@@ -31,7 +31,7 @@ sap.ui.define([
                 }
             }).catch(function(error){
                 console.log("ERROR: Formatter.eventoTexto - ", error );
-            });
+            });*/
         }
 
 
