@@ -12,7 +12,7 @@
 									<Label text="Fecha/Hora Inic. Cala" design="Standard" width="100%" required="false" textAlign="Left" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<DatePicker value="{eventos>/FICAL}" id="dtp_fechaIniCala" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="dd/MM/yyyy" change=".validarFechaCalas_Evn" />
+									<DatePicker value="{eventos>/FICAL}" id="dtp_fechaIniCala" width="100%" displayFormat="dd/MM/yyyy" valueStateText="Invalid entry"  valueFormat="dd/MM/yyyy" change=".validarFechaCalas_Evn" />
 									<TimePicker id="dtp_horaIniCala" value="{eventos>/HICAL}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%" change=".validarFechaCalas_Evn"/>
 								</form:fields>
 							</form:FormElement>
