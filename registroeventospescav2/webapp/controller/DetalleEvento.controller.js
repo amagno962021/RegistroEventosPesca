@@ -68,6 +68,15 @@ sap.ui.define([
             console.log(this.getOwnerComponent().getModel("DetalleMarea"));
             this.cargarMessagePopover();
         },
+        /**
+         * @override
+         */
+        onExit: function() {
+            console.log("SALIENDO DEL COMPONENTE DE EVENTOS")
+            //MainComp.prototype.onExit.apply(this, arguments);
+            
+        
+        },
         cargarMessagePopover: function(){
             let oMessageTemplate = new MessageItem({
 				type: '{DetalleMarea>type}',
@@ -454,6 +463,7 @@ sap.ui.define([
             }
 
             oStore.put("flagFragment", false);
+            this._listaEventos[this._elementAct].ESOPE = this._listaEventos[this._elementAct].ESOPE ? this._listaEventos[this._elementAct].ESOPE : "N";
 
             //SETEAR VALOR GLOBAL FRAGMENTS
             this.Dat_Horometro = o_fragment9;

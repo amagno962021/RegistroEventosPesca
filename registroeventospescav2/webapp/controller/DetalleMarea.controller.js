@@ -157,7 +157,7 @@ sap.ui.define([
                 var tipoEvento = ultimoEvento.CDTEV;
                 var tipoEvntInt = !isNaN(tipoEvento) ? parseInt(tipoEvento) + 1 : 0;
                 var nuevoEvento = tipoEvntInt.toString();
-                sap.ui.getCore().byId("ne_tipoEvn").setSelectedKey(nuevoEvento);
+                //sap.ui.getCore().byId("ne_tipoEvn").setSelectedKey(nuevoEvento);
                 modelo.setProperty("/Utils/TipoEvento", nuevoEvento);
             }
             this.getNuevoEvento().open();
