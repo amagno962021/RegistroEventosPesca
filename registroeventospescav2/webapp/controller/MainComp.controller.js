@@ -1683,6 +1683,7 @@ sap.ui.define([
                 codigo = codigo.trim();
                 if (tipo == "EMB") {
                     //if (this.bckEmbarcacion == null || codigo != this.bckEmbarcacion) {
+                        console.log("SETEA NULL AQUI 1");
                     modelo.setProperty("/DatosGenerales/CDMMA", null);
                     bOk = await this.buscarEmbarcacion(codigo, embarcacion);
                     //}
@@ -1966,6 +1967,8 @@ sap.ui.define([
                 modelo.setProperty("/DatosGenerales/CDSPE", null);
                 modelo.setProperty("/DatosGenerales/DSSPE", null);
                 //form.setProperty("/MotMarea", null);
+
+                console.log("SETEA NULL AQUI 2");
                 modelo.setProperty("/DatosGenerales/CDMMA", null);
             } else {
                 this.validarIndPropiedad(indPropiedad);
