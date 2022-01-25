@@ -80,6 +80,9 @@ sap.ui.define([
             
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             console.log("MODELO: ", modelo);
+
+            var tab = this.getView().byId("itbDetalleMarea");
+            tab.setSelectedKey("itfDatosGenerales"); 
         
         },
 
@@ -498,7 +501,7 @@ sap.ui.define([
 
                     //tipos evento
                     var tiposEvento = data[3].data;
-                    this.validaComboTipoEvento(tiposEvento);
+                    me.validaComboTipoEvento(tiposEvento);
 
                 }
             }
@@ -627,12 +630,18 @@ sap.ui.define([
             var modelo = context.getOwnerComponent().getModel("DetalleMarea");
             var indProp = modelo.getProperty("/Cabecera/INPRP");
             var esmar = modelo.getProperty("/DatosGenerales/ESMAR");
+            var indicador = modelo.getProperty("/Cabecera/INDICADOR");
+
             if (indProp == "P") {
                 modelo.setProperty("/Config/visibleLinkCrearArmador", false);
                 modelo.setProperty("/Config/visibleBuscarArmador", false);
             } else {
                 modelo.setProperty("/Config/visibleLinkCrearArmador", true);
                 modelo.setProperty("/Config/visibleBuscarArmador", true);
+                if(indicador == "N"){
+                    modelo.setProperty("/DatosGenerales/CDEMP", "");
+                    modelo.setProperty("/DatosGenerales/NAME1", "");
+                }
             }
 
             modelo.setProperty("/Utils/MessageItemsDM", []);
@@ -645,7 +654,6 @@ sap.ui.define([
             modelo.setProperty("/Config/visibleTabSepComb", false);
             modelo.setProperty("/Config/visibleBtnGuardar", false);
             modelo.setProperty("/Config/visibleBtnSiguiente", false);
-            var indicador = modelo.getProperty("/Cabecera/INDICADOR");
             if (indicador == "N") {
                 modelo.setProperty("/Config/readOnlyMotMarea", true);
                 modelo.setProperty("/Config/visibleTabReserva", false);

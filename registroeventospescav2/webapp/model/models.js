@@ -526,6 +526,8 @@ sap.ui.define([
                     readOnlyNuevaMarea: false,
                     readOnlyActualizar: false,
                     readOnlyPescDecl: false,
+                    visibleRowsPropios: 0,
+                    visibleRowsTerceros: 0
                 }
             };
             var oModel = new JSONModel(data);

@@ -78,6 +78,7 @@ sap.ui.define([
                 await this.callConstantes();
 
                 BusyIndicator.show(0);
+                console.log("ACTUALIZA LISTA MAREAS");
                 var currentUser = await this.getCurrentUser();
                 var listaMareas = await TasaBackendService.cargarListaMareas(currentUser);
                 if (listaMareas) {
@@ -249,16 +250,20 @@ sap.ui.define([
 
             onActionCrearMarea: async function () {
                 //abrir poup
+                BusyIndicator.show(0);
                 var me = this;
                 var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
                 var dataDetalleMarea = modeloDetalleMarea.getData();
                 var currentUser = await this.getCurrentUser();
                 await TasaBackendService.obtenerPlantas(currentUser).then(function (plantas) {
                     dataDetalleMarea.Config.datosCombo.Plantas = plantas.data; // cargar combo plantas nueva marea
+                    modeloDetalleMarea.setProperty("/DatosGenerales/CDEMB", "");
+                    modeloDetalleMarea.setProperty("/DatosGenerales/NMEMB", "");
                     modeloDetalleMarea.refresh();
                 }).catch(function (error) {
                     console.log("ERROR: Main.onInit - " + error);
                 });
+                BusyIndicator.hide();
                 me.getDialog().open();
             },
 

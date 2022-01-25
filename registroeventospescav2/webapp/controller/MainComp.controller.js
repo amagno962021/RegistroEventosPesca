@@ -262,7 +262,7 @@ sap.ui.define([
         onNavInicio: async function (evt) {
             BusyIndicator.show(0);
             var view = evt.getSource().getParent().getParent().getProperty("viewName");
-            await this.onActualizaMareas();
+            //await this.onActualizaMareas();
             BusyIndicator.hide();
             var viewName = view.split(".")[4];
             if (viewName == "DetalleMarea") {
@@ -341,7 +341,7 @@ sap.ui.define([
             //cargar dsitribucion de flota
             var codigo = modeloDetalleMarea.getProperty("/Cabecera/CDEMB");
             await this.obtenerDatosDistribFlotaMarea(codigo);
-            
+
 
             var estMarea = modeloDetalleMarea.getProperty("/DatosGenerales/ESMAR");
             var marea = modeloDetalleMarea.getProperty("/Cabecera/NRMAR");
@@ -390,13 +390,13 @@ sap.ui.define([
             modeloDetalleMarea.setProperty("/Cabecera/CDPTA", cdpta);
             modeloDetalleMarea.setProperty("/Cabecera/EsNuevo", false);
 
-            if(motivoSinZarpe.includes(motivo)){
+            if (motivoSinZarpe.includes(motivo)) {
                 modeloDetalleMarea.setProperty("/Config/readOnlyFechIni", false);
                 modeloDetalleMarea.setProperty("/Config/visibleFecHoEta", false);
                 modeloDetalleMarea.setProperty("/Config/visibleFechIni", true);
                 modeloDetalleMarea.setProperty("/Config/visibleFechFin", true);
-                if(estMarea == "A" && motivo == "8"){
-                    
+                if (estMarea == "A" && motivo == "8") {
+
                 }
             }
 
@@ -416,7 +416,7 @@ sap.ui.define([
             BusyIndicator.hide();
             if (navegar) {
                 oRouter.navTo("DetalleMarea");
-            }else{
+            } else {
                 BusyIndicator.show(0);
                 sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleMarea").validaFechaNulaEvt(this);
                 await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleMarea").cargarCombos(this);
@@ -494,7 +494,7 @@ sap.ui.define([
                 var currentDate = new Date();
                 objMarea.FXMAR = currentDate;
                 objMarea.HXMAR = Utils.strHourToSapHo(Utils.dateToStrHours(currentDate)),
-                objMarea.AXMAR = await this.getCurrentUser();
+                    objMarea.AXMAR = await this.getCurrentUser();
             }
 
             var esNuevo = modelo.getProperty("/Cabecera/EsNuevo");
@@ -502,7 +502,7 @@ sap.ui.define([
                 var currentDate = new Date();
                 objMarea.FEMAR = currentDate;
                 objMarea.HAMAR = Utils.strHourToSapHo(Utils.dateToStrHours(currentDate)),
-                objMarea.AAMAR = await this.getCurrentUser();
+                    objMarea.AAMAR = await this.getCurrentUser();
             }
 
             marea.str_marea.push(objMarea);
@@ -544,7 +544,7 @@ sap.ui.define([
                     marea.str_horom.unshift(objHoroElim);
                 }
 
-                for (let index3= 0; index3 < bodElim.length; index3++) {
+                for (let index3 = 0; index3 < bodElim.length; index3++) {
                     const element3 = bodElim[index3];
                     var objBodElim = {
                         INDTR: "D",
@@ -696,12 +696,12 @@ sap.ui.define([
 
         },
 
-        obtenerALDistribFlota: function(){
+        obtenerALDistribFlota: function () {
             let modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var distrFlota = modelo.getProperty("/DistribFlota");
             var distrFlotaElim = modelo.getProperty("/Eventos/DistribFlotaElim");
             var listaDistrFlota = [];
-            if(distrFlotaElim.CDEMB){           
+            if (distrFlotaElim.CDEMB) {
                 var objDistrFlotaElim = {
                     INDTR: "D",
                     CDEMB: distrFlotaElim.CDEMB
@@ -709,13 +709,13 @@ sap.ui.define([
                 listaDistrFlota.push(objDistrFlotaElim);
             }
 
-            if((distrFlota.Indicador && distrFlota.Indicador == "N")){
+            if ((distrFlota.Indicador && distrFlota.Indicador == "N")) {
                 var objDistrFlota = {
                     INDTR: distrFlota.Indicador,
                     CDEMB: modelo.getProperty("/Cabecera/CDEMB"),
                     CDPTA: distrFlota.CDPTA,
                     FEARR: Utils.strDateToDate(distrFlota.FEARR),
-                    HEARR: Utils.strHourToSapHo(distrFlota.HEARR)                   
+                    HEARR: Utils.strHourToSapHo(distrFlota.HEARR)
                 };
                 listaDistrFlota.push(objDistrFlota);
             }
@@ -729,26 +729,26 @@ sap.ui.define([
             let Cabecera = mod.getProperty("/Cabecera");
             let listaHoroAveCorreo = [];
             ListaEventos.forEach(element => {
-                if(true){
+                if (true) {
                     let LenghtHoro = element.ListaHorometros.length;
-                    if(LenghtHoro > 0){
+                    if (LenghtHoro > 0) {
                         let ListHoro = element.ListaHorometros;
                         let ListHoroAve = ListHoro.filter(elem => elem.Chk_averiado == true);
-                        if(ListHoroAve > 0){
-                            let obj ={
-                                horometrosAveriados : ListHoroAve,
-                                nroEvento : element.NREVN
+                        if (ListHoroAve > 0) {
+                            let obj = {
+                                horometrosAveriados: ListHoroAve,
+                                nroEvento: element.NREVN
                             };
                             listaHoroAveCorreo.push(obj);
                         }
                     }
                 }
-                
+
             });
 
-            if(listaHoroAveCorreo > 0){
+            if (listaHoroAveCorreo > 0) {
                 //llama al servicio de envio de correo
-                let serv_correoHoroAve = TasaBackendService.envioCorreoHoroAve(Cabecera.NMEMB , listaHoroAveCorreo);
+                let serv_correoHoroAve = TasaBackendService.envioCorreoHoroAve(Cabecera.NMEMB, listaHoroAveCorreo);
                 let that = this;
                 await Promise.resolve(serv_correoHoroAve).then(values => {
                     console.log(values);
@@ -773,7 +773,7 @@ sap.ui.define([
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             let elementSel = modelo.getProperty("/Eventos/LeadSelEvento");
             let ListaEventos = modelo.getProperty("/Eventos/Lista");
-            var listaEquipamientos = ListaEventos[elementSel].ListaEquipamiento;//modelo equipamientos del evento (element)
+            var listaEquipamientos = ListaEventos[elementSel - 1].ListaEquipamiento;//modelo equipamientos del evento (element)
             var equipamientos = [];
             for (let index = 0; index < listaEquipamientos.length; index++) {
                 const element = listaEquipamientos[index];
@@ -801,7 +801,7 @@ sap.ui.define([
                     NREVN: ListaEventos[elementSel].NREVN,
                     CDTHR: element.tipoHorometro,
                     LCHOR: element.lectura,
-                    NORAV: element.Chk_averiado  === false ? "" : "A"
+                    NORAV: element.Chk_averiado === false ? "" : "A"
                 };
                 lista.push(listHorometros);
             }
@@ -1061,7 +1061,7 @@ sap.ui.define([
             var indProp = modelo.getProperty("/Cabecera/INPRP");
             for (let index = 0; index < suministros.length; index++) {
                 const element = suministros[index];
-                var almacen = almacenes.find(function(param){
+                var almacen = almacenes.find(function (param) {
                     return param.CDALE == element.CDALE;
                 });
                 var obj = {
@@ -1219,7 +1219,7 @@ sap.ui.define([
                 }
 
                 var almExt = await TasaBackendService.obtenerAlmExterno(usuario);
-                if(almExt){
+                if (almExt) {
                     modelo.setProperty("/ConfigReservas/AlmacenesExt", almExt.data);
                     modelo.setProperty("/Config/visibleAlmacenExterno", true);
                 }
@@ -1256,7 +1256,7 @@ sap.ui.define([
             var planta = ultimoEvento ? ultimoEvento.CDPTA : "";
             var descr = ultimoEvento ? ultimoEvento.DESCR : "";
             var centro = modelo.getProperty("/ConfigReservas/WERKS");
-            if(indProp == "T"){
+            if (indProp == "T") {
                 for (let index1 = 0; index1 < eventos.length; index1++) {
                     const element = eventos[index1];
                     if (element.CDTEV == "5") {
@@ -1272,7 +1272,7 @@ sap.ui.define([
                 var suministro = data.data[0];
                 var dsalm = "";
                 var cdale = "";
-                if(indProp == "P"){
+                if (indProp == "P") {
                     for (let index = 0; index < almacenes.length; index++) {
                         const element = almacenes[index];
                         if (element.DSALM == descr) {
@@ -1280,9 +1280,9 @@ sap.ui.define([
                             cdale = element.CDALE;
                         }
                     }
-                }else{
+                } else {
                     var almExt = await TasaBackendService.obtenerAlmExterno(usuario);
-                    if(almExt){
+                    if (almExt) {
                         modelo.setProperty("/ConfigReservas/AlmacenesExt", almExt.data);
                         var almacen = almExt.data[0];
                         dsalm = almacen.DESCR;
@@ -1391,11 +1391,11 @@ sap.ui.define([
                     }
                 }
                 var detalles = detalleSuministro.t_detalle;
-                if(detalles.length > 0){
+                if (detalles.length > 0) {
                     for (let index = 0; index < detalles.length; index++) {
                         const element = detalles[index];
-                        if(!element.DSALM && indProp == "T"){
-                            var almExt = almacenesExterno.find(function(param){
+                        if (!element.DSALM && indProp == "T") {
+                            var almExt = almacenesExterno.find(function (param) {
                                 return param.VAL01 == element.CDALM;
                             });
                             element.DSALM = almExt.DESCR;
@@ -1613,7 +1613,7 @@ sap.ui.define([
                 var messageItems = modelo.getProperty("/Utils/MessageItemsMA");
                 for (let index = 0; index < mensajes.length; index++) {
                     const element = mensajes[index];
-                    if(element.CMIN == "E"){
+                    if (element.CMIN == "E") {
                         bOk = false;
                     }
                     var objMessage = {
@@ -1683,7 +1683,7 @@ sap.ui.define([
                 codigo = codigo.trim();
                 if (tipo == "EMB") {
                     //if (this.bckEmbarcacion == null || codigo != this.bckEmbarcacion) {
-                        console.log("SETEA NULL AQUI 1");
+                    console.log("SETEA NULL AQUI 1");
                     modelo.setProperty("/DatosGenerales/CDMMA", null);
                     bOk = await this.buscarEmbarcacion(codigo, embarcacion);
                     //}
@@ -1859,8 +1859,7 @@ sap.ui.define([
                 //var ce_embaElement = emba[0];
                 var ce_embaElement = embarcacion;
                 indPropiedad = ce_embaElement.INPRP;
-                if (estMarAnt == "C") {
-                    console.log("Mare Anterior Cerrada");
+                if (estMarAnt == "" ||  estMarAnt == "C") {
                     if (ce_embaElement.ESEMB == "O") {
                         var cabecera = modelo.getProperty("/Cabecera");
                         var datosGenerales = modelo.getProperty("/DatosGenerales");
@@ -1928,7 +1927,7 @@ sap.ui.define([
                             actions: ["Ver Marea", MessageBox.Action.CLOSE],
                             onClose: async function (sAction) {
                                 console.log("Action: ", sAction);
-                                if(sAction == "Ver Marea"){
+                                if (sAction == "Ver Marea") {
                                     BusyIndicator.show(0);
                                     var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                                     var initData = oStore.get('InitData');
@@ -2101,21 +2100,23 @@ sap.ui.define([
             //var mareaAnterior = this.getModel("MareaAnterior");
             var response = await TasaBackendService.obtenerMareaAnterior(marea, codigo, usuario);
             if (response) {
-                var mareaAnt = response.data[0];
-                for (var key in mareaAnt) {
-                    if (mareaAnterior.hasOwnProperty(key)) {
-                        mareaAnterior[key] = mareaAnt[key];
+                if (response.data.length > 0) {
+                    var mareaAnt = response.data[0];
+                    for (var key in mareaAnt) {
+                        if (mareaAnterior.hasOwnProperty(key)) {
+                            mareaAnterior[key] = mareaAnt[key];
+                        }
                     }
-                }
-                if (!motivosSinZarpe.includes(mareaAnt.CDMMA)) {
-                    var response1 = await TasaBackendService.obtenerEventoAnterior(parseInt(mareaAnt.NRMAR), usuario);
-                    if (response1) {
-                        var eventoAnt = response1.data[0];
-                        if (eventoAnt) {
-                            var evtMarAnt = modelo.getProperty("/MareaAnterior/EventoMarAnt");
-                            for (var key in eventoAnt) {
-                                if (evtMarAnt.hasOwnProperty(key)) {
-                                    evtMarAnt[key] = eventoAnt[key];
+                    if (!motivosSinZarpe.includes(mareaAnt.CDMMA)) {
+                        var response1 = await TasaBackendService.obtenerEventoAnterior(parseInt(mareaAnt.NRMAR), usuario);
+                        if (response1) {
+                            var eventoAnt = response1.data[0];
+                            if (eventoAnt) {
+                                var evtMarAnt = modelo.getProperty("/MareaAnterior/EventoMarAnt");
+                                for (var key in eventoAnt) {
+                                    if (evtMarAnt.hasOwnProperty(key)) {
+                                        evtMarAnt[key] = eventoAnt[key];
+                                    }
                                 }
                             }
                         }
@@ -2272,6 +2273,7 @@ sap.ui.define([
             }
             console.log("DATA PROPIOS: ", dataPropios);
             modelo.setProperty("/PropiosFiltro", dataPropios);
+            modelo.setProperty("/Utils/visibleRowsPropios", dataPropios.length);
             /*var modeloMareaPropios = new JSONModel(dataPropios);
             this.getView().byId("tblMareasPropios").setModel(modeloMareaPropios);*/
             //modelo.setProperty("/Mareas/Propios", dataPropios);
@@ -2336,7 +2338,7 @@ sap.ui.define([
             //modelo.setProperty("/Mareas/Terceros", dataTerceros);
             //this.getView().byId("itfTerceros").setCount(dataTerceros.length);
             modelo.setProperty("/Utils/CountTerceros", dataTerceros.length);
-
+            modelo.setProperty("/Utils/visibleRowsTerceros", dataTerceros.length);
             //setear header para total de pesca declarada
             var ttPescaDecl = totalPescaDeclarada.toString();
             //this.getView().byId("idObjectHeader").setNumber(ttPescaDecl);
@@ -2368,49 +2370,49 @@ sap.ui.define([
             }
         },
 
-        getSerachingHelpComponents:function(oModel,sAyudaBusqId){
-			let sUrlSubaccount = this.getHostSubaccount().url,
-			aSearchingHelp = ["busqarmadores"],
-			// iCountF = aSearchingHelp.length,
-			// iCount = 0,
-			oComponent,
-			nameComponent,
-			idComponent,
-			urlComponent;
-			
-			// BusyIndicator.show(0);
-			aSearchingHelp.forEach(elem=>{
-				// let comCreateOk = function(oEvent){
-				// 	if(iCountF === iCount) BusyIndicator.hide();
-				// };
-				oComponent = {};
-				nameComponent = elem;
-				idComponent = elem;
-				urlComponent = `${sUrlSubaccount}/${sAyudaBusqId}.AyudasBusqueda.${elem}-1.0.0`;
-				oComponent = new sap.ui.core.ComponentContainer({
-					id:idComponent,
-					name:nameComponent,
-					url:urlComponent,
-					settings:{},
-					componentData:{},
-					propagateModel:true,
-					// componentCreated:comCreateOk,
-					height:'100%',
-					// manifest:true,
-					async:false
-				});
-				oModel.setProperty(`/${elem}`,oComponent)
-				// iCount++
-			});
-		},
+        getSerachingHelpComponents: function (oModel, sAyudaBusqId) {
+            let sUrlSubaccount = this.getHostSubaccount().url,
+                aSearchingHelp = ["busqarmadores"],
+                // iCountF = aSearchingHelp.length,
+                // iCount = 0,
+                oComponent,
+                nameComponent,
+                idComponent,
+                urlComponent;
+
+            // BusyIndicator.show(0);
+            aSearchingHelp.forEach(elem => {
+                // let comCreateOk = function(oEvent){
+                // 	if(iCountF === iCount) BusyIndicator.hide();
+                // };
+                oComponent = {};
+                nameComponent = elem;
+                idComponent = elem;
+                urlComponent = `${sUrlSubaccount}/${sAyudaBusqId}.AyudasBusqueda.${elem}-1.0.0`;
+                oComponent = new sap.ui.core.ComponentContainer({
+                    id: idComponent,
+                    name: nameComponent,
+                    url: urlComponent,
+                    settings: {},
+                    componentData: {},
+                    propagateModel: true,
+                    // componentCreated:comCreateOk,
+                    height: '100%',
+                    // manifest:true,
+                    async: false
+                });
+                oModel.setProperty(`/${elem}`, oComponent)
+                // iCount++
+            });
+        },
 
         getHostSubaccount: function () {
 
             var urlIntance = window.location.origin,
 
-            sUrlSubaccount,
+                sUrlSubaccount,
 
-            sParam;
+                sParam;
 
 
 
@@ -2426,13 +2428,13 @@ sap.ui.define([
 
                 sParam = "IDH4_PRD"
 
-            }else if(urlIntance.indexOf('localhost') !== -1){
+            } else if (urlIntance.indexOf('localhost') !== -1) {
 
                 sUrlSubaccount = 'tasadev'; // apuntando a DEV
 
                 sParam = "IDH4_DEV"
 
-            }else{
+            } else {
 
                 sUrlSubaccount = 'tasadev'; // apuntando a DEV
 
@@ -2444,81 +2446,81 @@ sap.ui.define([
 
             return {
 
-                url : `https://${sUrlSubaccount}.launchpad.cfapps.us10.hana.ondemand.com`,
+                url: `https://${sUrlSubaccount}.launchpad.cfapps.us10.hana.ondemand.com`,
 
-                param : sParam
+                param: sParam
 
             };
 
         },
 
-        onLocation:function(){
+        onLocation: function () {
 
-			var oRouter = window.location.origin;
-	
-			console.log(oRouter)
-	
-			var service="";
-	
-			if(oRouter.indexOf("localhost") !== -1){
-	
-				service='https://cf-nodejs-cheerful-bat-js.cfapps.us10.hana.ondemand.com/api/'
-	
-			}
-	
-			if(oRouter.indexOf("tasadev")!== -1){
-	
-				service='https://cf-nodejs-cheerful-bat-js.cfapps.us10.hana.ondemand.com/api/'
-	
-			}
-	
-			if(oRouter.indexOf("tasaprd")!==-1){
-	
-				service='https://cf-nodejs-prd.cfapps.us10.hana.ondemand.com/api/'
-	
-			}
-	
-			if(oRouter.indexOf("tasaqas")!==-1){
-	
-				service='https://cf-nodejs-qas.cfapps.us10.hana.ondemand.com/api/'
-	
-			}
-	
-			console.log(service);
-	
-			return service;
-	
-		},
+            var oRouter = window.location.origin;
 
-        _getHelpSearch:  function(){
-			var oRouter = window.location.origin;
-			var service=[];
-			if(oRouter.indexOf("localhost") !== -1){
-				service.push({
-					url:"https://tasaqas.launchpad.cfapps.us10.hana.ondemand.com/",
-					parameter:"IDH4_QAS"
-				})
-			}
-			if(oRouter.indexOf("tasadev")!== -1){
-				service.push({
-					url:"https://tasadev.launchpad.cfapps.us10.hana.ondemand.com/",
-					parameter:"IDH4_DEV"
-				})
-			}
-			if(oRouter.indexOf("tasaprd")!==-1){
-				service.push({
-					url:"https://tasaprd.launchpad.cfapps.us10.hana.ondemand.com/",
-					parameter:"IDH4_PRD"
-				})
-			}
-			if(oRouter.indexOf("tasaqas")!==-1){
-				service.push({
-					url:"https://tasaqas.launchpad.cfapps.us10.hana.ondemand.com/",
-					parameter:"IDH4_QAS"
-				})
-			}
-			return service;
-		},
+            console.log(oRouter)
+
+            var service = "";
+
+            if (oRouter.indexOf("localhost") !== -1) {
+
+                service = 'https://cf-nodejs-cheerful-bat-js.cfapps.us10.hana.ondemand.com/api/'
+
+            }
+
+            if (oRouter.indexOf("tasadev") !== -1) {
+
+                service = 'https://cf-nodejs-cheerful-bat-js.cfapps.us10.hana.ondemand.com/api/'
+
+            }
+
+            if (oRouter.indexOf("tasaprd") !== -1) {
+
+                service = 'https://cf-nodejs-prd.cfapps.us10.hana.ondemand.com/api/'
+
+            }
+
+            if (oRouter.indexOf("tasaqas") !== -1) {
+
+                service = 'https://cf-nodejs-qas.cfapps.us10.hana.ondemand.com/api/'
+
+            }
+
+            console.log(service);
+
+            return service;
+
+        },
+
+        _getHelpSearch: function () {
+            var oRouter = window.location.origin;
+            var service = [];
+            if (oRouter.indexOf("localhost") !== -1) {
+                service.push({
+                    url: "https://tasaqas.launchpad.cfapps.us10.hana.ondemand.com/",
+                    parameter: "IDH4_QAS"
+                })
+            }
+            if (oRouter.indexOf("tasadev") !== -1) {
+                service.push({
+                    url: "https://tasadev.launchpad.cfapps.us10.hana.ondemand.com/",
+                    parameter: "IDH4_DEV"
+                })
+            }
+            if (oRouter.indexOf("tasaprd") !== -1) {
+                service.push({
+                    url: "https://tasaprd.launchpad.cfapps.us10.hana.ondemand.com/",
+                    parameter: "IDH4_PRD"
+                })
+            }
+            if (oRouter.indexOf("tasaqas") !== -1) {
+                service.push({
+                    url: "https://tasaqas.launchpad.cfapps.us10.hana.ondemand.com/",
+                    parameter: "IDH4_QAS"
+                })
+            }
+            return service;
+        },
 
         validaComboTipoEvento: function (sData) {
             var oVal = [];
