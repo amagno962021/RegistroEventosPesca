@@ -2658,22 +2658,25 @@ sap.ui.define([
                 modelo.setProperty("/Config/visibleFechIni", true);
                 modelo.setProperty("/Config/readOnlyFechIni", false);
                 modelo.setProperty("/Config/readOnlyEstaMar", true);
-                modelo.setProperty("/DatosGenerales/INUBC", "1");
+                modelo.setProperty("/Config/visibleFechFin", true);
+                //modelo.setProperty("/DatosGenerales/INUBC", "1");//mejora
                 if (indicador == "N") {
                     modelo.setProperty("/Config/visibleBtnGuardar", true); //si es nueva marea
                     modelo.setProperty("/Config/visibleBtnSiguiente", false); //si es nueva marea
                     modelo.setProperty("/DatosGenerales/ESMAR", "A");
+                    modelo.setProperty("/DatosGenerales/INUBC", null);
+                    modelo.setProperty("/Config/visibleFechFin", false);
+                    var MareAntNrmar = modelo.getProperty("/MareaAnterior/NRMAR");
+                    var MareAntDesc = modelo.getProperty("/MareaAnterior/DESC_CDMMA");
+                    var MareAntEvt = modelo.getProperty("/MareaAnterior/EventoMarAnt/DESC_CDTEV");
+                    var MareAntFech = modelo.getProperty("/MareaAnterior/FFMAR");
+                    var MareAntHora = modelo.getProperty("/MareaAnterior/HFMAR");
+                    var mssg = this.oBundle.getText("NOTIFULTMAREA", [MareAntNrmar, MareAntDesc, MareAntEvt, MareAntFech, MareAntHora]);
+                    modelo.setProperty("/Cabecera/TXTNOTIF", mssg);
+                    modelo.setProperty("/DatosGenerales/FIMAR", MareAntFech);
+                    modelo.setProperty("/DatosGenerales/HIMAR", MareAntHora);
+                    modelo.setProperty("/Cabecera/TXTNOTIF1", "");
                 }
-                var MareAntNrmar = modelo.getProperty("/MareaAnterior/NRMAR");
-                var MareAntDesc = modelo.getProperty("/MareaAnterior/DESC_CDMMA");
-                var MareAntEvt = modelo.getProperty("/MareaAnterior/EventoMarAnt/DESC_CDTEV");
-                var MareAntFech = modelo.getProperty("/MareaAnterior/FFMAR");
-                var MareAntHora = modelo.getProperty("/MareaAnterior/HFMAR");
-                var mssg = this.oBundle.getText("NOTIFULTMAREA", [MareAntNrmar, MareAntDesc, MareAntEvt, MareAntFech, MareAntHora]);
-                modelo.setProperty("/Cabecera/TXTNOTIF", mssg);
-                modelo.setProperty("/DatosGenerales/FIMAR", MareAntFech);
-                modelo.setProperty("/DatosGenerales/HIMAR", MareAntHora);
-                modelo.setProperty("/Cabecera/TXTNOTIF1", "");
                 if (motivo == "8") {
                     BusyIndicator.show(0);
                     await this.validarFechaVeda();

@@ -947,7 +947,7 @@ sap.ui.define([
                     if (estado == "C") {
                         vFin = true;
                     }
-                    if (fechHorIni.getTime() < fechHorActual.getTime()) {
+                    if (fechHorIni.getTime() > fechHorActual.getTime()) {
                         vFin = false;
                         var mssg = this.oBundle.getText("FECINIMARMENOFECHACT");
                         MessageBox.error(mssg);

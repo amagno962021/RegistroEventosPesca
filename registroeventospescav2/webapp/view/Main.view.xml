@@ -64,7 +64,7 @@
                                  <table:Column filterProperty="CNPCM" defaultFilterOperator="Contains" sortProperty="CNPCM" >
                                      <Label text="Pesc. Dec." />
                                      <table:template>
-                                          <ObjectNumber number="{ListaMareas>CNPCM}" unit="Tn" />
+                                          <ObjectNumber number="{= ${ListaMareas>CNPCM} > 0 ? ${ListaMareas>CNPCM} : '' }" unit="{= ${ListaMareas>CNPCM} > 0 ? 'Tn' : '' }" />
                                      </table:template>
                                  </table:Column>
                                  <table:Column filterProperty="FEHOARR" defaultFilterOperator="Contains" >
@@ -98,90 +98,75 @@
                      <IconTabSeparator icon="" iconDensityAware="false" />
                      <IconTabFilter id="itfTerceros" icon="sap-icon://group" iconColor="Default" text="Terceros" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false" count="{ListaMareas>/Utils/CountTerceros}">
                         <content>
-                           <Table id="tblMareasTerceros" width="auto" noDataText="No data" mode="None" showSeparators="All" growing="true" growingThreshold="20" growingScrollToLoad="true" class="sapUiResponsiveMargin" items="{path:'ListaMareas>/TercerosFiltro', templateShareable:true}">
-                              
-                              <columns>
-                                 <Column width="5%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                                    <header>
-                                       <Text text="Nro." width="auto" maxLines="1" wrapping="false" textAlign="Center" textDirection="Inherit" visible="true" />
-                                    </header>
-                                    <footer />
-                                 </Column>
-                                 <Column width="10%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                                    <header>
-                                       <Text text="Marea" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                    </header>
-                                    <footer />
-                                 </Column>
-                                 <Column width="12%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                                    <header>
-                                       <Text text="Embarcación" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                    </header>
-                                    <footer />
-                                 </Column>
-                                 <Column width="10%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                                    <header>
-                                       <Text text="Mot. Marea" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                    </header>
-                                    <footer />
-                                 </Column>
-                                 <Column width="10%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                                    <header>
-                                       <Text text="Est. Oper." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                    </header>
-                                    <footer />
-                                 </Column>
-                                 <Column width="10%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                                    <header>
-                                       <Text text="Pesc. Dec." width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                    </header>
-                                    <footer />
-                                 </Column>
-                                 <Column width="15%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                                    <header>
-                                       <Text text="Fecha/Hora Arribo" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                    </header>
-                                    <footer />
-                                 </Column>
-                                 <Column width="8%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                                    <header>
-                                       <Text text="Estado" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                    </header>
-                                    <footer />
-                                 </Column>
-                                 <Column width="5%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                                    <header>
-                                       <Text text="" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                    </header>
-                                    <footer />
-                                 </Column>
-                                 <Column width="5%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false">
-                                    <header>
-                                       <Text text="" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                    </header>
-                                    <footer />
-                                 </Column>
-                              </columns>
-                              <items>
-                                 <ColumnListItem type="Active">
-                                    <customData>
-                                       <core:CustomData key="mydata" value="{ListaMareas>ESMAR}" writeToDom="true" />
-                                    </customData>
-                                    <cells>
-                                       <Text text="{ListaMareas>NRO}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{ListaMareas>NRMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{ListaMareas>NMEMB}" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{ListaMareas>DESCMOTMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{ListaMareas>DSEEC}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <ObjectNumber number="{ListaMareas>CNPCM}" unit="Tn" />
-                                       <Text text="{ListaMareas>FEHOARR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Text text="{ListaMareas>DESCESMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
-                                       <Link text="{ListaMareas>DESCLINK}" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" press="onEditarCrearMarea" />
-                                       <Link text="Anular" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="{ListaMareas>visibleAnularMarea}" press="onAnularMarea"/>
-                                    </cells>
-                                 </ColumnListItem>
-                              </items>
-                           </Table>
+                           
+                           <table:Table id="tblMareasTerceros" rows="{path:'ListaMareas>/TercerosFiltro', templateShareable:true}" selectionMode="None" class="sapUiResponsiveMargin" visibleRowCount="{ListaMareas>/Utils/visibleRowsTerceros}">
+                              <table:columns>
+                                 <table:Column sortProperty="NRO" width="3%">
+                                     <Label text="Nro."/>
+                                     <table:template>
+                                          <Text text="{ListaMareas>NRO}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                          
+                                     </table:template>
+                                     <table:customData>
+                                          <core:CustomData key="mydata" value="{ListaMareas>ESMAR}" writeToDom="true" />
+                                     </table:customData>
+                                 </table:Column>
+                                 <table:Column filterProperty="NRMAR" defaultFilterOperator="Contains" sortProperty="NRMAR" >
+                                     <Label text="Marea" />
+                                     <table:template>
+                                          <Text text="{ListaMareas>NRMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                     </table:template>
+                                 </table:Column>
+                                 <table:Column filterProperty="NMEMB" defaultFilterOperator="Contains" sortProperty="NMEMB" >
+                                     <Label text="Embarcación" />
+                                     <table:template>
+                                          <Text text="{ListaMareas>NMEMB}" width="auto" maxLines="2" wrapping="true" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                     </table:template>
+                                 </table:Column>
+                                 <table:Column filterProperty="DESC_CDMMA" defaultFilterOperator="Contains" sortProperty="DESC_CDMMA" >
+                                     <Label text="Mot. Marea" />
+                                     <table:template>
+                                          <Text text="{ListaMareas>DESC_CDMMA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                     </table:template>
+                                 </table:Column>
+                                 <table:Column filterProperty="DSEEC" defaultFilterOperator="Contains" sortProperty="DSEEC" >
+                                     <Label text="Est. Oper." />
+                                     <table:template>
+                                          <Text text="{ListaMareas>DSEEC}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                     </table:template>
+                                 </table:Column>
+                                 <table:Column filterProperty="CNPCM" defaultFilterOperator="Contains" sortProperty="CNPCM" >
+                                     <Label text="Pesc. Dec." />
+                                     <table:template>
+                                          <ObjectNumber number="{= ${ListaMareas>CNPCM} > 0 ? ${ListaMareas>CNPCM} : '' }" unit="{= ${ListaMareas>CNPCM} > 0 ? 'Tn' : '' }" />
+                                     </table:template>
+                                 </table:Column>
+                                 <table:Column filterProperty="FEHOARR" defaultFilterOperator="Contains" >
+                                     <Label text="Fecha/Hora Arribo" />
+                                     <table:template>
+                                          <Text text="{ListaMareas>FEHOARR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                     </table:template>
+                                 </table:Column>
+                                 <table:Column filterProperty="DESC_ESMAR" defaultFilterOperator="Contains" sortProperty="DESC_ESMAR" >
+                                     <Label text="Estado" />
+                                     <table:template>
+                                          <Text text="{ListaMareas>DESC_ESMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                     </table:template>
+                                 </table:Column>
+                                 <table:Column width="5%">
+                                     <Label text="" />
+                                     <table:template>
+                                          <Link text="{ListaMareas>DESCLINK}" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" press="onEditarCrearMarea" />
+                                     </table:template>
+                                 </table:Column>
+                                 <table:Column width="5%">
+                                     <Label text="" />
+                                     <table:template>
+                                          <Link text="Anular" width="auto" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="{ListaMareas>visibleAnularMarea}" press="onAnularMarea"/>
+                                     </table:template>
+                                 </table:Column>
+                              </table:columns>
+                           </table:Table>
                         </content>
                      </IconTabFilter>
                   </items>
