@@ -775,14 +775,16 @@ sap.ui.define([
             let ListaEventos = modelo.getProperty("/Eventos/Lista");
             var listaEquipamientos = ListaEventos[elementSel - 1].ListaEquipamiento;//modelo equipamientos del evento (element)
             var equipamientos = [];
-            for (let index = 0; index < listaEquipamientos.length; index++) {
-                const element = listaEquipamientos[index];
-                var obj = {
-                    CDEMB: modelo.getProperty("/Cabecera/CDEMB"),
-                    CDEQP: element.CDEQP,
-                    CNEPE: element.CNEPE
-                };
-                equipamientos.push(obj);
+            if(listaEquipamientos){
+                for (let index = 0; index < listaEquipamientos.length; index++) {
+                    const element = listaEquipamientos[index];
+                    var obj = {
+                        CDEMB: modelo.getProperty("/Cabecera/CDEMB"),
+                        CDEQP: element.CDEQP,
+                        CNEPE: element.CNEPE
+                    };
+                    equipamientos.push(obj);
+                }
             }
             return equipamientos;
         },
