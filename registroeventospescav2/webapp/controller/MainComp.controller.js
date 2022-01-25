@@ -638,18 +638,18 @@ sap.ui.define([
                     }
 
                     if (eveVisTabHorom.includes(element.CDTEV)) {
-                        horometros = this.obtenerHorometrosRFC(element);
+                        horometros = this.obtenerHorometrosRFC(element,horometros);
                     }
 
                     if (element.CDTEV == "3") {
-                        pescaDeclarada = this.obtenerPescaDeclaradaRFC(element);
+                        pescaDeclarada = this.obtenerPescaDeclaradaRFC(element, pescaDeclarada);
                         if (motivoMarea == "1") {
-                            pescaBodega = this.obtenerPescaBodegaRFC(element);
+                            pescaBodega = this.obtenerPescaBodegaRFC(element, pescaBodega);
                         }
                     }
 
                     if (element.CDTEV == "6") {
-                        pescaDescargada = this.obtenerPescaDescargadaRFC(element);
+                        pescaDescargada = this.obtenerPescaDescargadaRFC(element, pescaDescargada);
                     }
 
                     if (element.CDTEV == "8") {
@@ -789,12 +789,12 @@ sap.ui.define([
             return equipamientos;
         },
 
-        obtenerHorometrosRFC: function (element) {
+        obtenerHorometrosRFC: function (element,horometros_model) {
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
             let ListaEventos = mod.getProperty("/Eventos/Lista");
             var horometros = element.ListaHorometros ? element.ListaHorometros : []; //modelo de horometros de la lista de eventos (element)
-            var lista = [];
+            var lista = horometros_model;
             for (let index = 0; index < horometros.length; index++) {
                 const element2 = horometros[index];
                 var listHorometros = {
@@ -911,12 +911,12 @@ sap.ui.define([
             return pscinc_list;
         },
 
-        obtenerPescaBodegaRFC: function (elementParam) {
+        obtenerPescaBodegaRFC: function (elementParam, pescaBodega_model) {
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
             let ListaEventos = mod.getProperty("/Eventos/Lista");
             var bodegas = ListaEventos[elementSel].ListaBodegas;//modelo de bodegas
-            var lista = [];
+            var lista = pescaBodega_model;
             for (let index = 0; index < bodegas.length; index++) {
                 const element = bodegas[index];
                 var listBodegas = {
@@ -931,12 +931,12 @@ sap.ui.define([
             return lista;
         },
 
-        obtenerPescaDeclaradaRFC: function (elementParam) {
+        obtenerPescaDeclaradaRFC: function (elementParam, pescaDeclarada_model) {
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
             let ListaEventos = mod.getProperty("/Eventos/Lista");
             var pescaDeclarada = elementParam.ListaPescaDeclarada ? elementParam.ListaPescaDeclarada : [];//modelo pesca declarada
-            var lista = [];
+            var lista = pescaDeclarada_model;
             for (let index = 0; index < pescaDeclarada.length; index++) {
                 const element = pescaDeclarada[index];
                 var listPescaDeclarada = {
@@ -956,11 +956,11 @@ sap.ui.define([
             return lista;
         },
 
-        obtenerPescaDescargadaRFC: function (element) {
+        obtenerPescaDescargadaRFC: function (element,pescaDescargada_model) {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var pescaDescargada = element.ListaPescaDescargada[0];//modelo pesca descargada
             var ePescaDescargada = element.ListaPescaDescargadaElim ? element.ListaPescaDescargadaElim : [];//modelo pesca descargada eliminada
-            var lista = [];
+            var lista = pescaDescargada_model;
             if (ePescaDescargada.length > 0) {
                 var EListPescaDescargada = {
                     INDTR: ePescaDescargada.INDTR,
