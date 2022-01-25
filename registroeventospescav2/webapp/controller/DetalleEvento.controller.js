@@ -415,7 +415,7 @@ sap.ui.define([
             v_this._listaEventos[v_this._elementAct].ListaAccidente = [];
             v_this._listaEventos[v_this._elementAct].ListaSiniestros = v_this._listaEventos[v_this._elementAct].ListaSiniestros ? v_this._listaEventos[v_this._elementAct].ListaSiniestros : [];
             v_this._listaEventos[v_this._elementAct].ListaIncidental = v_this._listaIncidental;
-            v_this._listaEventos[v_this._elementAct].eListaPescaDeclarada = [];
+            v_this._listaEventos[v_this._elementAct].eListaPescaDeclarada = v_this._listaEventos[v_this._elementAct].eListaPescaDeclarada ? v_this._listaEventos[v_this._elementAct].eListaPescaDeclarada : [];
             v_this._listaEventos[v_this._elementAct].EspePermitida = [];
             v_this._listaEventos[v_this._elementAct].EspeZonaPesca = [];
             v_this._listaEventos[v_this._elementAct].EspeVeda = [];
@@ -2932,7 +2932,8 @@ sap.ui.define([
             this.byId("cb_motNoPesca").setValueState( sap.ui.core.ValueState.None);
         },
         cargarValoresFormateados : function (){
-            var eventoActual = this._listaEventos[this._elementAct];
+            let eveZonaPesca = ["2", "3", "4"];
+            let eventoActual = this._listaEventos[this._elementAct];
             if(eventoActual.CDTEV == 3){eventoActual.CNPDC = eventoActual.CantTotalPescDecla ? Number(eventoActual.CantTotalPescDecla) : Number(0);}
             if(eventoActual.CDTEV == 6){eventoActual.CNPDS = eventoActual.ListaPescaDescargada[0].CNPDS ? Number(eventoActual.ListaPescaDescargada[0].CNPDS) : Number(0);}
             eventoActual.HIEVN = Utils.formatHoraBTP(eventoActual.HIEVN);
@@ -2940,6 +2941,8 @@ sap.ui.define([
             eventoActual.FFEVN = eventoActual.FFEVN == "" ? "" : Utils.formatfechaBTP(eventoActual.FFEVN);
             eventoActual.CNPDC = eventoActual.CNPDC ? eventoActual.CNPDC : 0;
             eventoActual.CNPDS = eventoActual.CNPDS ? eventoActual.CNPDS : 0;
+            if(eveZonaPesca.includes(eventoActual.CDTEV)){ eventoActual.DSZPC = this.byId("cb_ZonaPesca").getSelectedItem().getText();}
+            
             eventoActual.NREVN = Utils.formatoNroEvento(eventoActual.NREVN);
         },
         validacionStock :function (){

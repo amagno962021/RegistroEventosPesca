@@ -54,9 +54,7 @@ sap.ui.define([
             this._controler = o_this;
             this._TipoPesca = [];
             this._Estado = [];
-            this._modelosPescaDescargada = {"det_Descarga":"","det_Ticket":"","det_TipoPesca":"","det_Planta":"","det_DesPlanta":"","det_Emba":"","det_DesEmba":"","det_Especie":"","det_DesEspecie":"","det_Lado":"",
-            "det_CantPesca":"","det_FechaIni":"","det_FechaFin":"","det_Estado":"","det_Header":"",
-            "Estado":"","NomPlanta":"","CodPlanta":"","NomEmb":"","Matricula":"","CodEmb":"","TipoPescaSel":"","FechaInicio" : "", "HoraInicio" : "","ListaDescargas":[], "TipoPesca" : [], "ListaEstado":[]}
+            this._modelosPescaDescargada = {"det_Descarga":"","det_Ticket":"","det_TipoPesca":"","det_Planta":"","det_DesPlanta":"","det_Emba":"","det_DesEmba":"","det_Especie":"","det_DesEspecie":"","det_Lado":"","det_CantPesca":"","det_FechaIni":"","det_FechaFin":"","det_Estado":"","det_Header":"","Estado":"","NomPlanta":"","CodPlanta":"","NomEmb":"","Matricula":"","CodEmb":"","TipoPescaSel":"","FechaInicio" : "", "HoraInicio" : "","ListaDescargas":[], "TipoPesca" : [], "ListaEstado":[]};
 
             var Popup_Descarga_Modelo = new JSONModel();
             this._oView.setModel(Popup_Descarga_Modelo, "popup_descarga");

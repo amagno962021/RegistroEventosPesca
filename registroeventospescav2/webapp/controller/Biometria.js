@@ -269,6 +269,7 @@ sap.ui.define([
 
         obtenerEspecies: function(){
             let nodoPescaDeclarada = this._oView.getModel("eventos").getData().ListaPescaDeclarada;
+            let enodoPescaDeclarada = this._oView.getModel("eventos").getData().eListaPescaDeclarada;
 			let motivoMarea = this.ctr._motivoMarea;
 			let especie = sap.ui.getCore().byId("cb_especies_espec").getSelectedKey();
 			let cantPesca = sap.ui.getCore().byId("ip_especies_cp").getValue();
@@ -365,6 +366,17 @@ sap.ui.define([
                     Especie: sap.ui.getCore().byId("cb_especies_espec").getSelectedItem().getText()
                  });
 
+                 //ELIMINAR DE LA TABLA DE ELIMNADOS PESCA DECLARADA SI EXISTE EL REGISTRO
+                 if(enodoPescaDeclarada != undefined){
+                    
+                    for (var i = enodoPescaDeclarada.length - 1; i >= 0; i--) {
+                        if(enodoPescaDeclarada[i].CDSPC == especie){
+                            enodoPescaDeclarada.splice(i, 1);
+                        }  
+                    }
+                 }
+                 
+
                  this._oView.getModel("eventos").updateBindings(true);
                 
 			}
@@ -386,6 +398,7 @@ sap.ui.define([
 
         deleteItemsBiometria: function(oevent){
             let tablaBio = this._oView.byId("table_biometria");
+            let EventoCons = this._oView.getModel("eventos");
             let ListaBiometrias = this._oView.getModel("eventos").getData().ListaBiometria;
             let ListadeIndices  = tablaBio.getSelectedIndices();
             for (var i = ListaBiometrias.length - 1; i >= 0; i--) {
@@ -398,9 +411,17 @@ sap.ui.define([
             }
             /*****************************ELIMINACION DE PESCA DECLARADA************************************** */
             let ListaPescaDecl = this._oView.getModel("eventos").getData().ListaPescaDeclarada;
+            let elimListaPescaDecl = this._oView.getModel("eventos").getData().eListaPescaDeclarada;
             for (var i = ListaPescaDecl.length - 1; i >= 0; i--) {
                 for (let index = 0; index < ListadeIndices.length; index++) {
                     if(ListadeIndices[index] == i){
+                        let ePescaDeclarada = {
+                            INDTR: "D",
+                            NRMAR: EventoCons.NRMAR,
+                            NREVN: EventoCons.NREVN,
+                            CDSPC: ListaPescaDecl[i].CDSPC
+                        };
+                        elimListaPescaDecl.push(ePescaDeclarada);
                         ListaPescaDecl.splice(i, 1);
                     }
                     
@@ -408,6 +429,7 @@ sap.ui.define([
                     
             }
             this._oView.getModel("eventos").setProperty("/ListaPescaDeclarada",ListaPescaDecl);
+            this._oView.getModel("eventos").setProperty("/eListaPescaDeclarada",elimListaPescaDecl);
             this._oView.getModel("eventos").setProperty("/ListaBiometria",ListaBiometrias);
         },
 

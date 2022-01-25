@@ -935,7 +935,8 @@ sap.ui.define([
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
             let ListaEventos = mod.getProperty("/Eventos/Lista");
-            var pescaDeclarada = elementParam.ListaPescaDeclarada ? elementParam.ListaPescaDeclarada : [];//modelo pesca declarada
+            let pescaDeclarada = elementParam.ListaPescaDeclarada ? elementParam.ListaPescaDeclarada : [];//modelo pesca declarada
+            let elimpescaDeclarada = elementParam.eListaPescaDeclarada ? elementParam.eListaPescaDeclarada : [];//modelo pesca declarada
             var lista = pescaDeclarada_model;
             for (let index = 0; index < pescaDeclarada.length; index++) {
                 const element = pescaDeclarada[index];
@@ -953,6 +954,19 @@ sap.ui.define([
                 };
                 lista.push(listPescaDeclarada);
             }
+
+            //recorrido de los eliminados 
+            for (let index = 0; index < elimpescaDeclarada.length; index++) {
+                const element = elimpescaDeclarada[index];
+                var elistPescaDeclarada = {
+                    INDTR: element.INDTR,
+                    NRMAR: element.NRMAR,
+                    NREVN: element.NREVN,
+                    CDSPC: element.CDSPC
+                };
+                lista.push(elistPescaDeclarada);
+            }
+            
             return lista;
         },
 
