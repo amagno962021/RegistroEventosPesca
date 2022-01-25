@@ -2933,7 +2933,8 @@ sap.ui.define([
         },
         cargarValoresFormateados : function (){
             var eventoActual = this._listaEventos[this._elementAct];
-            eventoActual.CNPDC = eventoActual.CantTotalPescDecla ? Number(eventoActual.CantTotalPescDecla) : Number(0);
+            if(eventoActual.CDTEV == 3){eventoActual.CNPDC = eventoActual.CantTotalPescDecla ? Number(eventoActual.CantTotalPescDecla) : Number(0);}
+            if(eventoActual.CDTEV == 6){eventoActual.CNPDS = eventoActual.ListaPescaDescargada[0].CNPDS ? Number(eventoActual.ListaPescaDescargada[0].CNPDS) : Number(0);}
             eventoActual.HIEVN = Utils.formatHoraBTP(eventoActual.HIEVN);
             eventoActual.HFEVN = eventoActual.HFEVN == "" ? "" : Utils.formatHoraBTP(eventoActual.HFEVN);
             eventoActual.FFEVN = eventoActual.FFEVN == "" ? "" : Utils.formatfechaBTP(eventoActual.FFEVN);
