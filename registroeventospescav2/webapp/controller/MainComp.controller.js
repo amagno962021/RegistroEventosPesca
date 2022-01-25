@@ -689,7 +689,7 @@ sap.ui.define([
             }
 
             if (bOk) {
-                //this.informarHorometroAveriado();
+                this.informarHorometroAveriado();
             }
 
             return bOk;
@@ -730,7 +730,7 @@ sap.ui.define([
             let listaHoroAveCorreo = [];
             ListaEventos.forEach(element => {
                 if(true){
-                    let LenghtHoro = element.ListaHorometros.length;
+                    let LenghtHoro = element.ListaHorometros ? element.ListaHorometros.length : 0;
                     if(LenghtHoro > 0){
                         let ListHoro = element.ListaHorometros;
                         let ListHoroAve = ListHoro.filter(elem => elem.Chk_averiado == true);
@@ -791,17 +791,17 @@ sap.ui.define([
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
             let ListaEventos = mod.getProperty("/Eventos/Lista");
-            var horometros = ListaEventos[elementSel].ListaHorometros; //modelo de horometros de la lista de eventos (element)
+            var horometros = element.ListaHorometros ? element.ListaHorometros : []; //modelo de horometros de la lista de eventos (element)
             var lista = [];
             for (let index = 0; index < horometros.length; index++) {
-                const element = horometros[index];
+                const element2 = horometros[index];
                 var listHorometros = {
-                    INDTR: element.indicador,
-                    NRMAR: ListaEventos[elementSel].NRMAR,
-                    NREVN: ListaEventos[elementSel].NREVN,
-                    CDTHR: element.tipoHorometro,
-                    LCHOR: element.lectura,
-                    NORAV: element.Chk_averiado  === false ? "" : "A"
+                    INDTR: element2.indicador,
+                    NRMAR: element.NRMAR,
+                    NREVN: element.NREVN,
+                    CDTHR: element2.tipoHorometro,
+                    LCHOR: element2.lectura,
+                    NORAV: element2.Chk_averiado  === false ? "" : "A"
                 };
                 lista.push(listHorometros);
             }
@@ -885,19 +885,27 @@ sap.ui.define([
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
             let ListaEventos = mod.getProperty("/Eventos/Lista");
-            var IncidenReg = ListaEventos[elementSel].ListaIncidental;//modelo de lista de pesca incidental
             var pscinc_list = [];
-            for (let index = 0; index < IncidenReg.length; index++) {
-                const element = IncidenReg[index];
-                var incidental = {
-                    CDSPC: element.CDSPC,
-                    DSSPC: element.DSSPC,
-                    NREVN: ListaEventos[elementSel].NREVN,
-                    NRMAR: ListaEventos[elementSel].NRMAR,
-                    PCSPC: element.PCSPC
-                };
-                pscinc_list.push(incidental);
+            for (let index1 = 0; index1 < ListaEventos.length; index1++) {
+                const element1 = ListaEventos[index1];
+                var IncidenReg = element1.ListaIncidental ? element1.ListaIncidental.length : 0;
+                if(IncidenReg != 0 ){
+                    for (let index = 0; index < IncidenReg.length; index++) {
+                        const element = IncidenReg[index];
+                        var incidental = {
+                            CDSPC: element.CDSPC,
+                            DSSPC: element.DSSPC,
+                            NREVN: element1.NREVN,
+                            NRMAR: element1.NRMAR,
+                            PCSPC: element.PCSPC
+                        };
+                        pscinc_list.push(incidental);
+                    }
+                }
+                
+                
             }
+            
             return pscinc_list;
         },
 

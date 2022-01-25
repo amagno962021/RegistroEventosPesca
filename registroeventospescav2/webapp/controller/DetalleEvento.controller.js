@@ -22,10 +22,12 @@ sap.ui.define([
     "./Utils",
     "./DetalleMarea.controller",
     'sap/m/MessageItem',
-    'sap/m/MessagePopover'
+    'sap/m/MessagePopover',
+	"sap/ui/core/UIComponent",
+    "sap/ui/core/routing/History"
 ], function (
     MainComp,
-    Controller,
+	Controller,
 	General,
 	Distribucion,
 	PescaDeclarada,
@@ -46,11 +48,17 @@ sap.ui.define([
 	BusyIndicator,
 	Utils,
 	DetalleMarea,
-    MessageItem,
-    MessagePopover
+	MessageItem,
+	MessagePopover,
+	UIComponent,
+    History
 ) {
     "use strict";
     var oMessageEP;
+    
+    // window.location.hash="no-back-button";
+    // window.location.hash="Again-No-back-button";//again because google chrome don't insert first hash into history
+    // window.onhashchange=function(){window.location.hash="no-back-button";}
 
     return MainComp.extend("com.tasa.registroeventospescav2.controller.DetalleEvento", {
 
@@ -60,6 +68,8 @@ sap.ui.define([
 
 
         onInit: function () {
+            
+            this._vista = "";
             this.router = this.getOwnerComponent().getRouter();
             this.router.getRoute("DetalleEvento").attachPatternMatched(this._onPatternMatched, this);
             var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.session);
@@ -67,16 +77,128 @@ sap.ui.define([
             this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
             console.log(this.getOwnerComponent().getModel("DetalleMarea"));
             this.cargarMessagePopover();
+            //this.router.attachRouteMatched(this._onRouteMatched,this );
+
+                
+        },
+        _onRouteMatched :async function(oEvent){
+                let urlIntance = "" +  window.location;
+                //console.log("vista : " + oEvent.getParameter("name") + " - URL : " + urlIntance);&& oEvent.getParameter("name") == 
+                if(urlIntance.indexOf('DetalleEvento') !== -1 ){
+                    this._vista = "DetalleEvento";
+                }else{
+                    if(this._vista === "DetalleEvento"){
+                        //metodo de validacion hacia atras
+                        this.resetearValidaciones();
+                        let mod = this.getOwnerComponent().getModel("DetalleMarea");
+                        mod.setProperty("/Utils/MessageItemsEP", []);
+                        if(this.validacioncampos == false){
+
+                        }else{
+                            let bOk = await this.Dat_PescaDescargada.validarDatosEvento();
+                            var detalleMarea = this._FormMarea;//modelo detalle marea
+                            if (!bOk) {
+                                var mensaje = this.oBundle.getText("DISCCHANEVENTMESSAGE");
+                                this.agregarMensajeValid("Error", mensaje);
+                                this.Dat_Horometro.mostrarEnlaces();
+                                this.getView().getModel("eventos").updateBindings(true);
+                                //NAVEGACION SI VALORES SON INCORRECTOS
+                                this.router.navTo("DetalleEvento");
+                            } else {
+                                detalleMarea.FormEditado = true;
+                                this.getView().byId("Tab_eventos").setSelectedKey("");
+                                await this.cargarValoresFormateados();
+                                console.log("MOD: ", mod);
+                                this.getView().getModel("eventos").updateBindings(true);
+                                //NAVEGACION SI VALORES SON CORRECTOS
+                                this.router.navTo("DetalleMarea");
+                                this._vista = "";
+                            }
+                        }
+                        console.log("Saliendo de ventana de detalle evento");
+                    }
+                }
+                // if (oEvent.getParameter("name") !== "DetalleMarea") {
+                //                 return;
+                // }
+                // var oHasher = new sap.ui.core.routing.HashChanger();
+                // var hash = oHasher.getHash();
+                // oHasher.setHash("DetalleEvento");
+                // let hashprev = History.getInstance().getPreviousHash();
+                // if(hashprev !== undefined ){
+                //     if (oEvent.getParameter("name") === "DetalleMarea") {       
+                //         this.validacionReg();
+                //         this.router.navTo("DetalleEvento");
+                //     }
+                // }
+            
+        },
+
+        validacionReg : async function(){
+                        this.resetearValidaciones();
+                        let mod = this.getOwnerComponent().getModel("DetalleMarea");
+                        this.setProperty("/Utils/MessageItemsEP", []);
+                        
+                            if(this.validacioncampos == false){
+
+                            }else{
+                                let bOk = await this.Dat_PescaDescargada.validarDatosEvento();
+                                var detalleMarea = this._FormMarea;//modelo detalle marea
+                                if (!bOk) {
+                                    var mensaje = this.oBundle.getText("DISCCHANEVENTMESSAGE");
+                                    this.agregarMensajeValid("Error", mensaje);
+                                    this.Dat_Horometro.mostrarEnlaces();
+                                    this.getView().getModel("eventos").updateBindings(true);
+                                    //NAVEGACION SI VALORES SON INCORRECTOS
+                                    window.location.hash="no-back-button";
+                                } else {
+                                    detalleMarea.FormEditado = true;
+                                    this.getView().byId("Tab_eventos").setSelectedKey("");
+                                    await this.cargarValoresFormateados();
+                                    console.log("MOD: ", mod);
+                                    this.getView().getModel("eventos").updateBindings(true);
+                                    //NAVEGACION SI VALORES SON CORRECTOS
+                                    this._vista = "";
+                                    this.router.navTo("DetalleMarea");
+                                    
+                                }
+                            }
+        },
+        
+        pruebaRet :function(oEvent){
+            console.log("navegacion :c");
+        },
+        _selectItemWithId : function(id) {
+            //implementation
         },
         /**
          * @override
          */
         onExit: function() {
-            console.log("SALIENDO DEL COMPONENTE DE EVENTOS")
+            console.log("SALIENDO DEL COMPONENTE DE EVENTOS");
             //MainComp.prototype.onExit.apply(this, arguments);
             
         
         },
+        _onObjectMatched: async function (oEvent) {
+            if (oEvent.getParameter("name") !== navigation.Constants.EventDetailFragment) {
+                return;
+            }
+            
+            // let urlIntance = "" +  window.location;
+            // //console.log("vista : " + oEvent.getParameter("name") + " - URL : " + urlIntance);&& oEvent.getParameter("name") == 
+            // if(urlIntance.indexOf('DetalleEvento') !== -1 ){
+            //     this._vista = "DetalleEvento";
+            // }else{
+            //     if(this._vista === "DetalleEvento"){
+            //         //window.location = "http://localhost:8080/index.html#/DetalleEvento";
+            //         console.log("Saliendo de ventana de detalle evento");
+            //         return;
+            //     }
+            //     this._vista = "";
+            // }
+        },
+        
         cargarMessagePopover: function(){
             let oMessageTemplate = new MessageItem({
 				type: '{DetalleMarea>type}',
@@ -106,6 +228,7 @@ sap.ui.define([
         },
 
         _onPatternMatched: async function (oEvent) {
+            
 
             //modelo de alejandro
             BusyIndicator.show(0);
@@ -275,6 +398,8 @@ sap.ui.define([
             v_this._listaEventos[v_this._elementAct].CDMLM = v_this._listaEventos[v_this._elementAct].CDMLM ? v_this._listaEventos[v_this._elementAct].CDMLM : "";
             v_this._listaEventos[v_this._elementAct].CDZPC = v_this._listaEventos[v_this._elementAct].CDZPC ? v_this._listaEventos[v_this._elementAct].CDZPC : "";
             v_this._listaEventos[v_this._elementAct].INDTR = v_this._listaEventos[v_this._elementAct].INDTR ? v_this._listaEventos[v_this._elementAct].INDTR : "E";
+            v_this._listaEventos[v_this._elementAct].HFEVN = v_this._listaEventos[v_this._elementAct].HFEVN ? v_this._listaEventos[v_this._elementAct].HFEVN : "";
+            v_this._listaEventos[v_this._elementAct].FFEVN = v_this._listaEventos[v_this._elementAct].FFEVN ? v_this._listaEventos[v_this._elementAct].FFEVN : "";
             v_this._listaEventos[v_this._elementAct].NRMAR = v_this._nroMarea;
             v_this._listaEventos[v_this._elementAct].LatitudD = v_this._listaEventos[v_this._elementAct].LatitudD ? v_this._listaEventos[v_this._elementAct].LatitudD : "000";
             v_this._listaEventos[v_this._elementAct].LatitudM = v_this._listaEventos[v_this._elementAct].LatitudM ? v_this._listaEventos[v_this._elementAct].LatitudM : "00";
@@ -1546,7 +1671,7 @@ sap.ui.define([
             if(this.validacioncampos == false){
 
             }else{
-                var bOk = await this.Dat_PescaDescargada.validarDatosEvento();
+                let bOk = await this.Dat_PescaDescargada.validarDatosEvento();
                 var detalleMarea = this._FormMarea;//modelo detalle marea
                 if (!bOk) {
                     var mensaje = this.oBundle.getText("DISCCHANEVENTMESSAGE");
@@ -1556,17 +1681,14 @@ sap.ui.define([
                 } else {
                     detalleMarea.FormEditado = true;
                     this.getView().byId("Tab_eventos").setSelectedKey("");
-                    // let o_iconTabBar = sap.ui.getCore().byId("__xmlview3--Tab_eventos");
-                    // o_iconTabBar.setSelectedKey("");
                     await this.cargarValoresFormateados();
                     console.log("MOD: ", mod);
                     this.getView().getModel("eventos").updateBindings(true);
+                     //NAVEGACION SI VALORES SON CORRECTOS
                     history.go(-1);
-                }
+                 }
             }
 
-
-            
             
             //refresh model
         },
@@ -2811,7 +2933,10 @@ sap.ui.define([
         },
         cargarValoresFormateados : function (){
             var eventoActual = this._listaEventos[this._elementAct];
+            eventoActual.CNPDC = eventoActual.CantTotalPescDecla ? Number(eventoActual.CantTotalPescDecla) : Number(0);
             eventoActual.HIEVN = Utils.formatHoraBTP(eventoActual.HIEVN);
+            eventoActual.HFEVN = eventoActual.HFEVN == "" ? "" : Utils.formatHoraBTP(eventoActual.HFEVN);
+            eventoActual.FFEVN = eventoActual.FFEVN == "" ? "" : Utils.formatfechaBTP(eventoActual.FFEVN);
             eventoActual.CNPDC = eventoActual.CNPDC ? eventoActual.CNPDC : 0;
             eventoActual.CNPDS = eventoActual.CNPDS ? eventoActual.CNPDS : 0;
             eventoActual.NREVN = Utils.formatoNroEvento(eventoActual.NREVN);
