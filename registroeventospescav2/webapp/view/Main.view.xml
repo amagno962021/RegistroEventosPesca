@@ -1,5 +1,5 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:tnt="sap.tnt" controllerName="com.tasa.registroeventospescav2.controller.Main" displayBlock="true" height="100%">
-   <SplitApp>
+   <SplitApp mode="HideMode" >
       <masterPages>
          <Page title="Plantas" backgroundDesign="Transparent">
             <tnt:NavigationList id="navigationList" width="auto" items="{PlantasModel>/Items}" itemSelect="onSearchMarea">

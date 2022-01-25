@@ -49,6 +49,13 @@ sap.ui.define([
             return sBody;
         },
 
+        getBodyDominiosVarios: function(){
+            var sBody = {
+                dominios: []
+            };
+            return sBody;
+        },
+
         getBodyReadTable: function () {
             var sBody = {
                 delimitador: "",

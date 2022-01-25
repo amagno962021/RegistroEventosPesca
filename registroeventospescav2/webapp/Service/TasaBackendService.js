@@ -86,6 +86,20 @@ sap.ui.define([
             return data;
         },
 
+        obtenerDominioVarios: async function(listaDominios){
+            var uri = UtilService.getHostService() + "/api/dominios/Listar";
+            var sBody = UtilService.getBodyDominiosVarios();
+            sBody.dominios = listaDominios;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerDominio: ", error);
+                return null;
+            });
+            return data;
+        },
+
         obtenerDepartamentos: async function (sUsuario) {
             var uri = UtilService.getHostService() + "/api/General/ConsultaGeneral/";
             var sBody = UtilService.getConsultaGeneral();
