@@ -129,15 +129,27 @@ sap.ui.define([
                 }));
             }
             else{
-                this._oView.byId("table_biometria").addColumn( new sap.ui.table.Column({
-                    label: new sap.m.Label({
-                        text: textCol 
-                    }),
-                    template : new sap.m.Text({
-                        text: CampoSet 
-                    }),
-                    width : '10rem'
-                }));
+                if(paramModel == "Moda" || paramModel == "Muestra" || paramModel == "PorcJuveniles"){
+                    this._oView.byId("table_biometria").addColumn( new sap.ui.table.Column({
+                        label: new sap.m.Label({
+                            text: textCol 
+                        }),
+                        template : new sap.m.Text({
+                            text: CampoSet 
+                        }),
+                        width : '7.5rem'
+                    }));
+                }else{
+                    this._oView.byId("table_biometria").addColumn( new sap.ui.table.Column({
+                        label: new sap.m.Label({
+                            text: textCol 
+                        }),
+                        template : new sap.m.Text({
+                            text: CampoSet 
+                        }),
+                        width : '10rem'
+                    }));
+                }
             }
         },
         CargaDatosBiometria :async function(event){

@@ -32,7 +32,7 @@
 									<VBox justifyContent="Center" class="sapUiSmallMarginEnd">
 										<layout:VerticalLayout class="sapUiSmallMarginBeginEnd">
 											<ObjectStatus title="Matricula" text="{DetalleMarea>/Cabecera/MREMB}"/>
-											<ObjectStatus title="Planta" text="{DetalleMarea>/DistribFlota/DESCR}"/>
+											<ObjectStatus title="Planta" text="{DetalleMarea>/DistribFlota/DESCR}" inverted="true" state="Success"/>
 											<ObjectStatus title="Tipo de Evento" text="{DetalleMarea>/Utils/DescTipoEvento}" inverted="true" state="Success"/>
 										</layout:VerticalLayout>
 									</VBox>

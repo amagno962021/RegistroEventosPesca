@@ -414,7 +414,7 @@ sap.ui.define([
             v_this._listaEventos[v_this._elementAct].ListaEquipamiento = v_this._listaEventos[v_this._elementAct].ListaEquipamiento ? v_this._listaEventos[v_this._elementAct].ListaEquipamiento :[];
             v_this._listaEventos[v_this._elementAct].ListaAccidente = [];
             v_this._listaEventos[v_this._elementAct].ListaSiniestros = v_this._listaEventos[v_this._elementAct].ListaSiniestros ? v_this._listaEventos[v_this._elementAct].ListaSiniestros : [];
-            v_this._listaEventos[v_this._elementAct].ListaIncidental = v_this._listaIncidental;
+            v_this._listaEventos[v_this._elementAct].ListaIncidental = v_this._listaEventos[v_this._elementAct].ListaIncidental ? v_this._listaEventos[v_this._elementAct].ListaIncidental : v_this._listaIncidental;
             v_this._listaEventos[v_this._elementAct].eListaPescaDeclarada = v_this._listaEventos[v_this._elementAct].eListaPescaDeclarada ? v_this._listaEventos[v_this._elementAct].eListaPescaDeclarada : [];
             v_this._listaEventos[v_this._elementAct].EspePermitida = [];
             v_this._listaEventos[v_this._elementAct].EspeZonaPesca = [];
@@ -1016,12 +1016,14 @@ sap.ui.define([
 
             //Tab Pesca Biometria
             if (this.buscarValorFijo(textValidaciones.EVEVISTABBIOME, this._tipoEvento)) {
-                if (this._FormMarea.INPRP != textValidaciones.INDIC_PROPIEDAD_TERCEROS) {
+                // if (this._FormMarea.INPRP != textValidaciones.INDIC_PROPIEDAD_TERCEROS) {
+                if (this._indicadorPropXPlanta != textValidaciones.INDIC_PROPIEDAD_TERCEROS) {
                     this.getView().byId("idBiometria").setVisible(true);
-                    this.getView().byId("ext_botonesPescaDcl").setVisible(false);
-                }else{
-                    this.getView().byId("ext_botonesPescaDcl").setVisible(true);
+                    //this.getView().byId("ext_botonesPescaDcl").setVisible(false);
                 }
+                // else{
+                //     this.getView().byId("ext_botonesPescaDcl").setVisible(true);
+                // }
 
             }
 
