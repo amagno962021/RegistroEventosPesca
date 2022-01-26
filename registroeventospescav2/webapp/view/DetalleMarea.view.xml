@@ -216,7 +216,7 @@
 												<form:fields>
 													<HBox>
 														<DatePicker value="{DetalleMarea>/DatosGenerales/FFMAR}" width="90%"  valueStateText="Invalid entry" 
-																 valueFormat="dd/MM/yyyy HH:mm" displayFormat="dd/MM/yyyy HH:mm" enabled="{DetalleMarea>/Config/readOnlyFechFin}"/>
+																 valueFormat="dd/MM/yyyy" displayFormat="dd/MM/yyyy" enabled="{DetalleMarea>/Config/readOnlyFechFin}"/>
 														<TimePicker id="TP3" value="{DetalleMarea>/DatosGenerales/HFMAR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%" enabled="{DetalleMarea>/Config/readOnlyFechFin}"/>
 													</HBox>
 												</form:fields>
