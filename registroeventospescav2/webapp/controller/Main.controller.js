@@ -38,6 +38,19 @@ sap.ui.define([
                     this.filtarMareas(cdtem, cdpta);
                 }
                 */
+                var currentUser = await this.getCurrentUser();
+                var listaMareas = await TasaBackendService.cargarListaMareas(currentUser);
+                if (listaMareas) {
+                    var tipoEmba = await TasaBackendService.obtenerTipoEmbarcacion(currentUser);
+                    if (tipoEmba) {
+                        var plantas = await TasaBackendService.obtenerPlantas(currentUser);
+                        if (plantas) {
+                            this.prepararDataTree(tipoEmba, plantas.data);
+                            this.validarDataMareas(listaMareas);
+                        }
+                    }
+                }
+
                 await this.loadInitData();
 
                 this.CDTEM = "";
@@ -78,19 +91,7 @@ sap.ui.define([
                 await this.callConstantes();
 
                 BusyIndicator.show(0);
-                console.log("ACTUALIZA LISTA MAREAS");
-                var currentUser = await this.getCurrentUser();
-                var listaMareas = await TasaBackendService.cargarListaMareas(currentUser);
-                if (listaMareas) {
-                    var tipoEmba = await TasaBackendService.obtenerTipoEmbarcacion(currentUser);
-                    if (tipoEmba) {
-                        var plantas = await TasaBackendService.obtenerPlantas(currentUser);
-                        if (plantas) {
-                            this.prepararDataTree(tipoEmba, plantas.data);
-                            this.validarDataMareas(listaMareas);
-                        }
-                    }
-                }
+                await this.onActualizaMareas();
                 BusyIndicator.hide();
 
 

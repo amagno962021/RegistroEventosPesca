@@ -124,6 +124,7 @@ sap.ui.define([
                                 existeDesc = true;
                                 let fechContab = element.ListaPescaDescargada[0].FECCONMOV;
                                 var fechaContabilizacion = Utils.strDateToDate(fechContab);//pasar fecha de contabilizacion de modelo pesca descargada
+                                console.log("FECHA CONT: ", fechContab);
                                 if ((fechaContabilizacion.getTime() - fechaActual.getTime()) >= 0) {
                                     modelo.setProperty("/Cabecera/ESCMA", "P");
                                 }
@@ -2390,9 +2391,10 @@ sap.ui.define([
                         title: "Exitoso"
                     });
                 }
-            } else {
+            } 
+            /*else {
                 MessageBox.information(this.oBundle.getText("ERRORSLECCIONEPLANTA"));
-            }
+            }*/
         },
 
         getSerachingHelpComponents: function (oModel, sAyudaBusqId) {

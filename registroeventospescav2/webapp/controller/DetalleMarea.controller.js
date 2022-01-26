@@ -165,13 +165,15 @@ sap.ui.define([
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             modelo.refresh();
             var listaEventos = modelo.getProperty("/Eventos/Lista");
+            //this.getView().byId("ne_tipoEvn").setValue(null);
             if (listaEventos.length > 0) {
                 var ultimoEvento = listaEventos[listaEventos.length - 1];
                 var tipoEvento = ultimoEvento.CDTEV;
                 var tipoEvntInt = !isNaN(tipoEvento) ? parseInt(tipoEvento) + 1 : 0;
                 var nuevoEvento = tipoEvntInt.toString();
-                //sap.ui.getCore().byId("ne_tipoEvn").setSelectedKey(nuevoEvento); COMENTADO DA ERROR
+                //this.getView().byId("ne_tipoEvn").setSelectedKey(nuevoEvento);
                 modelo.setProperty("/Utils/TipoEvento", nuevoEvento);
+                modelo.refresh();
             }
             this.getNuevoEvento().open();
         },
@@ -386,6 +388,8 @@ sap.ui.define([
             //mod.setProperty("/Utils/TipoEvento","6");
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("DetalleEvento");
+            mod.setProperty("/Utils/TipoEvento", null);
+            mod.refresh();
             this.getNuevoEvento().close();
 
         },
