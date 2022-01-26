@@ -17,7 +17,7 @@
 						<m:Text text="TM"/>
 						<m:ToolbarSpacer/>
 					</m:OverflowToolbar>
-					<m:OverflowToolbar id="ext_botonesPescaDcl" style="Clear">
+					<!-- <m:OverflowToolbar id="ext_botonesPescaDcl" style="Clear">
 							<m:Button text="Agregar" icon="sap-icon://add" press=".buscarEspeciePopup">
 								<m:customData>
 									<core:CustomData key="multi" value="true" />
@@ -25,7 +25,7 @@
 							</m:Button>
 							<m:Button text="Eliminar" type="Reject" icon="sap-icon://decline" tooltip="Clear all filters" press=".deleteItemsBiometria" />
 
-					</m:OverflowToolbar>
+					</m:OverflowToolbar> -->
 				</extension>
 				<columns>
 					<Column

@@ -192,7 +192,12 @@
 
                                         <HBox class="sapUiTinyMarginBottom">
                                             <Label text="Cantd. pesca:" class="sapUiSmallMarginEnd"/>
-                                            <tnt:InfoLabel text="{popup_descarga>/det_CantPesca}" renderMode="Narrow" colorScheme="8" />
+                                            <ObjectNumber
+                                                number="{popup_descarga>/det_CantPesca}"
+                                                unit="Tn."
+                                                inverted="true"
+                                                state="Information" />
+                                            <!-- <tnt:InfoLabel text="{popup_descarga>/det_CantPesca}" renderMode="Narrow" colorScheme="8" /> -->
                                         </HBox>
 
                                         <HBox renderType="Bare">
@@ -293,7 +298,12 @@
                                             <Text text="{popup_descarga>WEPTA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                             <Text text="{popup_descarga>DSPTA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                             <Text text="{popup_descarga>NMEMB}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-                                            <Text text="{popup_descarga>CNPDS}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>  
+                                            <ObjectNumber
+                                                number="{popup_descarga>CNPDS}"
+                                                unit="Tn."
+                                                inverted="true"
+                                                state="Information" />
+                                            <!-- <Text text="{popup_descarga>CNPDS}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>   -->
                                             <Text text="{popup_descarga>FIDES} {popup_descarga>HIDES}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>  
                                             <Text text="{popup_descarga>FFDES} {popup_descarga>HFDES}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/> 
                                         </cells>

@@ -892,8 +892,9 @@ sap.ui.define([
                 const element1 = ListaEventos[index1];
                 var IncidenReg = element1.ListaIncidental ? element1.ListaIncidental.length : 0;
                 if(IncidenReg != 0 ){
-                    for (let index = 0; index < IncidenReg.length; index++) {
-                        const element = IncidenReg[index];
+                    let lstIncidental = element1.ListaIncidental;
+                    for (let index = 0; index < lstIncidental.length; index++) {
+                        const element = lstIncidental[index];
                         var incidental = {
                             CDSPC: element.CDSPC,
                             DSSPC: element.DSSPC,
