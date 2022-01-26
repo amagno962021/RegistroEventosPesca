@@ -29,13 +29,17 @@ sap.ui.define([
 
     return MainComp.extend("com.tasa.registroeventospescav2.controller.DetalleMarea", {
 
-        onInit: function () {
+        onInit: async function () {
             this.router = this.getOwnerComponent().getRouter();
             this.router.getRoute("DetalleMarea").attachPatternMatched(this._onPatternMatched, this);
             this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
             //this.oControllerEvento = sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento"); 
             this.cargarMessagePopover();
 
+
+            this.validaFechaNulaEvt(this);
+            await this.cargarCombos(this);
+            await this.validarVista(this);
         },
 
         _onPatternMatched: async function (oEvent) {
@@ -45,11 +49,13 @@ sap.ui.define([
 
             BusyIndicator.show(0);
             //validar fechas nulas en tabla de eventos
+            //this.validaFechaNulaEvt(this);
+
+
             this.validaFechaNulaEvt(this);
-
-
-            //cargar combos
             await this.cargarCombos(this);
+            //cargar combos
+            //await this.cargarCombos(this);
 
             //obtener datos de distribucion de flota
             //this.obtenerDatosDistribFlota();
@@ -64,7 +70,7 @@ sap.ui.define([
             //this.validarLimiteVeda();
 
             //validaciones de objetos de vista
-            await this.validarVista(this);
+            //await this.validarVista(this);
 
             var bckpModelo = this.getOwnerComponent().getModel("DetalleMarea");
             var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
@@ -388,7 +394,8 @@ sap.ui.define([
             //mod.setProperty("/Utils/TipoEvento","6");
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("DetalleEvento");
-            mod.setProperty("/Utils/TipoEvento", null);
+            //mod.setProperty("/Utils/TipoEvento", null);
+            //sap.ui.getCore().byId("ne_tipoEvn").setValue(null);
             mod.refresh();
             this.getNuevoEvento().close();
 
@@ -649,6 +656,7 @@ sap.ui.define([
             }
 
             modelo.setProperty("/Utils/MessageItemsDM", []);
+            console.log("BORRA FECHA ETA AQUI 1");
             modelo.setProperty("/Config/visibleFecHoEta", false);
             modelo.setProperty("/Config/visibleFechIni", false);
             modelo.setProperty("/Config/visibleFechFin", false);

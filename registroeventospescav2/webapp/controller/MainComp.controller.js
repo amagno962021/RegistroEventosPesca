@@ -375,6 +375,7 @@ sap.ui.define([
 
             modeloDetalleMarea.setProperty("/Config/visibleTabReserva", false);
             modeloDetalleMarea.setProperty("/Config/visibleTabVenta", false);
+            modeloDetalleMarea.refresh();
             var inprp = modeloDetalleMarea.getProperty("/Cabecera/INPRP");
             var motivo = modeloDetalleMarea.getProperty("/Cabecera/CDMMA");
             if (inprp == "P" && motivoResCombu.includes(motivo)) {
@@ -393,6 +394,7 @@ sap.ui.define([
 
             if (motivoSinZarpe.includes(motivo)) {
                 modeloDetalleMarea.setProperty("/Config/readOnlyFechIni", false);
+                console.log("BORRA FECHA ETA AQUI 2");
                 modeloDetalleMarea.setProperty("/Config/visibleFecHoEta", false);
                 modeloDetalleMarea.setProperty("/Config/visibleFechIni", true);
                 modeloDetalleMarea.setProperty("/Config/visibleFechFin", true);
@@ -2670,6 +2672,7 @@ sap.ui.define([
                     modelo.setProperty("/DatosGenerales/ESMAR", "A");
                 }
             } else if (motivo == "3" || motivo == "7" || motivo == "8") {
+                console.log("BORRA FECHA ETA AQUI 3");
                 modelo.setProperty("/Config/visibleFecHoEta", false);
                 modelo.setProperty("/Config/visibleUbiPesca", true);
                 modelo.setProperty("/Config/visibleFechIni", true);
