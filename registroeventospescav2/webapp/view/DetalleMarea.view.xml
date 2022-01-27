@@ -29,7 +29,7 @@
 				</layout:content>
 			</layout:VerticalLayout>
 			<IconTabBar expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true"
-						selectedKey="itfDatosGenerales" select="onSelectTabMarea" id="itbDetalleMarea">
+						selectedKey="{DetalleMarea>/Config/initSelectKeyTab}" select="onSelectTabMarea" id="itbDetalleMarea">
 				<items>
 					<IconTabFilter key="itfDatosGenerales" iconColor="Default" text="Datos Generales" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true"
 								visible="true" iconDensityAware="false">

@@ -35,21 +35,30 @@ sap.ui.define([
             this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
             //this.oControllerEvento = sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento"); 
             this.cargarMessagePopover();
+
         },
 
         _onPatternMatched: async function (oEvent) {
-            console.log("PARAM ROUTER: ", oEvent);
-            var modeloMarea = this.getOwnerComponent().getModel("DetalleMarea");
-            var indicador = modeloMarea.getProperty("/Cabecera/INDICADOR");
+            //console.log("PARAM ROUTER: ", oEvent);
+            /*var modeloMarea = this.getOwnerComponent().getModel("DetalleMarea");
+            var indicador = modeloMarea.getProperty("/Cabecera/INDICADOR");*/
 
             BusyIndicator.show(0);
             //validar fechas nulas en tabla de eventos
             //this.validaFechaNulaEvt(this);
 
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+            var cargaInicial = oStore.get("FlagCargaInicial");
+            if(cargaInicial){
+                this.validaFechaNulaEvt(this);
+                await this.cargarCombos(this);
+                await this.validarVista(this);
+            }
 
-            this.validaFechaNulaEvt(this);
-            await this.cargarCombos(this);
-            await this.validarVista(this);
+            var modeloMarea = this.getOwnerComponent().getModel("DetalleMarea");
+            var listaTipoEventos = modeloMarea.getProperty("/Config/datosCombo/ListaTipoEventos");
+            this.validaComboTipoEvento(listaTipoEventos);
+            
             //cargar combos
             //await this.cargarCombos(this);
 
@@ -69,7 +78,7 @@ sap.ui.define([
             //await this.validarVista(this);
 
             var bckpModelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+            
             oStore.put("BckpModeloMarea", bckpModelo);
 
             BusyIndicator.hide();
@@ -83,9 +92,10 @@ sap.ui.define([
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             console.log("MODELO: ", modelo);
 
+            /*
             var tab = this.getView().byId("itbDetalleMarea");
             tab.setSelectedKey("itfDatosGenerales"); 
-        
+            */
         },
 
         cargarMessagePopover: function () {
@@ -388,6 +398,8 @@ sap.ui.define([
             mod.setProperty("/Utils/TipoConsulta", "C");
             mod.setProperty("/Utils/DescTipoEvento", sap.ui.getCore().byId("ne_tipoEvn").getSelectedItem().getText());
             //mod.setProperty("/Utils/TipoEvento","6");
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+            oStore.put("FlagCargaInicial", false);
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("DetalleEvento");
             //mod.setProperty("/Utils/TipoEvento", null);
@@ -508,8 +520,10 @@ sap.ui.define([
 
                     //tipos evento
                     var tiposEvento = data[3].data;
-                    me.validaComboTipoEvento(tiposEvento);
-
+                    modeloDetalleMarea.setProperty("/Config/datosCombo/ListaTipoEventos", tiposEvento);
+                    dataDetalleMarea.Config.datosCombo.ListaTipoEventos = tiposEvento;
+                    //me.validaComboTipoEvento(tiposEvento);
+                    modeloDetalleMarea.refresh();
                 }
             }
         },
@@ -1396,10 +1410,12 @@ sap.ui.define([
         onNext: function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var valMotUbicPesca = this.validarMotivoUbiPesca();
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
             if (valMotUbicPesca) {
                 modelo.setProperty("/Utils/TipoConsulta", "C");
                 modelo.setProperty("/Utils/TipoEvento", "1");
                 modelo.setProperty("/Utils/DescTipoEvento", "Zarpe");
+                oStore.put("FlagCargaInicial", false);
                 var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.navTo("DetalleEvento");
                 this.getNuevoEvento().close();

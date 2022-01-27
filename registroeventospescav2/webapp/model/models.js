@@ -235,13 +235,15 @@ sap.ui.define([
                     readOnlyFechaEta: true,
                     readOnlyHoraEta: true,
                     readOnlyFechFin: true,
+                    initSelectKeyTab: "",
 					datosCombo: {
                         Departamentos: [],
                         MotivosMarea: [],
                         UbicPesca: [],
                         EstMar: [],
                         TipoEventos: [],
-                        Plantas: []
+                        Plantas: [],
+                        ListaTipoEventos: []
                     }
 				},
                 FormNewMarea: {
