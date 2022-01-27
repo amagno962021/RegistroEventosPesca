@@ -52,6 +52,7 @@ sap.ui.define([
                 }
 
                 await this.loadInitData();
+                await this.cargarDatosReutilizables();
 
                 this.CDTEM = "";
                 this.CDPTA = "";

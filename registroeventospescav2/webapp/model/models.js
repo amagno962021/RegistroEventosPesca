@@ -85,6 +85,9 @@ sap.ui.define([
                     }   
 				},
                 Eventos: {
+                    BiometriaRest : [],
+                    ListaDominios : [],
+                    ConfEventos :{},
 					TituloEventos: "",
                     CantPescaDescDeclText : "",
                     Lista: [],

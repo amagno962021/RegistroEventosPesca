@@ -448,8 +448,8 @@ sap.ui.define([
         cargarDataBiometria: async function(){
             let lstBiometria = this.ctr._listaEventos[this.ctr._elementAct].ListaBiometria ? this.ctr._listaEventos[this.ctr._elementAct].ListaBiometria.length : 0;
             if(lstBiometria === 0){
-                if (this.ctr._listasServicioCargaIni[18] ? true : false) {
-                    let lista_total_bio = this.ctr._listasServicioCargaIni[18].str_flbsp_matched;
+                if (this.ctr._listaBiometriaRFC ? true : false) {
+                    let lista_total_bio = this.ctr._listaBiometriaRFC;
                     let listaDataBio = [];
                     //-------------------------Cargar las biometria pertenecientes solo a ese evento --------------//
                     for(let w = 0; w < lista_total_bio.length; w++){

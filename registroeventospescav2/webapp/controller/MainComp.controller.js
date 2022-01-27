@@ -317,6 +317,7 @@ sap.ui.define([
             var eventos = data.s_evento;
             var incidental = data.str_pscinc;
             var biometria = data.str_flbsp;
+            var biometriaRes = data.str_flbsp_matched; // AJUSTE DE BIOMETRIA ----EACOSTA
             var motivoResCombu = ["1", "2", "4", "5", "6", "7", "8"];
             var motivoSinZarpe = ["3", "7", "8"];
             await this.clearAllData();//inicalizar valores
@@ -368,6 +369,7 @@ sap.ui.define([
             //dataDetalleMarea.Eventos.Lista = eventos;
             console.log("LISTA EVENTOS: ", eventos);
             modeloDetalleMarea.setProperty("/Eventos/Lista", eventos);
+            modeloDetalleMarea.setProperty("/Eventos/BiometriaRest", biometriaRes);   // AJUSTE DE BIOMETRIA ----EACOSTA
             //dataDetalleMarea.Incidental = incidental;
             modeloDetalleMarea.setProperty("/Incidental", incidental);
             //dataDetalleMarea.Biometria = biometria;
@@ -2733,6 +2735,49 @@ sap.ui.define([
                 }
             }
         },
+        cargarDatosReutilizables:async function(){
+
+            //CARGA DE MODELO UNA SOLA VEZ
+            let modeloDetalleMarea = this.getOwnerComponent().getModel("DetalleMarea");
+            let listaDominios = [{
+                "domname": "1ZONAPESCA",
+                "status": "A"
+            }, {
+                "domname": "ZESOPE",
+                "status": "A"
+            }, {
+                "domname": "ZCDMLM",
+                "status": "A"
+            }, {
+                "domname": "ZCDTDS",
+                "status": "A"
+            },{
+                "domname": "ZCDMNP",
+                "status": "A"
+            },
+            {
+                "domname": "ZCDMES",
+                "status": "A"
+            },
+            {
+                "domname": "ZD_SISFRIO",
+                "status": "A"
+            },
+            {
+                "domname": "ESPECIE",
+                "status": "A"
+            }];
+            let serv1 = TasaBackendService.obtenerConfiguracionEvento();
+            let serv2 = TasaBackendService.obtenerDominioVarios(listaDominios);
+            await Promise.all([serv1, serv2]).then(values => {
+                modeloDetalleMarea.setProperty("/Eventos/ListaDominios", values[1]);
+                modeloDetalleMarea.setProperty("/Eventos/ConfEventos", values[0]);
+            }).catch(reason => {
+
+            });
+            //-----------
+            
+        }
 
 
     });

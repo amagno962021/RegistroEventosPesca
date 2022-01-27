@@ -305,6 +305,9 @@ sap.ui.define([
                 v_this._listaMareaAnterior = MareaAnterior_cont;
                 v_this._eventoNuevo = "5"; //VALOR DEL ID DEL EVENTO NUEVO DE LA LISTA PRINCIPAL
                 v_this._validBodegas = false;
+                v_this._listaBiometriaRFC =  dataDetalleMarea.Eventos.BiometriaRest;
+                v_this._confEventoMain = dataDetalleMarea.Eventos.ConfEventos;
+                v_this._DominiosEvn = dataDetalleMarea.Eventos.ListaDominios;
                 this.cargarListasEventoSelVacias(v_this);
                 /************ Listas iniciales vacias **************/
                 v_this._ConfiguracionEvento = {};
@@ -374,6 +377,8 @@ sap.ui.define([
                 v_this._listaEventosBkup;
                 v_this._listaMareaAnterior = MareaAnterior_cont;
                 v_this._eventoNuevo = "";
+                v_this._confEventoMain = dataDetalleMarea.Eventos.ConfEventos;
+                v_this._DominiosEvn = dataDetalleMarea.Eventos.ListaDominios;
                 /************ Listas iniciales vacias **************/
                 v_this._ConfiguracionEvento = {};
                 v_this._cmbPuntosDescarga = [];
@@ -435,37 +440,37 @@ sap.ui.define([
             if (lst_PescaDescargada.length > 0) { lst_PescaDescargada[0].Nro_descarga = this._nroDescarga; }
 
             //combo Zona de Pesca
-            var combZonaPesca = new JSONModel(this._listasServicioCargaIni[10].data[0]);
+            var combZonaPesca = new JSONModel(this._DominiosEvn.data[0]);
             this.getView().setModel(combZonaPesca, "combZonaPesca");
             this.getView().getModel("combZonaPesca").updateBindings(true);
 
             //combo Estado Operacion
-            var combEstadoOperacion = new JSONModel(this._listasServicioCargaIni[11].data[0]);
+            var combEstadoOperacion = new JSONModel(this._DominiosEvn.data[1]);
             this.getView().setModel(combEstadoOperacion, "combEstadoOperacion");
             this.getView().getModel("combEstadoOperacion").updateBindings(true);
 
             //combo Motivo Limitacion
-            var combMotivoLim = new JSONModel(this._listasServicioCargaIni[12].data[0]);
+            var combMotivoLim = new JSONModel(this._DominiosEvn.data[2]);
             this.getView().setModel(combMotivoLim, "combMotivoLim");
             this.getView().getModel("combMotivoLim").updateBindings(true);
 
             //combo Tipo de descarga
-            var combTipoDescarga = new JSONModel(this._listasServicioCargaIni[13].data[0]);
+            var combTipoDescarga = new JSONModel(this._DominiosEvn.data[3]);
             this.getView().setModel(combTipoDescarga, "combTipoDescarga");
             this.getView().getModel("combTipoDescarga").updateBindings(true);
 
             //combo Motivo no pesca
-            var combMotivoNoPesca = new JSONModel(this._listasServicioCargaIni[14].data[0]);
+            var combMotivoNoPesca = new JSONModel(this._DominiosEvn.data[4]);
             this.getView().setModel(combMotivoNoPesca, "combMotivoNoPesca");
             this.getView().getModel("combMotivoNoPesca").updateBindings(true);
 
             //combo Motivo de espera
-            var combMotivoEspera = new JSONModel(this._listasServicioCargaIni[15].data[0]);
+            var combMotivoEspera = new JSONModel(this._DominiosEvn.data[5]);
             this.getView().setModel(combMotivoEspera, "combMotivoEspera");
             this.getView().getModel("combMotivoEspera").updateBindings(true);
 
             //combo Sistema Frio
-            var combSistemaFrio = new JSONModel(this._listasServicioCargaIni[16].data[0]);
+            var combSistemaFrio = new JSONModel(this._DominiosEvn.data[6]);
             this.getView().setModel(combSistemaFrio, "combSistemaFrio");
             this.getView().getModel("combSistemaFrio").updateBindings(true);
 
@@ -475,7 +480,7 @@ sap.ui.define([
             this.getView().getModel("combPuntoDescarga").updateBindings(true);
 
             //AYUDA DE BUSQUEDA ESPECIES
-            var popupEspecies = new JSONModel(this._listasServicioCargaIni[17].data[0]);
+            var popupEspecies = new JSONModel(this._DominiosEvn.data[7]);
             this.getView().setModel(popupEspecies, "popupEspecies");
             this.getView().getModel("popupEspecies").updateBindings(true);
 
@@ -488,7 +493,8 @@ sap.ui.define([
         },
 
         cargarServiciosPreEvento: function (v_this) {
-
+            //LISTA DE DOMINIOS
+            
             let self = v_this;
             var s1 = TasaBackendService.obtenerCodigoTipoPreservacion(v_this._embarcacion, this.getCurrentUser());
             var s2 = TasaBackendService.obtenerListaEquipamiento(v_this._embarcacion, this.getCurrentUser());
@@ -500,18 +506,21 @@ sap.ui.define([
             var s8 = TasaBackendService.obtenerListaPescaDescargada(v_this._nroDescarga, this.getCurrentUser());
             //--var s9 = TasaBackendService.obtenerListaSiniestros(this._nroMarea, this._nroEvento); ---> PENDIENTE EN REVISAR
             var s10 = TasaBackendService.obtenerListaHorometro(v_this._FormMarea.WERKS, v_this._tipoEvento, v_this._nroMarea, v_this._nroEvento);
-            var s11 = TasaBackendService.obtenerConfiguracionEvento();
-            var s12 = TasaBackendService.obtenerDominio("1ZONAPESCA");
-            var s13 = TasaBackendService.obtenerDominio("ZESOPE");
-            var s14 = TasaBackendService.obtenerDominio("ZCDMLM");
-            var s15 = TasaBackendService.obtenerDominio("ZCDTDS");
-            var s16 = TasaBackendService.obtenerDominio("ZCDMNP");
-            var s17 = TasaBackendService.obtenerDominio("ZCDMES");
-            var s18 = TasaBackendService.obtenerDominio("ZD_SISFRIO");
-            var s19 = TasaBackendService.obtenerDominio("ESPECIE");
-            var s20 = TasaBackendService.obtenerMareaBiometria(v_this._embarcacion, v_this._nroMarea, this.getCurrentUser());
+            //var s11 = TasaBackendService.obtenerConfiguracionEvento();
+            // var s12 = TasaBackendService.obtenerDominio("1ZONAPESCA");
+            // var s13 = TasaBackendService.obtenerDominio("ZESOPE");
+            // var s14 = TasaBackendService.obtenerDominio("ZCDMLM");
+            // var s15 = TasaBackendService.obtenerDominio("ZCDTDS");
+            // var s16 = TasaBackendService.obtenerDominio("ZCDMNP");
+            // var s17 = TasaBackendService.obtenerDominio("ZCDMES");
+            // var s18 = TasaBackendService.obtenerDominio("ZD_SISFRIO");
+            // var s19 = TasaBackendService.obtenerDominio("ESPECIE");
+            // var s20 = TasaBackendService.obtenerMareaBiometria(v_this._embarcacion, v_this._nroMarea, this.getCurrentUser());
+            //var s21 = TasaBackendService.obtenerDominioVarios(listaDominios);
 
-            return Promise.all([s1, s2, s3, s4, s5, s6, s7, s8, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20]).then(values => {
+            return Promise.all([s1, s2, s3, s4, s5, s6, s7, s8, s10
+                //s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21
+            ]).then(values => {
                 self._tipoPreservacion = JSON.parse(values[0]).data[0].CDTPR;
                 self._listasServicioCargaIni = values;
                 console.log(self._listasServicioCargaIni);
@@ -598,8 +607,8 @@ sap.ui.define([
             this.Dat_PescaDescargada = o_fragment8;
             this.Dat_Biometria = o_fragment13;
 
-            if (this._listasServicioCargaIni[9] ? true : false) {
-                this._ConfiguracionEvento = this._listasServicioCargaIni[9];
+            if (this._confEventoMain ? true : false) {
+                this._ConfiguracionEvento = this._confEventoMain;
             }
 
             if(TipoCons == "C"){
@@ -622,7 +631,7 @@ sap.ui.define([
                 this.inhabilitarInfoCoord();
                 BusyIndicator.hide();
             }else{
-                var ss = this._listasServicioCargaIni[11].data[0].data;
+                //var ss = this._listasServicioCargaIni[10].data[0].data;
                 await this.prepararRevisionEvento(false);
                 this.cargaModelos(this);
                 this.inhabilitarInfoCoord();
@@ -659,6 +668,7 @@ sap.ui.define([
         },
 
         prepararRevisionEvento: async function (soloDatos) {
+            let mod = this.getOwnerComponent().getModel("DetalleMarea");
             if (this._tipoEvento == textValidaciones.TIPOEVENTOCALA) {
                 var fechaIniEnvase = this.getView().byId("FechaEnvaseIni");
                 fechaIniEnvase.setVisible(true);
@@ -687,6 +697,7 @@ sap.ui.define([
 
             if (this._tipoEvento == textValidaciones.TIPOEVENTODESCARGA
                 && this.buscarValorFijo(textValidaciones.MOTIVOPESCADES, this._motivoMarea)) {
+                mod.setProperty("/Eventos/CantPescaDescDeclText",this._listaEventos[this._eventoNuevo].ListaPescaDescargada[0].CantPescaDeclarada);
                 var fechaIniEnvase = this.getView().byId("FechaEnvaseIni");
                 fechaIniEnvase.setVisible(false);
                 var fechaFinEnvase = this.getView().byId("FechaEnvaseFin");
