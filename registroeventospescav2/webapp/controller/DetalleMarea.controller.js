@@ -35,11 +35,6 @@ sap.ui.define([
             this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
             //this.oControllerEvento = sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento"); 
             this.cargarMessagePopover();
-
-
-            this.validaFechaNulaEvt(this);
-            await this.cargarCombos(this);
-            await this.validarVista(this);
         },
 
         _onPatternMatched: async function (oEvent) {
@@ -54,6 +49,7 @@ sap.ui.define([
 
             this.validaFechaNulaEvt(this);
             await this.cargarCombos(this);
+            await this.validarVista(this);
             //cargar combos
             //await this.cargarCombos(this);
 
