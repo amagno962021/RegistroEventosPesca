@@ -778,9 +778,9 @@ sap.ui.define([
 
         obtenerEquipamientos: function (element) {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            let elementSel = modelo.getProperty("/Eventos/LeadSelEvento");
-            let ListaEventos = modelo.getProperty("/Eventos/Lista");
-            var listaEquipamientos = ListaEventos[elementSel - 1].ListaEquipamiento;//modelo equipamientos del evento (element)
+            //let elementSel = modelo.getProperty("/Eventos/LeadSelEvento");
+           // let ListaEventos = modelo.getProperty("/Eventos/Lista");
+            var listaEquipamientos = element.ListaEquipamiento ? element.ListaEquipamiento : [];//modelo equipamientos del evento (element)
             var equipamientos = [];
             if(listaEquipamientos){
                 for (let index = 0; index < listaEquipamientos.length; index++) {
