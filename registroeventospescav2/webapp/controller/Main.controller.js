@@ -296,6 +296,7 @@ sap.ui.define([
                 } else {
                     MessageBox.information(this.oBundle.getText("NEWMAREAMISSFIELD"));
                 }*/
+                var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 var codemba = modelo.getProperty("/DatosGenerales/CDEMB");
                 var codPlanta = modelo.getProperty("/DatosGenerales/CDPTA");
@@ -306,6 +307,7 @@ sap.ui.define([
                     if (valMareaProd) {//se puso la admiracion para pruebas
                         modelo.setProperty("/Cabecera/INDICADOR", "N");
                         modelo.setProperty("/DatosGenerales/ESMAR", "A");
+                        oStore.put("FlagCargaInicial", true);
                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                         oRouter.navTo("DetalleMarea");
                         //this.navToExternalComp();

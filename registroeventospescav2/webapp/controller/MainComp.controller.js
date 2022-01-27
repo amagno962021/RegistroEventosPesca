@@ -420,6 +420,8 @@ sap.ui.define([
             modeloDetalleMarea.refresh();
             BusyIndicator.hide();
             if (navegar) {
+                modeloDetalleMarea.setProperty("/Config/initSelectKeyTab", "itfDatosGenerales");
+                oStore.put("FlagCargaInicial", true);
                 oRouter.navTo("DetalleMarea");
             } else {
                 BusyIndicator.show(0);
@@ -1775,6 +1777,7 @@ sap.ui.define([
         cargarMarea: async function (marea, estadoMarea, embarcacion, navegar) {
             BusyIndicator.show(0);
             var currentUser = await this.getCurrentUser();
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
             if (estadoMarea == "A") {
                 var response = await TasaBackendService.obtenerDetalleMarea(marea, currentUser);
                 if (response) {
@@ -1798,8 +1801,10 @@ sap.ui.define([
                                 modelo.setProperty("/Cabecera/INDICADOR", "N");
                                 modelo.setProperty("/DatosGenerales/ESMAR", "A");
                                 modelo.setProperty("/Cabecera/EsNuevo", true);
+                                modelo.setProperty("/Config/initSelectKeyTab", "itfDatosGenerales");
                                 BusyIndicator.hide();
                                 if (navegar) {
+                                    oStore.put("FlagCargaInicial", true);
                                     var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                                     oRouter.navTo("DetalleMarea");
                                 }
@@ -2556,9 +2561,9 @@ sap.ui.define([
         validaComboTipoEvento: function (sData) {
             var oVal = [];
             var modeloDetalleMarea = this.getOwnerComponent().getModel("DetalleMarea");
-            var dataDetalleMarea = modeloDetalleMarea.getData();
-            var motivoMarea = dataDetalleMarea.Cabecera.CDMMA;
-            var eventos = dataDetalleMarea.Eventos.Lista;
+            //var dataDetalleMarea = modeloDetalleMarea.getData();
+            var motivoMarea = modeloDetalleMarea.getProperty("/DatosGenerales/CDMMA");
+            var eventos = modeloDetalleMarea.getProperty("/Eventos/Lista");
             var motivosSinZarpe = ["3", "7", "8"];
             var motivoEventoHo = ["7", "8"];
             var motivoCalaSDes = ["4", "5", "6"];
@@ -2648,9 +2653,10 @@ sap.ui.define([
                     }
                 }
             }
-            var primerItem = oVal[0];
-            modeloDetalleMarea.setProperty("/Utils/TipoEvento", primerItem.id);
-            dataDetalleMarea.Config.datosCombo.TipoEventos = oVal;
+            //var primerItem = oVal[0];
+            //modeloDetalleMarea.setProperty("/Utils/TipoEvento", primerItem.id);
+            modeloDetalleMarea.setProperty("/Config/datosCombo/TipoEventos", oVal);
+            //dataDetalleMarea.Config.datosCombo.TipoEventos = oVal;
             modeloDetalleMarea.refresh();
         },
 
