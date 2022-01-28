@@ -85,7 +85,23 @@ tr[data-mydata="C"]{
     font-style: normal;
     font-weight: 600;
 }
-
+#__status4-text, #__status5-text{
+  font-size: 16px;
+}
+#__xmlview3--idHorometro.sapMITBSelected, #__xmlview3--idEquipamiento.sapMITBSelected, #__xmlview3--idGeneral.sapMITBSelected, #__xmlview3--idDistribucion.sapMITBSelected,
+ #__xmlview3--idBiometria.sapMITBSelected, #__xmlview3--idPescaDecl.sapMITBSelected, #__xmlview3--idEquipamiento.sapMITBSelected, #__xmlview3--idPescaDesc.sapMITBSelected{
+  background: #154378 !important;
+  /* background-color: #C0392B; */
+  /* -webkit-transition: background-color 1s; */
+  -webkit-transition: 1s linear;
+  transition: 1s linear;
+  border-radius: 10px 10px 0px 0px;
+}
+#__xmlview3--idHorometro.sapMITBSelected div>div>span,#__xmlview3--idEquipamiento.sapMITBSelected div>div>span, #__xmlview3--idGeneral.sapMITBSelected div>div>span,
+  #__xmlview3--idDistribucion.sapMITBSelected div>div>span, #__xmlview3--idBiometria.sapMITBSelected div>div>span, #__xmlview3--idPescaDecl.sapMITBSelected div>div>span,
+  #__xmlview3--idEquipamiento.sapMITBSelected div>div>span, #__xmlview3--idPescaDesc.sapMITBSelected div>div>span{
+  color: rgb(255, 255, 255);
+}
 /* #__xmlview3--Tab_eventos--header{
   background: #154378 !important;
 } */
@@ -94,6 +110,7 @@ tr[data-mydata="C"]{
 /* #__xmlview3--idGeneral-text, #__xmlview3--idBiometria-text, #__xmlview3--idPescaDecl-text, #__xmlview3--idHorometro-text, #__xmlview3--idEquipamiento-text, #__xmlview3--idPescaDesc-text{
   color: white;
 } */
+
 
 /* .table100.ver6 table {
   background-color: transparent;
@@ -108,7 +125,7 @@ tr[data-mydata="C"]{
   line-height: 1.4;
 }
 
-.table100.ver6 th {
+.table100.ver6 th {     
   font-family: Montserrat-Medium;
   font-size: 12px;
   color: #fff;
