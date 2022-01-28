@@ -15,7 +15,7 @@ sap.ui.define([
 
 		createInitModel: function(){
 			var initModel = {
-				Cabecera: {
+                Form:{
                     INDICADOR: "",
 					NRMAR: "",
                     CDMMA: "",
@@ -49,24 +49,15 @@ sap.ui.define([
                     TXTNOTIF1: "",
                     TERRORES: false,
                     VEDAVERIF: false,
-                    FECVEDMAX: "",
                     NUEVOARM: "",
                     OBSCOMB: "",
                     CantTotalPescDecla: "",
-                    EsNuevo: false
-				},
-                DatosGenerales: {
-					CDEMB: "",
-                    NMEMB: "",
-                    CDEMP: "",
-                    NAME1: "",
-                    CDSPE: "",
-                    DSSPE: "",
-                    CDMMA: "",
-                    CDPTA: "",
-                    INUBC: "",
-                    ESMAR: "",
-                    FEARR: "",
+                    EsNuevo: false,
+					CDSPE: "",
+					DSSPE: "",
+					INUBC: "",
+					ESMAR: "",
+					FEARR: "",
                     HEARR: "",
                     FIMAR: "",
                     HIMAR: "",
@@ -74,16 +65,24 @@ sap.ui.define([
                     HFMAR: "",
                     FEMAR: "",
                     HAMAR: "",
-                    WERKS: "",
-                    NuevoArmador: {
-                        RUC: "",
-                        RAZON: "",
-                        CALLE: "",
-                        DISTRITO: "",
-                        PROVINCIA: "",
-                        DEPARTAMENTO: ""
-                    }   
-				},
+					RUC: "",
+                    RAZON: "",
+                    CALLE: "",
+                    DISTRITO: "",
+                    PROVINCIA: "",
+                    DEPARTAMENTO: "",
+                    AAMAR: "",
+                    AXMAR: "",
+                    DESCR: "",
+                    DESC_INPRP: "",
+                    ESBLO: "",
+                    FCBLO: "",
+                    FXMAR: "",
+                    HRBLO: "",
+                    HXMAR: "",
+                    USBLO: "",
+                    CapBodegaPermiso: 0
+                },
                 Eventos: {
                     BiometriaRest : [],
                     ListaDominios : [],
@@ -190,6 +189,14 @@ sap.ui.define([
                     }
                 },
                 Config: {
+                    visibleArmador: false,
+                    visibleBusArmador: false,
+                    visibleNueArmador: false,
+                    visibleEnlNueArmador: false,
+                    visibleBtnArmador: false,
+                    visibleBtnEventos: false,
+                    visibleEnlDetalleEvento: false,
+
 					visibleArmadorComercial: true,
                     visibleLinkCrearArmador: true,
                     visibleLinkSelecArmador: false,
@@ -239,6 +246,8 @@ sap.ui.define([
                     readOnlyFechaEta: true,
                     readOnlyHoraEta: true,
                     readOnlyFechFin: true,
+                    readOnlyHorFin: true,
+                    readOnlyFecHoEta: true,
                     initSelectKeyTab: "",
 					datosCombo: {
                         Departamentos: [],
@@ -260,7 +269,7 @@ sap.ui.define([
                     IsAllOk: false,
                     IsRollngComb: false,
                     IsRolRadOpe: false,
-                    MareaReabierta: true,
+                    MareaReabierta: false,
                     RolFlota: "",
                     SoloLectura: false,
                     Type: ""
@@ -278,6 +287,8 @@ sap.ui.define([
                 Utils:{
                     VedaVerificada: true,
                     BtnEnabled: false,
+                    BckMotMarea: [],
+                    ArmadorPropietario: [],
                     TextoConfirmacion: "",
                     VisibleEstCierre: false,
                     VisibleObsvComb: false,
@@ -301,7 +312,14 @@ sap.ui.define([
                     NumeroReservaGen: "",
                     NumeroPedidoGen: "",
                     TituloReviewReVe: "",
-                    ConfirmDialog: null
+                    ConfirmDialog: null,
+                    SetInitTab: "",
+                    TextoErrorMarea: "",
+                    FecVedaMax: "",
+                    bckEmbarcacion: null,
+                    bckArmador: null,
+                    BckFecInicio: "",
+                    BckTipoEvento: []
                 },
                 InputsDescargas :{
                     CentPlanta : "",

@@ -38,8 +38,8 @@
 									<Label text="Fecha/hora ETA" design="Standard" width="100%" required="false" textAlign="Left" textDirection="Inherit" visible="true" />
 								</form:label>
 								<form:fields>
-									<DatePicker value="{DetalleMarea>/DatosGenerales/FEARR}" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd" />
-									<TimePicker value="{DetalleMarea>/DatosGenerales/HEARR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%"/>
+									<DatePicker value="{DetalleMarea>/Form/FEARR}" width="100%" displayFormat="dd/MM/yyyy" required="false" valueStateText="Invalid entry" enabled="true" visible="true" valueFormat="yyyyMMdd" />
+									<TimePicker value="{DetalleMarea>/Form/HEARR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%"/>
 								</form:fields>
 							</form:FormElement>
 						</form:formElements>

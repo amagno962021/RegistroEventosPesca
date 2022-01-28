@@ -160,7 +160,7 @@ sap.ui.define([
             }
         },
 
-        strDateToSapDate: function(date){
+        strDateToSapDate: function(date){ //dd/MM/yyyy
             let p_fecha = date + "";
             var newDate = "";
             if(p_fecha.length > 8){
@@ -198,11 +198,44 @@ sap.ui.define([
 
         getEtiqueta: function(path){
             var etiqueta = "";
-            if(etiqueta == "/DatosGenerales/CDEMB"){
+            if(path == "/Form/CDEMB"){
                 etiqueta = "Embarcación";
             }
-            if(etiqueta == "/DatosGenerales/CDEMP"){
+            if(path == "/Form/CDMMA"){
+                etiqueta = "Motivo de Marea";
+            }
+            if(path == "/Form/INUBC"){
+                etiqueta = "Ubicación de Pesca";
+            }
+            if(path == "/Form/RUC"){
+                etiqueta = "R.U.C";
+            }
+            if(path == "/Form/RAZON"){
+                etiqueta = "Razón Social";
+            }
+            if(path == "/Form/CALLE"){
+                etiqueta = "Calle";
+            }
+            if(path == "/Form/DISTRITO"){
+                etiqueta = "Distrito";
+            }
+            if(path == "/Form/PROVINCIA"){
+                etiqueta = "Provincia";
+            }
+            if(path == "/Form/DEPARTAMENTO"){
+                etiqueta = "Departamento";
+            }
+            if(path == "/Form/CDEMP"){
                 etiqueta = "Armador Comercial";
+            }
+            if(path == "/Form/FIMAR"){
+                etiqueta = "Fecha de Inicio";
+            }
+            if(path == "/Form/FFMAR"){
+                etiqueta = "Fecha de Fin";
+            }
+            if(path == "/Form/HIMAR"){
+                etiqueta = "Hora de Inicio";
             }
 
             return etiqueta;

@@ -21,7 +21,7 @@
 									<Label text="Estado de Marea" width="100%"/>
 								</form:label>
 								<form:fields>
-									<ComboBox width="auto" selectedKey="{DetalleMarea>/DatosGenerales/ESMAR}" items="{DetalleMarea>/Config/datosCombo/EstMar}" enabled="true">
+									<ComboBox width="auto" selectedKey="{DetalleMarea>/Form/ESMAR}" items="{DetalleMarea>/Config/datosCombo/EstMar}" enabled="true">
 										<items>
 											<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
 										</items>
@@ -33,7 +33,7 @@
 									<Label text="Observación" width="100%"/>
 								</form:label>
 								<form:fields>
-									<TextArea id="txtObsComb" value="{DetalleMarea>/Cabecera/OBSCOMB}"  width="100%"/>
+									<TextArea id="txtObsComb" value="{DetalleMarea>/Form/OBSCOMB}"  width="100%"/>
 								</form:fields>
 							</form:FormElement>
 						</form:formElements>
