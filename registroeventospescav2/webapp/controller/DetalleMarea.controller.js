@@ -674,19 +674,19 @@ sap.ui.define([
             //modelo.setProperty("/Config/visibleTabReserva", false);
             //modelo.setProperty("/Config/visibleTabVenta", false);
             modelo.setProperty("/Config/visibleTabSepComb", false);
-            modelo.setProperty("/Config/visibleBtnGuardar", false);
+            modelo.setProperty("/Config/visibleBtnGuardar", true);
             modelo.setProperty("/Config/visibleBtnSiguiente", false);
             if (indicador == "N") {
                 modelo.setProperty("/Config/readOnlyMotMarea", true);
                 modelo.setProperty("/Config/visibleTabReserva", false);
                 modelo.setProperty("/Config/visibleTabSepComb", false);
                 modelo.setProperty("/Config/visibleTabVenta", false);
-                modelo.setProperty("/Config/visibleBtnGuardar", true);
+                //modelo.setProperty("/Config/visibleBtnGuardar", true);
                 modelo.setProperty("/Config/visibleBtnSiguiente", false);
             } else {
                 var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
                 context.validarMotivo(motivoMarea);
-                modelo.setProperty("/Config/visibleBtnGuardar", true);
+                //modelo.setProperty("/Config/visibleBtnGuardar", true);
                 modelo.setProperty("/Config/readOnlyMotMarea", false);
                 await context.validaDescargas();
             }

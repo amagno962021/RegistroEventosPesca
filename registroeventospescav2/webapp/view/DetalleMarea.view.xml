@@ -874,6 +874,8 @@
 				<content>
 					<Button id="messagePopoverBtn" icon="{ path: '/', formatter: 'buttonIconFormatter' }" type="{ path: '/', formatwter: 'buttonTypeFormatter' }" text= "{path: '/', formatter: 'highestSeverityMessages' }" press="handleMessagePopoverPress"/>
 					<ToolbarSpacer width=""/>
+					<Button text="Atrás" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleBtnAtras}"
+								iconDensityAware="false" press="onBackListMarea"/>
 					<Button text="Guardar" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleBtnGuardar}"
 								iconDensityAware="false" press="onSave"/>
 					<Button text="Siguiente" type="Emphasized" icon="sap-icon://open-command-field" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleBtnSiguiente}"
