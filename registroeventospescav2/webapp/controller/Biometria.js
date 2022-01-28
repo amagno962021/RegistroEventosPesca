@@ -120,6 +120,7 @@ sap.ui.define([
                         text: textCol 
                     }),
                     template : new sap.m.Input({
+                        type:"Number",
                         value: CampoSet, 
                         liveChange : function(evt){
                             that.CargaDatosBiometria(evt);

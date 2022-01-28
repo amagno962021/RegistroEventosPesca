@@ -357,8 +357,8 @@
 										<cells>
 											<Text text="{DetalleMarea>NREVN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 											<ObjectIdentifier title="{DetalleMarea>DESC_CDTEV}" text="" titleActive="false" visible="true"/>
-											<Text text="{DetalleMarea>FECHOINI}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-											<Text text="{DetalleMarea>FECHOFIN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="{DetalleMarea>FIEVN} {DetalleMarea>HIEVN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+											<Text text="{DetalleMarea>FFEVN} {DetalleMarea>HFEVN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 											<ObjectIdentifier title="{DetalleMarea>DSZPC}" text="" titleActive="false" visible="true"/>
 											<ObjectIdentifier title="{DetalleMarea>DSPTO}" text="" titleActive="false" visible="true"/>
 											<ObjectIdentifier title="{DetalleMarea>DESCR}" text="" titleActive="false" visible="true"/>

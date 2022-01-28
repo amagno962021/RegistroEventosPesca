@@ -2952,6 +2952,8 @@ sap.ui.define([
             eventoActual.HIEVN = Utils.formatHoraBTP(eventoActual.HIEVN);
             eventoActual.HFEVN = eventoActual.HFEVN == "" ? "" : Utils.formatHoraBTP(eventoActual.HFEVN);
             eventoActual.FFEVN = eventoActual.FFEVN == "" ? "" : Utils.formatfechaBTP(eventoActual.FFEVN);
+            eventoActual.HIEVN = eventoActual.HIEVN == "" ? "" : Utils.formatHoraBTP(eventoActual.HIEVN);
+            eventoActual.FIEVN = eventoActual.FIEVN == "" ? "" : Utils.formatfechaBTP(eventoActual.FIEVN);
             eventoActual.CNPDC = eventoActual.CNPDC ? eventoActual.CNPDC : 0;
             eventoActual.CNPDS = eventoActual.CNPDS ? eventoActual.CNPDS : 0;
             if(eveZonaPesca.includes(eventoActual.CDTEV)){ eventoActual.DSZPC = this.byId("cb_ZonaPesca").getSelectedItem().getText();}
