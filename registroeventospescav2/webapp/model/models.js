@@ -232,6 +232,7 @@ sap.ui.define([
                     visibleBuscarArmador: true,
                     visibleAlmacenReserva: false,
                     visibleAlmacenExterno: false,
+                    visibleBtnAtras: false,
                     enableBtnArmador: true,
                     readOnlyUbicPesca: true,
                     readOnlyObs: true,
@@ -328,7 +329,8 @@ sap.ui.define([
                 helpArma: null,
                 user: {
                     name: ""
-                }
+                },
+                EmbaItem: null
 			};
 			var oModel = new JSONModel(initModel);
 			//oModel.setDefaultBindingMode("OneWay");
