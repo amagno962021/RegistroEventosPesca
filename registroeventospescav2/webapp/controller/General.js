@@ -654,8 +654,8 @@ sap.ui.define([
                 var difHoras = difHorasLong / (1000 * 60 * 60);
                 var calActual = new Date();
                 var fechaActual = Utils.strDateToSapDate(Utils.dateToStrDate(calActual));
-                var embarcacion = mod.getProperty("/Cabecera/CDEMB");
-                var motMarea = mod.getProperty("/Cabecera/CDMMA");
+                var embarcacion = mod.getProperty("/Form/CDEMB");
+                var motMarea = mod.getProperty("/Form/CDMMA");
                 var obtenerconsTeorico = await TasaBackendService.obtenerconsTeorico(embarcacion, motMarea, eventoActual.CDPTO, fechaActual);
                 if (obtenerconsTeorico.length > 0) {
                     var consTeorComb = obtenerconsTeorico[0].CSTEO * difHoras;

@@ -69,7 +69,7 @@ sap.ui.define([
                 var dataModelo = modelo.getData();
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 oStore.put('InitData', dataModelo);
-                
+
 
             },
 
@@ -77,7 +77,7 @@ sap.ui.define([
              * @override
              */
             onBeforeRendering: async function () {
-                
+
             },
 
             /**
@@ -85,7 +85,7 @@ sap.ui.define([
              */
             onAfterRendering: async function () {
                 //MainComp.prototype.onAfterRendering.apply(this, arguments);
-                
+
                 this.objetoHelp = this._getHelpSearch();
                 this.parameter = this.objetoHelp[0].parameter;
                 this.url = this.objetoHelp[0].url;
@@ -121,7 +121,7 @@ sap.ui.define([
                         modeloConstantes.setProperty("/HelpHost", host);
                     }).catch(error => console.log(error)
                     );
-                    BusyIndicator.hide();
+                BusyIndicator.hide();
             },
 
             _onPatternMatched: function () {
@@ -187,6 +187,41 @@ sap.ui.define([
                         this.getOwnerComponent().getModel("ComboModel").setProperty("/Plantas", plantas);
                     }).catch(error => console.log(error));
 
+
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var listaDominios = [{
+                    "domname": "ZCDMMA",
+                    "status": "A"
+                }, {
+                    "domname": "ZDO_ZESMAR",
+                    "status": "A"
+                }, {
+                    "domname": "ZCDTEV",
+                    "status": "A"
+                }];
+
+                var dominios = await TasaBackendService.obtenerDominioVarios(listaDominios);
+                if (dominios) {
+                    var data = dominios.data;
+                    if (data.length > 0) {
+                        var motivosMarea = data[0].data;
+                        modelo.setProperty("/Utils/BckMotMarea", motivosMarea);
+
+                        var estadosMarea = data[1].data;
+                        modelo.setProperty("/Config/datosCombo/EstMar", estadosMarea);
+
+                        var tipoEventos = data[2].data;
+                        modelo.setProperty("/Utils/BckTipoEvento", tipoEventos);
+                    }
+                }
+
+                var resDepartamentos = await TasaBackendService.obtenerDepartamentos(await this.getCurrentUser());
+                if (resDepartamentos) {
+                    var departamentos = resDepartamentos.data;
+                    modelo.setProperty("/Config/datosCombo/Departamentos", departamentos);
+                }
+                modelo.refresh();
+
                 this.validarRoles();
             },
 
@@ -233,8 +268,8 @@ sap.ui.define([
                     var cdpta = selectedItem.cdpta;
                     var txtCabecera = selectedItem.text + " - " + selectedItem.descr;
                     this.getView().byId("idObjectHeader").setTitle(txtCabecera);
-                    modelo.setProperty("/DatosGenerales/CDPTA", cdpta);
-                    modelo.setProperty("/Cabecera/CDPTA", cdpta);
+                    modelo.setProperty("/Form/CDPTA", cdpta);
+                    modelo.setProperty("/Form/CDPTA", cdpta);
                     this.CDTEM = cdtem;
                     this.CDPTA = cdpta;
                     oStore.put("CDTEM", cdtem);
@@ -259,8 +294,8 @@ sap.ui.define([
                 var currentUser = await this.getCurrentUser();
                 await TasaBackendService.obtenerPlantas(currentUser).then(function (plantas) {
                     dataDetalleMarea.Config.datosCombo.Plantas = plantas.data; // cargar combo plantas nueva marea
-                    modeloDetalleMarea.setProperty("/DatosGenerales/CDEMB", "");
-                    modeloDetalleMarea.setProperty("/DatosGenerales/NMEMB", "");
+                    modeloDetalleMarea.setProperty("/Form/CDEMB", "");
+                    modeloDetalleMarea.setProperty("/Form/NMEMB", "");
                     modeloDetalleMarea.refresh();
                 }).catch(function (error) {
                     console.log("ERROR: Main.onInit - " + error);
@@ -298,15 +333,15 @@ sap.ui.define([
                 }*/
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-                var codemba = modelo.getProperty("/DatosGenerales/CDEMB");
-                var codPlanta = modelo.getProperty("/DatosGenerales/CDPTA");
-                var nmbemb = modelo.getProperty("/DatosGenerales/NMEMB");
+                var codemba = modelo.getProperty("/Form/CDEMB");
+                var codPlanta = modelo.getProperty("/Form/CDPTA");
+                var nmbemb = modelo.getProperty("/Form/NMEMB");
                 var validaBodCert = await this.validarBodegaCert(codemba, codPlanta);
                 if (validaBodCert) { //se puso la admiracion para pruebas
                     var valMareaProd = await this.ValidacionMareaProduce(codemba, codPlanta);
                     if (valMareaProd) {//se puso la admiracion para pruebas
-                        modelo.setProperty("/Cabecera/INDICADOR", "N");
-                        modelo.setProperty("/DatosGenerales/ESMAR", "A");
+                        modelo.setProperty("/Form/INDICADOR", "N");
+                        modelo.setProperty("/Form/ESMAR", "A");
                         oStore.put("FlagCargaInicial", true);
                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                         oRouter.navTo("DetalleMarea");
@@ -335,6 +370,41 @@ sap.ui.define([
 
             onEditarCrearMarea: async function (evt) {
                 var selectedItem = evt.getSource().getParent().getBindingContext("ListaMareas").getObject();
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var estMarea = selectedItem.ESMAR;
+                var embarcacion = selectedItem.CDEMB;
+                if (estMarea == "A") {
+                    await this.editRecord(selectedItem.NRMAR);
+                } else {
+                    BusyIndicator.show(0);
+                    var codPlanta = modelo.getProperty("/Form/CDPTA");
+                    var validarBodegaCert = await this.validarBodegaCert(embarcacion, codPlanta);
+                    if (validarBodegaCert) {
+                        var validacionMareaProduce = await this.ValidacionMareaProduce(embarcacion, codPlanta);
+                        if (validacionMareaProduce) {
+                            await this.prepareNewRecord();
+                            var buscarEmba = await this.buscarEmbarcacion(embarcacion);
+                            if(buscarEmba){
+                                BusyIndicator.hide();
+                                var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                                oRouter.navTo("DetalleMarea");
+                            }else{
+                                BusyIndicator.hide();
+                            }
+                        } else {
+                            BusyIndicator.hide();
+                            this.mostrarMessagePopover();
+                        }
+                    } else {
+                        BusyIndicator.hide();
+                        MessageBox.error(this.oBundle.getText("EMBANOPER", [selectedItem.NMEMB]));
+                    }
+
+
+                }
+
+
+                /*
                 var me = this;
                 if (selectedItem) {
                     await this.cargarMarea(selectedItem.NRMAR, selectedItem.ESMAR, selectedItem.CDEMB, true);
@@ -359,7 +429,7 @@ sap.ui.define([
                 } else {
                     BusyIndicator.hide();
                     console.log("ERROR: Main.onEditarCrearMarea - " + this.oBundle.getText("ERRORITEMSELECCIONADO"));
-                }
+                }*/
 
                 /*var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.navTo("DetalleEventoExt", {
@@ -455,14 +525,14 @@ sap.ui.define([
                 //var formModel = this.getModel("Form");
                 /*formModel.setProperty("/Embarcacion", object.CDEMB);
                 formModel.setProperty("/DescEmbarcacion", object.NMEMB);*/
-                this.getEmbaDialog().close();
+                //this.getEmbaDialog().close();
 
-                var bOk = await this.verificarCambiosCodigo("EMB", object.CDEMB, object);
-                if (!bOk) {
+                /*var bOk = await this.verificarCambiosCodigo("EMB", object.CDEMB, object);
+                if (!bOk) {*/
                     /*sap.ui.getCore().byId("txtEmba").setValue(formModel.getProperty("/Embarcacion"));
                     sap.ui.getCore().byId("txtEmba").setDescription(formModel.getProperty("/DescEmbarcacion"));*/
-                    sap.ui.getCore().byId("btnAceptarCrearMarea").setEnabled(true);
-                }
+                    //sap.ui.getCore().byId("btnAceptarCrearMarea").setEnabled(true);
+                //}
 
                 //await FormCust.buscarArmador(object.CDEMB);
                 /*var s = await FormCust.consultarPermisoZarpe(object.CDEMB)
@@ -741,13 +811,12 @@ sap.ui.define([
                 var listItem = evt.getSource();
                 var expanded = listItem.getExpanded();
                 listItem.setExpanded(!expanded);
-                //console.log(listItem);
+                console.log(listItem);
             },
 
             onAnularMarea: async function (evt) {
                 var selectedItem = evt.getSource().getParent().getBindingContext("ListaMareas").getObject();
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-                var oButton = this.getView().byId("messagePopoverBtnMain");
                 if (selectedItem) {
                     var me = this;
                     MessageBox.confirm("¿Realmente quiere anular esta marea?, este proceso puede durar varios minutos.", {
@@ -760,25 +829,30 @@ sap.ui.define([
                                 } else {
                                     var messageItems = modelo.getProperty("/Utils/MessageItemsMA");
                                     if (messageItems.length > 0) {
-                                        oMessagePopover.getBinding("items").attachChange(function (oEvent) {
-                                            oMessagePopover.navigateBack();
-                                            oButton.setType(me.buttonTypeFormatter("MA"));
-                                            oButton.setIcon(me.buttonIconFormatter("MA"));
-                                            oButton.setText(me.highestSeverityMessages("MA"));
-                                        }.bind(this));
-
-                                        setTimeout(function () {
-                                            oMessagePopover.openBy(oButton);
-                                            oButton.setType(me.buttonTypeFormatter("MA"));
-                                            oButton.setIcon(me.buttonIconFormatter("MA"));
-                                            oButton.setText(me.highestSeverityMessages("MA"));
-                                        }.bind(this), 100);
+                                        me.mostrarMessagePopover();
                                     }
                                 }
                             }
                         }
                     });
                 }
+            },
+
+            mostrarMessagePopover: function(){
+                var oButton = this.getView().byId("messagePopoverBtnMain");
+                oMessagePopover.getBinding("items").attachChange(function (oEvent) {
+                    oMessagePopover.navigateBack();
+                    oButton.setType(this.buttonTypeFormatter("MA"));
+                    oButton.setIcon(this.buttonIconFormatter("MA"));
+                    oButton.setText(this.highestSeverityMessages("MA"));
+                }.bind(this));
+
+                setTimeout(function () {
+                    oMessagePopover.openBy(oButton);
+                    oButton.setType(this.buttonTypeFormatter("MA"));
+                    oButton.setIcon(this.buttonIconFormatter("MA"));
+                    oButton.setText(this.highestSeverityMessages("MA"));
+                }.bind(this), 100);
             },
 
             onTest: function () {

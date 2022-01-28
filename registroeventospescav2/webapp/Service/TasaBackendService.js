@@ -1055,6 +1055,21 @@ sap.ui.define([
             return data;
         },
 
+        obtenerArmadorPropietario: async function(usuario){
+            var uri = UtilService.getHostService() + "/api/General/AyudasBusqueda";
+            var sBody = UtilService.getConsultaGeneral();
+            sBody.nombreAyuda = "BSQAMADORPROP";
+            sBody.p_user = usuario;
+            var data = await this.http(uri).post(null, sBody).then(function (response) {
+                var data = JSON.parse(response);
+                return data;
+            }).catch(function(error){
+                console.log("ERROR: TasaBackendService.obtenerArmadorPropietario: ", error);
+                return null;
+            });
+            return data;
+        }
+
     });
 
     return new TasaBackend();

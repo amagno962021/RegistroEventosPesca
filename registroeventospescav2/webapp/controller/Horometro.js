@@ -405,8 +405,8 @@ sap.ui.define([
 
         obtenerLectUltHoro: async function () {
             var modelo = this.ctr.getOwnerComponent().getModel("DetalleMarea");
-            var cdemb = modelo.getProperty("/Cabecera/CDEMB");
-            var nrmar = modelo.getProperty("/Cabecera/NRMAR");
+            var cdemb = modelo.getProperty("/Form/CDEMB");
+            var nrmar = modelo.getProperty("/Form/NRMAR");
             //var mareaClh = detalleMarea.MareaCLH;
             var response = await TasaBackendService.consultarHorometro(cdemb, nrmar);
             if(response){

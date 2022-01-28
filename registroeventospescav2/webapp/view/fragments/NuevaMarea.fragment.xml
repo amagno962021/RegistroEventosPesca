@@ -14,7 +14,7 @@
                                     <Label text="Planta" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
                                 </form:label>
                                 <form:fields>
-                                    <ComboBox id="cbxPlantas" width="auto" items="{ComboModel>/Plantas}" selectedKey="{DetalleMarea>/DatosGenerales/CDPTA}" change="onActionSelPlanta">
+                                    <ComboBox id="cbxPlantas" width="auto" items="{ComboModel>/Plantas}" selectedKey="{DetalleMarea>/Form/CDPTA}" change="onActionSelPlanta">
                                         <items>
                                             <core:Item text="{ComboModel>DESCR}" enabled="true" key="{ComboModel>CDPTA}"/>
                                         </items>
@@ -27,9 +27,9 @@
                                 </form:label>
                                 <form:fields>
                                     <HBox>
-                                        <Input id="txtEmba" maxLength="10" value="{DetalleMarea>/DatosGenerales/CDEMB}" showValueHelp="false" enabled="false" width="auto" valueStateText="Invalid entry"/>
+                                        <Input id="txtEmba" maxLength="10" value="{DetalleMarea>/Form/CDEMB}" showValueHelp="false" enabled="false" width="auto" valueStateText="Invalid entry"/>
                                         <Button icon="sap-icon://search" press="onAbrirAyudaEmbarcacion"/>
-                                        <Text text="{DetalleMarea>/DatosGenerales/NMEMB}" />
+                                        <Text text="{DetalleMarea>/Form/NMEMB}" />
                                     </HBox>
                                 </form:fields>
                             </form:FormElement>

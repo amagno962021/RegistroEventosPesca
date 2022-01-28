@@ -12,14 +12,14 @@
 		<content>
 			<layout:VerticalLayout width="100%" visible="true">
 				<layout:content>
-					<ObjectHeader intro="{DetalleMarea>/Cabecera/DESC_CDMMA}" title="{DetalleMarea>/Cabecera/NRMAR}" icon="sap-icon://product" number="" numberUnit="" numberState="None" titleActive="false"
+					<ObjectHeader intro="{DetalleMarea>/Form/DESC_CDMMA}" title="{DetalleMarea>/Form/NRMAR}" icon="sap-icon://product" number="" numberUnit="" numberState="None" titleActive="false"
 								backgroundDesign="Translucent" condensed="false" visible="true">
 						<attributes>
-							<ObjectAttribute title="Embarcacion" text="{DetalleMarea>/Cabecera/CDEMB} {DetalleMarea>/Cabecera/NMEMB}" active="false" visible="true"/>
-							<ObjectAttribute title="Matricula" text="{DetalleMarea>/Cabecera/MREMB}" active="false" visible="true"/>
-							<ObjectAttribute title="Armador" text="{DetalleMarea>/Cabecera/CDEMP} {DetalleMarea>/Cabecera/NAME1}" active="false" visible="true"/>
-							<ObjectAttribute text="{DetalleMarea>/Cabecera/TXTNOTIF}" active="false" visible="true"/>
-							<ObjectAttribute text="{DetalleMarea>/Cabecera/TXTNOTIF1}" active="false" visible="true"/>
+							<ObjectAttribute title="Embarcacion" text="{DetalleMarea>/Form/CDEMB} {DetalleMarea>/Form/NMEMB}" active="false" visible="true"/>
+							<ObjectAttribute title="Matricula" text="{DetalleMarea>/Form/MREMB}" active="false" visible="true"/>
+							<ObjectAttribute title="Armador" text="{DetalleMarea>/Form/CDEMP} {DetalleMarea>/Form/NAME1}" active="false" visible="true"/>
+							<ObjectAttribute text="{DetalleMarea>/Form/TXTNOTIF}" active="false" visible="true"/>
+							<ObjectAttribute text="{DetalleMarea>/Form/TXTNOTIF1}" active="false" visible="true"/>
 						</attributes>
 						<statuses>
 							<ObjectStatus text="Abierto" state="Success" icon="sap-icon://status-completed" visible="true"/>
@@ -29,7 +29,7 @@
 				</layout:content>
 			</layout:VerticalLayout>
 			<IconTabBar expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true"
-						selectedKey="{DetalleMarea>/Config/initSelectKeyTab}" select="onSelectTabMarea" id="itbDetalleMarea">
+						selectedKey="{DetalleMarea>/Utils/SetInitTab}" select="onSelectTabMarea" id="itbDetalleMarea">
 				<items>
 					<IconTabFilter key="itfDatosGenerales" iconColor="Default" text="Datos Generales" count="" design="Vertical" showAll="false" textDirection="Inherit" enabled="true"
 								visible="true" iconDensityAware="false">
@@ -46,100 +46,56 @@
 													<Label text="Embarcacion" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 												</form:label>
 												<form:fields>
-													<Input value="{DetalleMarea>/DatosGenerales/CDEMB}"  description="{DetalleMarea>/DatosGenerales/NMEMB}"  enabled="false"  width="27.5%"
+													<Input value="{DetalleMarea>/Form/CDEMB}"  description="{DetalleMarea>/Form/NMEMB}"  enabled="false"  width="27.5%"
 																 valueStateText="Invalid entry"/>
 												</form:fields>
 											</form:FormElement>
-											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorComercial}">
+											<form:FormElement>
 												<form:label>
-													<Label text="Armador Comercial" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+													<Label text="Armador Comercial" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="{DetalleMarea>/Config/visibleArmador}"/>
 												</form:label>
 												<form:fields>
-								
-													<HBox
-													>
-														<Input id="idArmadorComercial_R" value="{DetalleMarea>/DatosGenerales/CDEMP}" enabled="false" 
-																width="auto" valueStateText="Invalid entry"/>
-													<Button
-														icon="sap-icon://search"
-														press="onAbrirArmadorHelp"
-														visible="{DetalleMarea>/Config/visibleBuscarArmador}"
-														enabled="{DetalleMarea>/Config/enableBtnArmador}"
-													/>	
-													<Text
-														
-														text="{DetalleMarea>/DatosGenerales/NAME1}"
-														
-													/>
-														
-													
-													</HBox>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="{DetalleMarea>/Config/visibleLinkCrearArmador}">
-												<form:label>
-													<Label text=""/>
-												</form:label>
-												<form:fields>
-													<Link text="Crear Armador" press="onCrearArmador" />
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorRuc}">
-												<form:label>
-													<Label text="RUC"/>
-												</form:label>
-												<form:fields>
-													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/RUC}" width="27.5%"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorRazon}">
-												<form:label>
-													<Label text="Razón Social"/>
-												</form:label>
-												<form:fields>
-													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/RAZON}" width="27.5%"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorCalle}">
-												<form:label>
-													<Label text="Calle"/>
-												</form:label>
-												<form:fields>
-													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/CALLE}" width="27.5%"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorDistrito}">
-												<form:label>
-													<Label text="Distrito"/>
-												</form:label>
-												<form:fields>
-													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/DISTRITO}" width="27.5%"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorProvincia}">
-												<form:label>
-													<Label text="Provincia"/>
-												</form:label>
-												<form:fields>
-													<Input value="{DetalleMarea>/DatosGenerales/NuevoArmador/PROVINCIA}" width="27.5%"/>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="{DetalleMarea>/Config/visibleArmadorDepartamento}">
-												<form:label>
-													<Label text="Departamento"/>
-												</form:label>
-												<form:fields>
-													<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/NuevoArmador/DEPARTAMENTO}" items="{DetalleMarea>/Config/datosCombo/Departamentos}" width="27.5%">
-														<core:Item key="{DetalleMarea>BLAND}" text="{DetalleMarea>BEZEI}" />
-													</ComboBox>
-												</form:fields>
-											</form:FormElement>
-											<form:FormElement visible="{DetalleMarea>/Config/visibleLinkSelecArmador}">
-												<form:label>
-													<Label text=""/>
-												</form:label>
-												<form:fields>
-													<Link text="Seleccionar Armador" press="onSeleccionarArmador" />
+													<VBox visible="{DetalleMarea>/Config/visibleArmador}">
+														<VBox visible="{DetalleMarea>/Config/visibleBusArmador}">
+															<HBox>
+																<Input id="idArmadorComercial_R" value="{DetalleMarea>/Form/CDEMP}" enabled="false" width="auto" valueStateText="Invalid entry"/>
+																<Button icon="sap-icon://search" press="onAbrirArmadorHelp" visible="{DetalleMarea>/Config/visibleBtnArmador}" />	
+																<Text text="{DetalleMarea>/Form/NAME1}" />
+															</HBox>
+															<Link text="Crear Armador" press="onCrearArmador" visible="{DetalleMarea>/Config/visibleEnlNueArmador}"/>
+														</VBox>
+														<VBox visible="{DetalleMarea>/Config/visibleNueArmador}">
+															<VBox>
+																<VBox>
+																	<Label text="RUC:" labelFor="txtRuc"/>
+																	<Input id="txtRuc" value="{DetalleMarea>/Form/RUC}" width="27.5%"/>
+																</VBox>
+																<VBox>
+																	<Label text="Razón Social:" labelFor="txtRazon"/>
+																	<Input value="{DetalleMarea>/Form/RAZON}" width="27.5%"/>
+																</VBox>
+																<VBox >
+																	<Label text="Calle:" labelFor="txtCalle"/>
+																	<Input value="{DetalleMarea>/Form/CALLE}" width="27.5%"/>
+																</VBox>
+																<VBox >
+																	<Label text="Distrito:"/>
+																	<Input value="{DetalleMarea>/Form/DISTRITO}" width="27.5%"/>
+																</VBox>
+																<VBox >
+																	<Label text="Provincia:"/>
+																	<Input value="{DetalleMarea>/Form/PROVINCIA}" width="27.5%"/>
+																</VBox>
+																<VBox >
+																	<Label text="Departamento:"/>
+																	<ComboBox selectedKey="{DetalleMarea>/Form/DEPARTAMENTO}" items="{DetalleMarea>/Config/datosCombo/Departamentos}" width="27.5%">
+																		<core:Item key="{DetalleMarea>BLAND}" text="{DetalleMarea>BEZEI}" />
+																	</ComboBox>
+																</VBox>
+															</VBox>
+															<Link text="Seleccionar Armador" press="onSeleccionarArmador" />
+														</VBox>
+													</VBox>
 												</form:fields>
 											</form:FormElement>
 											<form:FormElement>
@@ -147,7 +103,7 @@
 													<Label text="Sistema de Pesca" width="100%"/>
 												</form:label>
 												<form:fields>
-													<Text text="{DetalleMarea>/DatosGenerales/CDSPE} {DetalleMarea>/DatosGenerales/DSSPE}" width="auto" maxLines="1" wrapping="false"/>
+													<Text text="{DetalleMarea>/Form/CDSPE} {DetalleMarea>/Form/DSSPE}" width="auto" maxLines="1" wrapping="false"/>
 												</form:fields>
 											</form:FormElement>
 										</form:formElements>
@@ -170,7 +126,7 @@
 													<Label text="Motivo de Marea" width="100%" />
 												</form:label>
 												<form:fields>
-													<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/CDMMA}" enabled="{DetalleMarea>/Config/readOnlyMotMarea}" items="{DetalleMarea>/Config/datosCombo/MotivosMarea}" width="27.5%" change="onValidaMotivo" >
+													<ComboBox selectedKey="{DetalleMarea>/Form/CDMMA}" enabled="{DetalleMarea>/Config/readOnlyMotMarea}" items="{DetalleMarea>/Config/datosCombo/MotivosMarea}" width="27.5%" change="onValidaMotivo" >
 														<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
 													</ComboBox>
 												</form:fields>
@@ -180,7 +136,7 @@
 													<Label text="Ubicación de Pesca"  width="100%" />
 												</form:label>
 												<form:fields>
-													<ComboBox selectedKey="{DetalleMarea>/DatosGenerales/INUBC}" items="{DetalleMarea>/Config/datosCombo/UbicPesca}" width="27.5%" enabled="{DetalleMarea>/Config/readOnlyUbicPesca}">
+													<ComboBox selectedKey="{DetalleMarea>/Form/INUBC}" items="{DetalleMarea>/Config/datosCombo/UbicPesca}" width="27.5%" enabled="{DetalleMarea>/Config/readOnlyUbicPesca}">
 														<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
 													</ComboBox>
 												</form:fields>
@@ -191,9 +147,9 @@
 												</form:label>
 												<form:fields>
 													<HBox>
-														<DatePicker value="{DetalleMarea>/DatosGenerales/FEARR}" width="90%"  valueStateText="Invalid entry" 
-																 	valueFormat="dd/MM/yyyy" displayFormat="dd/MM/yyyy" enabled="{DetalleMarea>/Config/readOnlyFechaEta}"/>
-														<TimePicker id="TP2" value="{DetalleMarea>/DatosGenerales/HEARR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%" enabled="{DetalleMarea>/Config/readOnlyHoraEta}"/>
+														<DatePicker value="{DetalleMarea>/Form/FEARR}" width="90%"  valueStateText="Invalid entry" 
+																 	valueFormat="dd/MM/yyyy" displayFormat="dd/MM/yyyy" enabled="{DetalleMarea>/Config/readOnlyFecHoEta}"/>
+														<TimePicker id="TP2" value="{DetalleMarea>/Form/HEARR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%" enabled="{DetalleMarea>/Config/readOnlyFecHoEta}"/>
 													</HBox>
 												</form:fields>
 											</form:FormElement>
@@ -203,9 +159,9 @@
 												</form:label>
 												<form:fields>
 													<HBox>
-														<DatePicker value="{DetalleMarea>/DatosGenerales/FIMAR}" width="90%"  valueStateText="Invalid entry" 
+														<DatePicker value="{DetalleMarea>/Form/FIMAR}" width="90%"  valueStateText="Invalid entry" 
 																	valueFormat="dd/MM/yyyy" displayFormat="dd/MM/yyyy" enabled="{DetalleMarea>/Config/readOnlyFechIni}" />
-														<TimePicker id="TP1" value="{DetalleMarea>/DatosGenerales/HIMAR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%" enabled="{DetalleMarea>/Config/readOnlyFechIni}"/>
+														<TimePicker id="TP1" value="{DetalleMarea>/Form/HIMAR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%" enabled="{DetalleMarea>/Config/readOnlyFechIni}"/>
 													</HBox>
 												</form:fields>
 											</form:FormElement>
@@ -215,9 +171,9 @@
 												</form:label>
 												<form:fields>
 													<HBox>
-														<DatePicker value="{DetalleMarea>/DatosGenerales/FFMAR}" width="90%"  valueStateText="Invalid entry" 
+														<DatePicker value="{DetalleMarea>/Form/FFMAR}" width="90%"  valueStateText="Invalid entry" 
 																 valueFormat="dd/MM/yyyy" displayFormat="dd/MM/yyyy" enabled="{DetalleMarea>/Config/readOnlyFechFin}"/>
-														<TimePicker id="TP3" value="{DetalleMarea>/DatosGenerales/HFMAR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%" enabled="{DetalleMarea>/Config/readOnlyFechFin}"/>
+														<TimePicker id="TP3" value="{DetalleMarea>/Form/HFMAR}" valueFormat="HH:mm" displayFormat="HH:mm" width="90%" enabled="{DetalleMarea>/Config/readOnlyHorFin}"/>
 													</HBox>
 												</form:fields>
 											</form:FormElement>
@@ -226,7 +182,7 @@
 													<Label text="Estado de Marea" width="100%"/>
 												</form:label>
 												<form:fields>
-													<ComboBox width="27.5%" selectedKey="{DetalleMarea>/DatosGenerales/ESMAR}" items="{DetalleMarea>/Config/datosCombo/EstMar}" enabled="{DetalleMarea>/Config/readOnlyEstaMar}" change="onMostrarFechaFin">
+													<ComboBox width="27.5%" selectedKey="{DetalleMarea>/Form/ESMAR}" items="{DetalleMarea>/Config/datosCombo/EstMar}" enabled="{DetalleMarea>/Config/readOnlyEstaMar}" change="onMostrarFechaFin">
 														<items>
 															<core:Item key="{DetalleMarea>id}" text="{DetalleMarea>descripcion}" />
 														</items>
@@ -253,7 +209,7 @@
 													<Label text="Observación" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 												</form:label>
 												<form:fields>
-													<Input value="{DetalleMarea>/Cabecera/OBMAR}" enabled="{DetalleMarea>/Config/readOnlyObs}"  width="27.5%"
+													<Input value="{DetalleMarea>/Form/OBMAR}" enabled="{DetalleMarea>/Config/readOnlyObs}"  width="27.5%"
 																valueStateText="Invalid entry"/>
 												</form:fields>
 											</form:FormElement>
@@ -285,8 +241,8 @@
 										<content>
 											<Title text="{DetalleMarea>/Eventos/TituloEventos}" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
 											<ToolbarSpacer width=""/>
-											<Button id="btnAddEvento" icon="sap-icon://add" text="Agregar" type="Emphasized" press="abrirCrearEvento" visible="{DetalleMarea>/Config/visibleAgregarEvento}"/>
-											<Button id="btnDeleteEvento" icon="sap-icon://delete" text="Eliminar" type="Emphasized" press="onEliminarEvento" visible="{DetalleMarea>/Config/visibleEliminarEvento}"/>
+											<Button id="btnAddEvento" icon="sap-icon://add" text="Agregar" type="Emphasized" press="abrirCrearEvento" visible="{DetalleMarea>/Config/visibleBtnEventos}"/>
+											<Button id="btnDeleteEvento" icon="sap-icon://delete" text="Eliminar" type="Emphasized" press="onEliminarEvento" visible="{DetalleMarea>/Config/visibleBtnEventos}"/>
 										</content>
 									</OverflowToolbar>
 								</headerToolbar>
@@ -345,7 +301,7 @@
 										</header>
 										<footer/>
 									</Column>
-									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false" visible="{DetalleMarea>/Config/visibleDetalleEvento}">
+									<Column width="auto" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false" visible="{DetalleMarea>/Config/visibleEnlDetalleEvento}">
 										<header>
 											<Text text="" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 										</header>
@@ -393,7 +349,7 @@
 														<Label text="Embarcacion" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:label>
 													<form:fields>
-														<Text text="{DetalleMarea>/Cabecera/CDEMB} {DetalleMarea>/Cabecera/NMEMB}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														<Text text="{DetalleMarea>/Form/CDEMB} {DetalleMarea>/Form/NMEMB}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 														
 													</form:fields>
 												</form:FormElement>
@@ -402,7 +358,7 @@
 														<Label text="Marea" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:label>
 													<form:fields>
-														<Text text="{DetalleMarea>/Cabecera/NRMAR} {DetalleMarea>/Cabecera/DESC_CDMMA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														<Text text="{DetalleMarea>/Form/NRMAR} {DetalleMarea>/Form/DESC_CDMMA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 														
 													</form:fields>
 												</form:FormElement>
@@ -411,7 +367,7 @@
 														<Label text="Evento" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:label>
 													<form:fields>
-														<Text text="{DetalleMarea>/Cabecera/DESC_CDTEV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														<Text text="{DetalleMarea>/Form/DESC_CDTEV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:fields>
 												</form:FormElement>
 												<form:FormElement visible="true">
@@ -419,7 +375,7 @@
 														<Label text="Fecha de Reserva" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:label>
 													<form:fields>
-														<Text text="{DetalleMarea>/Cabecera/FIEVN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														<Text text="{DetalleMarea>/Form/FIEVN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:fields>
 												</form:FormElement>
 											</form:formElements>
@@ -758,7 +714,7 @@
 														<Label text="Embarcacion" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:label>
 													<form:fields>
-														<Text text="{DetalleMarea>/Cabecera/CDEMB} {DetalleMarea>/Cabecera/NMEMB}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														<Text text="{DetalleMarea>/Form/CDEMB} {DetalleMarea>/Form/NMEMB}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 														
 													</form:fields>
 												</form:FormElement>
@@ -767,7 +723,7 @@
 														<Label text="Marea" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:label>
 													<form:fields>
-														<Text text="{DetalleMarea>/Cabecera/NRMAR} {DetalleMarea>/Cabecera/DESC_CDMMA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														<Text text="{DetalleMarea>/Form/NRMAR} {DetalleMarea>/Form/DESC_CDMMA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 														
 													</form:fields>
 												</form:FormElement>
@@ -776,7 +732,7 @@
 														<Label text="Evento" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:label>
 													<form:fields>
-														<Text text="{DetalleMarea>/Cabecera/DESC_CDTEV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														<Text text="{DetalleMarea>/Form/DESC_CDTEV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:fields>
 												</form:FormElement>
 												<form:FormElement visible="true">
@@ -784,7 +740,7 @@
 														<Label text="Fecha de Venta" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:label>
 													<form:fields>
-														<Text text="{DetalleMarea>/Cabecera/FIEVN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														<Text text="{DetalleMarea>/Form/FIEVN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:fields>
 												</form:FormElement>
 											</form:formElements>
@@ -874,7 +830,7 @@
 				<content>
 					<Button id="messagePopoverBtn" icon="{ path: '/', formatter: 'buttonIconFormatter' }" type="{ path: '/', formatwter: 'buttonTypeFormatter' }" text= "{path: '/', formatter: 'highestSeverityMessages' }" press="handleMessagePopoverPress"/>
 					<ToolbarSpacer width=""/>
-					<Button text="Atrás" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleBtnAtras}"
+					<Button text="Atrás" type="Emphasized" icon="sap-icon://close-command-field" iconFirst="true" width="auto" enabled="true" visible="true"
 								iconDensityAware="false" press="onBackListMarea"/>
 					<Button text="Guardar" type="Emphasized" icon="sap-icon://save" iconFirst="true" width="auto" enabled="true" visible="{DetalleMarea>/Config/visibleBtnGuardar}"
 								iconDensityAware="false" press="onSave"/>

@@ -18,7 +18,7 @@
 														<Label text="Embarcacion" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:label>
 													<form:fields>
-														<Text text="{DetalleMarea>/Cabecera/CDEMB} {DetalleMarea>/Cabecera/NMEMB}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														<Text text="{DetalleMarea>/Form/CDEMB} {DetalleMarea>/Form/NMEMB}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 														
 													</form:fields>
 												</form:FormElement>
@@ -27,7 +27,7 @@
 														<Label text="Marea" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:label>
 													<form:fields>
-														<Text text="{DetalleMarea>/Cabecera/NRMAR} {DetalleMarea>/Cabecera/DESC_CDMMA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														<Text text="{DetalleMarea>/Form/NRMAR} {DetalleMarea>/Form/DESC_CDMMA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 														
 													</form:fields>
 												</form:FormElement>
@@ -36,7 +36,7 @@
 														<Label text="Evento" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:label>
 													<form:fields>
-														<Text text="{DetalleMarea>/Cabecera/DESC_CDTEV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														<Text text="{DetalleMarea>/Form/DESC_CDTEV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:fields>
 												</form:FormElement>
 												<form:FormElement visible="true">
@@ -44,7 +44,7 @@
 														<Label text="Fecha de Reserva" design="Standard" width="100%" required="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:label>
 													<form:fields>
-														<Text text="{DetalleMarea>/Cabecera/FIEVN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+														<Text text="{DetalleMarea>/Form/FIEVN}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 													</form:fields>
 												</form:FormElement>
 											</form:formElements>

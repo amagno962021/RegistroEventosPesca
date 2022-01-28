@@ -41,15 +41,15 @@ sap.ui.define([
         _onPatternMatched: async function (oEvent) {
             //console.log("PARAM ROUTER: ", oEvent);
             /*var modeloMarea = this.getOwnerComponent().getModel("DetalleMarea");
-            var indicador = modeloMarea.getProperty("/Cabecera/INDICADOR");*/
+            var indicador = modeloMarea.getProperty("/Form/INDICADOR");*/
 
             BusyIndicator.show(0);
             //validar fechas nulas en tabla de eventos
             //this.validaFechaNulaEvt(this);
-
+            /*
             var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
             var cargaInicial = oStore.get("FlagCargaInicial");
-            if(cargaInicial){
+            if (cargaInicial) {
                 this.validaFechaNulaEvt(this);
                 await this.cargarCombos(this);
                 await this.validarVista(this);
@@ -58,7 +58,8 @@ sap.ui.define([
             var modeloMarea = this.getOwnerComponent().getModel("DetalleMarea");
             var listaTipoEventos = modeloMarea.getProperty("/Config/datosCombo/ListaTipoEventos");
             this.validaComboTipoEvento(listaTipoEventos);
-            
+            */
+
             //cargar combos
             //await this.cargarCombos(this);
 
@@ -76,19 +77,19 @@ sap.ui.define([
 
             //validaciones de objetos de vista
             //await this.validarVista(this);
-
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
             var bckpModelo = this.getOwnerComponent().getModel("DetalleMarea");
-            
+
             oStore.put("BckpModeloMarea", bckpModelo);
 
             BusyIndicator.hide();
         },
-        
+
         /**
          * @override
          */
-        onAfterRendering: function() {
-            
+        onAfterRendering: function () {
+
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             console.log("MODELO: ", modelo);
 
@@ -135,8 +136,14 @@ sap.ui.define([
         },
 
         onCrearArmador: function (oEvent) {
-            var modeloDetalleMarea = this.getOwnerComponent().getModel("DetalleMarea");
-            modeloDetalleMarea.setProperty("/Cabecera/NUEVOARM", "X");
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            modelo.setProperty("/Config/visibleBusArmador", false);
+            modelo.setProperty("/Config/visibleNueArmador", true);
+            modelo.setProperty("/Form/NUEVOARM", true);
+            modelo.setProperty("/Form/CDEMP", null);
+            modelo.setProperty("/Form/NAME1", null);
+            modelo.refresh();
+            /*modeloDetalleMarea.setProperty("/Form/NUEVOARM", "X");
             var dataDetalleMarea = modeloDetalleMarea.getData();
             dataDetalleMarea.Config.visibleArmadorComercial = false;
             dataDetalleMarea.Config.visibleLinkCrearArmador = false;
@@ -147,12 +154,24 @@ sap.ui.define([
             dataDetalleMarea.Config.visibleArmadorProvincia = true;
             dataDetalleMarea.Config.visibleArmadorDepartamento = true;
             dataDetalleMarea.Config.visibleLinkSelecArmador = true;
-            modeloDetalleMarea.refresh();
+            modeloDetalleMarea.refresh();*/
         },
 
         onSeleccionarArmador: function (oEvent) {
-            var modeloDetalleMarea = this.getOwnerComponent().getModel("DetalleMarea");
-            modeloDetalleMarea.setProperty("/Cabecera/NUEVOARM", "");
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            modelo.setProperty("/Config/visibleBusArmador", true);
+            modelo.setProperty("/Config/visibleNueArmador", false);
+            modelo.setProperty("/Form/NUEVOARM", false);
+            modelo.setProperty("/Form/RUC", null);
+            modelo.setProperty("/Form/RAZON", null);
+            modelo.setProperty("/Form/CALLE", null);
+            modelo.setProperty("/Form/DISTRITO", null);
+            modelo.setProperty("/Form/PROVINCIA", null);
+            modelo.setProperty("/Form/DEPARTAMENTO", null);
+            modelo.refresh();
+
+            /*
+            modeloDetalleMarea.setProperty("/Form/NUEVOARM", "");
             var dataDetalleMarea = modeloDetalleMarea.getData();
             dataDetalleMarea.Config.visibleArmadorComercial = true;
             dataDetalleMarea.Config.visibleLinkCrearArmador = true;
@@ -163,31 +182,123 @@ sap.ui.define([
             dataDetalleMarea.Config.visibleArmadorProvincia = false;
             dataDetalleMarea.Config.visibleArmadorDepartamento = false;
             dataDetalleMarea.Config.visibleLinkSelecArmador = false;
-            dataDetalleMarea.DatosGenerales.NuevoArmador.RUC = "";
-            dataDetalleMarea.DatosGenerales.NuevoArmador.RAZON = "";
-            dataDetalleMarea.DatosGenerales.NuevoArmador.CALLE = "";
-            dataDetalleMarea.DatosGenerales.NuevoArmador.DISTRITO = "";
-            dataDetalleMarea.DatosGenerales.NuevoArmador.PROVINCIA = "";
-            dataDetalleMarea.DatosGenerales.NuevoArmador.DEPARTAMENTO = "";
-            modeloDetalleMarea.refresh();
+            dataDetalleMarea.Form.RUC = "";
+            dataDetalleMarea.Form.RAZON = "";
+            dataDetalleMarea.Form.CALLE = "";
+            dataDetalleMarea.Form.DISTRITO = "";
+            dataDetalleMarea.Form.PROVINCIA = "";
+            dataDetalleMarea.Form.DEPARTAMENTO = "";
+            modeloDetalleMarea.refresh();*/
 
         },
 
-        abrirCrearEvento: function () {
-            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            modelo.refresh();
-            var listaEventos = modelo.getProperty("/Eventos/Lista");
+        abrirCrearEvento: async function () {
+            await this.crearDropDown();
+            this.getNuevoEvento().open();
+
+            //modelo.refresh();
+            //var listaEventos = modelo.getProperty("/Eventos/Lista");
             //this.getView().byId("ne_tipoEvn").setValue(null);
-            if (listaEventos.length > 0) {
+            /*if (listaEventos.length > 0) {
                 var ultimoEvento = listaEventos[listaEventos.length - 1];
                 var tipoEvento = ultimoEvento.CDTEV;
                 var tipoEvntInt = !isNaN(tipoEvento) ? parseInt(tipoEvento) + 1 : 0;
                 var nuevoEvento = tipoEvntInt.toString();
-                //this.getView().byId("ne_tipoEvn").setSelectedKey(nuevoEvento);
+                this.getView().byId("ne_tipoEvn").setSelectedKey(nuevoEvento);
                 modelo.setProperty("/Utils/TipoEvento", nuevoEvento);
                 modelo.refresh();
             }
-            this.getNuevoEvento().open();
+            this.getNuevoEvento().open();*/
+        },
+
+        crearDropDown: async function(){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var listaEventos = modelo.getProperty("/Eventos/Lista");
+            var motMarea = modelo.getProperty("/Form/CDMMA");
+            var numEventos = listaEventos.length;
+            var motivoSinZarpe = ["3", "7", "8"];
+            var motivoEventHor = ["7", "8"];
+            var siniestAcciden = ["8"];
+            var horoSiniAccide = ["H", "8", "T"];
+            var zarpeSiniAccid = ["1", "8"];
+            var llegArriSinAcc = ["2", "5", "8"];
+            var calaSalSinAcci = ["3", "4", "8"];
+            var motivoCalaSDes = ["4", "5", "6"];
+            var zarpEspeSinAcc = ["1", "7", "8"];
+            var zarpDescSinAcc = ["1", "6", "7", "8"];
+            if(motivoSinZarpe.includes(motMarea)){
+                if(motivoEventHor.includes(motMarea)){
+                    var existeEveHoro = false;
+                    for (let index = 0; index < listaEventos.length; index++) {
+                        const element = listaEventos[index];
+                        if(element.CDTEV == "H"){
+                            existeEveHoro = true;
+                            this.createFixedValuesEventos(siniestAcciden);
+                            break;
+                        }
+                        if(element.CDTEV == "T"){
+                            existeEveHoro = true;
+                            this.createFixedValuesEventos(siniestAcciden);
+                            break;
+                        }
+                    }
+                    if(!existeEveHoro){
+                        this.createFixedValuesEventos(horoSiniAccide);
+                    }
+                }else{
+                    this.createFixedValuesEventos(siniestAcciden);
+                }
+            }else{
+                if(numEventos > 0){
+                    var ultimoIndice = numEventos - 1;
+                    var ultimoEvento = listaEventos[ultimoIndice];
+                    var tipoEvento = ultimoEvento.CDTEV;
+                    while (true) {
+                        if(tipoEvento == "1"){
+                            await this.createFixedValuesEventos(llegArriSinAcc);
+                        }else if (tipoEvento == "2" || tipoEvento == "3"){
+                            await this.createFixedValuesEventos(calaSalSinAcci);
+                        }else if(tipoEvento == "4"){
+                            await this.createFixedValuesEventos(llegArriSinAcc);
+                        }else if(tipoEvento == "5" || tipoEvento == "6"){
+                            if(tipoEvento == "5" && (ultimoEvento.CDMNP || motivoCalaSDes.includes(motMarea))){
+                                await this.createFixedValuesEventos(zarpEspeSinAcc);
+                            }else{
+                                await this.createFixedValuesEventos(zarpDescSinAcc);
+                                modelo.setProperty("/Utils/TipoEvento", "6");
+                            }
+                        }else if(tipoEvento == "7"){
+                            await this.createFixedValuesEventos(zarpeSiniAccid);
+                        }else if(tipoEvento == "8"){
+                            ultimoIndice--;
+                            if(ultimoIndice >= 0){
+                                tipoEvento = listaEventos[ultimoIndice].CDTEV;
+                                continue;
+                            }else{
+                                await this.createFixedValuesEventos(zarpeSiniAccid);
+                            }
+                        }
+                        break;
+                    }
+                }else{
+                    await this.createFixedValuesEventos(zarpeSiniAccid);
+                }
+            }
+        },
+
+        createFixedValuesEventos: async function(evento){
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var listaTipoEventos = modelo.getProperty("/Utils/BckTipoEvento");
+            var newValues = [];
+            for (let index = 0; index < listaTipoEventos.length; index++) {
+                const element = listaTipoEventos[index];
+                if(evento.includes(element.id)){
+                    newValues.push(element);
+                }
+            }
+            modelo.setProperty("/Config/datosCombo/TipoEventos", newValues);
+            modelo.setProperty("/Utils/TipoEvento", evento[0]);
+            modelo.refresh();
         },
 
         onEliminarEvento: async function (evt) {
@@ -199,7 +310,7 @@ sap.ui.define([
             if (eventos.length > 0) {
                 var ultimoEvento = eventos[eventos.length - 1];
                 var inprpEvento = ultimoEvento.INPRP;
-                var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
+                var motivoMarea = modelo.getProperty("/Form/CDMMA");
                 if (ultimoEvento.CDTEV !== "6") {
                     MessageBox.confirm(confirmElimEve, {
                         actions: [MessageBox.Action.OK, MessageBox.Action.CLOSE],
@@ -242,11 +353,11 @@ sap.ui.define([
         eliminarEvento: async function (object) {
             BusyIndicator.show(0);
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var motivoMarea = modelo.getProperty("/DatosGenerales/CDMMA");
+            var motivoMarea = modelo.getProperty("/Form/CDMMA");
             var indPropPlanta = object.INPRP;
             var indicador = object.Indicador;
             var tipoEvento = object.CDTEV;
-            var marea = modelo.getProperty("/Cabecera/NRMAR");
+            var marea = modelo.getProperty("/Form/NRMAR");
             var nroEvento = !isNaN(object.NREVN) ? parseInt(object.NREVN) : 0;
             var usuario = await this.getCurrentUser();
             var eliminarEvento = true;
@@ -332,7 +443,7 @@ sap.ui.define([
                     var objPrecMareElim = {
                         CDSPC: object.CDSPC
                     };
-                    var listaPrecMarElim =  modelo.getProperty("/Eventos/PreciosMareaElim");
+                    var listaPrecMarElim = modelo.getProperty("/Eventos/PreciosMareaElim");
                     listaPrecMarElim.push(objPrecMareElim);
 
                 }
@@ -362,7 +473,7 @@ sap.ui.define([
                 this.setVisibleBtnSave(false, false);
                 modelo.setProperty("/Config/readOnlyMotMarea", false);
             }
-            
+
             modelo.refresh();
             console.log("MODELO: ", modelo);
             BusyIndicator.hide();
@@ -418,11 +529,11 @@ sap.ui.define([
             var usuario = this.getCurrentUser();
             var modeloDetalleMarea = this.getOwnerComponent().getModel("DetalleMarea");
             var dataDetalleMarea = modeloDetalleMarea.getData();
-            var indicadorPro = dataDetalleMarea.Cabecera.INPRP;
+            var indicadorPro = dataDetalleMarea.Form.INPRP;
             var motivoResCombu = ["1", "2", "4", "5", "6", "7", "8"]; // Motivos de marea que pueden reservar combustible
-            var motivo = dataDetalleMarea.Cabecera.CDMMA;
-            var numeroMarea = dataDetalleMarea.Cabecera.NRMAR;
-            var estMar = dataDetalleMarea.DatosGenerales.ESMAR;
+            var motivo = dataDetalleMarea.Form.CDMMA;
+            var numeroMarea = dataDetalleMarea.Form.NRMAR;
+            var estMar = dataDetalleMarea.Form.ESMAR;
             var eventos = dataDetalleMarea.Eventos.Lista;
             if (eventos) {
                 var ultimoEvento = eventos[eventos.length - 1];
@@ -491,12 +602,12 @@ sap.ui.define([
             }];
 
             var dominios = await TasaBackendService.obtenerDominioVarios(listaDominios);
-            if(dominios){
+            if (dominios) {
                 var data = dominios.data;
                 if (data.length > 0) {
                     //motivos de marea
                     var motivosMarea = data[0].data;
-                    var inprp = modeloDetalleMarea.getProperty("/Cabecera/INPRP");
+                    var inprp = modeloDetalleMarea.getProperty("/Form/INPRP");
                     var items = [];
                     if (inprp == "P") {
                         items = motivosMarea
@@ -554,7 +665,7 @@ sap.ui.define([
             var me = ctx;
             var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
             var dataDetalleMarea = modeloDetalleMarea.getData();
-            var embarcacion = dataDetalleMarea.Cabecera.CDEMB;
+            var embarcacion = dataDetalleMarea.Form.CDEMB;
             var currentUser = await this.getCurrentUser();
             var distFlota = dataDetalleMarea.DistribFlota;
             TasaBackendService.obtenerDatosDstrFlota(embarcacion, currentUser).then(function (response) {
@@ -572,12 +683,12 @@ sap.ui.define([
             var me = this;
             var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
             var dataDetalleMarea = modeloDetalleMarea.getData();
-            var estMar = dataDetalleMarea.DatosGenerales.ESMAR;
+            var estMar = dataDetalleMarea.Form.ESMAR;
             var currentUser = await this.getCurrentUser();
             console.log("Est Mar: " + estMar);
             if (estMar == "A") {
-                var embarcacion = dataDetalleMarea.Cabecera.CDEMB;
-                var marea = dataDetalleMarea.Cabecera.NRMAR;
+                var embarcacion = dataDetalleMarea.Form.CDEMB;
+                var marea = dataDetalleMarea.Form.NRMAR;
                 TasaBackendService.obtenerMareaAnterior(marea, embarcacion, currentUser).then(function (response) {
                     //preparar servicio para obtener marea anterior
                 }).catch(function (error) {
@@ -587,19 +698,44 @@ sap.ui.define([
         },
 
         onValidaMotivo: async function (evt) {
+            BusyIndicator.show(0);
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            modelo.setProperty("/Utils/MessageItemsDM", []);
+            var motivo = modelo.getProperty("/Form/CDMMA");
+            modelo.setProperty("/Form/CDMMA", null)
+            await this.onActionBuscarEmbarcacion();
+            modelo.setProperty("/Form/CDMMA", motivo);
+            await this.validarMotivoMarea();
+            modelo.refresh();
+            BusyIndicator.hide();
+            
+            var listaMensajes = modelo.getProperty("/Utils/MessageItemsDM");
+            if(listaMensajes.length > 0){
+                this.mostrarMessagePopover();
+            }
+
+            /*
             var oValidatedComboBox = evt.getSource();
             var motivo = oValidatedComboBox.getSelectedKey();
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var listaMotivos = modelo.getProperty("/Config/datosCombo/MotivosMarea");
             var objMotivo = listaMotivos.find(obj => obj.id == motivo);
-            modelo.setProperty("/Cabecera/DESC_CDMMA", objMotivo.descripcion);
-            this.validarMotivo(motivo);
-            this.validarComboEventos();
+            modelo.setProperty("/Form/DESC_CDMMA", objMotivo.descripcion);
+            this.validarMotivoMarea();
+            this.validarComboEventos();*/
+        },
+
+        onActionBuscarEmbarcacion: async function () {
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var campos = ["/Form/CDEMB"];
+            var cdemb = modelo.getProperty("/Form/CDEMB");
+            await this.validateFormFields(campos);
+            await this.verificarCambiosCodigo("EMB", cdemb);
         },
 
         validarComboEventos: async function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var motivo = modelo.getProperty("/DatosGenerales/CDMMA");
+            var motivo = modelo.getProperty("/Form/CDMMA");
             var tmpEventos = [];
             var response = await TasaBackendService.obtenerDominio("ZCDTEV");
             if (response) {
@@ -637,8 +773,8 @@ sap.ui.define([
             var me = this;
             var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
             var dataDetalleMarea = modeloDetalleMarea.getData();
-            var motMarea = dataDetalleMarea.Cabecera.CDMMA;
-            var estMarea = dataDetalleMarea.DatosGenerales.ESMAR;
+            var motMarea = dataDetalleMarea.Form.CDMMA;
+            var estMarea = dataDetalleMarea.Form.ESMAR;
             if (motMarea == "8" && estMarea == "A") {
                 //preparar servicio para validar limite de veda
             }
@@ -649,9 +785,9 @@ sap.ui.define([
             //ocultar fecha horta eta
             //ocultar fecha inicio fecha fin
             var modelo = context.getOwnerComponent().getModel("DetalleMarea");
-            var indProp = modelo.getProperty("/Cabecera/INPRP");
-            var esmar = modelo.getProperty("/DatosGenerales/ESMAR");
-            var indicador = modelo.getProperty("/Cabecera/INDICADOR");
+            var indProp = modelo.getProperty("/Form/INPRP");
+            var esmar = modelo.getProperty("/Form/ESMAR");
+            var indicador = modelo.getProperty("/Form/INDICADOR");
 
             if (indProp == "P") {
                 modelo.setProperty("/Config/visibleLinkCrearArmador", false);
@@ -659,9 +795,9 @@ sap.ui.define([
             } else {
                 modelo.setProperty("/Config/visibleLinkCrearArmador", true);
                 modelo.setProperty("/Config/visibleBuscarArmador", true);
-                if(indicador == "N"){
-                    modelo.setProperty("/DatosGenerales/CDEMP", "");
-                    modelo.setProperty("/DatosGenerales/NAME1", "");
+                if (indicador == "N") {
+                    modelo.setProperty("/Form/CDEMP", "");
+                    modelo.setProperty("/Form/NAME1", "");
                 }
             }
 
@@ -684,7 +820,7 @@ sap.ui.define([
                 //modelo.setProperty("/Config/visibleBtnGuardar", true);
                 modelo.setProperty("/Config/visibleBtnSiguiente", false);
             } else {
-                var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
+                var motivoMarea = modelo.getProperty("/Form/CDMMA");
                 context.validarMotivo(motivoMarea);
                 //modelo.setProperty("/Config/visibleBtnGuardar", true);
                 modelo.setProperty("/Config/readOnlyMotMarea", false);
@@ -711,87 +847,27 @@ sap.ui.define([
             }
         },
 
-        validarTemporadaVeda: async function () {
+        onSelectTabMarea: async function (evt) {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var fechaIni = modelo.getProperty("/DatosGenerales/FIMAR");
-            var veda = false;
-            if (fechaIni) {
-                var usuario = await this.getCurrentUser();
-                var strFecha = fechaIni.split("/")[2] + fechaIni.split("/")[1] + fechaIni.split("/")[0] + "";
-                var response = await TasaBackendService.obtenerTemporadaVeda(strFecha, usuario);
-                if (response.data) {
-                    var latVed = modelo.getProperty("/DistribFlota/IntLatPuerto");
-                    var litorales = response.data;
-                    for (let index = 0; index < litorales.length; index++) {
-                        const element = litorales[index];
-                        var latIni = parseInt(element.LTINI.replace('°', '').replace("'", ''));
-                        var latFin = parseInt(element.LTFIN.replace('°', '').replace("'", ''));
-                        var millas = parseFloat(element.MILLA).toFixed(3);
-                        if (latVed >= latIni && latVed <= latFin && millas > 0) {
-                            veda = true;
-                            break;
-                        }
-                    }
-                }
-            }
-            return veda;
-        },
-
-        validarFechaVeda: async function () {
-            var veda = await this.validarTemporadaVeda();
-            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var fechaIni = modelo.getProperty("/DatosGenerales/FIMAR");
-            var puerto = modelo.getProperty("/DistribFlota/CDPTA");
-            var descPuerto = modelo.getProperty("/DistribFlota/DESCR");
-            if (veda) {
-                await this.obtenerLimiteVeda();
-            } else {
-                modelo.setProperty("/DatosGenerales/CDMMA", "");
-                modelo.setProperty("/DatosGenerales/FIMAR", "");
-                modelo.setProperty("/DatosGenerales/HIMAR", "");
-                var strPuerto = puerto + " " + descPuerto;
-                var mssg = this.oBundle.getText("NOVEDFECHAPTO", [fechaIni, strPuerto]);
-                MessageBox.error(mssg);
-            }
-            return veda;
-        },
-
-        obtenerLimiteVeda: async function () {
-            var veda = true;
-            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var fechaIni = modelo.getProperty("/DatosGenerales/FIMAR");
-            var dateFechaIni = Utils.strDateToDate(fechaIni);
-            var fechaActual = new Date();
-            if (fechaActual.getTime() > dateFechaIni.getTime()) {
-                dateFechaIni.setDate(dateFechaIni.getDate() + 1);
-                var strNextDay = Utils.dateToStrDate(dateFechaIni);
-                modelo.setProperty("/DatosGenerales/FIMAR", strNextDay);
-                modelo.setProperty("/Cabecera/VEDAVERIF", dateFechaIni);
-                veda = await this.validarTemporadaVeda();
-                if (!veda) {
-                    modelo.setProperty("/Cabecera/FECVEDMAX", oValue)
-                    var mssg = this.oBundle.getText("SOLOVEDAHASTA");
-                    modelo.setProperty("/Cabecera/TXTNOTIF1", mssg)
-                }
-            }
-        },
-
-        onSelectTabMarea: function (evt) {
+            var soloLectura = modelo.getProperty("/DataSession/SoloLectura");
             var key = evt.getParameter("key");
             var previousKey = evt.getParameter("previousKey");
             var iconTabBar = this.getView().byId("itbDetalleMarea");
             if (key == "itfEventos" && previousKey == "itfDatosGenerales") {
-                var valMotUbicPesca = this.validarMotivoUbiPesca();
-                if (!valMotUbicPesca) {
-                    iconTabBar.setSelectedKey("itfDatosGenerales");
+                if(!soloLectura){
+                    var bOk = await this.validarDatosMarea();
+                    if(!bOk){
+                        iconTabBar.setSelectedKey("itfDatosGenerales");
+                        this.mostrarMessagePopover();
+                    }
                 }
             }
         },
 
         validarMotivoUbiPesca: function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var motivo = modelo.getProperty("/DatosGenerales/CDMMA");
-            var ubicPesca = modelo.getProperty("/DatosGenerales/INUBC");
+            var motivo = modelo.getProperty("/Form/CDMMA");
+            var ubicPesca = modelo.getProperty("/Form/INUBC");
             var bOk = true;
             if (!motivo) {
                 modelo.setProperty("/Utils/MessageItemsDM", []);
@@ -853,13 +929,17 @@ sap.ui.define([
         onSave: async function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var validarMareaEventos = sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").validarMareaEventos(this);
-            var tieneErrores = modelo.getProperty("/Cabecera/TERRORES");
+            var tieneErrores = modelo.getProperty("/Form/TERRORES");
             if (validarMareaEventos) {
                 if (!tieneErrores) {
                     modelo.setProperty("/Utils/VisibleObsvComb", false);
-                    await this.validarDatosMarea();
-                    this.prepararVistaConfirm();
-                    this.getConfirmDialog().open();
+                    var bOk = await this.validarDatosMarea();
+                    if(bOk){
+                        this.prepararVistaConfirm();
+                        this.getConfirmDialog().open();
+                    }else{
+                        this.mostrarMessagePopover();
+                    }
                 }
             }
             //this.getConfirmSaveDialogTest().open();
@@ -870,7 +950,7 @@ sap.ui.define([
             await this.SaveGeneral();
             // var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             // var visbleObsComb = modelo.getProperty("/Utils/VisibleObsvComb");
-            // var obsComb = modelo.getProperty("/Cabecera/OBSCOMB");
+            // var obsComb = modelo.getProperty("/Form/OBSCOMB");
             // if(visbleObsComb && !obsComb){
             //     var mssg = this.oBundle.getText("MISSOBSCOMB");;
             //     MessageBox.error(mssg);
@@ -892,130 +972,61 @@ sap.ui.define([
         },
 
         validarDatosMarea: async function () {
+            BusyIndicator.show(0);
+            var bOk = true;
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var motivo = modelo.getProperty("/Cabecera/CDMMA");
-            var estado = modelo.getProperty("/DatosGenerales/ESMAR");
-            var esNuevo = modelo.getProperty("/Cabecera/INDICADOR") == "N" ? true : false;
+            var motivo = modelo.getProperty("/Form/CDMMA");
+            var estado = modelo.getProperty("/Form/ESMAR");
+            var esNuevo = modelo.getProperty("/Form/EsNuevo");
             var motivoSinZarpe = ["3", "7", "8"];
-            var embarcacion = modelo.getProperty("/Cabecera/CDEMB");
+            var embarcacion = modelo.getProperty("/Form/CDEMB");
+            modelo.setProperty("/Utils/MessageItemsDM", []);
             var campos = [];
             if (esNuevo) {
-                campos = ["/DatosGenerales/CDEMB", "/DatosGenerales/CDMMA", "/DatosGenerales/INUBC"];
+                campos = ["/Form/CDEMB", "/Form/CDMMA", "/Form/INUBC"];
                 if (!motivoSinZarpe.includes(motivo)) {
-                    var nuevoArmadorFlag = modelo.getProperty("/Cabecera/NUEVOARM");
-                    if (nuevoArmadorFlag == "X") {
-                        campos = ["/DatosGenerales/NuevoArmador/RUC", "/DatosGenerales/NuevoArmador/RAZON", "/DatosGenerales/NuevoArmador/CALLE", "/DatosGenerales/NuevoArmador/DISTRITO",
-                            "/DatosGenerales/NuevoArmador/PROVINCIA", "/DatosGenerales/NuevoArmador/DEPARTAMENTO", "/DatosGenerales/CDEMB", "/DatosGenerales/CDMMA"];
+                    var nuevoArmadorFlag = modelo.getProperty("/Form/NUEVOARM");
+                    if (nuevoArmadorFlag) {
+                        campos = ["/Form/RUC", "/Form/RAZON", "/Form/CALLE", "/Form/DISTRITO",
+                            "/Form/PROVINCIA", "/Form/DEPARTAMENTO", "/Form/CDEMB", "/Form/CDMMA"];
                     } else {
-                        campos = ["/DatosGenerales/CDEMB", "/DatosGenerales/CDEMP", "/DatosGenerales/CDMMA"];
-                    }
-                } else {
-                    campos = ["/DatosGenerales/FIMAR"];
-                    if (estado == "C") {
-                        campos = ["/DatosGenerales/FIMAR", "/DatosGenerales/FFMAR"];
+                        campos = ["/Form/CDEMB", "/Form/CDEMP", "/Form/CDMMA"];
                     }
                 }
-                /*if (campos.length > 0) {
-                    var emba = await this.consultarEmba(embarcacion);
-                    if (emba) {
-                        await this.verificarCambiosCodigo("EMB", embarcacion, emba[0]);
+                if(motivoSinZarpe.includes(motivo)){
+                    campos = ["/Form/FIMAR"];
+                    if (estado == "C") {
+                        campos = ["/Form/FIMAR", "/Form/FFMAR"];
                     }
-                }*/
+                }
+                if (campos.length > 0) {
+                    await this.verificarCambiosCodigo("EMB", embarcacion);
+                    await this.validarFechaIniFin();
+                }
             } else {
                 if (motivoSinZarpe.includes(motivo) && estado == "C") {
-                    campos = ["/DatosGenerales/HIMAR", "/DatosGenerales/FFMAR"]
+                    campos = ["/Form/HIMAR", "/Form/FFMAR"];
+                    await this.validarFechaIniFin();
                 }
             }
-            console.log("CAMPOS VALIDAR: ", campos);
-            var bOk = this.validateFormFields(campos);
-            /*if(!bOk){
-                var mensajes = modelo.getProperty("/Utils/MessageItemsDM");
-                if(mensajes.length > 0){
-                    var oButton = this.getView().byId("messagePopoverBtn");
-                    oMessagePopover.getBinding("items").attachChange(function (oEvent) {
-                        oMessagePopover.navigateBack();
-                        oButton.setType(this.buttonTypeFormatter("DM"));
-                        oButton.setIcon(this.buttonIconFormatter("DM"));
-                        oButton.setText(this.highestSeverityMessages("DM"));
-                    }.bind(this));
-
-                    setTimeout(function () {
-                        oMessagePopover.openBy(oButton);
-                        oButton.setType(this.buttonTypeFormatter("DM"));
-                        oButton.setIcon(this.buttonIconFormatter("DM"));
-                        oButton.setText(this.highestSeverityMessages("DM"));
-                    }.bind(this), 100);
-                }
-            }else{*/
-            await this.validarFechaIniFin();
-            //}
+            this.validateFormFields(campos);
+            modelo.refresh();
+            BusyIndicator.hide();
+            var listaMensajes = modelo.getProperty("/Utils/MessageItemsDM");
+            if(listaMensajes.length > 0){
+                bOk = false;
+            }
             return bOk;
         },
 
-        validarFechaIniFin: async function () {
-            var vFin = false;
-            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var motivo = modelo.getProperty("/Cabecera/CDMMA");
-            var estado = modelo.getProperty("/DatosGenerales/ESMAR");
-            var esNuevo = modelo.getProperty("/Cabecera/INDICADOR") == "N" ? true : false;
-            var motivoSinZarpe = ["3", "7", "8"];
-            var fechHorIni = null;
-            var fechHorActual = new Date();
-            if (esNuevo) {
-                if (motivoSinZarpe.includes(motivo)) {
-                    var fechaIni = modelo.getProperty("/DatosGenerales/FIMAR");
-                    var horaIni = modelo.getProperty("/DatosGenerales/HIMAR");
-                    fechHorIni = Utils.strDateHourToDate(fechaIni, horaIni);
-                    if (estado == "C") {
-                        vFin = true;
-                    }
-                    if (fechHorIni.getTime() > fechHorActual.getTime()) {
-                        vFin = false;
-                        var mssg = this.oBundle.getText("FECINIMARMENOFECHACT");
-                        MessageBox.error(mssg);
-                    }
-                    if (vFin && motivo == "8") {
-                        await this.validarFechaVeda();
-                    }
-                }
-            } else {
-                if (motivoSinZarpe.includes(motivo) && estado == "C") {
-                    vFin = true;
-                }
-            }
-
-            if (vFin) {
-                var fechaFin = modelo.getProperty("/DatosGenerales/FFMAR");
-                var horaFin = modelo.getProperty("/DatosGenerales/HFMAR");
-                var fechHorFin = Utils.strDateHourToDate(fechaFin, horaFin);
-                if (fechaFin.getTime() > fechHorActual.getTime()) {
-                    vFin = false;
-                    var mssg = this.oBundle.getText("FECFINMARMENOFECHACT");
-                    MessageBox.error(mssg);
-                } else if (!motivoSinZarpe.includes(motivo) && fechHorFin.getTime() < fechHorIni.getTime()) {
-                    vFin = false;
-                    var mssg = this.oBundle.getText("FECINIMARMENFECFINMAR");
-                    MessageBox.error(mssg);
-                } else if (motivoSinZarpe.includes(motivo)) {
-                    if (fechHorFin.getTime() < fechHorIni.getTime()) {
-                        var mssg = this.oBundle.getText("FECFINMARNOMENFECINIMAR");
-                        MessageBox.error(mssg);
-                    }
-                }
-            }
-        },
-
         validateFormFields: function (campos) {
-            var bOk = true;
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var mensajes = [];
-            modelo.setProperty("/Utils/MessageItemsDM", []);
+            var listaMensajes = modelo.getProperty("/Utils/MessageItemsDM");
             for (let index = 0; index < campos.length; index++) {
                 const path = campos[index];
                 var value = modelo.getProperty(path);
                 var nroMensaje = 0;
                 if (!value) {
-                    bOk = false;
                     nroMensaje++;
                     var etiqueta = Utils.getEtiqueta(path);
                     var mssg = this.oBundle.getText("MISSFORMFIELD", [etiqueta]);
@@ -1027,11 +1038,10 @@ sap.ui.define([
                         subtitle: mssg,
                         counter: nroMensaje
                     };
-                    mensajes.push(objMessage);
+                    listaMensajes.push(objMessage);
+                    modelo.refresh();
                 }
             }
-            modelo.setProperty("/Utils/MessageItemsDM", mensajes);
-            return bOk;
         },
 
         prepararVistaConfirm: function () {
@@ -1045,13 +1055,14 @@ sap.ui.define([
         verificarCierreMarea: function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var eventos = modelo.getProperty("/Eventos/Lista");
-            var estadoMarea = modelo.getProperty("/DatosGenerales/ESMAR");
+            var estadoMarea = modelo.getProperty("/Form/ESMAR");
             var ultimoEvento = eventos[eventos.length - 1];
             var cantTotalDeclMarea = sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").obtenerCantTotalPescaDecla(0, this);
             var cantTotalDeclDescMarea = sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").obtenerCantTotalPescaDeclDesc(0, this);
-            var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
+            var motivoMarea = modelo.getProperty("/Form/CDMMA");
             var motivoMarPesca = ["1", "2"];
             var motivoCalaSDes = ["4", "5", "6"];
+            var listaMensajes = modelo.getProperty("/Utils/MessageItemsDM");
             if (ultimoEvento) {
                 var tipoEvento = ultimoEvento.CDTEV;
                 var verEstCierre = false;
@@ -1064,7 +1075,18 @@ sap.ui.define([
                     } else if (estadoMarea == "C" && tipoEvento == "5" && cantTotalDeclMarea > 0 && cantTotalDeclDescMarea > 0) {
                         verEstCierre = true;
                         var mssg = this.oBundle.getText("CERRPDECMAYPDESC");
-                        MessageBox.warning(mssg);
+                        var index = listaMensajes.length + 1;
+                        var objMessage = {
+                            type: 'Warning',
+                            title: 'Mensaje de Validación',
+                            activeTitle: false,
+                            description: mssg,
+                            subtitle: mssg,
+                            counter: index
+                        };
+                        listaMensajes.push(objMessage);
+                        modelo.refresh();
+                        ///MessageBox.warning(mssg);
                         var texto = mssg + " " + this.oBundle.getText("CONFIRMSAVEMESSAGE");
                         modelo.setProperty("/Utils/TextoConfirmacion", texto);
                     }
@@ -1073,7 +1095,7 @@ sap.ui.define([
                 }
                 if (verEstCierre) {
                     //sap.ui.getCore().byId("estadoMar").setSelectedKey("C");
-                    modelo.setProperty("/DatosGenerales/ESMAR", "C");
+                    modelo.setProperty("/Form/ESMAR", "C");
                     modelo.setProperty("/Utils/VisibleEstCierre", true);
                     modelo.refresh();
                 }
@@ -1092,7 +1114,7 @@ sap.ui.define([
 
         onProcesarSum: async function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var inprp = modelo.getProperty("/Cabecera/INPRP");
+            var inprp = modelo.getProperty("/Form/INPRP");
 
             if (inprp == "P") {
                 await this.onReservar()
@@ -1187,7 +1209,7 @@ sap.ui.define([
 
         validarCabeceraSuministro: async function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var campos = ["/Cabecera/CDEMB", "/Suministro/0/CNSUM"];
+            var campos = ["/Form/CDEMB", "/Suministro/0/CNSUM"];
             var bOk = this.validateFormFields(campos);
             if (bOk) {
                 var cantSuministro = modelo.getProperty("/Suministro/0/CNSUM");
@@ -1281,14 +1303,14 @@ sap.ui.define([
 
         onAbrirDetalleSuministro: async function (evt) {
             var reserva = evt.getSource().getParent().getBindingContext("DetalleMarea").getObject();
-            var modelo = this.getOwnerComponent().getModel("DetalleMarea"); 
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             if (reserva.NRMAR && reserva.NRRSV) {
                 var nrmar = reserva.NRMAR;
                 var nrrsv = reserva.NRRSV;
-                var indProp = modelo.getProperty("/Cabecera/INPRP");
-                if(indProp == "P"){
+                var indProp = modelo.getProperty("/Form/INPRP");
+                if (indProp == "P") {
                     modelo.setProperty("/Utils/TituloReviewReVe", "Detalle de la Reserva");
-                }else{
+                } else {
                     modelo.setProperty("/Utils/TituloReviewReVe", "Detalle de la Venta");
                 }
                 var abrirPopup = await this.obtenerDetalleSuministro(nrmar, nrrsv);
@@ -1334,7 +1356,7 @@ sap.ui.define([
                         if (evt == "OK") {
                             BusyIndicator.hide();
                             await me.anularVentas(listVentas, indiVentas);
-                            
+
                         }
                     }
                 });
@@ -1349,39 +1371,12 @@ sap.ui.define([
 
         },
 
-        verificarErroresMarea: async function (nroDescarga) {
-            await this.validarErroresDescargaMarea(nroDescarga);
-            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var messageItems = modelo.getProperty("/Utils/MessageItemsDM");
-            if (messageItems.length > 0) {
-                var oButton = this.getView().byId("messagePopoverBtn");
-                oMessagePopover.getBinding("items").attachChange(function (oEvent) {
-                    oMessagePopover.navigateBack();
-                    oButton.setType(this.buttonTypeFormatter("DM"));
-                    oButton.setIcon(this.buttonIconFormatter("DM"));
-                    oButton.setText(this.highestSeverityMessages("DM"));
-                }.bind(this));
 
-                setTimeout(function () {
-                    oMessagePopover.openBy(oButton);
-                    oButton.setType(this.buttonTypeFormatter("DM"));
-                    oButton.setIcon(this.buttonIconFormatter("DM"));
-                    oButton.setText(this.highestSeverityMessages("DM"));
-                }.bind(this), 100);
-                modelo.setProperty("/Config/visibleDetalleEvento", false);
-                modelo.setProperty("/Config/visibleAgregarEvento", false);
-                modelo.setProperty("/Config/visibleEliminarEvento", false);
-            } else {
-                modelo.setProperty("/Config/visibleDetalleEvento", true);
-                modelo.setProperty("/Config/visibleAgregarEvento", true);
-                modelo.setProperty("/Config/visibleEliminarEvento", true);
-            }
-        },
 
         onNuevaReserva: async function () {
             BusyIndicator.show(0);
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var inprp = modelo.getProperty("/Cabecera/INPRP");
+            var inprp = modelo.getProperty("/Form/INPRP");
             if (inprp == "P") {
                 modelo.setProperty("/Config/TxtNuevaVentaRes", "Nueva Reserva");
             }
@@ -1424,17 +1419,19 @@ sap.ui.define([
 
         onMostrarFechaFin: function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var motivoMarea = modelo.getProperty("/DatosGenerales/CDMMA");
-            var estadoMarea = modelo.getProperty("/DatosGenerales/ESMAR");
+            var motivoMarea = modelo.getProperty("/Form/CDMMA");
+            var estadoMarea = modelo.getProperty("/Form/ESMAR");
+            var listaMensajes = modelo.getProperty("/Utils/MessageItemsDM");
             var motivoSinZarpe = ["3", "7", "8"];
             var cerrar = true;
+            modelo.setProperty("/Utils/MessageItemsDM", []);
             if (motivoSinZarpe.includes(motivoMarea)) {
-                modelo.setProperty("/DatosGenerales/FEARR", "");
-                modelo.setProperty("/DatosGenerales/HEARR", "");
+                modelo.setProperty("/Form/FEARR", null);
+                modelo.setProperty("/Form/HEARR", null);
                 var visibleFecHorFin = modelo.getProperty("/Config/visibleFechFin");
                 if (visibleFecHorFin == false) {
-                    modelo.setProperty("/DatosGenerales/FFMAR", "");
-                    modelo.setProperty("/DatosGenerales/HFMAR", "");
+                    modelo.setProperty("/Form/FFMAR", null);
+                    modelo.setProperty("/Form/HFMAR", null);
                 }
                 if (estadoMarea == "C") {
                     modelo.setProperty("/Config/visibleFechFin", true);
@@ -1442,20 +1439,36 @@ sap.ui.define([
                     modelo.setProperty("/Config/visibleFechFin", false);
                 }
             } else {
-                modelo.setProperty("/DatosGenerales/FIMAR", "");
-                modelo.setProperty("/DatosGenerales/HIMAR", "");
-                modelo.setProperty("/DatosGenerales/FFMAR", "");
-                modelo.setProperty("/DatosGenerales/HFMAR", "");
+                modelo.setProperty("/Form/FIMAR", null);
+                modelo.setProperty("/Form/HIMAR", null);
+                modelo.setProperty("/Form/FFMAR", null);
+                modelo.setProperty("/Form/HFMAR", null);
                 modelo.setProperty("/Config/visibleFechFin", false);
                 if (estadoMarea == "C") {
                     cerrar = this.verificarCierreMarea();
+                    modelo.refresh();
                 }
             }
 
             if (!cerrar) {
                 var mssg = this.oBundle.getText("EVENTOSNOCOMPLE");
-                MessageBox.error(mssg);
-                modelo.setProperty("/DatosGenerales/ESMAR", "A")
+                var indice = listaMensajes.length + 1;
+                var objMessage = {
+                    type: 'Error',
+                    title: 'Mensaje de Validación',
+                    activeTitle: false,
+                    description: mssg,
+                    subtitle: mssg,
+                    counter: indice
+                };
+                listaMensajes.push(objMessage);
+                modelo.refresh();
+                //MessageBox.error(mssg);
+                modelo.setProperty("/Form/ESMAR", "A")
+            }
+
+            if (listaMensajes.length > 0) {
+                this.mostrarMessagePopover();
             }
 
         },
@@ -1476,7 +1489,7 @@ sap.ui.define([
                 nameComponent = "busqarmadores",
                 idComponent = "busqarmadores",
                 oInput = this.getView().byId("idArmadorComercial_R");
-                modeloConst.setProperty("/input", oInput);
+            modeloConst.setProperty("/input", oInput);
 
             if (!this.DialogComponent) {
                 this.DialogComponent = sap.ui.xmlfragment("com.tasa.registroeventospescav2.view.fragments.NuevoArmador", this);
@@ -1538,6 +1551,23 @@ sap.ui.define([
                 this.getView().addDependent(this.oDialogConfirmSave);
             }
             return this.oDialogConfirmSave;
+        },
+
+        mostrarMessagePopover: function () {
+            var oButton = this.getView().byId("messagePopoverBtn");
+            oMessagePopover.getBinding("items").attachChange(function (oEvent) {
+                oMessagePopover.navigateBack();
+                oButton.setType(this.buttonTypeFormatter("DM"));
+                oButton.setIcon(this.buttonIconFormatter("DM"));
+                oButton.setText(this.highestSeverityMessages("DM"));
+            }.bind(this));
+
+            setTimeout(function () {
+                oMessagePopover.openBy(oButton);
+                oButton.setType(this.buttonTypeFormatter("DM"));
+                oButton.setIcon(this.buttonIconFormatter("DM"));
+                oButton.setText(this.highestSeverityMessages("DM"));
+            }.bind(this), 100);
         },
 
 

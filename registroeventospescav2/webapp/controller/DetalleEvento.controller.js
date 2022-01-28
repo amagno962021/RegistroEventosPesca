@@ -280,20 +280,20 @@ sap.ui.define([
                 v_this._elementAct = modeloDetalleMarea.getProperty("/Eventos/LeadSelEvento");//ESTE ES ITEM DE LA LISTA DE EVENTOS SELECCIONADO
                 v_this._utilNroEventoBio = "001";
                 v_this._utilNroEventoIncid = "001";
-                v_this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA != "" ? dataDetalleMarea.Cabecera.CDMMA : dataDetalleMarea.DatosGenerales.CDMMA;
+                v_this._motivoMarea = dataDetalleMarea.Form.CDMMA != "" ? dataDetalleMarea.Form.CDMMA : dataDetalleMarea.Form.CDMMA;
                 v_this._tipoEvento = ListaEventos_cont[v_this._elementAct].CDTEV;
                 v_this._nroEvento = ListaEventos_cont[v_this._elementAct].NREVN;//ESTE ES EL NUMERO DEL EVENTO SELECCIONADO DE LA LISTA DE DETALLE
-                v_this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "" == "" ? "0" : FormEvent_cont.Cabecera.NRMAR + "";//"165728";
+                v_this._nroMarea = FormEvent_cont.Form.NRMAR + "" == "" ? "0" : FormEvent_cont.Form.NRMAR + "";//"165728";
                 v_this._nroDescarga = ListaEventos_cont[v_this._elementAct].NRDES;//"TCHI001444";
                 v_this._indicador = "E"//ListaEventos_cont[this._elementAct].INPRP;//"E";
                 v_this._indicadorPropXPlanta = ListaEventos_cont[v_this._elementAct].INPRP;
-                v_this._codPlanta = FormEvent_cont.Cabecera.CDPTA ? FormEvent_cont.Cabecera.CDPTA : dataDetalleMarea.DatosGenerales.CDPTA;
-                v_this._embarcacion = FormEvent_cont.Cabecera.CDEMB;//"0000000012";
-                v_this._indicadorProp = FormEvent_cont.Cabecera.INPRP;
+                v_this._codPlanta = FormEvent_cont.Form.CDPTA ? FormEvent_cont.Form.CDPTA : dataDetalleMarea.Form.CDPTA;
+                v_this._embarcacion = FormEvent_cont.Form.CDEMB;//"0000000012";
+                v_this._indicadorProp = FormEvent_cont.Form.INPRP;
                 v_this._soloLectura = FormEvent_cont.DataSession.SoloLectura;//data de session solo lectura obtenida desde el principal
                 v_this._EsperaMareaAnt = EsperaMareaAnt_cont;//[{ "id": "0" }, { "id": "1" }]; 
                 v_this._listaEventos = ListaEventos_cont;
-                v_this._FormMarea = FormEvent_cont.Cabecera;
+                v_this._FormMarea = FormEvent_cont.Form;
                 v_this._mareaReabierta = FormEvent_cont.DataSession.MareaReabierta;
                 v_this._zonaPesca = ListaEventos_cont[v_this._elementAct].CDZPC;
                 v_this._IsRolRadOpe = true; //ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
@@ -351,22 +351,22 @@ sap.ui.define([
                 v_this._listaIncidental = dataDetalleMarea.Incidental;
                 v_this._utilNroEventoBio = "001";
                 v_this._utilNroEventoIncid = "001";
-                v_this._motivoMarea = dataDetalleMarea.Cabecera.CDMMA != "" ? dataDetalleMarea.Cabecera.CDMMA : dataDetalleMarea.DatosGenerales.CDMMA;
+                v_this._motivoMarea = dataDetalleMarea.Form.CDMMA != "" ? dataDetalleMarea.Form.CDMMA : dataDetalleMarea.Form.CDMMA;
                 v_this._tipoEvento = "";
                 v_this._nroEvento = "";
-                v_this._nroMarea = FormEvent_cont.Cabecera.NRMAR + "" == "" ? "0" : FormEvent_cont.Cabecera.NRMAR + "";//"165728";
+                v_this._nroMarea = FormEvent_cont.Form.NRMAR + "" == "" ? "0" : FormEvent_cont.Form.NRMAR + "";//"165728";
                 v_this._nroDescarga = "";
                 v_this._indicadorPropXPlanta = "";
                 v_this._indicador = "N"
-                v_this._codPlanta = FormEvent_cont.Cabecera.CDPTA ? FormEvent_cont.Cabecera.CDPTA : FormEvent_cont.DatosGenerales.CDPTA;
-                v_this._embarcacion = FormEvent_cont.Cabecera.CDEMB;//"0000000012";
-                v_this._indicadorProp = FormEvent_cont.Cabecera.INPRP;
+                v_this._codPlanta = FormEvent_cont.Form.CDPTA ? FormEvent_cont.Form.CDPTA : FormEvent_cont.Form.CDPTA;
+                v_this._embarcacion = FormEvent_cont.Form.CDEMB;//"0000000012";
+                v_this._indicadorProp = FormEvent_cont.Form.INPRP;
                 v_this._soloLectura = FormEvent_cont.DataSession.SoloLectura;//data de session solo lectura obtenida desde el principal
                 v_this._EsperaMareaAnt = EsperaMareaAnt_cont;//[{ "id": "0" }, { "id": "1" }]; 
                 v_this._listaEventos = ListaEventos_cont;
                 v_this._elementAct = v_this._listaEventos.length;
                 modeloDetalleMarea.setProperty("/Eventos/LeadSelEvento",v_this._elementAct);
-                v_this._FormMarea = FormEvent_cont.Cabecera;
+                v_this._FormMarea = FormEvent_cont.Form;
                 v_this._mareaReabierta = FormEvent_cont.DataSession.MareaReabierta;;
                 v_this._zonaPesca = "";
                 v_this._IsRolRadOpe = true; //ESTO ES VALORES DE SON DE ROLES QUE VIENE DE MAREA
@@ -1360,7 +1360,7 @@ sap.ui.define([
             var modelo = me.getOwnerComponent().getModel("DetalleMarea");
             let cantTotal = 0;
             var listaEventos = this._listaEventos ? this._listaEventos : modelo.getProperty("/Eventos/Lista");
-            var cabecera = modelo.getProperty("/Cabecera");
+            var cabecera = modelo.getProperty("/Form");
             for (var j = 0; j < listaEventos.length; j++) {
                 if (listaEventos[j].CDTEV == "6") {
                     if(listaEventos[j].ListaPescaDescargada != undefined){
@@ -1764,7 +1764,7 @@ sap.ui.define([
         validarMareaEventos: function (me) {
             //this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
             var modelo = me.getOwnerComponent().getModel("DetalleMarea");
-            let motMarea = this._motivoMarea ? this._motivoMarea : modelo.getProperty("/Cabecera/CDMMA");
+            let motMarea = this._motivoMarea ? this._motivoMarea : modelo.getProperty("/Form/CDMMA");
             let _listaEventos = modelo.getProperty("/Eventos/Lista");
             if (!this.buscarValorFijo(textValidaciones.MOTIVOSINZARPE, motMarea)) {
 
@@ -2378,9 +2378,9 @@ sap.ui.define([
                     FCEVN : Utils.dateToStrDate(timeInMilis),
                     HCEVN : Utils.strHourToSapHo(Utils.dateToStrHours(timeInMilis))
                 }
-                mod.setProperty("/Cabecera/FormEditado",true);
-                mod.setProperty("/Cabecera/MareaEditada",true);
-                mod.setProperty("/Cabecera/MareaEditada",true);
+                mod.setProperty("/Form/FormEditado",true);
+                mod.setProperty("/Form/MareaEditada",true);
+                mod.setProperty("/Form/MareaEditada",true);
                 LstEvento.push(obj);
                 
                 this._eventoNuevo = Number(LstEvento.length) -1;
@@ -2411,8 +2411,8 @@ sap.ui.define([
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
             let nodoEventos = mod.getProperty("/Eventos/Lista");
             let tipoEvento = nodoEventos[this._eventoNuevo].CDTEV;
-            let motivoMarea = mod.getProperty("/Cabecera/CDMMA");
-            let indiPropiedad = mod.getProperty("/Cabecera/INPRP");
+            let motivoMarea = mod.getProperty("/Form/CDMMA");
+            let indiPropiedad = mod.getProperty("/Form/INPRP");
             let indiPropPlanta = nodoEventos[this._eventoNuevo].INPRP;
             let cantEventos = nodoEventos.length;
             let fechaSist = new Date();
@@ -2564,7 +2564,7 @@ sap.ui.define([
             //Tab Pesca Descargada
             if (this.buscarValorFijo(textValidaciones.EVEVISTABPEDSC, tipoEvento)) {
                 nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].INDTR = "N";	
-                let nroDescarga = mod.getProperty("/DatosGenerales/WERKS");;
+                let nroDescarga = mod.getProperty("/Form/WERKS");;
                 
                 if (motivoMarea == "1") {
                     nodoEventos[this._eventoNuevo].ListaPescaDescargada[0].CDTPC = "D";			
@@ -3123,11 +3123,11 @@ sap.ui.define([
         verificarCierreMarea: function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var eventos = modelo.getProperty("/Eventos/Lista");
-            var estadoMarea = modelo.getProperty("/DatosGenerales/ESMAR");
+            var estadoMarea = modelo.getProperty("/Form/ESMAR");
             var ultimoEvento = eventos[eventos.length - 1];
             var cantTotalDeclMarea = this.obtenerCantTotalPescaDecla(0, this);
             var cantTotalDeclDescMarea = this.obtenerCantTotalPescaDeclDesc(0, this);
-            var motivoMarea = modelo.getProperty("/Cabecera/CDMMA");
+            var motivoMarea = modelo.getProperty("/Form/CDMMA");
             var motivoMarPesca = ["1", "2"];
             var motivoCalaSDes = ["4", "5", "6"];
             if (ultimoEvento) {
@@ -3150,7 +3150,7 @@ sap.ui.define([
                     verEstCierre = true;
                 }
                 if (verEstCierre) {
-                    modelo.setProperty("/DatosGenerales/ESMAR", "C");
+                    modelo.setProperty("/Form/ESMAR", "C");
                     modelo.setProperty("/Utils/VisibleEstCierre", true);
                     modelo.refresh();
                 }
