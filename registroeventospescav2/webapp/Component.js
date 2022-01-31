@@ -78,8 +78,6 @@ sap.ui.define([
 			//set constantes model
 			sap.ui.getCore().setModel(models.createConstantesModel(), "Constantes");
 
-
-
 		}
 
 	});

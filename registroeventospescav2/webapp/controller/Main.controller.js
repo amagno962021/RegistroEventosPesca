@@ -71,13 +71,18 @@ sap.ui.define([
                 oStore.put('InitData', dataModelo);
 
 
+
             },
 
             /**
              * @override
              */
             onBeforeRendering: async function () {
-
+                this.getOwnerComponent().getService("ShellUIService").then(function(oShellService) {
+                    oShellService.setBackNavigation(function() {
+                        console.log("NAVEGAR ATRAS FIORI LAUNCHPAD");
+                    });
+                });
             },
 
             /**

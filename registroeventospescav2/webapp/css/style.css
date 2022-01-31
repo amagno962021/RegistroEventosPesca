@@ -1,10 +1,18 @@
 /* Enter your custom styles here */
-tr[data-mydata="A"]{
+/*tr[data-mydata="A"]{
     background: #BDCFE9!important;
   }
 
 tr[data-mydata="C"]{
   background: #bde9d3!important;
+}
+
+[data-style-class=nameOfYourColor] {
+  background-color: #c9fcd5 !important
+}*/
+
+#__xmlview1--tblMareasPropios-table tbody>tr{
+  background: #BDCFE9!important;
 }
 
 /* .prueba{

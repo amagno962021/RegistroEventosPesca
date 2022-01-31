@@ -28,6 +28,11 @@
         } 
     },
     "sap.ui": {
+        "services":{
+            "ShellUIService": {
+                "factoryName": "sap.ushell.ui5service.ShellUIService"
+            }
+        },
         "technology": "UI5",
         "icons": {
             "icon": "sap-icon://task",
