@@ -2671,10 +2671,11 @@ sap.ui.define([
                     let fechHoraIni = Utils.strDateHourToDate(fechaAnt, horaAnt); //fechaAnt
                     
                     if (fechHoraIni < fechHoraProd) {
-                        fechHoraProd.setMonth(fechHoraProd.getMonth() - 1);
+                        fechHoraProd.setDate(fechHoraProd.getDate() - 1);
+                        //fechHoraProd.setMonth(fechHoraProd.getMonth() - 1);
                     }
                     
-                    nodoEventos[elementAct].FechProduccion = fechaAnt;	
+                    nodoEventos[elementAct].FechProduccion = Utils.dateToStrDate(fechHoraProd);	
                 }
             } else if ( this._indicadorProp == textValidaciones.INDIC_PROPIEDAD_PROPIOS) {
                 let motivoMareaAnt = mod.getProperty("/MareaAnterior/CDMMA");

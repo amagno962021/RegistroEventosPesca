@@ -741,7 +741,7 @@ sap.ui.define([
                     if(LenghtHoro > 0){
                         let ListHoro = element.ListaHorometros;
                         let ListHoroAve = ListHoro.filter(elem => elem.Chk_averiado == true);
-                        if (ListHoroAve > 0) {
+                        if (ListHoroAve.length > 0) {
                             let obj = {
                                 horometrosAveriados: ListHoroAve,
                                 nroEvento: element.NREVN

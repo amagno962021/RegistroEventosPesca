@@ -216,7 +216,7 @@ sap.ui.define([
                         this._controler.Dat_PescaDeclarada.calcularCantTotalPescDeclEve();
                     }
                     if(bOk){
-                        await this._controler.Dat_PescaDeclarada.validarCantidadTotalPesca();
+                        bOk = await this._controler.Dat_PescaDeclarada.validarCantidadTotalPesca();
                     }
                     if(bOk){
                         bOk = this._controler.Dat_General.validarIncidental();
@@ -784,13 +784,14 @@ sap.ui.define([
             ListaPescDesc.DSSPC = data.DSSPC;
             ListaPescDesc.CNPDS = data.CNPDS;
             this._oView.getModel("eventos").updateBindings(true);
-            if(this._controler._motivoMarea == "1"){
-                //this._controler.distribuirDatosDescarga(data);
-                this._controler.distribuirDatosDescargaCHD(data);
-            }else if(this._controler._motivoMarea == "2"){
-                //this._controler.distribuirDatosDescargaCHD(data);
-                this._controler.distribuirDatosDescarga(data);
-            }
+            this._controler.distribuirDatosDescarga(data);
+            // if(this._controler._motivoMarea == "1"){
+            //     //this._controler.distribuirDatosDescarga(data);
+            //     this._controler.distribuirDatosDescargaCHD(data);
+            // }else if(this._controler._motivoMarea == "2"){
+            //     //this._controler.distribuirDatosDescargaCHD(data);
+            //     this._controler.distribuirDatosDescarga(data);
+            // }
 
             this.getDialogConsultaDescarga().close();
             //console.log("Holaaaaaaaaaaaaaa");
