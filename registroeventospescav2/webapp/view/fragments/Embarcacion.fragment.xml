@@ -4,6 +4,23 @@
     xmlns:form="sap.ui.layout.form"
 >
 
+	<Dialog
+        icon="sap-icon://search"
+        title="Búsqueda de Embarcaciones"
+        state="Information">
+        <beginButton>
+            <Button
+                text="Cerrar"
+                icon="sap-icon://decline"
+                type="Reject" 
+                press="onCerrarEmba"/>
+        </beginButton>
+    </Dialog>
+
+
+
+
+<!--
     <Dialog horizontalScrolling="true" showHeader="true" state="None" stretch="false" title="Buscar Embarcación" type="Standard"
 		verticalScrolling="true">
 		<content>
@@ -180,8 +197,6 @@
 		<endButton/>
 		<subHeader/>
 	</Dialog>
-
-
-
+-->
 </core:FragmentDefinition>
 

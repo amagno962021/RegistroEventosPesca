@@ -26,18 +26,16 @@
                      <IconTabFilter id="itfPropios" icon="sap-icon://person-placeholder" iconColor="Default" text="Propios" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false" count="{ListaMareas>/Utils/CountPropios}">
                         <content>
                            <table:Table id="tblMareasPropios" rows="{path:'ListaMareas>/PropiosFiltro', templateShareable:true}" selectionMode="None" class="sapUiResponsiveMargin" visibleRowCount="{ListaMareas>/Utils/visibleRowsPropios}">
-                              <table:customData>
-                                   
-                              </table:customData>
+                              
                               <table:columns>
                                  <table:Column sortProperty="NRO" width="3%">
-                                     <Label text="Nro."/>
-                                     <table:template>
+                                        <Label text="Nro."/>
+                                        <table:template>
                                              
-                                          <Text text="{ListaMareas>NRO}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
+                                             <Text text="{ListaMareas>NRO}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true" />
                                           
-                                     </table:template>
-                                     
+                                        </table:template>
+                                        
                                  </table:Column>
                                  <table:Column filterProperty="NRMAR" defaultFilterOperator="Contains" sortProperty="NRMAR" >
                                      <Label text="Marea" />

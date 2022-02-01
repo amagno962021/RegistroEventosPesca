@@ -70,19 +70,6 @@ sap.ui.define([
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 oStore.put('InitData', dataModelo);
 
-
-
-            },
-
-            /**
-             * @override
-             */
-            onBeforeRendering: async function () {
-                this.getOwnerComponent().getService("ShellUIService").then(function(oShellService) {
-                    oShellService.setBackNavigation(function() {
-                        console.log("NAVEGAR ATRAS FIORI LAUNCHPAD");
-                    });
-                });
             },
 
             /**
@@ -90,15 +77,21 @@ sap.ui.define([
              */
             onAfterRendering: async function () {
                 //MainComp.prototype.onAfterRendering.apply(this, arguments);
-
                 this.objetoHelp = this._getHelpSearch();
                 this.parameter = this.objetoHelp[0].parameter;
                 this.url = this.objetoHelp[0].url;
                 await this.callConstantes();
 
+                /*
                 BusyIndicator.show(0);
                 await this.onActualizaMareas();
-                BusyIndicator.hide();
+                BusyIndicator.hide();*/
+
+                /*await this.getOwnerComponent().getServiceAsync("ShellUIService").then(function(oShellService) {
+                    oShellService.setBackNavigation(function() {
+                        console.log("NAVEGAR ATRAS FIORI LAUNCHPAD");
+                    });
+                });*/
 
 
                 //BusyIndicator.hide();
@@ -521,8 +514,53 @@ sap.ui.define([
                 return this.oDialogEmba;
             },
 
-            onAbrirAyudaEmbarcacion: function (evt) {
-                this.getEmbaDialog().open();
+            onAbrirAyudaEmbarcacion: async function (evt) {
+                //this.getEmbaDialog().open();
+                BusyIndicator.show(0);
+                var modeloConst = this.getOwnerComponent().getModel("DetalleMarea");
+                var usuario = await this.getCurrentUser();
+                modeloConst.setProperty("/user/name", usuario);
+
+                //let sIdInput = oEvent.getSource().getId(),
+                let host = modeloConst.getProperty("/HelpHost"),
+                    oView = this.getView(),
+                    //oModel = this.getModel(),
+                    sUrl = host + ".AyudasBusqueda.busqembarcaciones-1.0.0",
+                    nameComponent = "busqembarcaciones",
+                    idComponent = "busqembarcaciones",
+                    oInput = sap.ui.getCore().byId("txtEmba_R");
+                
+                modeloConst.setProperty("/input", oInput);
+
+                if (!this.DialogComponentEmba) {
+                    this.DialogComponentEmba = sap.ui.xmlfragment("com.tasa.registroeventospescav2.view.fragments.Embarcacion", this);
+                    oView.addDependent(this.DialogComponentEmba);
+                }
+                modeloConst.setProperty("/idDialogComp", this.DialogComponentEmba.getId());
+
+                let compCreateOk = function () {
+                    BusyIndicator.hide()
+                }
+                if (this.DialogComponentEmba.getContent().length === 0) {
+                    BusyIndicator.show(0);
+                    const oContainer = new sap.ui.core.ComponentContainer({
+                        id: idComponent,
+                        name: nameComponent,
+                        url: sUrl,
+                        settings: {},
+                        componentData: {},
+                        propagateModel: true,
+                        componentCreated: compCreateOk,
+                        height: '100%',
+                        // manifest: true,
+                        async: false
+                    });
+                    this.DialogComponentEmba.addContent(oContainer);
+                }
+
+                BusyIndicator.hide();
+                this.DialogComponentEmba.open();
+
             },
 
             onSelectEmba: async function (evt) {
@@ -778,8 +816,9 @@ sap.ui.define([
                     }).catch(error => console.log(error));
             },
 
-            onCerrarEmba: function () {
-                this.clearFilterEmba();
+            onCerrarEmba: function (oEvent) {
+                oEvent.getSource().getParent().close();
+                /*this.clearFilterEmba();
                 this.getEmbaDialog().close();
                 this.getOwnerComponent().getModel("ComboModel").setProperty("/Embarcaciones", []);
                 this.getOwnerComponent().getModel("ComboModel").setProperty("/TituloEmba", "");
@@ -789,7 +828,7 @@ sap.ui.define([
                 sap.ui.getCore().byId("comboPaginacion").setEnabled(false);
                 sap.ui.getCore().byId("goLastPag").setEnabled(false);
                 sap.ui.getCore().byId("goNextPag").setEnabled(false);
-                sap.ui.getCore().byId("comboPaginacion").setSelectedKey("1");
+                sap.ui.getCore().byId("comboPaginacion").setSelectedKey("1");*/
             },
 
             validarRoles: function () {

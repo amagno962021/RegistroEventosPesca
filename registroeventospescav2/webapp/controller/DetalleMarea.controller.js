@@ -9,7 +9,8 @@ sap.ui.define([
     "./Utils",
     'sap/m/MessageItem',
     'sap/m/MessagePopover',
-    "sap/ui/core/Fragment"
+    "sap/ui/core/Fragment",
+    "../model/formatter"
 ], function (
     MainComp,
     Controller,
@@ -21,13 +22,16 @@ sap.ui.define([
     Utils,
     MessageItem,
     MessagePopover,
-    Fragment
+    Fragment,
+    formatter
 ) {
     "use strict";
 
     var oMessagePopover;
 
     return MainComp.extend("com.tasa.registroeventospescav2.controller.DetalleMarea", {
+
+        formatter: formatter,
 
         onInit: async function () {
             this.router = this.getOwnerComponent().getRouter();
