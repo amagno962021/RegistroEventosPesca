@@ -166,7 +166,7 @@ sap.ui.define([
         },
         CargaDatosBiometria :async function(event){
 
-            let myPattern = /^[0-9]{3}$/  //^[+]?([1-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/;
+            let myPattern = /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/;
             let value = event.getParameter("value");
             let idMod = event.getParameter("id");
             let valid = false;
