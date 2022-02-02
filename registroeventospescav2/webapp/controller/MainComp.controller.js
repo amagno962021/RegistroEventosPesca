@@ -124,8 +124,9 @@ sap.ui.define([
                                 existeDesc = true;
                                 let fechContab = element.ListaPescaDescargada[0].FECCONMOV;
                                 var fechaContabilizacion = Utils.strDateToDate(fechContab);//pasar fecha de contabilizacion de modelo pesca descargada
+                                var diffDays = Utils.daysBetween(fechaContabilizacion, fechaActual);
                                 console.log("FECHA CONT: ", fechContab);
-                                if ((fechaContabilizacion.getTime() - fechaActual.getTime()) >= 0) {
+                                if (diffDays >= 0) {
                                     modelo.setProperty("/Form/ESCMA", "P");
                                 }
                             }

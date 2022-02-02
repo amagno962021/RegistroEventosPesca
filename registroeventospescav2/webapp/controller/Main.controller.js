@@ -387,7 +387,8 @@ sap.ui.define([
                     await this.editRecord(selectedItem.NRMAR);
                 } else {
                     BusyIndicator.show(0);
-                    var codPlanta = modelo.getProperty("/Form/CDPTA");
+                    var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+                    var codPlanta = modelo.getProperty("/Form/CDPTA") ? modelo.getProperty("/Form/CDPTA") : oStore.get("CDPTA");
                     var validarBodegaCert = await this.validarBodegaCert(embarcacion, codPlanta);
                     if (validarBodegaCert) {
                         var validacionMareaProduce = await this.ValidacionMareaProduce(embarcacion, codPlanta);
@@ -912,18 +913,22 @@ sap.ui.define([
             },
 
             getDataPopUp: async function(value){
-                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-                var embarcacion = modelo.getProperty("/Form/CDEMB");
-                await this.verificarCambiosCodigo("EMB", embarcacion);
-                modelo.refresh();
+                if(value){
+                    var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                    var embarcacion = modelo.getProperty("/Form/CDEMB");
+                    await this.verificarCambiosCodigo("EMB", embarcacion);
+                    modelo.refresh();
 
-                var newEmba = modelo.getProperty("/Form/CDEMB");
-                if(newEmba){
-                    sap.ui.getCore().byId("btnAceptarCrearMarea").setEnabled(true);
+                    var newEmba = modelo.getProperty("/Form/CDEMB");
+                    if (newEmba) {
+                        sap.ui.getCore().byId("btnAceptarCrearMarea").setEnabled(true);
+                    } else {
+                        sap.ui.getCore().byId("btnAceptarCrearMarea").setEnabled(false);
+                    }
+                    return newEmba;
                 }else{
-                    sap.ui.getCore().byId("btnAceptarCrearMarea").setEnabled(false);
+                    return value;
                 }
-                return newEmba;
             },
 
             onTest: function () {
