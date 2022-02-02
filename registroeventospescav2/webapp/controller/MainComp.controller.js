@@ -118,7 +118,7 @@ sap.ui.define([
                     }
                     if (!mareaReabierta) {
                         var existeDesc = false;
-                        for (let index = eventos.length; index > 0; index--) {
+                        for (let index = eventos.length - 1; index >= 0; index--) {
                             const element = eventos[index];
                             if (element.CDTEV == "6") {
                                 existeDesc = true;

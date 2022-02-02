@@ -366,7 +366,7 @@ sap.ui.define([
                 cordenada = gra_v + min_v;
             }
             else{
-                cordenada = fecha;
+                cordenada = cord;
             }
 
             return cordenada;
