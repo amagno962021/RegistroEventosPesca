@@ -136,6 +136,7 @@ sap.ui.define([
             var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
             var initData = oStore.get('InitData');
             modelo.setData(initData);
+            modelo.refresh();
             history.go(-1);
         },
 
@@ -472,7 +473,7 @@ sap.ui.define([
                 listaEventos.pop();
             }
 
-            var validarMareaEventos = sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").validarMareaEventos(this);
+            var validarMareaEventos = await sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento").validarMareaEventos(this);
             if (!validarMareaEventos) {
                 this.setVisibleBtnSave(false, false);
                 modelo.setProperty("/Config/readOnlyMotMarea", false);

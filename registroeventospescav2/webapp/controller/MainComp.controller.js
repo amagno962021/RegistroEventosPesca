@@ -310,10 +310,15 @@ sap.ui.define([
                 }
             }
 
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
             var cdpta = oStore.get("CDPTA");
             var cdtem = oStore.get("CDTEM");
             this.filtarMareas(cdtem, cdpta);
+
+            var initData = oStore.get('InitData');
+            modelo.setData(initData);
+            modelo.refresh();
 
             var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             oRouter.navTo("Main");
@@ -2166,7 +2171,8 @@ sap.ui.define([
                 modelo.setProperty("/DistribFlota/Indicador", caracterNuevo);
                 modelo.setProperty("/DistribFlota/IntLatPuerto", parseInt(response.LTGEO));
                 modelo.setProperty("/DistribFlota/IntLonPuerto", parseInt(response.LNGEO));
-                //modelo.refresh();
+                modelo.refresh();
+                console.log("DISTRIBUCION FLOTA PLANTA: ", modelo.getProperty("/DistribFlota"));
                 if (!response.DSEMP || !response.INPRP) {
                     var mssg = this.getResourceBundle().getText("PLANTASINEMPRESA");
                     MessageBox.error(mssg);
@@ -2206,6 +2212,7 @@ sap.ui.define([
                     MessageBox.warning(mssg);
                 }
                 modelo.refresh();
+                console.log("DISTRIBUCION FLOTA: ", modelo.getProperty("/DistribFlota"));
                 return true;
             } else {
                 return false;

@@ -159,7 +159,7 @@ sap.ui.define([
             mod.setProperty("/Eventos/Lista", ListaEventos);
             //refresh model
             if (ListaEventos.length < 1) {
-               
+                this.ctr.setVisibleBtnSave(false, false);
             }
             this.ctr.resetearValidaciones();
             history.go(-1);

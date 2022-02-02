@@ -2383,6 +2383,7 @@ sap.ui.define([
                 mod.setProperty("/Form/FormEditado",true);
                 mod.setProperty("/Form/MareaEditada",true);
                 mod.setProperty("/Form/MareaEditada",true);
+                this.setVisibleBtnSave(true, false);
                 LstEvento.push(obj);
                 
                 this._eventoNuevo = Number(LstEvento.length) -1;
@@ -2626,7 +2627,7 @@ sap.ui.define([
                 nodoEventos[this._eventoNuevo].WERKS = distribFlotaElement.WKSPT;
                 nodoEventos[this._eventoNuevo].DESCR = distribFlotaElement.DESCR;
                 nodoEventos[this._eventoNuevo].INPRP = distribFlotaElement.INPRP;
-                nodoEventos[this._eventoNuevo].CDEMP = distribFlotaElement.EMPLA;
+                nodoEventos[this._eventoNuevo].CDEMP = this._indicadorProp == "P" ? distribFlotaElement.EMPLA : distribFlotaElement.CDEMP;
                 nodoEventos[this._eventoNuevo].DSEMP = distribFlotaElement.DSEMP;
             } else {
                 this.getView().byId("FechaEnvaseIni").setVisible(false);
