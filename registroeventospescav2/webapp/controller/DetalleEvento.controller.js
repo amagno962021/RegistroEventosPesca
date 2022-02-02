@@ -1691,12 +1691,14 @@ sap.ui.define([
                     this.agregarMensajeValid("Error", mensaje);
                     this.Dat_Horometro.mostrarEnlaces();
                     this.getView().getModel("eventos").updateBindings(true);
+                    mod.refresh();
                 } else {
                     detalleMarea.FormEditado = true;
                     this.getView().byId("Tab_eventos").setSelectedKey("");
                     await this.cargarValoresFormateados();
                     console.log("MOD: ", mod);
                     this.getView().getModel("eventos").updateBindings(true);
+                    mod.refresh();
                      //NAVEGACION SI VALORES SON CORRECTOS
                     history.go(-1);
                  }

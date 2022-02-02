@@ -2037,7 +2037,7 @@ sap.ui.define([
                     if (!cieMarAnt) {
                         //visibleModel.setProperty("/EnlMarAnterior", true);
                         var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + this.getResourceBundle().getText("EMBMAREAABIERTA");
-                        console.log(mssg);
+                        var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                         var me = this;
                         MessageBox.error(mssg, {
                             actions: ["Ver Marea", MessageBox.Action.CLOSE],
@@ -2048,6 +2048,9 @@ sap.ui.define([
                                     var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                                     var initData = oStore.get('InitData');
                                     modelo.setData(initData);
+                                    modelo.refresh();
+                                    await me.abrirDetalleMarea(nrmarAnt);
+                                    oRouter.navTo("DetalleMarea");
                                     //await me.cargarMarea(nrmarAnt, "A", null, true);
                                     BusyIndicator.hide();
                                 }
