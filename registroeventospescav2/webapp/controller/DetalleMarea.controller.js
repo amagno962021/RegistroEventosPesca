@@ -1425,7 +1425,7 @@ sap.ui.define([
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var motivoMarea = modelo.getProperty("/Form/CDMMA");
             var estadoMarea = modelo.getProperty("/Form/ESMAR");
-            var listaMensajes = modelo.getProperty("/Utils/MessageItemsDM");
+            //var listaMensajes = modelo.getProperty("/Utils/MessageItemsDM");
             var motivoSinZarpe = ["3", "7", "8"];
             var cerrar = true;
             modelo.setProperty("/Utils/MessageItemsDM", []);
@@ -1454,9 +1454,10 @@ sap.ui.define([
                 }
             }
 
+            var listaMensajes = modelo.getProperty("/Utils/MessageItemsDM");
             if (!cerrar) {
                 var mssg = this.oBundle.getText("EVENTOSNOCOMPLE");
-                var indice = listaMensajes.length + 1;
+                /*var indice = listaMensajes.length + 1;
                 var objMessage = {
                     type: 'Error',
                     title: 'Mensaje de Validación',
@@ -1465,10 +1466,13 @@ sap.ui.define([
                     subtitle: mssg,
                     counter: indice
                 };
-                listaMensajes.push(objMessage);
-                modelo.refresh();
-                //MessageBox.error(mssg);
-                modelo.setProperty("/Form/ESMAR", "A")
+                listaMensajes.push(objMessage);*/
+                MessageBox.error(mssg, {
+                    onClose: function(){
+                        modelo.setProperty("/Form/ESMAR", "A");
+                        modelo.refresh();
+                    }
+                });
             }
 
             if (listaMensajes.length > 0) {

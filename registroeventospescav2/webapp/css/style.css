@@ -10,6 +10,17 @@ tr[data-mydata="C"]{
 [data-style-class=nameOfYourColor] {
   background-color: #c9fcd5 !important
 }*/
+/*a#backBtn{
+  visibility: hidden;
+}
+
+#backBtn{
+
+}*/
+
+a.sapUshellShellHeadItmCntnt{
+  visibility: hidden;
+}
 
 #__xmlview1--tblMareasPropios-table tbody>tr{
   background: #BDCFE9!important;

@@ -260,19 +260,73 @@ sap.ui.define([
             return this.oDialogConfirmSave;
         },
 
+        prepararDataTree: function (dataTipoEmba, dataPlantas) {
+            var modelo = this.getOwnerComponent().getModel("PlantasModel");
+            var iconTipoEmba = "sap-icon://sap-box";
+            var iconPlantas = "sap-icon://factory";
+            var dataTree = [];
+            for (let index = 0; index < dataTipoEmba.length; index++) {
+                var tmpNodes = [];
+                const element = dataTipoEmba[index];
+                for (let index1 = 0; index1 < dataPlantas.length; index1++) {
+                    const element1 = dataPlantas[index1];
+                    var plantasNode = {
+                        text: element1.DESCR,
+                        ref: iconPlantas,
+                        cdtem: element.cdtem,
+                        cdpta: element1.CDPTA,
+                        descr: element.descr
+                    };
+                    tmpNodes.push(plantasNode);
+                }
+                var tipoEmbaNode = {
+                    text: element.descr,
+                    ref: iconTipoEmba,
+                    nodes: tmpNodes
+                };
+                dataTree.push(tipoEmbaNode);
+            }
+            modelo.setProperty("/Items", dataTree);
+            modelo.refresh();
+            /*
+            var modelTree = new JSONModel(dataTree);
+            this.getView().byId("navigationList").setModel(modelTree);*/
+        },
+
         onNavInicio: async function (evt) {
             BusyIndicator.show(0);
-            var view = evt.getSource().getParent().getParent().getProperty("viewName");
+            //var view = evt.getSource().getParent().getParent().getProperty("viewName");
             //await this.onActualizaMareas();
+            var currentUser = await this.getCurrentUser();
+            var listaMareas = await TasaBackendService.cargarListaMareas(currentUser);
+            if (listaMareas) {
+                var tipoEmba = await TasaBackendService.obtenerTipoEmbarcacion(currentUser);
+                if (tipoEmba) {
+                    var plantas = await TasaBackendService.obtenerPlantas(currentUser);
+                    if (plantas) {
+                        this.prepararDataTree(tipoEmba, plantas.data);
+                        this.validarDataMareas(listaMareas);
+                    }
+                }
+            }
+
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+            var cdpta = oStore.get("CDPTA");
+            var cdtem = oStore.get("CDTEM");
+            this.filtarMareas(cdtem, cdpta);
+
+            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+            oRouter.navTo("Main");
+
             BusyIndicator.hide();
-            var viewName = view.split(".")[4];
+            /*var viewName = view.split(".")[4];
             if (viewName == "DetalleMarea") {
                 this.getConfirmSaveDialog().close();
                 history.go(-1);//navegar a comp. reut. Lista Mareas
             } else {
                 this.getConfirmSaveDialog().close();
                 history.go(-2);//navegar a comp. reut. Lista Mareas
-            }
+            }*/
             //console.log(evt.getSource().getParent().getParent().getProperty("viewName"));
             /*this.getConfirmSaveDialog().close();
             history.go(-1);*/
@@ -283,26 +337,30 @@ sap.ui.define([
             var view = evt.getSource().getParent().getParent().getProperty("viewName");
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var marea = modelo.getProperty("/Form/NRMAR");
-            var estadoMarea = modelo.getProperty("/Form/ESMAR");
+            /*var estadoMarea = modelo.getProperty("/Form/ESMAR");
             var embarcacion = modelo.getProperty("/Form/CDEMB");
-            var currentUser = await this.getCurrentUser();
+            var currentUser = await this.getCurrentUser();*/
             var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
             var initData = oStore.get('InitData');
             modelo.setData(initData);
-            var response = await TasaBackendService.obtenerDetalleMarea(marea, currentUser);
+            modelo.refresh();
+            this.getConfirmSaveDialog().close();
+            BusyIndicator.hide();
+            await this.editRecord(marea);
+            /*var response = await TasaBackendService.obtenerDetalleMarea(marea, currentUser);
             if (response) {
                 await this.setDetalleMarea(response, false);
-            }
+            }*/
             //await this.cargarMarea(marea, estadoMarea, embarcacion, false);
-            BusyIndicator.hide();
-            var viewName = view.split(".")[4];
+            //BusyIndicator.hide();
+            /*var viewName = view.split(".")[4];
             if (viewName == "DetalleMarea") {
                 this.getConfirmSaveDialog().close();
                 //history.go(-1);
             } else {
                 this.getConfirmSaveDialog().close();
                 history.go(-1);
-            }
+            }*/
             //console.log(evt.getSource().getParent().getParent().getProperty("viewName"));
             //this.getConfirmSaveDialog().close();
         },
@@ -1583,13 +1641,17 @@ sap.ui.define([
 
         clearAllData: async function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+            var initData = oStore.get('InitData');
+            modelo.setData(initData);
+            modelo.refresh();
             modelo.setProperty("/Utils/bckEmbarcacion", null);
             modelo.setProperty("/Utils/bckArmador", null);
             modelo.setProperty("/Form/ESMAR", "A");
             modelo.setProperty("/Form/INDICADOR", "N");
             modelo.setProperty("/Utils/SetInitTab", "itfDatosGenerales");
             modelo.setProperty("/Utils/TextoErrorMarea", null);
-            modelo.setProperty("/Utils/EsNuevo", true);
+            modelo.setProperty("/Form/EsNuevo", true);
             modelo.setProperty("/Form/FCCRE", Utils.strDateToSapDate(Utils.dateToStrDate(new Date())));
             modelo.setProperty("/Form/HRCRE", Utils.strHourToSapHo(Utils.dateToStrHours(new Date())));
             modelo.setProperty("/Form/ATCRE", await this.getCurrentUser());
@@ -1949,6 +2011,7 @@ sap.ui.define([
                         } else if (indPropiedad == "T") {
                             var obtenerDatosPlantaDist = await this.obtenerDatosPlantaDist(valFijoPlanta);
                             if (obtenerDatosPlantaDist) {
+                                var consultarPermisoZarpe = await this.consultarPermisoZarpe(codigo);
                                 clearData = !consultarPermisoZarpe;
                             } else {
                                 var mssg = codigo + " - " + ce_embaElement.NMEMB + ":" + this.getResourceBundle().getText("SELECCPLANTA");
@@ -2100,6 +2163,7 @@ sap.ui.define([
                 modelo.setProperty("/DistribFlota/Indicador", caracterNuevo);
                 modelo.setProperty("/DistribFlota/IntLatPuerto", parseInt(response.LTGEO));
                 modelo.setProperty("/DistribFlota/IntLonPuerto", parseInt(response.LNGEO));
+                //modelo.refresh();
                 if (!response.DSEMP || !response.INPRP) {
                     var mssg = this.getResourceBundle().getText("PLANTASINEMPRESA");
                     MessageBox.error(mssg);
@@ -2247,11 +2311,16 @@ sap.ui.define([
 
             modelo.setProperty("/Propios", propios);
             modelo.setProperty("/Terceros", terceros);
+            modelo.setProperty("/Utils/readOnlyNuevaMarea", true);
+            modelo.setProperty("/Utils/readOnlyActualizar", true);
+            modelo.setProperty("/Utils/readOnlyPescDecl", true);
+            modelo.refresh();
 
+            /*
             var listaModelos = this.getOwnerComponent().getModel("ListaMareas");
             listaModelos.setProperty("/Utils/readOnlyNuevaMarea", true);
             listaModelos.setProperty("/Utils/readOnlyActualizar", true);
-            listaModelos.setProperty("/Utils/readOnlyPescDecl", true);
+            listaModelos.setProperty("/Utils/readOnlyPescDecl", true);*/
 
             /*
             var jsonModelPropios = new JSONModel(propios);
@@ -2334,7 +2403,7 @@ sap.ui.define([
             //modelo.setProperty("/Mareas/Propios", dataPropios);
             modelo.setProperty("/Utils/CountPropios", dataPropios.length);
             //this.getView().byId("itfPropios").setCount(dataPropios.length);
-
+            modelo.refresh();
 
             //filtrar terceros
             for (let index1 = 0; index1 < dataModeloTerceros.length; index1++) {
@@ -2400,6 +2469,7 @@ sap.ui.define([
             modelo.setProperty("/Utils/TotalPescDecl", ttPescaDecl);
             modelo.setProperty("/Utils/SelectedKey", "itfPropios");
             //this.getView().byId("idIconTabBar").setSelectedKey("itfPropios");
+            modelo.refresh();
         },
 
         onActualizaMareas: async function () {
@@ -2941,6 +3011,15 @@ sap.ui.define([
                 }else{
                     modelo.setProperty("/Config/visibleBtnArmador", true);
                     modelo.setProperty("/Config/visibleEnlNueArmador", true);
+                }
+
+                for (let index1 = 0; index1 < nodoEventos.length; index1++) {
+                    const element = nodoEventos[index1];
+                    element.Indicador = "E";
+                    element.LatitudD = Utils.getDegrees(element.LTGEO);
+                    element.LatitudM = Utils.getMinutes(element.LTGEO);
+                    element.LongitudD = Utils.getDegrees(element.LNGEO);
+                    element.LongitudM = Utils.getMinutes(element.LNGEO)
                 }
 
                 modelo.setProperty("/Eventos/TituloEventos", "Eventos (" + nodoEventos.length + ")")
