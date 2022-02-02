@@ -27,7 +27,7 @@
                                 </form:label>
                                 <form:fields>
                                     <HBox>
-                                        <Input id="txtEmba_R" maxLength="10" value="{DetalleMarea>/Form/CDEMB}" showValueHelp="false" enabled="false" width="auto" valueStateText="Invalid entry"/>
+                                        <Input id="txtEmba_R" maxLength="10" value="{path: 'DetalleMarea>/Form/CDEMB', formatter: '.getDataPopUp'}" showValueHelp="false" enabled="false" width="auto" valueStateText="Invalid entry"/>
                                         <Button icon="sap-icon://search" press="onAbrirAyudaEmbarcacion"/>
                                         <Text text="{DetalleMarea>/Form/NMEMB}" />
                                     </HBox>

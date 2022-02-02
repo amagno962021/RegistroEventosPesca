@@ -149,7 +149,8 @@ sap.ui.define([
                     WKSPT: "",
                     CDUPT: "",
                     DSEMP: "",
-                    INPRP: ""
+                    INPRP: "",
+                    CDEMP: ""
                 },
                 MareaAnterior:{
                     NRMAR: "",

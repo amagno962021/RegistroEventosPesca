@@ -5,7 +5,7 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageBox",
     "../Service/TasaBackendService",
-    "../Formatter/formatter",
+    "../model/formatter",
     "./Utils",
     "../model/models",
     "sap/ui/core/BusyIndicator",
@@ -77,11 +77,19 @@ sap.ui.define([
              */
             onAfterRendering: async function () {
                 //MainComp.prototype.onAfterRendering.apply(this, arguments);
+                BusyIndicator.show(0);
                 this.objetoHelp = this._getHelpSearch();
                 this.parameter = this.objetoHelp[0].parameter;
                 this.url = this.objetoHelp[0].url;
                 await this.callConstantes();
 
+                var oRenderer = sap.ushell.Container.getRenderer("fiori3");
+
+                console.log("RENDERER: ", oRenderer);
+                oRenderer.hideHeaderItem("backBtn", false);
+
+                BusyIndicator.hide();
+                
                 /*
                 BusyIndicator.show(0);
                 await this.onActualizaMareas();
@@ -185,7 +193,6 @@ sap.ui.define([
                         this.getOwnerComponent().getModel("ComboModel").setProperty("/Plantas", plantas);
                     }).catch(error => console.log(error));
 
-
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 var listaDominios = [{
                     "domname": "ZCDMMA",
@@ -195,6 +202,9 @@ sap.ui.define([
                     "status": "A"
                 }, {
                     "domname": "ZCDTEV",
+                    "status": "A"
+                }, {
+                    "domname": "ZDO_ZINUBC",
                     "status": "A"
                 }];
 
@@ -210,6 +220,9 @@ sap.ui.define([
 
                         var tipoEventos = data[2].data;
                         modelo.setProperty("/Utils/BckTipoEvento", tipoEventos);
+
+                        var indUbic = data[3].data;
+                        modelo.setProperty("/Config/datosCombo/UbicPesca", indUbic);
                     }
                 }
 
@@ -221,38 +234,6 @@ sap.ui.define([
                 modelo.refresh();
 
                 this.validarRoles();
-            },
-
-            prepararDataTree: function (dataTipoEmba, dataPlantas) {
-                var modelo = this.getOwnerComponent().getModel("PlantasModel");
-                var iconTipoEmba = "sap-icon://sap-box";
-                var iconPlantas = "sap-icon://factory";
-                var dataTree = [];
-                for (let index = 0; index < dataTipoEmba.length; index++) {
-                    var tmpNodes = [];
-                    const element = dataTipoEmba[index];
-                    for (let index1 = 0; index1 < dataPlantas.length; index1++) {
-                        const element1 = dataPlantas[index1];
-                        var plantasNode = {
-                            text: element1.DESCR,
-                            ref: iconPlantas,
-                            cdtem: element.cdtem,
-                            cdpta: element1.CDPTA,
-                            descr: element.descr
-                        };
-                        tmpNodes.push(plantasNode);
-                    }
-                    var tipoEmbaNode = {
-                        text: element.descr,
-                        ref: iconTipoEmba,
-                        nodes: tmpNodes
-                    };
-                    dataTree.push(tipoEmbaNode);
-                }
-                modelo.setProperty("/Items", dataTree);
-                /*
-                var modelTree = new JSONModel(dataTree);
-                this.getView().byId("navigationList").setModel(modelTree);*/
             },
 
             onSearchMarea: function (evt) {
@@ -290,10 +271,14 @@ sap.ui.define([
                 var modeloDetalleMarea = me.getOwnerComponent().getModel("DetalleMarea");
                 var dataDetalleMarea = modeloDetalleMarea.getData();
                 var currentUser = await this.getCurrentUser();
+                var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+                var cdpta = oStore.get("CDPTA");
+                await this.clearAllData();
                 await TasaBackendService.obtenerPlantas(currentUser).then(function (plantas) {
                     dataDetalleMarea.Config.datosCombo.Plantas = plantas.data; // cargar combo plantas nueva marea
                     modeloDetalleMarea.setProperty("/Form/CDEMB", "");
                     modeloDetalleMarea.setProperty("/Form/NMEMB", "");
+                    modeloDetalleMarea.setProperty("/Form/CDPTA", cdpta);
                     modeloDetalleMarea.refresh();
                 }).catch(function (error) {
                     console.log("ERROR: Main.onInit - " + error);
@@ -329,6 +314,7 @@ sap.ui.define([
                 } else {
                     MessageBox.information(this.oBundle.getText("NEWMAREAMISSFIELD"));
                 }*/
+                /*
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 var modelo = this.getOwnerComponent().getModel("DetalleMarea");
                 var codemba = modelo.getProperty("/Form/CDEMB");
@@ -339,6 +325,7 @@ sap.ui.define([
                     var valMareaProd = await this.ValidacionMareaProduce(codemba, codPlanta);
                     if (valMareaProd) {//se puso la admiracion para pruebas
                         modelo.setProperty("/Form/INDICADOR", "N");
+                        modelo.setProperty("/Form/EsNuevo", true);
                         modelo.setProperty("/Form/ESMAR", "A");
                         oStore.put("FlagCargaInicial", true);
                         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
@@ -363,6 +350,31 @@ sap.ui.define([
                     }
                 } else {
                     MessageBox.error(this.oBundle.getText("EMBANOPER", [nmbemb]));
+                }*/
+                BusyIndicator.show(0);
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var codPlanta = modelo.getProperty("/Form/CDPTA");
+                var embarcacion = modelo.getProperty("/Form/CDEMB");
+                var validarBodegaCert = await this.validarBodegaCert(embarcacion, codPlanta);
+                if (validarBodegaCert) {
+                    var validacionMareaProduce = await this.ValidacionMareaProduce(embarcacion, codPlanta);
+                    if (validacionMareaProduce) {
+                        //await this.prepareNewRecord();
+                        var buscarEmba = await this.buscarEmbarcacion(embarcacion);
+                        if (buscarEmba) {
+                            BusyIndicator.hide();
+                            var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
+                            oRouter.navTo("DetalleMarea");
+                        } else {
+                            BusyIndicator.hide();
+                        }
+                    } else {
+                        BusyIndicator.hide();
+                        this.mostrarMessagePopover();
+                    }
+                } else {
+                    BusyIndicator.hide();
+                    MessageBox.error(this.oBundle.getText("EMBANOPER", [selectedItem.NMEMB]));
                 }
             },
 
@@ -897,6 +909,21 @@ sap.ui.define([
                     oButton.setIcon(this.buttonIconFormatter("MA"));
                     oButton.setText(this.highestSeverityMessages("MA"));
                 }.bind(this), 100);
+            },
+
+            getDataPopUp: async function(value){
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var embarcacion = modelo.getProperty("/Form/CDEMB");
+                await this.verificarCambiosCodigo("EMB", embarcacion);
+                modelo.refresh();
+
+                var newEmba = modelo.getProperty("/Form/CDEMB");
+                if(newEmba){
+                    sap.ui.getCore().byId("btnAceptarCrearMarea").setEnabled(true);
+                }else{
+                    sap.ui.getCore().byId("btnAceptarCrearMarea").setEnabled(false);
+                }
+                return newEmba;
             },
 
             onTest: function () {
