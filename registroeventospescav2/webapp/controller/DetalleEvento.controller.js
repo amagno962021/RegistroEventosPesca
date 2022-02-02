@@ -1332,7 +1332,7 @@ sap.ui.define([
                 if (listaEventos[j].CDTEV == "3") {
                     var pescDecla = listaEventos[j].CantTotalPescDecla ? listaEventos[j].CantTotalPescDecla : listaEventos[j].CNPDC;
                     if (pescDecla && !isNaN(pescDecla)) {
-                        cantTotal += pescDecla;
+                        cantTotal += Number(pescDecla);
                     } else {
                         cantTotal += 0;
                     }
