@@ -985,9 +985,9 @@ sap.ui.define([
 
         obtenerPescaBodegaRFC: function (elementParam, pescaBodega_model) {
             let mod = this.getOwnerComponent().getModel("DetalleMarea");
-            let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
+            //let elementSel = mod.getProperty("/Eventos/LeadSelEvento");
             let ListaEventos = mod.getProperty("/Eventos/Lista");
-            var bodegas = ListaEventos[elementSel].ListaBodegas;//modelo de bodegas
+            var bodegas = elementParam.ListaBodegas;//modelo de bodegas
             var lista = pescaBodega_model;
             for (let index = 0; index < bodegas.length; index++) {
                 const element = bodegas[index];
