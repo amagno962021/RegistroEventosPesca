@@ -70,6 +70,8 @@ sap.ui.define([
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 oStore.put('InitData', dataModelo);
 
+                console.log("MODELO INICIAL: ", modelo);
+
             },
 
             /**
@@ -274,6 +276,7 @@ sap.ui.define([
                 var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
                 var cdpta = oStore.get("CDPTA");
                 await this.clearAllData();
+                modeloDetalleMarea.refresh();
                 await TasaBackendService.obtenerPlantas(currentUser).then(function (plantas) {
                     dataDetalleMarea.Config.datosCombo.Plantas = plantas.data; // cargar combo plantas nueva marea
                     modeloDetalleMarea.setProperty("/Form/CDEMB", "");
@@ -284,10 +287,16 @@ sap.ui.define([
                     console.log("ERROR: Main.onInit - " + error);
                 });
                 BusyIndicator.hide();
+                console.log("MODELO ABRIR POUP: ", modeloDetalleMarea);
                 me.getDialog().open();
             },
 
             onCancelMarea: function () {
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
+                var initData = oStore.get('InitData');
+                modelo.setData(initData);
+                modelo.refresh();
                 this.getDialog().close();
             },
 
@@ -533,6 +542,7 @@ sap.ui.define([
                 var modeloConst = this.getOwnerComponent().getModel("DetalleMarea");
                 var usuario = await this.getCurrentUser();
                 modeloConst.setProperty("/user/name", usuario);
+                modeloConst.setProperty("/Utils/BuscarEmba", true);
 
                 //let sIdInput = oEvent.getSource().getId(),
                 let host = modeloConst.getProperty("/HelpHost"),
@@ -913,8 +923,9 @@ sap.ui.define([
             },
 
             getDataPopUp: async function(value){
-                if(value){
-                    var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var modelo = this.getOwnerComponent().getModel("DetalleMarea");
+                var flagBuscEmba = modelo.getProperty("/Utils/BuscarEmba");
+                if(value && flagBuscEmba){
                     var embarcacion = modelo.getProperty("/Form/CDEMB");
                     await this.verificarCambiosCodigo("EMB", embarcacion);
                     modelo.refresh();
@@ -929,6 +940,7 @@ sap.ui.define([
                 }else{
                     return value;
                 }
+                //return value;
             },
 
             onTest: function () {

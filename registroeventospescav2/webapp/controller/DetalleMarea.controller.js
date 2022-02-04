@@ -40,6 +40,7 @@ sap.ui.define([
             //this.oControllerEvento = sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento"); 
             this.cargarMessagePopover();
 
+            console.log("MODELO DETALLE MAREA: ", this.getOwnerComponent().getModel("DetalleMarea"));
         },
 
         _onPatternMatched: async function (oEvent) {
@@ -1120,7 +1121,7 @@ sap.ui.define([
         onProcesarSum: async function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             var inprp = modelo.getProperty("/Form/INPRP");
-
+            console.log("IND PROPIEDAD: ", inprp);
             if (inprp == "P") {
                 await this.onReservar()
             }
@@ -1214,35 +1215,44 @@ sap.ui.define([
 
         validarCabeceraSuministro: async function () {
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var campos = ["/Form/CDEMB", "/Suministro/0/CNSUM"];
-            var bOk = this.validateFormFields(campos);
-            if (bOk) {
+            var emba = modelo.getProperty("/Form/CDEMB");
+            var bOk = true;
+            if (emba) {
                 var cantSuministro = modelo.getProperty("/Suministro/0/CNSUM");
-                if (!isNaN(cantSuministro)) {
-                    if (Number(cantSuministro) > 0) {
-                        var capTanque = modelo.getProperty("/EmbaComb/CDTAN");
-                        var stockComb = modelo.getProperty("/EmbaComb/STCMB");
-                        var cantCombTotal = 0;
-                        var cantSumProp = 0;
-                        if (!isNaN(stockComb) && !isNaN(capTanque)) {
-                            cantCombTotal = Number(cantSuministro) + Number(stockComb);
-                            cantSumProp = Number(capTanque) - Number(stockComb);
-                        }
-                        if (cantCombTotal > capTanque) {
+                if (cantSuministro) {
+                    var cantSuministro = modelo.getProperty("/Suministro/0/CNSUM");
+                    if (!isNaN(cantSuministro)) {
+                        if (Number(cantSuministro) > 0) {
+                            var capTanque = modelo.getProperty("/EmbaComb/CDTAN");
+                            var stockComb = modelo.getProperty("/EmbaComb/STCMB");
+                            var cantCombTotal = 0;
+                            var cantSumProp = 0;
+                            if (!isNaN(stockComb) && !isNaN(capTanque)) {
+                                cantCombTotal = Number(cantSuministro) + Number(stockComb);
+                                cantSumProp = Number(capTanque) - Number(stockComb);
+                            }
+                            if (cantCombTotal > capTanque) {
+                                bOk = false;
+                                var mssg = this.oBundle.getText("CAPTANQUESUP", [cantSumProp]);
+                                MessageBox.error(mssg);
+                            }
+                        } else {
                             bOk = false;
-                            var mssg = this.oBundle.getText("CAPTANQUESUP", [cantSumProp]);
+                            var mssg = this.oBundle.getText("CANTSUMNOCERO");
                             MessageBox.error(mssg);
                         }
                     } else {
                         bOk = false;
-                        var mssg = this.oBundle.getText("CANTSUMNOCERO");
+                        var mssg = this.oBundle.getText("CANTSUMNOINT");
                         MessageBox.error(mssg);
                     }
                 } else {
                     bOk = false;
-                    var mssg = this.oBundle.getText("CANTSUMNOINT");
-                    MessageBox.error(mssg);
+                    MessageBox.error("Debe ingresar la cantidad del suministro.");
                 }
+            } else {
+                bOk = false;
+                MessageBox.error("No tiene embarcación.");
             }
             return bOk;
         },

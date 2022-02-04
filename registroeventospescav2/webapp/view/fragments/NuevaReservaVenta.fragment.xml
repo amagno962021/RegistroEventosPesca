@@ -112,19 +112,23 @@
 												<Text text="{DetalleMarea>NRPOS}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 												<Text text="{DetalleMarea>MAKTX}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit"
 														visible="true"/>
-												<ObjectNumber number="{DetalleMarea>CNSUM}" unit="{DetalleMarea>DSUMD}"/>
+												<Input value="{DetalleMarea>CNSUM}" description="{DetalleMarea>DSUMD}" showValueHelp="false" width="auto" valueStateText="Invalid entry"/>
 												<Text text="{DetalleMarea>WERKS}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												<Text text="{DetalleMarea>DSALM}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
+												<ComboBox id="cbxPlantas" width="auto" items="{DetalleMarea>/ConfigReservas/Almacenes}" selectedKey="{DetalleMarea>/Suministro/0/CDALE}" change="onSelectAlmacen">
+                                        			<items>
+                                            			<core:Item text="{DetalleMarea>DSALM}" enabled="true" key="{DetalleMarea>CDALE}"/>
+                                        			</items>
+                                    			</ComboBox>
 											</cells>
 										</ColumnListItem>
 									</items>
 								</Table>
     </content>
    <beginButton>
-        <Button type="Emphasized"  text="Cerrar" press="onCancelNuevaResVent" enabled="true"></Button>
+        <Button type="Emphasized" id="btnAceptarCrearMarea" text="{DetalleMarea>/Utils/TxtBtnSuministro}" press="onProcesarSum" enabled="true"></Button>
     </beginButton>
     <endButton>
-        
+        <Button type="Emphasized"  text="Cerrar" press="onCancelNuevaResVent" enabled="true"></Button>
     </endButton>
     
 </Dialog>

@@ -1186,7 +1186,7 @@ sap.ui.define([
             modelo.setProperty("/Utils/TxtBtnSuministro", "Reservar");
             if (response) {
                 var reservas = response.t_reservas;
-                if (reservas.length != 0) {
+                //if (reservas.length != 0) {
                     modelo.setProperty("/Config/visibleReserva2", true);
                     if (visibleNuevo) {
                         modelo.setProperty("/Config/visibleBtnNuevaReserva", true);
@@ -1207,9 +1207,10 @@ sap.ui.define([
                         modelo.setProperty("/Config/visibleAnulaReserva", true);
                         modelo.setProperty("/Config/visibleCheckReserva", true);
                     }
-                } else {
+                modelo.refresh();
+                /*} else {
                     await this.obtenerNuevoSuministro(true);
-                }
+                }*/
             }
             BusyIndicator.hide();
         },
@@ -1517,7 +1518,7 @@ sap.ui.define([
             var response = await TasaBackendService.obtenerReservas(marea, null, null, usuario);
             if (response) {
                 var ventas = response.t_reservas;
-                if (ventas.length != 0) {
+                //if (ventas.length != 0) {
                     modelo.setProperty("/Config/visibleVenta1", true);
                     if (primerRegVenta) {
                         modelo.setProperty("/Config/visibleBtnNuevaVenta", true);
@@ -1538,9 +1539,10 @@ sap.ui.define([
                         modelo.setProperty("/Config/visibleAnulaVenta", true);
                         modelo.setProperty("/Config/visibleCheckVenta", true);
                     }
-                } else {
+                    modelo.refresh();
+                /*} else {
                     await this.obtenerNuevoSuministro(true);
-                }
+                }*/
             }
 
             BusyIndicator.hide();

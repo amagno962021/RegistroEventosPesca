@@ -8,7 +8,7 @@ sap.ui.define([
 
         getHostService: function () {
 			var urlIntance = window.location.origin;
-			var servicioNode = 'cheerful-bat-js';
+			var servicioNode = 'qas';
 			if (urlIntance.indexOf('tasaqas') !== -1) {
 				servicioNode = 'qas';
 			} else if (urlIntance.indexOf('tasaprd') !== -1) {
