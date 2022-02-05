@@ -320,7 +320,8 @@ sap.ui.define([
                     bckEmbarcacion: null,
                     bckArmador: null,
                     BckFecInicio: "",
-                    BckTipoEvento: []
+                    BckTipoEvento: [],
+                    BuscarEmba: false
                 },
                 InputsDescargas :{
                     CentPlanta : "",
