@@ -40,7 +40,6 @@ sap.ui.define([
             //this.oControllerEvento = sap.ui.controller("com.tasa.registroeventospescav2.controller.DetalleEvento"); 
             this.cargarMessagePopover();
 
-            console.log("MODELO DETALLE MAREA: ", this.getOwnerComponent().getModel("DetalleMarea"));
         },
 
         _onPatternMatched: async function (oEvent) {
@@ -82,10 +81,12 @@ sap.ui.define([
 
             //validaciones de objetos de vista
             //await this.validarVista(this);
+
             var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
             var bckpModelo = this.getOwnerComponent().getModel("DetalleMarea");
+            var dataBckpModelo = bckpModelo.getData();
 
-            oStore.put("BckpModeloMarea", bckpModelo);
+            oStore.put("DataModeloBckp", dataBckpModelo);
 
             BusyIndicator.hide();
         },
@@ -132,13 +133,37 @@ sap.ui.define([
         },*/
 
         onBackListMarea: function () {
-            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
-            //modelo.setProperty("/Utils/MessageItemsDM", []);
             var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
-            var initData = oStore.get('InitData');
-            modelo.setData(initData);
+            var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             modelo.refresh();
-            history.go(-1);
+
+            var bckpData = oStore.get("DataModeloBckp");
+            var currentData = modelo.getData();
+            
+            var jsonBckpData = JSON.stringify(bckpData);
+            var jsonCurrentData = JSON.stringify(currentData);
+
+            if(jsonBckpData === jsonCurrentData){
+                var initData = oStore.get('InitData');
+                modelo.setData(initData);
+                modelo.refresh();
+                history.go(-1);
+            }else{
+                var mssg = this.oBundle.getText("CONFIRMSAVEMSSG");
+                MessageBox.confirm(mssg, {
+                    title: "Descartar Cambios",
+                    onClose: function(evt){
+                        if(evt == "OK"){
+                            //SI NO SE PRESIONO BOTON GUARDAR
+                            //DEBE ELIMNAR RESERVAS VENTAS Y EVENTOS
+                            var initData = oStore.get('InitData');
+                            modelo.setData(initData);
+                            modelo.refresh();
+                            history.go(-1);
+                        }
+                    }
+                })
+            }
         },
 
         onCrearArmador: function (oEvent) {
@@ -1139,11 +1164,11 @@ sap.ui.define([
                 var me = this;
                 MessageBox.confirm(mssg, {
                     title: me.oBundle.getText("CONFIRMSAVETITLE"),
-                    onClose: function (evt) {
+                    onClose: async function (evt) {
                         if (evt == "OK") {
                             BusyIndicator.hide();
+                            await me.SaveReserva();
                             me.getNuevaMareaDialog().close();
-                            me.SaveReserva()
                         }
                     }
                 })
@@ -1160,11 +1185,11 @@ sap.ui.define([
                 var me = this;
                 MessageBox.confirm(mssg, {
                     title: me.oBundle.getText("CONFIRMSAVETITLE"),
-                    onClose: function (evt) {
+                    onClose: async function (evt) {
                         if (evt == "OK") {
                             BusyIndicator.hide();
+                            await me.SaveVentaComb();
                             me.getNuevaMareaDialog().close();
-                            me.SaveVentaComb()
                         }
                     }
                 })

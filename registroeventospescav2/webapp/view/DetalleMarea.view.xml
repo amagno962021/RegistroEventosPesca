@@ -534,7 +534,7 @@
 											<cells>
 												<CheckBox selected="{DetalleMarea>CHKDE}" visible="{DetalleMarea>/Config/visibleCheckReserva}"/>
 												<Text text="{DetalleMarea>NRRSV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
-												<ObjectIdentifier text="{DetalleMarea>CDEMB}" title="{DetalleMarea>NMEMB}"/>
+												<ObjectIdentifier text="" title="{DetalleMarea>NMEMB}"/>
 												<Text text="{DetalleMarea>NRMAR}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 												<Text text="{DetalleMarea>DESC_CDMMA}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>
 												<Text text="{DetalleMarea>FHRSV}" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit" visible="true"/>

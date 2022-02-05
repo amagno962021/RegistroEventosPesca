@@ -69,7 +69,7 @@
 											<content>
 												<Title text="Suministros" titleStyle="Auto" width="auto" textAlign="Begin" visible="true" wrapping="false"/>
 												<ToolbarSpacer width=""/>
-												<Button text="Nuevo Suministro" type="Default" icon="sap-icon://add-product" iconFirst="true" width="auto" enabled="true" visible="true"
+												<Button text="Nuevo Suministro" type="Default" icon="sap-icon://add-product" iconFirst="true" width="auto" enabled="true" visible="false"
 														iconDensityAware="false" press="onPressNuevoSuministro"/>
 											</content>
 										</OverflowToolbar>
@@ -105,6 +105,12 @@
 											</header>
 											<footer/>
 										</Column>
+										<Column width="20%" hAlign="Left" vAlign="Middle" minScreenWidth="Tablet" demandPopin="true" popinDisplay="Inline" mergeDuplicates="false" visible="{DetalleMarea>/Config/visibleAlmacenExterno}">
+											<header>
+												<Text text="Almacén" width="auto" maxLines="1" wrapping="false" textAlign="Begin" textDirection="Inherit"/>
+											</header>
+											<footer/>
+										</Column>
 									</columns>
 									<items>
 										<ColumnListItem type="Inactive">
@@ -117,6 +123,11 @@
 												<ComboBox id="cbxPlantas" width="auto" items="{DetalleMarea>/ConfigReservas/Almacenes}" selectedKey="{DetalleMarea>/Suministro/0/CDALE}" change="onSelectAlmacen">
                                         			<items>
                                             			<core:Item text="{DetalleMarea>DSALM}" enabled="true" key="{DetalleMarea>CDALE}"/>
+                                        			</items>
+                                    			</ComboBox>
+												<ComboBox width="auto" items="{DetalleMarea>/ConfigReservas/AlmacenesExt}" selectedKey="{DetalleMarea>CDALE}" change="onSelectAlmacen" visible="{DetalleMarea>/Config/visibleAlmacenExterno}">
+                                        			<items>
+                                            			<core:Item text="{DetalleMarea>DESCR}" enabled="true" key="{DetalleMarea>VAL01}"/>
                                         			</items>
                                     			</ComboBox>
 											</cells>
