@@ -950,6 +950,30 @@ sap.ui.define([
                     console.log("ERROR: DetalleMarea.onTest - ", error);
                 });
             },
+            cargarFilas : function(event) {
+                console.log(event);
+                let otable = event.getSource();
+                let lista  = event.getSource().getBinding().oList;
+                let rows_d = event.getSource().getAggregation("rows"); 
+
+                for (let index2 = 0; index2 < rows_d.length; index2++) {
+                    const element2 = rows_d[index2];
+                    if(element2.getAggregation("cells")[7].getProperty("text") === "Abierto"){
+                        element2.addStyleClass("tabla");
+                    }else if (element2.getAggregation("cells")[7].getProperty("text") === "Cerrado"){
+                        element2.addStyleClass("tabla2");
+                    }else{
+                        element2.addStyleClass("tabla3");
+                    }
+                        
+                }
+                    
+                
+
+                //otable.addStyleClass("tabla1");
+
+                
+            },
 
             onCallUsuario: async function () {
                 /*var modelo = this.getOwnerComponent().getModel("DetalleMarea");

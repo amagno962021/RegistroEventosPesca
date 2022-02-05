@@ -22,9 +22,33 @@ a.sapUshellShellHeadItmCntnt{
   visibility: hidden;
 }
 
-#__xmlview1--tblMareasPropios-table tbody>tr{
-  background: #BDCFE9!important;
+/* #__xmlview1--tblMareasPropios-table{
+  
+} */
+
+
+/* -------------------------------------------------------------
+ *   LOCALHOST
+ * -------------------------------------------------------------
+ */
+
+/* Columnas Total Pesca */
+
+
+.tabla {
+  background: #92bef8!important;
 }
+
+.tabla1 {
+  background: #4dbf14!important;
+}
+
+.tabla1 {
+  background: #ffffff!important;
+}
+/* #__xmlview1--tblMareasPropios-table tbody>tr{
+  background: #7f8388!important;
+} */
 
 /* .prueba{
   background: #326ef0;

@@ -109,6 +109,7 @@
                 {
                     "name": "Main",
                     "view": "Main",
+                    "viewId" :"main",
                     "pattern": "",
                     "targetAggregation": "pages",
                     "controlId": "app"

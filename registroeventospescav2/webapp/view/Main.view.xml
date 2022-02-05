@@ -7,7 +7,7 @@
    controllerName="com.tasa.registroeventospescav2.controller.Main" 
    displayBlock="true" 
    height="100%">
-   <SplitApp>
+   <SplitApp id="App">
       <masterPages>
          <Page title="Plantas" backgroundDesign="Transparent">
             <tnt:NavigationList id="navigationList" width="auto" items="{PlantasModel>/Items}" itemSelect="onSearchMarea">
@@ -18,14 +18,14 @@
          </Page>
       </masterPages>
       <detailPages>
-         <Page title="Detalle de Mareas" backgroundDesign="Transparent">
+         <Page title="Detalle de Mareas" backgroundDesign="Transparent" id="ListaPrincipal">
             <content>
                <ObjectHeader id="idObjectHeader" icon="sap-icon://factory" titleActive="false" backgroundDesign="Translucent" numberUnit="Tn" numberState="Success" number="{ListaMareas>/Utils/TotalPescDecl}"/>
                <IconTabBar id="idIconTabBar" expandable="false" expanded="true" applyContentPadding="false" backgroundDesign="Solid" upperCase="false" visible="true" select="onSelectTab" selectedKey="{ListaMareas>/Utils/SelectedKey}">
                   <items>
                      <IconTabFilter id="itfPropios" icon="sap-icon://person-placeholder" iconColor="Default" text="Propios" design="Vertical" showAll="false" textDirection="Inherit" enabled="true" visible="true" iconDensityAware="false" count="{ListaMareas>/Utils/CountPropios}">
                         <content>
-                           <table:Table id="tblMareasPropios" rows="{path:'ListaMareas>/PropiosFiltro', templateShareable:true}" selectionMode="None" class="sapUiResponsiveMargin" visibleRowCount="{ListaMareas>/Utils/visibleRowsPropios}">
+                           <table:Table id="tblMareasPropios" rows="{path:'ListaMareas>/PropiosFiltro', templateShareable:true}" selectionMode="None" class="sapUiResponsiveMargin" visibleRowCount="{ListaMareas>/Utils/visibleRowsPropios}" rowsUpdated = "cargarFilas">
                               
                               <table:columns>
                                  <table:Column sortProperty="NRO" width="3%">
