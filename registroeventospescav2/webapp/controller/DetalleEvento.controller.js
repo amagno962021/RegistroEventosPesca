@@ -2761,18 +2761,20 @@ sap.ui.define([
             var s7 = TasaBackendService.obtenerListaPuntosDescarga(this._codPlanta, this.getCurrentUser());
             var s8 = TasaBackendService.obtenerListaPescaDescargada("0", this.getCurrentUser()); // servicios que no deberian cargarse
             var s10 = TasaBackendService.obtenerListaHorometro(this._FormMarea.WERKS, this._tipoEvento, this._nroMarea, this._nroEvento);
-            var s11 = TasaBackendService.obtenerConfiguracionEvento();
-            var s12 = TasaBackendService.obtenerDominio("1ZONAPESCA");
-            var s13 = TasaBackendService.obtenerDominio("ZESOPE");
-            var s14 = TasaBackendService.obtenerDominio("ZCDMLM");
-            var s15 = TasaBackendService.obtenerDominio("ZCDTDS");
-            var s16 = TasaBackendService.obtenerDominio("ZCDMNP");
-            var s17 = TasaBackendService.obtenerDominio("ZCDMES");
-            var s18 = TasaBackendService.obtenerDominio("ZD_SISFRIO");
-            var s19 = TasaBackendService.obtenerDominio("ESPECIE");
-            var s20 = TasaBackendService.obtenerMareaBiometria(this._embarcacion, this._nroMarea, this.getCurrentUser());
+            // var s11 = TasaBackendService.obtenerConfiguracionEvento();
+            // var s12 = TasaBackendService.obtenerDominio("1ZONAPESCA");
+            // var s13 = TasaBackendService.obtenerDominio("ZESOPE");
+            // var s14 = TasaBackendService.obtenerDominio("ZCDMLM");
+            // var s15 = TasaBackendService.obtenerDominio("ZCDTDS");
+            // var s16 = TasaBackendService.obtenerDominio("ZCDMNP");
+            // var s17 = TasaBackendService.obtenerDominio("ZCDMES");
+            // var s18 = TasaBackendService.obtenerDominio("ZD_SISFRIO");
+            // var s19 = TasaBackendService.obtenerDominio("ESPECIE");
+            // var s20 = TasaBackendService.obtenerMareaBiometria(this._embarcacion, this._nroMarea, this.getCurrentUser());
 
-            return Promise.all([s1, s2, s3, s4, s5, s6, s7, s8, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20]).then(values => {
+            return Promise.all([s1, s2, s3, s4, s5, s6, s7, s8, s10
+                //, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20
+            ]).then(values => {
                 self._tipoPreservacion = JSON.parse(values[0]).data[0].CDTPR;
                 self._listasServicioCargaIni = values;
                 return true;
