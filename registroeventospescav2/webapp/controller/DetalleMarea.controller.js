@@ -82,12 +82,6 @@ sap.ui.define([
             //validaciones de objetos de vista
             //await this.validarVista(this);
 
-            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
-            var bckpModelo = this.getOwnerComponent().getModel("DetalleMarea");
-            var dataBckpModelo = bckpModelo.getData();
-
-            oStore.put("DataModeloBckp", dataBckpModelo);
-
             BusyIndicator.hide();
         },
 
@@ -154,8 +148,6 @@ sap.ui.define([
                     title: "Descartar Cambios",
                     onClose: function(evt){
                         if(evt == "OK"){
-                            //SI NO SE PRESIONO BOTON GUARDAR
-                            //DEBE ELIMNAR RESERVAS VENTAS Y EVENTOS
                             var initData = oStore.get('InitData');
                             modelo.setData(initData);
                             modelo.refresh();
@@ -1475,6 +1467,17 @@ sap.ui.define([
                 }
                 if (estadoMarea == "C") {
                     modelo.setProperty("/Config/visibleFechFin", true);
+                    var fechFinMar = modelo.getProperty("/Form/FFMAR");
+                    var horFinMar = modelo.getProperty("/Form/HFMAR");
+                    if((!fechFinMar && !horFinMar) || (horFinMar == "00:00")){
+                        var mssg = this.oBundle.getText("MISSFECHAFINMAREA");
+                        MessageBox.error(mssg, {
+                            onClose: function(){
+                                modelo.setProperty("/Form/ESMAR", "A");
+                                modelo.refresh();
+                            }
+                        });
+                    }
                 } else {
                     modelo.setProperty("/Config/visibleFechFin", false);
                 }

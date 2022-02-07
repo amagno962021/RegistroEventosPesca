@@ -2924,10 +2924,14 @@ sap.ui.define([
 
         editRecord: async function(marea){
             BusyIndicator.show(0);
+            var oStore = jQuery.sap.storage(jQuery.sap.storage.Type.Session);
             var prepareEditRecord = await this.prepareEditRecord(marea);
             var modelo = this.getOwnerComponent().getModel("DetalleMarea");
             if(prepareEditRecord){
                 modelo.setProperty("/DataSession/Type", "EDIT");
+                modelo.refresh();
+                var dataBckpModelo = modelo.getData();
+                oStore.put("DataModeloBckp", dataBckpModelo);
                 BusyIndicator.hide();
                 var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
                 oRouter.navTo("DetalleMarea");
@@ -3070,6 +3074,8 @@ sap.ui.define([
                     modelo.setProperty("/Config/readOnlyFechFin", false);
                     modelo.setProperty("/Config/readOnlyHorFin", false);
                     modelo.setProperty("/Config/visibleBtnEventos", false);
+                    modelo.setProperty("/Config/readOnlyUbicPesca", false);
+                    modelo.setProperty("/Config/readOnlyObs", false);
                     this.setVisibleBtnSave(false, false);
                 }
                 
@@ -3292,10 +3298,13 @@ sap.ui.define([
             }
 
             if (vFin) {
+                var fechaIni = modelo.getProperty("/Form/FIMAR");
+                var horaIni = modelo.getProperty("/Form/HIMAR");
+                fechHorIni = Utils.strDateHourToDate(fechaIni, horaIni);
                 var fechaFin = modelo.getProperty("/Form/FFMAR");
                 var horaFin = modelo.getProperty("/Form/HFMAR");
                 var fechHorFin = Utils.strDateHourToDate(fechaFin, horaFin);
-                if (fechaFin.getTime() > fechHorActual.getTime()) {
+                if (fechHorFin.getTime() > fechHorActual.getTime()) {
                     vFin = false;
                     var mssg = this.getResourceBundle().getText("FECFINMARMENOFECHACT");
                     var index = listaMensajes.length + 1;

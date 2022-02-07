@@ -8,7 +8,7 @@
 	height="100%">
 	<!-- <App> removed -->
 	<!--	<pages> removed -->
-	<Page title="Ingresar datos" showNavButton="true" navButtonPress="onBackListMarea" showFooter="true">
+	<Page title="Ingresar datos" showNavButton="false" showFooter="true">
 		<content>
 			<layout:VerticalLayout width="100%" visible="true">
 				<layout:content>
